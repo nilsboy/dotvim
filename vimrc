@@ -143,7 +143,8 @@ endif
 
 "### Highlight cursor line after cursor jump ###################################
 
-au CursorMoved,CursorMovedI * call s:Cursor_Moved()
+" causes copy and past via mouse to add lots of spaces?!?
+" au CursorMoved,CursorMovedI * call s:Cursor_Moved()
 let g:last_pos = 0
 
 function s:Cursor_Moved()
@@ -246,14 +247,15 @@ au FileType sql map <silent> S :w<CR>:,$r !reportmail %<CR>
 
 "### XML #######################################################################
 
-au FileType xml,html,xhtml silent call XmlStuff()
+au FileType xml,html,xhtml,svg silent call XmlStuff()
 function! XmlStuff()
 
 map <silent> W :call XMLTidy()<CR>
 
 function XMLTidy()
     let _view=winsaveview()
-    %!tidy --indent-spaces 4 --vertical-space 1 --indent-attributes 1 --indent 1 --markup 1 --sort-attributes alpha --tab-size 4 --wrap 80 --wrap-attributes 1 --quiet 1 --uppercase-tags 1 --input-xml 1
+    %!tidy --indent-spaces 4 --vertical-space 1 --indent-attributes 1 --indent 1 --markup 1 --sort-attributes alpha --tab-size 4 --wrap 80 --wrap-attributes 1 --quiet 1 --input-xml 1
+" --uppercase-tags 1
     " %!xmllint --format --recover -
     call winrestview(_view)
 endfunction
@@ -306,6 +308,7 @@ if &t_Co > 1
 endif
 
 set t_Co=256
+set background=light
 
 try
     colorscheme autumnleaf256
