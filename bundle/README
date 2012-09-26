@@ -1,5 +1,6 @@
 l9:
-    l9 is a Vim-script library, which provides some utility functions and commands for programming in Vim.
+    l9 is a Vim-script library, which provides some utility
+        functions and commands for vim scripting.
     version: ns9tks-vim-l9-3bb534a720fa
     pre req for AutoComplPop
 
