@@ -83,7 +83,7 @@ set novisualbell
 set ttyfast
 
 " save undo after closing a file
-set undofile
+" set undofile
 
 " set encoding=utf-8
 " set laststatus=2
@@ -247,7 +247,7 @@ au FileType sql map <silent> S :w<CR>:,$r !reportmail %<CR>
 
 "### XML #######################################################################
 
-au FileType xml,html,xhtml,svg silent call XmlStuff()
+au FileType xml,html,xhtml,svg,wsdd silent call XmlStuff()
 function! XmlStuff()
 
 map <silent> W :call XMLTidy()<CR>
@@ -277,6 +277,23 @@ function CSSTidy()
 endfunction
 
 " CssStuff() end
+endfunction
+
+"### json ######################################################################
+
+au BufEnter,BufNew oms.conf setfiletype json
+au FileType json silent call JSONStuff()
+function! JSONStuff()
+
+map <silent> W :call JSONTidy()<CR>
+
+function JSONTidy()
+    let _view=winsaveview()
+    %!json_pp -json_opt pretty,canonical,indent
+    call winrestview(_view)
+endfunction
+
+" JSONStuff() end
 endfunction
 
 "### javascript ################################################################
