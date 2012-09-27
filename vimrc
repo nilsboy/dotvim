@@ -6,17 +6,6 @@
 " vim scripting:
 " http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html
 
-"### plugins ###################################################################
-
-" pathogen: load plugins in bundle/
-" http://www.vim.org/scripts/script.php?script_id=2332
-
-" l9: plugin helper lib - dependency for some plugins
-" http://www.vim.org/scripts/script.php?script_id=3252
-
-" AutoComplPop
-" http://www.vim.org/scripts/script.php?script_id=1879
-
 "### misc ######################################################################
 
 " Security
@@ -100,6 +89,8 @@ vnoremap <F1> <ESC>
 call pathogen#infect()
 
 filetype on " detect filetypes and run filetype plugins - needed for taglist
+filetype plugin on
+filetype indent on
 
 "### split windows #############################################################
 
@@ -192,6 +183,7 @@ map <silent> W :call PerlTidy()<CR>
 function PerlTidy()
     let _view=winsaveview()
     %!perltidy -q
+    " %!tidyall --conf-name ~/.tidyallrc -p ~/.tidyallrc
     call winrestview(_view)
 endfunction
 
