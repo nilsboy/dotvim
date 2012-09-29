@@ -5,7 +5,7 @@
 " :h pattern
 " vim scripting:
 " http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html
-
+"
 "### misc ######################################################################
 
 " Security
@@ -49,7 +49,7 @@ set wildmenu " use tab expansion in vim prompts
 " try to restore last known cursor position
 autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
 
-set nowrap " do wrap long lines
+set nowrap " line wrapping of long lines
 set nowrapscan " do not wrap while searching
 
 " set textwidth=80 " wrap automatically on edit
@@ -71,8 +71,30 @@ set novisualbell
 
 set ttyfast
 
-" save undo after closing a file
-" set undofile
+"### undo and swap #############################################################
+
+" Maximum amount of memory in Kbyte to use for all buffers together.
+set maxmemtot=2048
+
+set noswapfile
+
+" Keep undo history after closing a file
+set undofile
+set undodir=$REMOTE_HOME/.vim.var/undo
+
+" create undodir if missing
+if isdirectory(&undodir) == 0
+    silent execute '!mkdir -p ' . &undodir
+endif
+
+" default 1000
+" set undolevels=
+
+" never create backup files
+set nobackup
+set nowritebackup
+
+"###############################################################################
 
 " set encoding=utf-8
 " set laststatus=2
