@@ -8,6 +8,8 @@
 "
 "### misc ######################################################################
 
+let VIM_VAR=$REMOTE_HOME . "/.vim.var"
+
 " Security
 set modelines=0
 
@@ -19,7 +21,9 @@ set cmdheight=2 " increase ruler height
 set ruler " always show status line
 set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
-" searching
+set colorcolumn=81
+
+"### searching #################################################################
 
 " use normal regexes
 " nnoremap / /\v
@@ -33,6 +37,8 @@ set ignorecase
 set smartcase " case insensitive search when all lowercase
 set infercase " case inferred by default
 
+"###############################################################################
+
 set autoread " Set to auto read when a file is changed from the outside
 
 set nostartofline " leave my cursor where it was - even on page jump
@@ -41,7 +47,7 @@ set expandtab " Insert spaces when the tab key is hit
 set tabstop=4 " Tab spacing of 4
 set sw=4 " shift width (moved sideways for the shift command)
 set smarttab
-
+                                                                                        
 set backspace=indent,eol,start " make backspace more flexible
 
 set wildmenu " use tab expansion in vim prompts
@@ -80,7 +86,7 @@ set noswapfile
 
 " Keep undo history after closing a file
 set undofile
-set undodir=$REMOTE_HOME/.vim.var/undo
+let &undodir=VIM_VAR . "/undo"
 
 " create undodir if missing
 if isdirectory(&undodir) == 0
@@ -94,21 +100,21 @@ endif
 set nobackup
 set nowritebackup
 
+"### tags ######################################################################
+
+let &tags=VIM_VAR . "/tags"
+
 "###############################################################################
 
 " set encoding=utf-8
 " set laststatus=2
 
 let mapleader = ","
-" inoremap jj <ESC>jj
 
 " disable F1
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
-
-" load plugins in bundle/*
-call pathogen#infect()
 
 filetype on " detect filetypes and run filetype plugins - needed for taglist
 filetype plugin on
@@ -153,28 +159,6 @@ set wildmode=longest:list
 if exists("&wildignorecase")
     set wildignorecase
 endif
-
-"### Highlight cursor line after cursor jump ###################################
-
-" causes copy and past via mouse to add lots of spaces?!?
-" au CursorMoved,CursorMovedI * call s:Cursor_Moved()
-let g:last_pos = 0
-
-function s:Cursor_Moved()
-  let cur_pos = winline()
-  if g:last_pos == 0
-    set cul
-    let g:last_pos = cur_pos
-    return
-  endif
-  let diff = g:last_pos - cur_pos
-  if diff > 1 || diff < -1
-    set cul
-  else
-    set nocul
-  endif
-  let g:last_pos = cur_pos
-endfunction
 
 "### automatically give executable permissions #################################
 
@@ -327,7 +311,7 @@ endfunction
 " JavaScriptStuff() end
 endfunction
 
-"### colorscheme ###############################################################
+"### highlighting ##############################################################
 
 " NOTE
 " to convert a highcolor theme to run in a 256-color-terminal-vim
@@ -347,8 +331,8 @@ catch /find/
     " nothing
 endtry
 
-" hi NonText ctermfg=red ctermbg=NONE cterm=bold
-" hi NonText ctermfg=NONE ctermbg=red cterm=bold
+" highlight the whole file not just the window - slower but more accurate.
+autocmd BufEnter * :syntax sync fromstart
 
 "### taglist ###################################################################
 
@@ -374,6 +358,7 @@ if executable('ctags')
     let Tlist_Inc_Winwidth = 0
     let Tlist_Auto_Update = 1
     let Tlist_Display_Tag_Scope = 0
+    let Tlist_Sort_Type = "name"
 
 else
 
@@ -398,3 +383,6 @@ function MyRedo()
 endfunction
 
 "###############################################################################
+
+" load plugins in bundle/*
+call pathogen#infect()

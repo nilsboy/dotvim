@@ -1,8 +1,9 @@
+" http://vim.wikia.com/wiki/Auto_highlight_current_word_when_idle
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
 " Type z/ to toggle highlighting on/off.
 
-nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+" nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 
 function! AutoHighlightToggle()
   let @/ = ''
@@ -18,9 +19,11 @@ function! AutoHighlightToggle()
       au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
     augroup end
     setl updatetime=500
-    echo 'Highlight current word: ON'
+    " echo 'Highlight current word: ON'
+    set hls
     return 1
   endif
 endfunction
 
-" if AutoHighlightToggle() :set hls endif
+execute AutoHighlightToggle()
+set hls
