@@ -8,8 +8,6 @@
 "
 "### misc ######################################################################
 
-let VIM_VAR=$REMOTE_HOME . "/.vim.var"
-
 " Security
 set modelines=0
 
@@ -22,6 +20,20 @@ set ruler " always show status line
 set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
 set colorcolumn=81
+
+let VIM_VAR = $REMOTE_HOME . "/.vim.var"
+let &tags = VIM_VAR . "/tags"
+
+" TEST: prevent creation of .netrwhist file
+let g:netrw_dirhistmax = 0
+
+" detect filetypes and run filetype plugins
+filetype on
+filetype plugin on
+filetype indent on
+
+" load plugins in bundle/*
+call pathogen#infect()
 
 "### searching #################################################################
 
@@ -104,18 +116,10 @@ endif
 set nobackup
 set nowritebackup
 
-"### tags ######################################################################
-
-let &tags=VIM_VAR . "/tags"
-
 "###############################################################################
 
 " set encoding=utf-8
 " set laststatus=2
-
-filetype on " detect filetypes and run filetype plugins - needed for taglist
-filetype plugin on
-filetype indent on
 
 "### mappings ##################################################################
 
@@ -215,6 +219,3 @@ function MyRedo()
 endfunction
 
 "###############################################################################
-
-" load plugins in bundle/*
-call pathogen#infect()
