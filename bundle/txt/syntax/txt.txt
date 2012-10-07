@@ -11,8 +11,6 @@ This is the default syntax coloring for all documents. Idea behind this is to co
 - colors basic smileys          -> ;) :-o :\ :D :P
 - colors changelogs tags        -> add: chg: rem: del: fix:
 
-# asdfdfkjdfkdjfkdjfkjdkfjdkfjdkj
-
 Examples:
 
 --- Vim 6.3 README NOTES (part)------------------------------------------------
