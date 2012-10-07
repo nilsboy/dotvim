@@ -7,7 +7,7 @@
 
 map <silent> W :call PerlTidy()<CR>
 
-function PerlTidy()
+function! PerlTidy()
     let _view=winsaveview()
     %!perltidy -q
     " %!tidyall --conf-name ~/.tidyallrc -p ~/.tidyallrc

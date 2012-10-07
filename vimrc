@@ -47,18 +47,22 @@ set expandtab " Insert spaces when the tab key is hit
 set tabstop=4 " Tab spacing of 4
 set sw=4 " shift width (moved sideways for the shift command)
 set smarttab
-                                                                                        
+
 set backspace=indent,eol,start " make backspace more flexible
 
-set wildmenu " use tab expansion in vim prompts
+" use tab expansion in vim prompts
+set wildmode=longest:list
+
+" ignore case in file names
+if exists("&wildignorecase")
+    set wildignorecase
+endif
 
 " try to restore last known cursor position
 autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
 
-set nowrap " line wrapping of long lines
+set nowrap " no line wrapping of long lines
 set nowrapscan " do not wrap while searching
-
-" set textwidth=80 " wrap automatically on edit
 
 " show arrows for too long lines / show trailing spaces
 set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
@@ -109,28 +113,9 @@ let &tags=VIM_VAR . "/tags"
 " set encoding=utf-8
 " set laststatus=2
 
-let mapleader = ","
-
-" disable F1
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
-
 filetype on " detect filetypes and run filetype plugins - needed for taglist
 filetype plugin on
 filetype indent on
-
-"### split windows #############################################################
-
-" move between windows
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-" open new window an move into it
-nnoremap <leader>w :80vs<cr><C-w>l
-nnoremap <leader>wc <C-w>c
 
 "### mappings ##################################################################
 
@@ -142,23 +127,38 @@ nnoremap <leader>wc <C-w>c
 " clear all mappings
 " :mapclear
 
+" disable F1
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+" nnoremap <ESC> :q<CR>
+
 " dont use Q for Ex mode
 map Q :q
 
-" nnoremap <c-k> g<c-]>
-" nnoremap <c-j> <c-t>
+let mapleader = ","
+
+" move between windows
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" open new window an move into it
+nnoremap <leader>w :80vs<cr><C-w>l
+nnoremap <leader>wc <C-w>c
+
+" jumlist
+" nmap <C-I> <C-W>j:call g:SrcExpl_Jump()<CR>
+" nmap <C-O> :call g:SrcExpl_GoBack()<CR>
 
 " history jump
 nnoremap <c-h> <c-o>
 nnoremap <c-l> <c-i>
 
-" file name expansion
-set wildmode=longest:list
-
-" ignore case in file names
-if exists("&wildignorecase")
-    set wildignorecase
-endif
+" nnoremap <c-k> g<c-]>
+" nnoremap <c-j> <c-t>
 
 "### automatically give executable permissions #################################
 
@@ -168,6 +168,9 @@ function ModeChange()
   if getline(1) =~ "^#!"
     if getline(1) =~ "/bin/"
       silent !chmod a+x <afile>
+    endif
+    if getline(1) =~ "perl"
+      silent set filetype=perl
     endif
   endif
 endfunction

@@ -25,5 +25,5 @@ function! AutoHighlightToggle()
   endif
 endfunction
 
-execute AutoHighlightToggle()
-set hls
+" execute AutoHighlightToggle()
+" set hls
