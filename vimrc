@@ -37,9 +37,10 @@ filetype indent on
 " load plugins in bundle/*
 call pathogen#infect()
 
-" clipboard
-" set clipboard=unnamed
-" set go+=a
+" make the clipboard register the same as the default register
+" this allows easy copy to other x11 apps
+set clipboard=unnamed
+
 
 "### searching #################################################################
 
