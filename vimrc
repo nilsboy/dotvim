@@ -24,6 +24,8 @@ set colorcolumn=81
 let VIM_VAR = $REMOTE_HOME . "/.vim.var"
 let &tags = VIM_VAR . "/tags"
 
+let &viminfo = VIM_VAR . "/viminfo"
+
 " TEST: prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
 
@@ -34,6 +36,10 @@ filetype indent on
 
 " load plugins in bundle/*
 call pathogen#infect()
+
+" clipboard
+" set clipboard=unnamed
+" set go+=a
 
 "### searching #################################################################
 
