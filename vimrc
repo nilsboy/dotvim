@@ -6,12 +6,115 @@
 " vim scripting:
 " http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html
 "
+"### notes #####################################################################
+" who set a var:
+" 5verbose set fo?
+" 5verbose setl fo?
 "### misc ######################################################################
+
+" Use <Leader> as prefix key for own key mappings
+let mapleader = ","
+
+" vars
+let VIM = $REMOTE_HOME . "/.vim/etc/"
+let VIM_VAR = $REMOTE_HOME . "/.vim/var/"
+let VIM_BUNDLE = $REMOTE_HOME . ".vim/bundle/"
+let TAGS = VIM_VAR . "tags"
+
+let &tags = TAGS
+
+" does not work:
+" set viminfo=$REMOTE_HOME/.vim/var/viminfo
+
+" create VIM_VAR dir if missing
+if isdirectory(VIM_VAR) == 0
+    silent execute '!mkdir -p ' . VIM_VAR
+endif
+
+" Keep undo history after closing a file
+set undofile
+let &undodir = VIM_VAR . "undo"
+
+" create undodir if missing
+if isdirectory(&undodir) == 0
+    silent execute '!mkdir -p ' . &undodir
+endif
 
 " Security
 set modelines=0
 
-set nocompatible " Enable vim enhancements
+" Enable vim enhancements
+set nocompatible
+
+set runtimepath+=$REMOTE_HOME/.vim/etc
+
+"### Install Vundle - The Plugin Manager #######################################
+
+    " Vundle https://github.com/gmarik/Vundle.vim
+
+    let iCanHazVundle=1
+    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle.."
+        echo ""
+        silent !mkdir -p ~/.vim/bundle
+        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+        let iCanHazVundle=0
+    endif
+    set rtp+=~/.vim/bundle/vundle/
+    call vundle#rc()
+    Plugin 'gmarik/vundle'
+
+"### Bundles ###################################################################
+
+    " uber awesome syntax and errors highlighter
+    Plugin 'Syntastic'
+
+    " A Git wrapper so awesome, it should be illegal
+    Plugin 'tpope/vim-fugitive'
+
+    " ack support
+    Plugin 'mileszs/ack.vim'
+
+    " Prerequisite for some vim plugins
+    Plugin 'l9'
+
+    " Automatically opens popup menu for completions
+    Plugin 'AutoComplPop'
+
+    " buffer/file/command/tag/etc explorer with fuzzy matching
+    " Plugin 'FuzzyFinder'
+
+    " Universal syntax script for all txt docs, logs and other types
+    Plugin 'txt.vim'
+
+    " EasyMotion provides a much simpler way to use some motions in vim
+    Plugin 'lokaltog/vim-easymotion'
+
+    " Search and display information from arbitrary sources
+    Plugin 'shougo/unite.vim'
+
+    " Most recently used plugin for unite.vim
+    Plugin 'shougo/neomru.vim'
+
+    " Provides your Vim's buffer with the outline view
+    Plugin 'h1mesuke/unite-outline'
+
+"### Install bundles ###########################################################
+
+    if iCanHazVundle == 0
+        echo "Installing Bundles, please ignore key map error messages"
+        echo ""
+        :PluginInstall
+    endif
+
+"###############################################################################
+
+" load plugins in bundle/*
+" call pathogen#infect($REMOTE_HOME . '/.vim/bundle/{}', $REMOTE_HOME . '/.vim/etc/bundle/{}')
+
+" reload vimrc on write
+autocmd bufwritepost $MYVIMRC source $MYVIMRC
 
 set shortmess=astTI " avoid 'hit enter prompt'
 set cmdheight=2 " increase ruler height
@@ -19,14 +122,9 @@ set cmdheight=2 " increase ruler height
 set ruler " always show status line
 set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
-set colorcolumn=81
+" set colorcolumn=81
 
-let VIM_VAR = $REMOTE_HOME . "/.vim.var"
-let &tags = VIM_VAR . "/tags"
-
-let &viminfo = VIM_VAR . "/viminfo"
-
-" TEST: prevent creation of .netrwhist file
+" prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
 
 " detect filetypes and run filetype plugins
@@ -34,13 +132,9 @@ filetype on
 filetype plugin on
 filetype indent on
 
-" load plugins in bundle/*
-call pathogen#infect()
-
 " make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
 set clipboard=unnamed
-
 
 "### searching #################################################################
 
@@ -59,6 +153,7 @@ set infercase " case inferred by default
 "###############################################################################
 
 set autoread " Set to auto read when a file is changed from the outside
+set autowrite " Automatically write file if leaving a buffer
 
 set nostartofline " leave my cursor where it was - even on page jump
 
@@ -105,23 +200,15 @@ set ttyfast
 " Maximum amount of memory in Kbyte to use for all buffers together.
 set maxmemtot=2048
 
-set noswapfile
-
-" Keep undo history after closing a file
-set undofile
-let &undodir=VIM_VAR . "/undo"
-
-" create undodir if missing
-if isdirectory(&undodir) == 0
-    silent execute '!mkdir -p ' . &undodir
-endif
-
 " default 1000
 " set undolevels=
 
 " never create backup files
 set nobackup
 set nowritebackup
+
+" in memory only
+set noswapfile
 
 "###############################################################################
 
@@ -143,30 +230,24 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-" nnoremap <ESC> :q<CR>
+nnoremap <ESC><ESC> :q<CR>
 
 " dont use Q for Ex mode
 map Q :q
 
-let mapleader = ","
-
 " move between windows
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
 
 " open new window an move into it
-nnoremap <leader>w :80vs<cr><C-w>l
-nnoremap <leader>wc <C-w>c
-
-" jumlist
-" nmap <C-I> <C-W>j:call g:SrcExpl_Jump()<CR>
-" nmap <C-O> :call g:SrcExpl_GoBack()<CR>
+" nnoremap <leader>w :80vs<cr><C-w>l
+" nnoremap <leader>wc <C-w>c
 
 " history jump
-nnoremap <c-h> <c-o>
-nnoremap <c-l> <c-i>
+" nnoremap <c-h> <c-o>
+" nnoremap <c-l> <c-i>
 
 " nnoremap <c-k> g<c-]>
 " nnoremap <c-j> <c-t>
@@ -175,7 +256,7 @@ nnoremap <c-l> <c-i>
 
 au BufWritePost * silent call ModeChange()
 
-function ModeChange()
+function! ModeChange()
   if getline(1) =~ "^#!"
     if getline(1) =~ "/bin/"
       silent !chmod a+x <afile>
@@ -193,9 +274,6 @@ endfunction
 " use CSApprox plugin and store theme with :CSApproxSnapshot
 
 " enable colors only if terminal supports colors
-if &t_Co > 1
-    syntax enable
-endif
 
 set t_Co=256
 set background=light
@@ -206,20 +284,24 @@ catch /find/
     " nothing
 endtry
 
+if &t_Co > 1
+    syntax enable
+endif
+
 " highlight the whole file not just the window - slower but more accurate.
 autocmd BufEnter * :syntax sync fromstart
 
 "### Keep cursor position on undo and redo #####################################
 
 map <silent> u :call MyUndo()<CR>
-function MyUndo()
+function! MyUndo()
     let _view=winsaveview()
     :undo
     call winrestview(_view)
 endfunction
 
 map <silent> <c-r> :call MyRedo()<CR>
-function MyRedo()
+function! MyRedo()
     let _view=winsaveview()
     :redo
     call winrestview(_view)
