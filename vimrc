@@ -63,9 +63,11 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     endif
     set rtp+=~/.vim/bundle/vundle/
     call vundle#rc()
-    Plugin 'gmarik/vundle'
 
 "### Bundles ###################################################################
+
+    " Vundle itself
+    Plugin 'gmarik/vundle'
 
     " uber awesome syntax and errors highlighter
     Plugin 'Syntastic'
@@ -80,7 +82,9 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     Plugin 'l9'
 
     " Automatically opens popup menu for completions
-    Plugin 'AutoComplPop'
+    " Plugin 'AutoComplPop'
+
+    Plugin 'shougo/neocomplcache.vim'
 
     " buffer/file/command/tag/etc explorer with fuzzy matching
     " Plugin 'FuzzyFinder'
@@ -98,7 +102,16 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     Plugin 'shougo/neomru.vim'
 
     " Provides your Vim's buffer with the outline view
-    Plugin 'h1mesuke/unite-outline'
+    Plugin 'shougo/unite-outline'
+
+    " Perl omni completion
+    Plugin 'c9s/perlomni.vim'
+
+    " Tags completion
+    Plugin 'ctags.vim'
+
+    " Select tags or select files including tags
+    Plugin 'tsukkee/unite-tag'
 
 "### Install bundles ###########################################################
 
@@ -113,14 +126,14 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
 " load plugins in bundle/*
 " call pathogen#infect($REMOTE_HOME . '/.vim/bundle/{}', $REMOTE_HOME . '/.vim/etc/bundle/{}')
 
-" reload vimrc on write
-autocmd bufwritepost $MYVIMRC source $MYVIMRC
+" reload vimrc on write - no works?
+" autocmd bufwritepost $MYVIMRC source $MYVIMRC
 
-set shortmess=astTI " avoid 'hit enter prompt'
-set cmdheight=2 " increase ruler height
+" set shortmess=astTI " avoid 'hit enter prompt'
+" set cmdheight=2 " increase ruler height
 
-set ruler " always show status line
-set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
+" set ruler " always show status line
+" set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
 " set colorcolumn=81
 
@@ -152,10 +165,14 @@ set infercase " case inferred by default
 
 "###############################################################################
 
-set autoread " Set to auto read when a file is changed from the outside
-set autowrite " Automatically write file if leaving a buffer
+" Set to auto read when a file is changed from the outside
+set autoread
 
-set nostartofline " leave my cursor where it was - even on page jump
+" Automatically write file if leaving a buffer
+set autowrite
+
+" leave my cursor where it was - even on page jump
+set nostartofline
 
 set expandtab " Insert spaces when the tab key is hit
 set tabstop=4 " Tab spacing of 4
@@ -188,9 +205,11 @@ set sidescrolloff=0
 " scroll by one char at end of line
 set sidescroll=1
 
-set iskeyword+=:,_,$,@,%,# " none of these are word dividers
+" none of these are word dividers
+set iskeyword+=:,_,$,@,%,#
 
-set noerrorbells " don't make noise
+" don't make noise
+set noerrorbells
 set novisualbell
 
 set ttyfast
@@ -279,7 +298,7 @@ set t_Co=256
 set background=light
 
 try
-    colorscheme autumnleaf256
+    colorscheme github
 catch /find/
     " nothing
 endtry

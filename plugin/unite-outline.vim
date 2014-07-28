@@ -1,9 +1,27 @@
 
-"map <silent> <Leader>o :FufBufferTag<CR>
-"map <silent> <Leader>t :FufTag<CR>
-"map <silent> <Leader>f :FufFile **/<CR>
-"map <silent> <Leader>j :FufJumpList<CR>
-"map <silent> <Leader>l :FufLine<CR>
+" nnoremap <leader>o :<C-u>Unite           -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>o :<C-u>Unite           -buffer-name=outline outline<cr>
 
-" map <silent> / :FufLine<CR>
-" map <silent> <c-t> :FufBufferTagWithCursorWord<CR>
+" let g:unite_source_outline_filetype_options = {
+"       \ '*': {
+"       \   'auto_update': 1,
+"       \   'auto_update_event': 'write',
+"       \ },
+"       \ 'cpp': {
+"       \   'auto_update': 0,
+"       \ },
+"       \ 'javascript': {
+"       \   'ignore_types': ['comment'],
+"       \ },
+"       \ 'markdown': {
+"       \   'auto_update_event': 'hold',
+"       \ },
+" \}
+" 
+" let g:unite_source_outline_info.ruby = {
+"       \ 'heading': '^\s*\(module\|class\|def\)\>',
+"       \ 'skip': {
+"       \   'header': '^#',
+"       \   'block' : ['^=begin', '^=end'],
+"       \ },
+" \}
