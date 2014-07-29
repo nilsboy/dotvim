@@ -1,6 +1,5 @@
 
 " nnoremap <leader>o :<C-u>Unite           -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>o :<C-u>Unite           -buffer-name=outline outline<cr>
 
 " let g:unite_source_outline_filetype_options = {
 "       \ '*': {

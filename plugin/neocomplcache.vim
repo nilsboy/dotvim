@@ -1,6 +1,6 @@
 " From: https://github.com/Shougo/neocomplcache.vim
 
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 
@@ -33,7 +33,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
 if !exists('g:neocomplcache_keyword_patterns')
     let g:neocomplcache_keyword_patterns = {}
 endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+let g:neocomplcache_keyword_patterns['default'] = '[\h-]\w*'
 
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplcache#undo_completion()

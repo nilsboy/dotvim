@@ -17,10 +17,9 @@ nnoremap <silent> <leader>f :<C-u>Unite
             \ -start-insert
             \ -silent
             \ file_rec<cr>
-            " \ buffer file_mru file_rec<cr>
 
 nnoremap <silent> <leader>r :<C-u>Unite
-            \ -buffer-name=files
+            \ -buffer-name=mru
             \ -no-quit
             \ -keep-focus
             \ -immediately
@@ -28,7 +27,16 @@ nnoremap <silent> <leader>r :<C-u>Unite
             \ -silent
             \ file_mru<cr>
 
-nnoremap <silent> <leader>s :<C-u>Unite
+nnoremap <silent> <Leader>o :<C-u>Unite
+            \ -buffer-name=outline
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -silent
+            \ outline<cr>
+
+nnoremap <silent> / :<C-u>Unite
             \ -buffer-name=search
             \ -no-quit
             \ -keep-focus
@@ -37,10 +45,19 @@ nnoremap <silent> <leader>s :<C-u>Unite
             \ -silent
             \ line<cr>
 
-nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
-nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files   -start-insert file_rec<cr>
-nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
-nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
+nnoremap <silent> <leader>v :<C-u>Unite
+            \ -buffer-name=vimfos
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -silent
+            \ tab window buffer<cr>
+
+" nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
+" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files   -start-insert file_rec<cr>
+" nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
+" nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
 
 " register
 " :UniteWithProjectDir

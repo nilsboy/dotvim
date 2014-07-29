@@ -50,8 +50,6 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
 
 "### Install Vundle - The Plugin Manager #######################################
 
-    " Vundle https://github.com/gmarik/Vundle.vim
-
     let iCanHazVundle=1
     let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
     if !filereadable(vundle_readme)
@@ -81,13 +79,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     " Prerequisite for some vim plugins
     Plugin 'l9'
 
-    " Automatically opens popup menu for completions
-    " Plugin 'AutoComplPop'
-
     Plugin 'shougo/neocomplcache.vim'
-
-    " buffer/file/command/tag/etc explorer with fuzzy matching
-    " Plugin 'FuzzyFinder'
 
     " Universal syntax script for all txt docs, logs and other types
     Plugin 'txt.vim'
@@ -113,6 +105,9 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     " Select tags or select files including tags
     Plugin 'tsukkee/unite-tag'
 
+    " Lean & mean status/tabline for vim that's light as air.
+    Plugin 'bling/vim-airline'
+
 "### Install bundles ###########################################################
 
     if iCanHazVundle == 0
@@ -122,9 +117,6 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     endif
 
 "###############################################################################
-
-" load plugins in bundle/*
-" call pathogen#infect($REMOTE_HOME . '/.vim/bundle/{}', $REMOTE_HOME . '/.vim/etc/bundle/{}')
 
 " reload vimrc on write - no works?
 " autocmd bufwritepost $MYVIMRC source $MYVIMRC
@@ -169,7 +161,12 @@ set infercase " case inferred by default
 set autoread
 
 " Automatically write file if leaving a buffer
-set autowrite
+set autowriteall
+
+" Timeout on mappings and key codes (faster escape etc)
+set timeout
+set timeoutlen=300
+set ttimeoutlen=10
 
 " leave my cursor where it was - even on page jump
 set nostartofline
@@ -249,7 +246,11 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-nnoremap <ESC><ESC> :q<CR>
+nnoremap <ESC> :q<CR>
+nnoremap <ESC><ESC> :q!<CR>
+
+nnoremap <C-l> :bnext<cr>
+nnoremap <C-h> :bprev<cr>
 
 " dont use Q for Ex mode
 map Q :q
