@@ -10,6 +10,9 @@
 " who set a var:
 " 5verbose set fo?
 " 5verbose setl fo?
+"### TODO ######################################################################
+" - set $XDG_CACHE_DIR from remote_home for neomru etc?
+" - CursorHold
 "### misc ######################################################################
 
 " Use <Leader> as prefix key for own key mappings
@@ -108,6 +111,11 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
     " Lean & mean status/tabline for vim that's light as air.
     Plugin 'bling/vim-airline'
 
+    Plugin 'scrooloose/nerdtree'
+
+    " File operations
+    Plugin 'tpope/vim-eunuch'
+
 "### Install bundles ###########################################################
 
     if iCanHazVundle == 0
@@ -124,7 +132,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
 " set shortmess=astTI " avoid 'hit enter prompt'
 " set cmdheight=2 " increase ruler height
 
-" set ruler " always show status line
+set ruler " always show status line
 " set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
 " set colorcolumn=81
@@ -140,6 +148,9 @@ filetype indent on
 " make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
 set clipboard=unnamed
+
+" Chdir to the dir of the current buffer
+set autochdir
 
 "### searching #################################################################
 
@@ -246,7 +257,7 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-nnoremap <ESC> :q<CR>
+nnoremap <silent> <ESC> :q<CR>
 nnoremap <ESC><ESC> :q!<CR>
 
 nnoremap <C-l> :bnext<cr>
@@ -271,6 +282,9 @@ map Q :q
 
 " nnoremap <c-k> g<c-]>
 " nnoremap <c-j> <c-t>
+
+" run current buffer
+nnoremap <leader>e :!%:p
 
 "### automatically give executable permissions #################################
 

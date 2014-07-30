@@ -1,26 +1,20 @@
+nnoremap <silent> <Leader>o :<C-u>Unite
+            \ -buffer-name=outline
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -silent
+            \ outline<cr>
 
-" nnoremap <leader>o :<C-u>Unite           -buffer-name=outline -start-insert outline<cr>
-
-" let g:unite_source_outline_filetype_options = {
-"       \ '*': {
-"       \   'auto_update': 1,
-"       \   'auto_update_event': 'write',
-"       \ },
-"       \ 'cpp': {
-"       \   'auto_update': 0,
-"       \ },
-"       \ 'javascript': {
-"       \   'ignore_types': ['comment'],
-"       \ },
-"       \ 'markdown': {
-"       \   'auto_update_event': 'hold',
-"       \ },
-" \}
-" 
-" let g:unite_source_outline_info.ruby = {
-"       \ 'heading': '^\s*\(module\|class\|def\)\>',
-"       \ 'skip': {
-"       \   'header': '^#',
-"       \   'block' : ['^=begin', '^=end'],
-"       \ },
-" \}
+let g:unite_source_outline_filetype_options = {
+      \ '*': {
+      \   'auto_update': 1,
+      \   'auto_update_event': 'hold',
+      \ },
+      \ 'java': {
+      \   'ignore_types': ['package'],
+      \ },
+      \ 'perl': {
+      \   'ignore_types': ['package'],
+      \ },
+      \}

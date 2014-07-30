@@ -9,34 +9,7 @@ let g:unite_source_history_yank_enable = 1
 call unite#filters#converter_default#use(['converter_file_directory'])
 call unite#filters#sorter_default#use(['sorter_word'])
 
-nnoremap <silent> <leader>f :<C-u>Unite
-            \ -buffer-name=files
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -start-insert
-            \ -silent
-            \ file_rec<cr>
-
-nnoremap <silent> <leader>r :<C-u>Unite
-            \ -buffer-name=mru
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -start-insert
-            \ -silent
-            \ file_mru<cr>
-
-nnoremap <silent> <Leader>o :<C-u>Unite
-            \ -buffer-name=outline
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -start-insert
-            \ -silent
-            \ outline<cr>
-
-nnoremap <silent> / :<C-u>Unite
+nnoremap <silent> // :<C-u>Unite
             \ -buffer-name=search
             \ -no-quit
             \ -keep-focus
