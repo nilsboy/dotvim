@@ -13,8 +13,10 @@
 "### TODO ######################################################################
 " - set $XDG_CACHE_DIR from remote_home for neomru etc?
 " - CursorHold
+" :runtime! ftplugin/man.vim / :Man
 "### misc ######################################################################
 
+runtime! ftplugin/man.vim
 " Use <Leader> as prefix key for own key mappings
 let mapleader = ","
 
@@ -26,8 +28,8 @@ let TAGS = VIM_VAR . "tags"
 
 let &tags = TAGS
 
-" does not work:
-" set viminfo=$REMOTE_HOME/.vim/var/viminfo
+" TODO set viminfo=$REMOTE_HOME/.vim/var/viminfo
+set viminfo='50,<1000,s100,:0,n~/vim/viminfo
 
 " create VIM_VAR dir if missing
 if isdirectory(VIM_VAR) == 0
@@ -222,6 +224,9 @@ set novisualbell
 
 set ttyfast
 
+" keep cursor position (if possible) when executing certain commands
+set nostartofline
+
 "### undo and swap #############################################################
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
@@ -262,6 +267,8 @@ nnoremap <ESC><ESC> :q!<CR>
 
 nnoremap <C-l> :bnext<cr>
 nnoremap <C-h> :bprev<cr>
+
+nnoremap <leader>l :!tree<cr>
 
 " dont use Q for Ex mode
 map Q :q
