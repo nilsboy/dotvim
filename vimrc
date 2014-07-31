@@ -13,10 +13,8 @@
 "### TODO ######################################################################
 " - set $XDG_CACHE_DIR from remote_home for neomru etc?
 " - CursorHold
-" :runtime! ftplugin/man.vim / :Man
 "### misc ######################################################################
 
-runtime! ftplugin/man.vim
 " Use <Leader> as prefix key for own key mappings
 let mapleader = ","
 
@@ -220,10 +218,8 @@ if exists("&wildignorecase")
     set wildignorecase
 endif
 
-autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
-
-" restore last known cursor position
-autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
+autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', 
+    \ escape(expand('<cword>'), '/\'))
 
 set nowrap " no line wrapping of long lines
 set nowrapscan " do not wrap while searching
@@ -285,7 +281,22 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-nnoremap <silent> <ESC> :q<CR>
+" quit vim if only empty buffers are left after a buffer delete
+" autocmd BufDelete * :call Haha()<cr>
+
+function! Haha()
+if len(filter(range(1, bufnr('$')), '!empty(bufname(v:val)) && buflisted(v:val)')) == 1 | quit | endif
+endfunction
+
+" - has content
+" - has file
+" - can write
+" - write
+" - wipe
+" - is last = q!
+
+nnoremap <silent> <ESC> :w<cr> :bwipeout!<cr>
+"haha
 nnoremap <ESC><ESC> :q!<CR>
 
 nnoremap <silent><C-l> :bnext<cr>

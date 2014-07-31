@@ -5,3 +5,6 @@ augroup CursorPosition
   autocmd BufLeave * let b:winview = winsaveview()
   autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 augroup END
+
+" restore last known cursor position
+autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
