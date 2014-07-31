@@ -144,13 +144,13 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
 "###############################################################################
 
-" reload vimrc on write - no works?
-" autocmd bufwritepost $MYVIMRC source $MYVIMRC
+" reload vimrc on write
+autocmd BufWritePost vimrc source %
 
 " set shortmess=astTI " avoid 'hit enter prompt'
 " set cmdheight=2 " increase ruler height
 
-set ruler " always show status line
+" set ruler " always show status line
 " set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
 
 " set colorcolumn=81
@@ -172,17 +172,22 @@ set autochdir
 
 "### searching #################################################################
 
-" use normal regexes
-" nnoremap / /\v
-" vnoremap / /\v
+" Show matching brackets.
+set showmatch
 
-set showmatch " Show matching brackets.
-set incsearch " Incremental search
-set hlsearch " highlight found text
+" Incremental search
+set incsearch
+
+" highlight found text
+set hlsearch
 
 set ignorecase
-set smartcase " case insensitive search when all lowercase
-set infercase " case inferred by default
+
+" case insensitive search when all lowercase
+set smartcase
+
+" case inferred by default
+set infercase
 
 "###############################################################################
 
@@ -215,7 +220,9 @@ if exists("&wildignorecase")
     set wildignorecase
 endif
 
-" try to restore last known cursor position
+autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
+
+" restore last known cursor position
 autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
 
 set nowrap " no line wrapping of long lines
@@ -288,23 +295,6 @@ nnoremap <leader>l :!tree<cr>
 
 " dont use Q for Ex mode
 map Q :q
-
-" move between windows
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-j> <C-w>j
-" nnoremap <C-k> <C-w>k
-" nnoremap <C-l> <C-w>l
-
-" open new window an move into it
-" nnoremap <leader>w :80vs<cr><C-w>l
-" nnoremap <leader>wc <C-w>c
-
-" history jump
-" nnoremap <c-h> <c-o>
-" nnoremap <c-l> <c-i>
-
-" nnoremap <c-k> g<c-]>
-" nnoremap <c-j> <c-t>
 
 " run current buffer
 nnoremap <leader>e :!%:p
