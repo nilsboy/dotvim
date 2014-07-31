@@ -51,7 +51,11 @@ set modelines=0
 " Enable vim enhancements
 set nocompatible
 
+" force 256 colors for terminals that call themselfs TERM=xterm
+set t_Co=256
+
 set runtimepath+=$REMOTE_HOME/.vim/etc
+set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
 "### Install Vundle - The Plugin Manager #######################################
 
@@ -117,6 +121,18 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
 
     " File operations
     Plugin 'tpope/vim-eunuch'
+
+    " Bringing GVim colorschemes to the terminal
+    Plugin 'godlygeek/csapprox'
+
+    " Use GUI Color Schemes in Supported Terminals
+    Plugin 'KevinGoodsell/vim-csexact'
+
+    " Colorschemes
+    Plugin 'altercation/vim-colors-solarized'
+    Plugin 'jonathanfilip/vim-lucius'
+
+    Plugin 'vim-scripts/CycleColor'
 
 "### Install bundles ###########################################################
 
@@ -265,8 +281,8 @@ vnoremap <F1> <ESC>
 nnoremap <silent> <ESC> :q<CR>
 nnoremap <ESC><ESC> :q!<CR>
 
-nnoremap <C-l> :bnext<cr>
-nnoremap <C-h> :bprev<cr>
+nnoremap <silent><C-l> :bnext<cr>
+nnoremap <silent><C-h> :bprev<cr>
 
 nnoremap <leader>l :!tree<cr>
 
@@ -307,30 +323,6 @@ function! ModeChange()
     endif
   endif
 endfunction
-
-"### highlighting ##############################################################
-
-" NOTE
-" to convert a highcolor theme to run in a 256-color-terminal-vim
-" use CSApprox plugin and store theme with :CSApproxSnapshot
-
-" enable colors only if terminal supports colors
-
-set t_Co=256
-set background=light
-
-try
-    colorscheme github
-catch /find/
-    " nothing
-endtry
-
-if &t_Co > 1
-    syntax enable
-endif
-
-" highlight the whole file not just the window - slower but more accurate.
-autocmd BufEnter * :syntax sync fromstart
 
 "### Keep cursor position on undo and redo #####################################
 
