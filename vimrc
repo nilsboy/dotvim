@@ -121,7 +121,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
     Plugin 'tpope/vim-eunuch'
 
     " Bringing GVim colorschemes to the terminal
-    Plugin 'godlygeek/csapprox'
+    " Plugin 'godlygeek/csapprox'
 
     " Use GUI Color Schemes in Supported Terminals
     Plugin 'KevinGoodsell/vim-csexact'
@@ -218,9 +218,6 @@ if exists("&wildignorecase")
     set wildignorecase
 endif
 
-autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', 
-    \ escape(expand('<cword>'), '/\'))
-
 set nowrap " no line wrapping of long lines
 set nowrapscan " do not wrap while searching
 
@@ -294,10 +291,10 @@ endfunction
 " - write
 " - wipe
 " - is last = q!
+"   if bufname('%') == ''
 
-nnoremap <silent> <ESC> :w<cr> :bwipeout!<cr>
-"haha
-nnoremap <ESC><ESC> :q!<CR>
+nnoremap <silent> <ESC>:w<cr> :bwipeout!<cr>
+nnoremap <silent> <ESC><ESC> :q!<CR>
 
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>

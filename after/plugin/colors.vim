@@ -1,3 +1,6 @@
+" show colors
+" :so $VIMRUNTIME/syntax/hitest.vim
+
 set background=light
 
 " highlight the whole file not just the window - slower but more accurate.
@@ -40,3 +43,7 @@ endtry
 if &t_Co > 1
     syntax enable
 endif
+
+autocmd CursorMoved * exe printf('match todo /\V\<%s\>/', 
+    \ escape(expand('<cword>'), '/\'))
+
