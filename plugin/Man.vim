@@ -30,10 +30,9 @@ function! MyMan(cmd)
     " silent :set filetype=man
     " silent :setlocal buftype=nofile
 
+    " silent map <buffer> <silent> <esc> :bwipeout!<cr>
 
 endfunction
-
-silent map <buffer> <silent> <esc> :bwipeout!<cr>
 
 nnoremap <silent> K :call MyMan(expand("<cword>"))<cr>
 command! -nargs=1 Man call MyMan("<args>")

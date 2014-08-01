@@ -278,22 +278,66 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-" quit vim if only empty buffers are left after a buffer delete
-" autocmd BufDelete * :call Haha()<cr>
+" Close a buffer writing its content and closing vim if appropriate.
+function! BufferClose()
 
-function! Haha()
-if len(filter(range(1, bufnr('$')), '!empty(bufname(v:val)) && buflisted(v:val)')) == 1 | quit | endif
+    if BufferIsEmpty() == 1
+    elseif BufferIsUnnamed() == 1
+    elseif &modified
+        :w
+    endif
+
+    if BufferIsLast() == 1
+        :q!
+    else
+        :bdelete!
+    endif
+
 endfunction
 
-" - has content
-" - has file
-" - can write
-" - write
-" - wipe
-" - is last = q!
-"   if bufname('%') == ''
+function! BufferIsUnnamed()
 
-nnoremap <silent> <ESC>:w<cr> :bwipeout!<cr>
+    if empty(bufname("%"))
+        return 1
+    else
+        return 2
+    endif
+
+endfunction
+
+function! BufferIsEmpty()
+    if line('$') == 1 && getline(1) == '' 
+        return 1
+    else
+        return 0
+    endif
+endfunction
+
+function! BufferIsLast()
+
+    let last_buffer = bufnr('$')
+
+    let listed = 0
+    let i = 1
+    while i <= last_buffer
+
+        if buflisted(i) == 1
+            let listed = listed + 1
+        endif
+
+        if listed > 1
+            return 0
+        endif
+
+        let i = i + 1
+
+    endwhile
+
+    return 1
+
+endfunction
+
+nnoremap <silent> <ESC> :call BufferClose()<cr>
 nnoremap <silent> <ESC><ESC> :q!<CR>
 
 nnoremap <silent><C-l> :bnext<cr>
