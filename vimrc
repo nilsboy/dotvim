@@ -1,18 +1,5 @@
-"### help ######################################################################
-" html help: http://vimdoc.sourceforge.net/htmldoc/usr_toc.html
-" what configuration was last loaded: :verbose set formatoptions
-" http://vim.wikia.com/wiki/Learn_to_use_help
-" :h pattern
-" vim scripting:
-" http://www.ibm.com/developerworks/linux/library/l-vim-script-1/index.html
-"
-"### notes #####################################################################
-" who set a var:
-" 5verbose set fo?
-" 5verbose setl fo?
 "### TODO ######################################################################
 " - set $XDG_CACHE_DIR from remote_home for neomru etc?
-" - CursorHold
 "### misc ######################################################################
 
 " Use <Leader> as prefix key for own key mappings
@@ -29,7 +16,7 @@ let &tags = TAGS
 " TODO set viminfo=$REMOTE_HOME/.vim/var/viminfo
 set viminfo='50,<1000,s100,:0,n~/vim/viminfo
 
-" create VIM_VAR dir if missing
+" Create VIM_VAR dir if missing
 if isdirectory(VIM_VAR) == 0
     silent execute '!mkdir -p ' . VIM_VAR
 endif
@@ -38,7 +25,7 @@ endif
 set undofile
 let &undodir = VIM_VAR . "undo"
 
-" create undodir if missing
+" Create undodir if missing
 if isdirectory(&undodir) == 0
     silent execute '!mkdir -p ' . &undodir
 endif
@@ -49,11 +36,178 @@ set modelines=0
 " Enable vim enhancements
 set nocompatible
 
-" force 256 colors for terminals that call themselfs TERM=xterm
+" Force 256 colors for terminals that call themselfs TERM=xterm
 set t_Co=256
 
 set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
+
+" Reload vimrc on write
+autocmd BufWritePost vimrc source %
+
+" set colorcolumn=81
+
+" Prevent creation of .netrwhist file
+let g:netrw_dirhistmax = 0
+
+" Detect filetypes and run filetype plugins
+filetype on
+filetype plugin on
+filetype indent on
+
+" Make the clipboard register the same as the default register
+" this allows easy copy to other x11 apps
+set clipboard=unnamed
+
+" Chdir to the dir of the current buffer
+set autochdir
+
+"### searching #################################################################
+
+" Show matching brackets.
+set showmatch
+
+" Incremental search
+set incsearch
+
+" Highlight found text
+set hlsearch
+
+set ignorecase
+
+" Case insensitive search when all lowercase
+set smartcase
+
+" Case inferred by default
+set infercase
+
+"###############################################################################
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Automatically write file if leaving a buffer
+set autowriteall
+
+" Timeout on mappings and key codes (faster escape etc)
+set timeout
+set timeoutlen=300
+set ttimeoutlen=10
+
+" Leave my cursor where it was - even on page jump
+set nostartofline
+
+" Insert spaces when the tab key is hit
+set expandtab
+
+" Tab spacing of 4
+set tabstop=4
+
+" Shift width (moved sideways for the shift command)
+set sw=4
+
+set smarttab
+
+" Make backspace more flexible
+set backspace=indent,eol,start
+
+" Use tab expansion in vim prompts
+set wildmode=longest:list
+
+" Ignore case in file names
+if exists("&wildignorecase")
+    set wildignorecase
+endif
+
+" No line wrapping of long lines
+set nowrap
+
+" Do not wrap while searching
+set nowrapscan
+
+" Show arrows for too long lines / show trailing spaces
+set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
+
+" Stay in the middle of the screen
+set scrolloff=999
+set sidescrolloff=0
+
+" Scroll by one char at end of line
+set sidescroll=1
+
+" None of these are word dividers
+set iskeyword+=:,_,$,@,%,#
+
+" Don't make noise
+set noerrorbells
+set novisualbell
+
+set ttyfast
+
+" Keep cursor position (if possible) when executing certain commands
+set nostartofline
+
+"### undo and swap #############################################################
+
+" Maximum amount of memory in Kbyte to use for all buffers together.
+set maxmemtot=2048
+
+" Default 1000
+" set undolevels=
+
+" Never create backup files
+set nobackup
+set nowritebackup
+
+" Don't create swapfiles
+set noswapfile
+
+"### mappings ##################################################################
+
+" These are the same for vim
+" Tab and Ctrl-I
+" Enter and Ctrl-M
+" Esc and Ctrl-[ 
+
+" Clear all mappings
+" :mapclear
+
+" Disable F1
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+nnoremap <silent> <ESC><ESC> :q!<CR>
+
+nnoremap <silent><C-l> :bnext<cr>
+nnoremap <silent><C-h> :bprev<cr>
+
+nnoremap <leader>l :!tree<cr>
+
+" Dont use Q for Ex mode
+map Q :q
+
+" Run current buffer
+nnoremap <leader>e :!%:p
+
+"### Statusline ################################################################
+
+set shortmess=astTI " avoid 'hit enter prompt'
+set cmdheight=2 " increase ruler height
+
+set laststatus=2
+
+" set ruler " always show status line
+" set statusline=%80(%t%=%{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}\ %2c\ %P%)
+" set statusline=%80(%t)
+
+"### Install Vundle - The Plugin Manager #######################################
+
+" Maximise help window
+augroup filetype_help
+    autocmd!
+    autocmd BufWinEnter * if &l:buftype ==# 'help' | wincmd _ | endif
+augroup END
 
 "### Install Vundle - The Plugin Manager #######################################
 
@@ -113,7 +267,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
     Plugin 'tsukkee/unite-tag'
 
     " Lean & mean status/tabline for vim that's light as air.
-    Plugin 'bling/vim-airline'
+    " Plugin 'bling/vim-airline'
 
     Plugin 'scrooloose/nerdtree'
 
@@ -132,6 +286,13 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
     Plugin 'vim-scripts/CycleColor'
 
+    " Select tags or select files including tags
+    " Plugin 'haha/unite-grep_sync'
+
+    " Plugin 'Shougo/vimproc.vim'
+
+    Plugin 'sgur/unite-qf'
+
 "### Install bundles ###########################################################
 
     if iCanHazVundle == 0
@@ -139,247 +300,5 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
         echo ""
         :PluginInstall
     endif
-
-"###############################################################################
-
-" reload vimrc on write
-autocmd BufWritePost vimrc source %
-
-" set shortmess=astTI " avoid 'hit enter prompt'
-" set cmdheight=2 " increase ruler height
-
-" set ruler " always show status line
-" set rulerformat=%80(%<%F\ %{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}%=\ %2c\ %P%)
-
-" set colorcolumn=81
-
-" prevent creation of .netrwhist file
-let g:netrw_dirhistmax = 0
-
-" detect filetypes and run filetype plugins
-filetype on
-filetype plugin on
-filetype indent on
-
-" make the clipboard register the same as the default register
-" this allows easy copy to other x11 apps
-set clipboard=unnamed
-
-" Chdir to the dir of the current buffer
-set autochdir
-
-"### searching #################################################################
-
-" Show matching brackets.
-set showmatch
-
-" Incremental search
-set incsearch
-
-" highlight found text
-set hlsearch
-
-set ignorecase
-
-" case insensitive search when all lowercase
-set smartcase
-
-" case inferred by default
-set infercase
-
-"###############################################################################
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-" Automatically write file if leaving a buffer
-set autowriteall
-
-" Timeout on mappings and key codes (faster escape etc)
-set timeout
-set timeoutlen=300
-set ttimeoutlen=10
-
-" leave my cursor where it was - even on page jump
-set nostartofline
-
-set expandtab " Insert spaces when the tab key is hit
-set tabstop=4 " Tab spacing of 4
-set sw=4 " shift width (moved sideways for the shift command)
-set smarttab
-
-set backspace=indent,eol,start " make backspace more flexible
-
-" use tab expansion in vim prompts
-set wildmode=longest:list
-
-" ignore case in file names
-if exists("&wildignorecase")
-    set wildignorecase
-endif
-
-set nowrap " no line wrapping of long lines
-set nowrapscan " do not wrap while searching
-
-" show arrows for too long lines / show trailing spaces
-set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
-
-" stay in the middle of the screen
-set scrolloff=999
-set sidescrolloff=0
-
-" scroll by one char at end of line
-set sidescroll=1
-
-" none of these are word dividers
-set iskeyword+=:,_,$,@,%,#
-
-" don't make noise
-set noerrorbells
-set novisualbell
-
-set ttyfast
-
-" keep cursor position (if possible) when executing certain commands
-set nostartofline
-
-"### undo and swap #############################################################
-
-" Maximum amount of memory in Kbyte to use for all buffers together.
-set maxmemtot=2048
-
-" default 1000
-" set undolevels=
-
-" never create backup files
-set nobackup
-set nowritebackup
-
-" in memory only
-set noswapfile
-
-"###############################################################################
-
-" set encoding=utf-8
-" set laststatus=2
-
-"### mappings ##################################################################
-
-" these are the same for vim
-" Tab and Ctrl-I
-" Enter and Ctrl-M
-" Esc and Ctrl-[ 
-
-" clear all mappings
-" :mapclear
-
-" disable F1
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
-
-" Close a buffer writing its content and closing vim if appropriate.
-function! BufferClose()
-
-    if BufferIsEmpty() == 1
-    elseif BufferIsUnnamed() == 1
-    elseif &modified
-        :w
-    endif
-
-    if BufferIsLast() == 1
-        :q!
-    else
-        :bdelete!
-    endif
-
-endfunction
-
-function! BufferIsUnnamed()
-
-    if empty(bufname("%"))
-        return 1
-    else
-        return 2
-    endif
-
-endfunction
-
-function! BufferIsEmpty()
-    if line('$') == 1 && getline(1) == '' 
-        return 1
-    else
-        return 0
-    endif
-endfunction
-
-function! BufferIsLast()
-
-    let last_buffer = bufnr('$')
-
-    let listed = 0
-    let i = 1
-    while i <= last_buffer
-
-        if buflisted(i) == 1
-            let listed = listed + 1
-        endif
-
-        if listed > 1
-            return 0
-        endif
-
-        let i = i + 1
-
-    endwhile
-
-    return 1
-
-endfunction
-
-nnoremap <silent> <ESC> :call BufferClose()<cr>
-nnoremap <silent> <ESC><ESC> :q!<CR>
-
-nnoremap <silent><C-l> :bnext<cr>
-nnoremap <silent><C-h> :bprev<cr>
-
-nnoremap <leader>l :!tree<cr>
-
-" dont use Q for Ex mode
-map Q :q
-
-" run current buffer
-nnoremap <leader>e :!%:p
-
-"### automatically give executable permissions #################################
-
-au BufWritePost * silent call ModeChange()
-
-function! ModeChange()
-  if getline(1) =~ "^#!"
-    if getline(1) =~ "/bin/"
-      silent !chmod a+x <afile>
-    endif
-    if getline(1) =~ "perl"
-      silent set filetype=perl
-    endif
-  endif
-endfunction
-
-"### Keep cursor position on undo and redo #####################################
-
-map <silent> u :call MyUndo()<CR>
-function! MyUndo()
-    let _view=winsaveview()
-    :undo
-    call winrestview(_view)
-endfunction
-
-map <silent> <c-r> :call MyRedo()<CR>
-function! MyRedo()
-    let _view=winsaveview()
-    :redo
-    call winrestview(_view)
-endfunction
 
 "###############################################################################

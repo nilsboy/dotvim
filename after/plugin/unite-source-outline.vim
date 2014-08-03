@@ -1,3 +1,6 @@
+" call unite#custom#source('outline', 'converters', ['converter_default'])
+" call unite#custom#source('outline', 'sorters', ['sorter_word'])
+
 nnoremap <silent> <Leader>o :<C-u>Unite
             \ -buffer-name=outline
             \ -keep-focus

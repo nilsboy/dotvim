@@ -1,3 +1,5 @@
+"### general ##################################################################
+
 let g:unite_data_directory = VIM_VAR . "unite"
 
 " no clue - but complains if not set
@@ -9,6 +11,17 @@ let g:unite_source_history_yank_enable = 1
 call unite#filters#converter_default#use(['converter_file_directory'])
 call unite#filters#sorter_default#use(['sorter_word'])
 
+" TODO
+" checkout source output:messages
+" nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
+" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files   -start-insert file_rec<cr>
+" nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
+" nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
+
+"### line #####################################################################
+
+call unite#custom#source('line', 'sorters', ['sorter_nothing'])
+
 nnoremap <silent> // :<C-u>Unite
             \ -buffer-name=search
             \ -no-quit
@@ -18,26 +31,64 @@ nnoremap <silent> // :<C-u>Unite
             \ -silent
             \ line<cr>
 
+"### buffers ##################################################################
+
+call unite#custom#source('tab', 'sorters', ['sorter_nothing'])
+call unite#custom#source('window', 'sorters', ['sorter_nothing'])
+call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
+
 nnoremap <silent> <leader>v :<C-u>Unite
             \ -buffer-name=vimfos
             \ -no-quit
             \ -keep-focus
             \ -immediately
-            \ -start-insert
             \ -silent
             \ tab window buffer<cr>
 
-" nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
-" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files   -start-insert file_rec<cr>
-" nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
-" nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
+"### file_rec #################################################################
 
-" register
-" :UniteWithProjectDir
-" \ -auto-preview
-" \ -quick-match
-" \ -hide-sources-names
-" \ -hide-status-line - no works?
-" \ -here -no-resize
-" -unique
-" source: menu
+call unite#custom#source('file_rec', 'converters', ['converter_default'])
+call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
+
+nnoremap <silent> <leader>f :<C-u>Unite
+            \ -buffer-name=files
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -silent
+            \ file_rec<cr>
+
+nnoremap <silent> <leader>ff call Uniteff()<cr>
+
+function! Uniteff()
+
+execute "Unite file_rec:" . $HOME . "/src"
+
+"             \ -buffer-name=hostfiles
+"             \ -no-quit
+"             \ -keep-focus
+"             \ -immediately
+"             \ -start-insert
+"             \ -silent
+"             \ file_rec:" . $HOME . "/src"<cr>
+endfunction
+
+"### neomru ###################################################################
+
+call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
+" call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
+call unite#custom#source('neomru/file', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+
+nnoremap <silent> <leader>r :<C-u>Unite
+            \ -buffer-name=mru
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -silent
+            \ neomru/file<cr>
+
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | :<C-u>Unite neomru/file<cr> | endif
+" nnoremap <silent> <leader>v :<C-u>Unite
