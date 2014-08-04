@@ -192,14 +192,59 @@ nnoremap <leader>e :!%:p
 
 "### Statusline ################################################################
 
-set shortmess=astTI " avoid 'hit enter prompt'
-set cmdheight=2 " increase ruler height
+" Avoid 'hit enter prompt'
+set shortmess=atTI
+
+" Increase ruler height
+" set cmdheight=2
 
 set laststatus=2
 
-" set ruler " always show status line
-" set statusline=%80(%t%=%{(&fenc==\"\"?&enc:&fenc)}%Y%{&ff=='unix'?'':','.&ff}\ %2c\ %P%)
-" set statusline=%80(%t)
+" Always show ruler (right part of the command line)
+" set ruler
+
+" Tail of the filename
+set statusline=%t
+
+set statusline+=\ (%{fnamemodify(expand('%:p'),':h:t')})
+
+" Dont highlight the space
+set statusline+=\ 
+" Set color of error highlight group
+set statusline+=%#error#
+
+" read only flag
+set statusline+=%{filewritable(expand('\%'))?'':'RO'}
+
+" Reset color
+set statusline+=%*
+
+" left/right separator
+set statusline+=%=
+
+" filetype
+set statusline+=%{strlen(&ft)?&ft.'\ ':''}
+
+" file encoding
+set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
+
+" File format
+set statusline+=%{&ff=='unix'?'':&ff.'\ '}
+
+" Separator
+set statusline+=\ \ \ \ \ 
+
+" Cursor line/total lines
+set statusline+=%l/%L
+
+" Cursor column
+set statusline+=:%c
+
+" Separator
+set statusline+=\ \ \ \ \ 
+
+" Percent through file
+set statusline+=%P
 
 "### Install Vundle - The Plugin Manager #######################################
 
