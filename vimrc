@@ -218,10 +218,12 @@ set laststatus=2
 " Tail of the filename
 set statusline=%t
 
+" Containing directory
 set statusline+=\ (%{fnamemodify(expand('%:p'),':h:t')})
 
-" Dont highlight the space
+" Separator
 set statusline+=\ 
+
 " Set color of error highlight group
 set statusline+=%#error#
 
