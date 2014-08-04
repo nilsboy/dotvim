@@ -12,7 +12,9 @@ nnoremap <buffer> S ?\|\zs\S\+\ze\|<CR>
 " set helpheight=99999
 
 " Make help buffers listed to be able to switch to them via :bnext etc.
-augroup filetype_help
-    autocmd!
-    autocmd BufWinEnter * if &l:buftype ==# 'help' | set buflisted | endif
-augroup END
+" @deprecated: done for all buffers now in vimrc
+" augroup filetype_help
+    " autocmd!
+    " autocmd BufWinEnter * if &l:buftype ==# 'help' | set buflisted | endif
+    " autocmd BufAdd * set buflisted
+" augroup END

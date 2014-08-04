@@ -153,6 +153,12 @@ augroup only_window
     autocmd WinEnter * only
 augroup END
 
+" Add all buffers to the buffer list
+augroup bufAdd_setBufListed
+    autocmd!
+    autocmd BufEnter * set buflisted
+augroup END
+
 "### undo and swap #############################################################
 
 " Maximum amount of memory in Kbyte to use for all buffers together.

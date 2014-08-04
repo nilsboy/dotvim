@@ -13,7 +13,9 @@ nnoremap <silent> <leader>r :<C-u>Unite
 autocmd StdinReadPre * let s:std_in=1
 augroup vimEnter_mru
     autocmd!
-    autocmd VimEnter * if argc() == 0 && exists("s:std_in") == 0 | :exe 'Unite neomru/file' | endif
+    autocmd VimEnter * if argc() == 0 && exists("s:std_in") == 0 
+        \ | :exe 'Unite -start-insert neomru/file' 
+        \ | endif
 augroup END
 
 
