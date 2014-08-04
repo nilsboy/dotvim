@@ -147,6 +147,12 @@ set ttyfast
 " Keep cursor position (if possible) when executing certain commands
 set nostartofline
 
+" Epic: Force single window mode!
+augroup only_window
+    autocmd!
+    autocmd WinEnter * only
+augroup END
+
 "### undo and swap #############################################################
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
@@ -193,7 +199,7 @@ nnoremap <leader>e :!%:p
 "### Statusline ################################################################
 
 " Avoid 'hit enter prompt'
-set shortmess=atTI
+set shortmess=atTIW
 
 " Increase ruler height
 " set cmdheight=2
@@ -245,14 +251,6 @@ set statusline+=\ \ \ \ \
 
 " Percent through file
 set statusline+=%P
-
-"### Install Vundle - The Plugin Manager #######################################
-
-" Maximise help window
-augroup filetype_help
-    autocmd!
-    autocmd BufWinEnter * if &l:buftype ==# 'help' | wincmd _ | endif
-augroup END
 
 "### Install Vundle - The Plugin Manager #######################################
 
