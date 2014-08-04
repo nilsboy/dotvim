@@ -5,7 +5,7 @@
 
 "--- perltidy ------------------------------------------------------------------
 
- map <silent> <Leader>w :call PerlTidy()<CR>
+" map <silent> <Leader>w :call PerlTidy()<CR>
 
 function! PerlTidy()
     let _view=winsaveview()
@@ -17,14 +17,14 @@ endfunction
 
 "--- :make with error parsing --------------------------------------------------
 
-map <silent> <c-e> :make<cr>
+" map <silent> <c-e> :make<cr>
 set makeprg=$VIMRUNTIME/tools/efm_perl.pl\ -c\ %\ $*
 set errorformat=%f:%l:%m
 
 "--- show documentation for builtins and modules under cursor ------------------
 " http://www.perlmonks.org/?node_id=441738
 
-noremap <silent> <c-m> :call PerlDoc()<cr>:set nomod<cr>:set filetype=man<cr>
+" noremap <silent> <c-m> :call PerlDoc()<cr>:set nomod<cr>:set filetype=man<cr>
 
 function! PerlDoc()
 
@@ -43,7 +43,7 @@ function! PerlDoc()
 
     exe ':0r!perldoc -t ' . l:this
     exe ':0'
-    noremap <buffer> <esc> <esc>:q!<cr>
+    " noremap <buffer> <esc> <esc>:q!<cr>
 
     return
 
@@ -54,6 +54,6 @@ function! PerlDoc()
   exe ':resize'
   exe ':0r!perldoc -t -f ' . @
   exe ':0'
-  noremap <buffer> <esc> <esc>:q!<cr>
+  " noremap <buffer> <esc> <esc>:q!<cr>
 
 endfunction

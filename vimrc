@@ -159,6 +159,8 @@ augroup bufEnter_setBufListed
     autocmd BufEnter * set buflisted
 augroup END
 
+autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
+
 "### undo and swap #############################################################
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
@@ -342,7 +344,12 @@ set statusline+=%P
 
     " Plugin 'Shougo/vimproc.vim'
 
+    " Quickfix
     Plugin 'sgur/unite-qf'
+
+    " Show the syntax group name of the item under cursor
+    " :call SyntaxAttr()<CR>
+    Plugin 'vim-scripts/SyntaxAttr.vim'
 
 "### Install bundles ###########################################################
 
