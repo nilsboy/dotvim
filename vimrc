@@ -148,13 +148,13 @@ set ttyfast
 set nostartofline
 
 " Epic: Force single window mode!
-augroup only_window
+augroup winEnter_only
     autocmd!
     autocmd WinEnter * only
 augroup END
 
-" Add all buffers to the buffer list
-augroup bufAdd_setBufListed
+" Make all unlisted buffers listed
+augroup bufEnter_setBufListed
     autocmd!
     autocmd BufEnter * set buflisted
 augroup END
