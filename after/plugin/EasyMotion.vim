@@ -1,13 +1,22 @@
 let g:EasyMotion_leader_key = '<Leader>'
 let g:EasyMotion_grouping = 1
-" let EasyMotion_keys = "abcdefghijklmnopqrstuvwxyz0123456789"
 
-let g:EasyMotion_use_upper = 1
-" let g:EasyMotion_keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-let g:EasyMotion_keys='hjklöä#zuiopü+7890ßnm,.-gfdsatrewq654321bvcxyHJKLÖÄ#ZUIOPÜ7890ßNMGFDSATREWQ654321BVCXY'
+" let g:EasyMotion_use_upper = 1
+
+" right hand
+let g:EasyMotion_keys='hjklöä#uiopünm7890ß'
+
+" left hand
+let g:EasyMotion_keys.='gfdsatrewqbvcxy654321'
+
+" right hand upper case
+let g:EasyMotion_keys.='HJKLÖÄUIOPÜNM'
+
+" left hand upper case
+let g:EasyMotion_keys.='GFDSATREWQBVCXY'
 
 let g:EasyMotion_enter_jump_first = 1
-let g:EasyMotion_disable_two_key_combo = 0
+let g:EasyMotion_disable_two_key_combo = 1
 
 let g:EasyMotion_do_shade = 1
 
