@@ -10,6 +10,7 @@ nnoremap <buffer> S ?\|\zs\S\+\ze\|<CR>
 
 " Open help fullscreen
 " set helpheight=99999
+setlocal keywordprg=:help
 
 " Make help buffers listed to be able to switch to them via :bnext etc.
 " @deprecated: done for all buffers now in vimrc

@@ -24,8 +24,9 @@ function! MyMan(cmd)
     silent execute 'edit' file_name
     silent execute 'normal ggdG'
     " silent execute 'r!man' cmd
-    silent execute 'r!man-multi-lookup' cmd
+    silent execute 'r!SHORT=1 man-multi-lookup' cmd
     silent execute 'normal ggdd/^---'
+    silent execute ':w'
 
     " silent :set filetype=man
     " silent :setlocal buftype=nofile
@@ -34,6 +35,6 @@ function! MyMan(cmd)
 
 endfunction
 
-nnoremap <silent> K :call MyMan(expand("<cword>"))<cr>
+nnoremap <buffer> <silent> K :call MyMan(expand("<cword>"))<cr><cr>
 command! -nargs=1 Man call MyMan("<args>")
 
