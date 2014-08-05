@@ -159,7 +159,19 @@ augroup bufEnter_setBufListed
     autocmd BufEnter * set buflisted
 augroup END
 
+" Highlight unknown filetypes as text
 autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
+
+" Highlight vim documentation if opened directly from file
+augroup buffer_vimdoc
+    autocmd!
+    autocmd FileType * if 
+        \ &filetype == 'text'
+        \ && expand("<afile>") =~ 'vim/'
+        \ && expand("<afile>") =~ '/doc/'
+        \ | setlocal filetype=help
+    \ | endif
+augroup END
 
 "### undo and swap #############################################################
 
@@ -173,7 +185,7 @@ set maxmemtot=2048
 set nobackup
 set nowritebackup
 
-" Don't create swapfiles
+" Never create swapfiles
 set noswapfile
 
 "### mappings ##################################################################
@@ -195,6 +207,9 @@ nnoremap <silent> <ESC><ESC> :q!<CR>
 
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>
+
+inoremap <silent><C-l> :bnext<cr>
+inoremap <silent><C-h> :bprev<cr>
 
 nnoremap <leader>l :!tree<cr>
 

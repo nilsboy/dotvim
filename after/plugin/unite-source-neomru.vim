@@ -30,4 +30,22 @@ augroup vimEnter_mru
         \ | endif
 augroup END
 
+call unite#custom#source('directory_file_rec', 'converters', ['converter_nothing'])
+call unite#custom#source('directory_file_rec', 'sorters', ['sorter_word'])
 
+let g:unite_source_alias_aliases = {
+      \   'directory_file_rec' : {
+      \     'source': 'file_rec',
+      \   },
+      \   'b' : 'buffer',
+      \ }
+
+let directory_file_rec = {
+  \ 'is_selectable': 0,
+  \}
+function! directory_file_rec.func(candidate)
+    execute ':Unite directory_file_rec:' . a:candidate.word
+endfunction
+
+call unite#custom#action('directory', 'directory_file_rec', directory_file_rec)
+call unite#custom#default_action('directory', 'directory_file_rec')
