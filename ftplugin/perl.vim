@@ -5,7 +5,7 @@
 
 "--- perltidy ------------------------------------------------------------------
 
-" map <silent> <Leader>w :call PerlTidy()<CR>
+map <silent> <Leader>w :call PerlTidy()<CR>
 
 function! PerlTidy()
     let _view=winsaveview()
@@ -57,3 +57,7 @@ function! PerlDoc()
   " noremap <buffer> <esc> <esc>:q!<cr>
 
 endfunction
+
+runtime! ftplugin/sh.vim
+" setlocal keywordprg=!perldoc
+nnoremap <buffer> <silent> K :call MyMan(expand("<cword>"))<cr><cr>

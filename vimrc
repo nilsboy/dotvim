@@ -225,18 +225,20 @@ nnoremap <leader>e :!%:p
 set shortmess=atTIW
 
 " Increase ruler height
-" set cmdheight=2
+set cmdheight=2
 
 set laststatus=2
 
 " Always show ruler (right part of the command line)
 " set ruler
 
-" Tail of the filename
-set statusline=%t
+set statusline=\ 
 
 " Containing directory
-set statusline+=\ (%{fnamemodify(expand('%:p'),':h:t')})
+set statusline+=%{fnamemodify(expand('%:p'),':h:t')}/
+
+" Tail of the filename
+set statusline+=%t
 
 " Separator
 set statusline+=\ 
@@ -276,6 +278,8 @@ set statusline+=\ \ \ \ \
 
 " Percent through file
 set statusline+=%P
+
+set statusline+=\ 
 
 "### Install Vundle - The Plugin Manager #######################################
 
