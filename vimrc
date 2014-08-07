@@ -318,7 +318,10 @@ set statusline+=\
     Plugin 'txt.vim'
 
     " EasyMotion provides a much simpler way to use some motions in vim
-    Plugin 'lokaltog/vim-easymotion'
+    " Plugin 'lokaltog/vim-easymotion'
+
+    " Easymotion alternative
+    Plugin 't9md/vim-smalls'
 
     " Search and display information from arbitrary sources
     Plugin 'shougo/unite.vim'
@@ -369,6 +372,9 @@ set statusline+=\
     " Show the syntax group name of the item under cursor
     " :call SyntaxAttr()<CR>
     Plugin 'vim-scripts/SyntaxAttr.vim'
+
+    " Support perl regexes
+    Plugin 'vim-scripts/eregex.vim'
 
 "### Install bundles ###########################################################
 

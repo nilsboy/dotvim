@@ -1,37 +1,57 @@
 let g:EasyMotion_leader_key = '<Leader>'
+
 let g:EasyMotion_grouping = 1
 
-" let g:EasyMotion_use_upper = 1
+let g:EasyMotion_use_upper = 1
 
 " right hand
-let g:EasyMotion_keys='hjklöä#uiopünm7890ß'
+let g:EasyMotion_keys='HJKLUIOPNM'
 
 " left hand
-let g:EasyMotion_keys.='gfdsatrewqbvcxy654321'
-
-" right hand upper case
-let g:EasyMotion_keys.='HJKLÖÄUIOPÜNM'
-
-" left hand upper case
 let g:EasyMotion_keys.='GFDSATREWQBVCXY'
 
 let g:EasyMotion_enter_jump_first = 1
-let g:EasyMotion_disable_two_key_combo = 1
+let g:EasyMotion_disable_two_key_combo = 0
 
 let g:EasyMotion_do_shade = 1
 
-" hi link EasyMotionTarget ErrorMsg
-" hi link EasyMotionShade  Comment
+let g:EasyMotion_force_csapprox = 1
 
 hi link EasyMotionTarget ErrorMsg
-hi link EasyMotionShade  Comment
+hi link EasyMotionShade  todo
 
 hi link EasyMotionTarget2First ErrorMsg
-hi link EasyMotionTarget2Second Comment
-" hi link EasyMotionTarget2Second MatchParen
+hi link EasyMotionTarget2Second todo
 
 " todo xxx term=standout ctermfg=20 ctermbg=21 guifg=#875f00 guibg=#ffffaf
 
-nmap w <Plug>(easymotion-w)
-nmap W <Plug>(easymotion-W)
+" nmap w <Plug>(easymotion-w)
+" nmap W <Plug>(easymotion-W)
+nmap <space> <Plug>(easymotion-jumptoanywhere)
 
+" let g:EasyMotion_re_anywhere=''
+" 
+" " Unescaped non ASCII chars are operators
+" let g:EasyMotion_re_anywhere.='\v'
+" 
+" " Beginning of word
+" let g:EasyMotion_re_anywhere.='(<.|^$)' . '|'
+" 
+" " End of word
+" let g:EasyMotion_re_anywhere.='(.>|^$)' . '|'
+" 
+" " Camelcase
+" let g:EasyMotion_re_anywhere.='(\l)\zs(\u)' . '|'
+" 
+" " After '_'
+" let g:EasyMotion_re_anywhere.='(_\zs.)' . '|'
+" 
+" " After '#'
+" let g:EasyMotion_re_anywhere.='(#\zs.)'
+" 
+" " 3 letter words
+" " let g:EasyMotion_re_anywhere='\v(_|\s)\zs([0-9A-Za-z]{3,})'
+" 
+" " let g:EasyMotion_re_anywhere='\v\s(\{|\})'
+" "
+" " let g:EasyMotion_re_anywhere='\v'
