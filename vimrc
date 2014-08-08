@@ -244,7 +244,7 @@ set statusline+=%t
 set statusline+=\ 
 
 " Set color of error highlight group
-set statusline+=%#error#
+set statusline+=%#errormsg#
 
 " read only flag
 set statusline+=%{filewritable(expand('\%'))?'':'RO'}
@@ -317,11 +317,12 @@ set statusline+=\
     " Universal syntax script for all txt docs, logs and other types
     Plugin 'txt.vim'
 
-    " EasyMotion provides a much simpler way to use some motions in vim
-    " Plugin 'lokaltog/vim-easymotion'
+    " EasyMotion and friends
+    Plugin 'lokaltog/vim-easymotion'
+    " Plugin 't9md/vim-smalls'
+    Plugin 'justinmk/vim-sneak'
 
-    " Easymotion alternative
-    Plugin 't9md/vim-smalls'
+" let g:sneak#streak = 1
 
     " Search and display information from arbitrary sources
     Plugin 'shougo/unite.vim'
