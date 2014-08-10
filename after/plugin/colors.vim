@@ -1,18 +1,16 @@
-" show colors
+" Show hightlight groups in their current colors
 " :so $VIMRUNTIME/syntax/hitest.vim
 
+" Prefer light version of a colorscheme
 set background=light
 
 " highlight the whole file not just the window - slower but more accurate.
 autocmd BufEnter * :syntax sync fromstart
 
+" Remove background set by colorscheme
+" http://stackoverflow.com/questions/12449248
 function! ColorschemeCleanup()
 
-    " convert colors down to 256
-    " :CSApprox!
-
-    " Remove background set by colorscheme
-    " http://stackoverflow.com/questions/12449248
     hi Normal ctermbg=NONE
     " hi Comment ctermbg=NONE
     " hi Constant ctermbg=NONE
@@ -32,8 +30,6 @@ function! ColorschemeCleanup()
 endfunction
 autocmd ColorScheme * exec ColorschemeCleanup()
 
-" let g:csexact_blacklist = 'solarized'
-
 try
     colorscheme lucius
 catch /find/
@@ -44,6 +40,11 @@ if &t_Co > 1
     syntax enable
 endif
 
+" Highlight all occurences of word under cursor
 autocmd CursorMoved * exe printf('match todo /\V\<%s\>/', 
     \ escape(expand('<cword>'), '/\'))
 
+" Prevent CSExact from resetting the colors to the normal palette to avoid
+" disturbing other vims in the same terminal window (when using tmux etc)
+" This overwrites CSExacts reset function with a dummy function.
+command! -bar CSExactResetColors echo "Avoiding CSExact reset"

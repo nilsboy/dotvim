@@ -208,10 +208,12 @@ nnoremap <silent> <ESC><ESC> :q!<CR>
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>
 
-inoremap <silent><C-l> :bnext<cr>
-inoremap <silent><C-h> :bprev<cr>
+nnoremap <silent><C-k> :tnext<cr>
+nnoremap <silent><C-j> :tprev<cr>
+nnoremap <silent>t :execute 'tag ' . expand("<cword>")<cr>
+" nnoremap <silent><C-i> tag<cr>
 
-nnoremap <leader>l :!tree<cr>
+nnoremap <silent><leader>l :!tree<cr>
 
 " Dont use Q for Ex mode
 map Q :q
@@ -320,7 +322,7 @@ set statusline+=\
     " EasyMotion and friends
     Plugin 'lokaltog/vim-easymotion'
     " Plugin 't9md/vim-smalls'
-    Plugin 'justinmk/vim-sneak'
+    " Plugin 'justinmk/vim-sneak'
 
 " let g:sneak#streak = 1
 
