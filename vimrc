@@ -81,6 +81,9 @@ set smartcase
 " Case inferred by default
 set infercase
 
+" Do not wrap while searching
+" set nowrapscan
+
 "###############################################################################
 
 " Set to auto read when a file is changed from the outside
@@ -121,9 +124,6 @@ endif
 
 " No line wrapping of long lines
 set nowrap
-
-" Do not wrap while searching
-set nowrapscan
 
 " Show arrows for too long lines / show trailing spaces
 set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
@@ -204,6 +204,10 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
 nnoremap <silent> <ESC><ESC> :q!<CR>
+
+nnoremap <silent> - /
+nmap <silent> ; ,
+nmap <silent> , ;
 
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>
@@ -322,7 +326,7 @@ set statusline+=\
     " EasyMotion and friends
     Plugin 'lokaltog/vim-easymotion'
     " Plugin 't9md/vim-smalls'
-    " Plugin 'justinmk/vim-sneak'
+    Plugin 'justinmk/vim-sneak'
 
 " let g:sneak#streak = 1
 

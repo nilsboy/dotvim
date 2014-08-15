@@ -17,7 +17,7 @@ let g:EasyMotion_keys.='7890'
 let g:EasyMotion_enter_jump_first = 1
 let g:EasyMotion_disable_two_key_combo = 0
 
-let g:EasyMotion_do_shade = 0
+let g:EasyMotion_do_shade = 1
 
 " ha::ha
 " camelCase
