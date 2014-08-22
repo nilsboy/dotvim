@@ -165,11 +165,11 @@ autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
 " Highlight vim documentation if opened directly from file
 augroup buffer_vimdoc
     autocmd!
-    autocmd FileType * if 
-        \ &filetype == 'text'
-        \ && expand("<afile>") =~ 'vim/'
-        \ && expand("<afile>") =~ '/doc/'
+    autocmd BufRead * if 
+        \ &filetype != "help"
+        \ && expand("<afile>") =~ 'vim/.*/doc/.*\.txt$'
         \ | setlocal filetype=help
+        \ | echo "haha " . expand("<afile>")
     \ | endif
 augroup END
 
@@ -382,6 +382,12 @@ set statusline+=\
 
     " Support perl regexes
     Plugin 'vim-scripts/eregex.vim'
+
+    " Define temporary keymaps
+    Plugin 'tomtom/tinykeymap_vim'
+
+    " Mappings for simultaneously pressed keys
+    " Plugin 'kana/vim-arpeggio'
 
 "### Install bundles ###########################################################
 
