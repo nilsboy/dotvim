@@ -241,10 +241,54 @@ set laststatus=2
 set statusline=\ 
 
 " Containing directory
-set statusline+=%{fnamemodify(expand('%:p'),':h:t')}/
+set statusline+=%{Location()}
+
+" TODO using an echo in statusline removes old messages - maybe a way to
+" suppress stuff?
+
+function! Location()
+    let l:fn = expand("%:p")
+    " let l:fn = $HOME . "/bashrc"
+    " let l:fn = $HOME . "/src/dotvim/vimrc"
+    " let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+    " let l:fn = $HOME . "/src/dotvim/plugin/BufferCloseSanely.vim"
+
+    let l:prefix = ""
+    let l:dirname = ""
+
+    let l:fn = substitute(l:fn, $HOME . "/src/", "", "")
+    let l:fn = substitute(l:fn, $HOME, "", "")
+
+    let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
+    let l:basename = fnamemodify(l:fn,':t:h')
+
+    if len(l:dirs) == 0
+        let l:dirname= "~"
+    elseif len(l:dirs) == 1
+        let l:prefix = dirs[0]
+    elseif len(l:dirs) == 2
+        let l:prefix = dirs[0]
+        let l:dirname = dirs[1]
+    elseif len(l:dirs) > 2
+        let l:prefix = dirs[2]
+        let l:dirname = dirs[len(dirs) - 1]
+    endif
+
+     if l:dirname != ""
+         let l:dirname .= "/"
+     endif
+
+    if l:prefix != ""
+        let l:prefix .= ":"
+    endif
+
+    let l:fn = l:prefix . l:dirname . l:basename
+    return l:fn
+
+endfunction
 
 " Tail of the filename
-set statusline+=%t
+" set statusline+=%t
 
 " Separator
 set statusline+=\ 
