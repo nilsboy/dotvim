@@ -180,7 +180,6 @@ augroup buffer_vimdoc
         \ &filetype != "help"
         \ && expand("<afile>") =~ 'vim/.*/doc/.*\.txt$'
         \ | setlocal filetype=help
-        " \ | echo "haha " . expand("<afile>")
     \ | endif
 augroup END
 
