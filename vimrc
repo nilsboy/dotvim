@@ -71,7 +71,7 @@ set showmatch
 set incsearch
 
 " Highlight found text
-set hlsearch
+" set hlsearch
 
 set ignorecase
 
@@ -147,16 +147,27 @@ set ttyfast
 " Keep cursor position (if possible) when executing certain commands
 set nostartofline
 
+" Highlight the screen line of the cursor with CursorLine
+" set cursorline
+
 " Epic: Force single window mode!
 augroup winEnter_only
     autocmd!
-    autocmd WinEnter * only
+    " autocmd WinEnter * only
+    autocmd WinEnter *
+        \ if bufname("%") !~ "unite-tagxx"
+        \     | set nowinfixheight
+        \     | only
+        \     | resize
+        \ | endif
 augroup END
 
 " Make all unlisted buffers listed
 augroup bufEnter_setBufListed
     autocmd!
     autocmd BufEnter * set buflisted
+    " Avoid errors about unsaved data
+    " setlocal buftype=nowrite
 augroup END
 
 " Highlight unknown filetypes as text
@@ -169,7 +180,7 @@ augroup buffer_vimdoc
         \ &filetype != "help"
         \ && expand("<afile>") =~ 'vim/.*/doc/.*\.txt$'
         \ | setlocal filetype=help
-        \ | echo "haha " . expand("<afile>")
+        " \ | echo "haha " . expand("<afile>")
     \ | endif
 augroup END
 
@@ -198,24 +209,20 @@ set noswapfile
 " Clear all mappings
 " :mapclear
 
-" Disable F1
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
-
-nnoremap <silent> <ESC><ESC> :q!<CR>
+nnoremap <silent> <ESC><ESC> :x!<CR>
 
 nnoremap <silent> - /
-nmap <silent> ; ,
-nmap <silent> , ;
+nnoremap <silent> ; ,
+nnoremap <silent> , ;
+nnoremap <silent> <leader>k1 <F1>
 
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>
 
-nnoremap <silent><C-k> :tnext<cr>
-nnoremap <silent><C-j> :tprev<cr>
-nnoremap <silent>t :execute 'tag ' . expand("<cword>")<cr>
-" nnoremap <silent><C-i> tag<cr>
+" nnoremap <silent><C-k> :tnext<cr>
+" nnoremap <silent><C-j> :tprev<cr>
+" nnoremap <silent>t :execute 'tjump ' . expand("<cword>")<cr>
+" nnoremap <silent>T :tjump 
 
 nnoremap <silent><leader>l :!tree<cr>
 
@@ -247,17 +254,19 @@ set statusline+=%{Location()}
 " suppress stuff?
 
 function! Location()
+
+    let l:fn = "/home/user/src/dotvim/vimrc"
+    let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+    let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
+    let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
+    let l:fn = "/home/user/bashrc"
     let l:fn = expand("%:p")
-    " let l:fn = $HOME . "/bashrc"
-    " let l:fn = $HOME . "/src/dotvim/vimrc"
-    " let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-    " let l:fn = $HOME . "/src/dotvim/plugin/BufferCloseSanely.vim"
 
     let l:prefix = ""
     let l:dirname = ""
 
-    let l:fn = substitute(l:fn, $HOME . "/src/", "", "")
-    let l:fn = substitute(l:fn, $HOME, "", "")
+    " let l:fn = substitute(l:fn, $HOME . "/src/", "", "")
+    let l:fn = substitute(l:fn, "/home", "", "")
 
     let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
     let l:basename = fnamemodify(l:fn,':t:h')
@@ -271,7 +280,9 @@ function! Location()
         let l:dirname = dirs[1]
     elseif len(l:dirs) > 2
         let l:prefix = dirs[2]
-        let l:dirname = dirs[len(dirs) - 1]
+        if len(dirs) > 3
+            let l:dirname = dirs[len(dirs) - 1]
+        endif
     endif
 
      if l:dirname != ""
@@ -386,9 +397,6 @@ set statusline+=\
     " Perl omni completion
     Plugin 'c9s/perlomni.vim'
 
-    " Tags completion
-    Plugin 'ctags.vim'
-
     " Select tags or select files including tags
     Plugin 'tsukkee/unite-tag'
 
@@ -432,6 +440,8 @@ set statusline+=\
 
     " Mappings for simultaneously pressed keys
     " Plugin 'kana/vim-arpeggio'
+
+    " Plugin 'fholgado/minibufexpl.vim'
 
 "### Install bundles ###########################################################
 

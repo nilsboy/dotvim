@@ -18,7 +18,6 @@ endfunction
 function! BufferIsUnnamed()
 
     if empty(bufname("%"))
-
         return 1
     else
         return 2

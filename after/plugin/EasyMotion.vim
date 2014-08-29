@@ -1,4 +1,4 @@
-let g:EasyMotion_leader_key = '<Leader>'
+" nmap x <Plug>(easymotion-prefix)
 
 let g:EasyMotion_grouping = 1
 
@@ -18,9 +18,6 @@ let g:EasyMotion_enter_jump_first = 1
 let g:EasyMotion_disable_two_key_combo = 0
 
 let g:EasyMotion_do_shade = 1
-
-" ha::ha
-" camelCase
 
 let g:EasyMotion_force_csapprox = 1
 
