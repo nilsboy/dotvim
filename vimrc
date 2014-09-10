@@ -165,7 +165,9 @@ augroup END
 " Make all unlisted buffers listed
 augroup bufEnter_setBufListed
     autocmd!
-    autocmd BufEnter * set buflisted
+    autocmd BufEnter *
+        \     set buflisted
+        \   | set hidden
     " Avoid errors about unsaved data
     " setlocal buftype=nowrite
 augroup END
@@ -402,7 +404,7 @@ set statusline+=\
     " Lean & mean status/tabline for vim that's light as air.
     " Plugin 'bling/vim-airline'
 
-    Plugin 'scrooloose/nerdtree'
+    " Plugin 'scrooloose/nerdtree'
 
     " File operations
     Plugin 'tpope/vim-eunuch'

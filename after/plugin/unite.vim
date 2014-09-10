@@ -62,7 +62,7 @@ call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
 " fails: call unite#custom#source('file_rec' 'max_candidates', 0)
 let g:unite_source_rec_max_cache_files = 0
 
-nnoremap <silent> <leader>f :<C-u>Unite
+nnoremap <silent> <leader>x :<C-u>Unite
             \ -buffer-name=files
             \ -no-quit
             \ -keep-focus
@@ -73,7 +73,7 @@ nnoremap <silent> <leader>f :<C-u>Unite
 
 "### find in default dirs #####################################################
 
-nnoremap <silent> <leader>ff :call Uniteff()<cr>
+" nnoremap <silent> <leader>ff :call Uniteff()<cr>
 
 function! Uniteff()
     execute "Unite -silent -start-insert file_rec:" . $HOME . "/src"
