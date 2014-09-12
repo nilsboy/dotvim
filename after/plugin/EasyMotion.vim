@@ -35,7 +35,7 @@ hi link EasyMotionTarget2Second MoreMsg
 
 "  nmap w <Plug>(easymotion-w)
 " nmap W <Plug>(easymotion-W)
-nmap <space> <Plug>(easymotion-jumptoanywhere)
+nmap <leader><space> <Plug>(easymotion-jumptoanywhere)
 
 let g:EasyMotion_re_anywhere=''
 
