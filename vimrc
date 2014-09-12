@@ -3,7 +3,7 @@
 "### misc ######################################################################
 
 " Use <Leader> as prefix key for own key mappings
-let mapleader = ","
+let mapleader = " "
 
 " vars
 let VIM = $REMOTE_HOME . "/.vim/etc/"
@@ -165,7 +165,7 @@ augroup END
 " Make all unlisted buffers listed
 augroup bufEnter_setBufListed
     autocmd!
-    autocmd BufEnter *
+    autocmd BufCreate,BufAdd,BufEnter *
         \     set buflisted
         \   | set hidden
     " Avoid errors about unsaved data
