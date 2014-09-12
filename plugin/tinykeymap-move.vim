@@ -44,7 +44,27 @@ call tinykeymap#Map("myjumps", "h", "normal! <C-O>")
 call tinykeymap#Map("myjumps", "l", "normal! <C-I>")
 
 call tinykeymap#EnterMap('myfile', '<leader>f', {'name': 'myfile'})
-" explore
-call tinykeymap#Map("myfile", "e", ":e .")
-call tinykeymap#Map("myfile", "f", ":enew | :r!find .")
+call tinykeymap#Map("myfile", "f", ':call MyFind(".")')
+call tinykeymap#Map("myfile", "a", ':call MyFind("~/src")')
 call tinykeymap#Map("myfile", "o", "normal! :e <cfile>")
+call tinykeymap#Map("myfile", "t", ':call MyTree(".")')
+
+function! MyFind(path, ...)
+
+    enew
+    execute "cd " . fnamemodify(a:path, ":p")
+    execute ":r!cd " . a:path . " && find-and " . join(a:000, " ")
+    normal ggdd
+    nnoremap <buffer> <CR> gf
+
+endfunction
+
+function! MyTree(path)
+
+    enew
+    setlocal listchars=
+    nnoremap <buffer> <CR> gf
+    execute ":r!tree --no-colors --exclude '\class$' " . a:path
+    normal gg
+
+endfunction
