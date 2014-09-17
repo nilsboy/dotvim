@@ -217,7 +217,7 @@ set noswapfile
 nnoremap <silent> <ESC><ESC> :x!<CR>
 
 nnoremap <silent> - /
-nnoremap <silent> : ,
+" nnoremap <silent> : ,
 nnoremap <silent> , :
 nnoremap <silent> <leader>k1 <F1>
 

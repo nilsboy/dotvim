@@ -2,10 +2,11 @@ package Jo;
 
 # use Data::Dumper;
 
-$fracking_var = 5;
+$test_var = 5;
 
-sub grr {
-    print STDERR "grrrrrrrrrrrrrrrrrr\n";
+sub test_sub1 {
+    print STDERR "test_sub1\n";
+
     # print STDERR Dumper VIM::Buffers();
     # print STDERR "num wins: " . VIM::Windows();
     # print STDERR "cur buf name: " . $curbuf->Name();
@@ -13,11 +14,12 @@ sub grr {
     print STDERR VIM::Eval("&runtimepath");
 }
 
-sub xxx {
-    print STDERR "zzzzzzzzzzzzzz";
+sub test_sub2 {
+    print STDERR "test_sub2";
 }
 
-sub _nix_da {
+sub _private_sub {
+
     # not installed
 }
 

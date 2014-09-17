@@ -1,3 +1,5 @@
+finish
+
 nnoremap <silent><leader>t :NERDTree %:h<CR>
 
 let g:NERDTreeCaseSensitiveSort = 0
