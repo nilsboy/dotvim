@@ -1,5 +1,5 @@
-if ! has( 'perl' )
-    echo "The load_perl_helpers.vim plugin needs vim internal perl support."
+if has( 'perl' ) == 0
+    " echo "The load_perl_helpers.vim plugin needs vim internal perl support."
     finish
 endif
 
