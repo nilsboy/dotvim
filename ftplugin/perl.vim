@@ -4,7 +4,6 @@
 " map E :w<CR>:!r<CR>
 
 "--- perltidy ------------------------------------------------------------------
-
 map <silent> <Leader>w :call PerlTidy()<CR>
 
 function! PerlTidy()
@@ -14,6 +13,13 @@ function! PerlTidy()
     " %!tidyall --conf-name ~/.tidyallrc -p ~/.tidyallrc
     call winrestview(_view)
 endfunction
+
+" :au CursorHold <buffer>  echo 'hold'
+augroup perl_tidy
+    autocmd!
+    autocmd InsertLeave <buffer>
+                \ call PerlTidy()
+augroup END
 
 "--- :make with error parsing --------------------------------------------------
 
@@ -60,4 +66,4 @@ endfunction
 
 runtime! ftplugin/sh.vim
 " setlocal keywordprg=!perldoc
-nnoremap <buffer> <silent> K :call MyMan(expand("<cword>"))<cr><cr>
+nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>

@@ -210,11 +210,15 @@ set noswapfile
 " Clear all mappings
 " :mapclear
 
+" nnoremap <silent> w /(\@<=\W)\w<cr>
+" nnoremap <silent> jj }
+" nnoremap <silent> kk {
+
 nnoremap <silent> <ESC><ESC> :x!<CR>
 
 nnoremap <silent> - /
-nnoremap <silent> ; ,
-nnoremap <silent> , ;
+nnoremap <silent> : ,
+nnoremap <silent> , :
 nnoremap <silent> <leader>k1 <F1>
 
 nnoremap <silent><C-l> :bnext<cr>
@@ -231,7 +235,7 @@ nnoremap <silent><leader>l :!tree<cr>
 map Q :q
 
 " Run current buffer
-nnoremap <leader>e :!%:p
+nnoremap <leader>e :!clear ; %:p<cr>
 
 "### Statusline ################################################################
 
