@@ -3,7 +3,7 @@ function! BufferClose()
 
     if BufferIsEmpty() == 1
     elseif BufferIsUnnamed() == 1
-    elseif &modified
+    elseif &modified && &write
         :w
     endif
 
@@ -16,13 +16,11 @@ function! BufferClose()
 endfunction
 
 function! BufferIsUnnamed()
-
     if empty(bufname("%"))
         return 1
     else
         return 2
     endif
-
 endfunction
 
 function! BufferIsEmpty()
@@ -31,6 +29,10 @@ function! BufferIsEmpty()
     else
         return 0
     endif
+endfunction
+
+function! BufferCanWrite()
+    return &write
 endfunction
 
 function! BufferIsLast()

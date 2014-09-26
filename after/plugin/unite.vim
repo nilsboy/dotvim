@@ -151,25 +151,25 @@ let g:unite_source_outline_filetype_options = {
 
 "### quickfix #################################################################
 
-nnoremap <silent> <Leader>q :<C-u>Unite
-            \ -buffer-name=qf
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ qf<cr>
-call unite#custom#source('line', 'sorters', ['sorter_nothing'])
+" nnoremap <silent> <Leader>q :<C-u>Unite
+"             \ -buffer-name=qf
+"             \ -no-quit
+"             \ -keep-focus
+"             \ -immediately
+"             \ -silent
+"             \ qf<cr>
+" call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
 "### search ###################################################################
 
-nnoremap <silent> // :<C-u>Unite
-            \ -buffer-name=search
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -start-insert
-            \ -silent
-            \ line<cr>
+" nnoremap <silent> // :<C-u>Unite
+"             \ -buffer-name=search
+"             \ -no-quit
+"             \ -keep-focus
+"             \ -immediately
+"             \ -start-insert
+"             \ -silent
+"             \ line<cr>
 
 "### tags #####################################################################
 

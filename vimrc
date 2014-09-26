@@ -1,5 +1,6 @@
 "### TODO ######################################################################
 " - set $XDG_CACHE_DIR from remote_home for neomru etc?
+" - check preview-window
 "### misc ######################################################################
 
 " Use <Leader> as prefix key for own key mappings
@@ -118,9 +119,10 @@ set backspace=indent,eol,start
 set wildmode=longest:list
 
 " Ignore case in file names
-if exists("&wildignorecase")
-    set wildignorecase
-endif
+set wildignorecase
+
+" Ignore patterns
+set wildignore=.*,*.class
 
 " No line wrapping of long lines
 set nowrap
@@ -154,23 +156,25 @@ set nostartofline
 augroup winEnter_only
     autocmd!
     " autocmd WinEnter * only
-    autocmd WinEnter *
+    autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
         \ if bufname("%") !~ "unite-tagxx"
         \     | set nowinfixheight
-        \     | only
         \     | resize
+        \     | only
+        \     | set buflisted
+        \     | set hidden
         \ | endif
 augroup END
 
 " Make all unlisted buffers listed
-augroup bufEnter_setBufListed
-    autocmd!
-    autocmd BufCreate,BufAdd,BufEnter *
-        \     set buflisted
-        \   | set hidden
-    " Avoid errors about unsaved data
-    " setlocal buftype=nowrite
-augroup END
+" augroup bufEnter_setBufListed
+"     autocmd!
+"     autocmd BufCreate,BufAdd,BufEnter *
+"         \     set buflisted
+"         \   | set hidden
+"     " Avoid errors about unsaved data
+"     " setlocal buftype=nowrite
+" augroup END
 
 " Highlight unknown filetypes as text
 autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
@@ -178,12 +182,15 @@ autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
 " Highlight vim documentation if opened directly from file
 augroup buffer_vimdoc
     autocmd!
-    autocmd BufRead * if 
-        \ &filetype != "help"
+    autocmd BufCreate,BufAdd,BufEnter *
+        \ if &filetype != "help"
         \ && expand("<afile>") =~ 'vim/.*/doc/.*\.txt$'
         \ | setlocal filetype=help
     \ | endif
 augroup END
+
+" show count of selected lines / columns
+set showcmd
 
 "### undo and swap #############################################################
 
@@ -217,6 +224,16 @@ set noswapfile
 nnoremap <silent> <ESC><ESC> :x!<CR>
 
 nnoremap <silent> - /
+nnoremap <silent> / -
+nnoremap <silent> _ ?
+nnoremap <silent> ? _
+
+nnoremap <silent> Ö :
+nnoremap <silent> ö ;
+
+nnoremap <silent> Ä "
+nnoremap <silent> ä '
+
 " nnoremap <silent> : ,
 nnoremap <silent> , :
 nnoremap <silent> <leader>k1 <F1>
@@ -229,13 +246,14 @@ nnoremap <silent><C-h> :bprev<cr>
 " nnoremap <silent>t :execute 'tjump ' . expand("<cword>")<cr>
 " nnoremap <silent>T :tjump 
 
-nnoremap <silent><leader>l :!tree<cr>
-
 " Dont use Q for Ex mode
 map Q :q
 
 " Run current buffer
 nnoremap <leader>e :!clear ; %:p<cr>
+
+" Alway clear shell screen
+noremap :! :!clear; 
 
 "### Statusline ################################################################
 
@@ -313,7 +331,7 @@ set statusline+=\
 set statusline+=%#errormsg#
 
 " read only flag
-set statusline+=%{filewritable(expand('\%'))?'':'RO'}
+" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
 
 " Reset color
 set statusline+=%*
@@ -425,11 +443,6 @@ set statusline+=\
 
     Plugin 'vim-scripts/CycleColor'
 
-    " Select tags or select files including tags
-    " Plugin 'haha/unite-grep_sync'
-
-    " Plugin 'Shougo/vimproc.vim'
-
     " Quickfix
     Plugin 'sgur/unite-qf'
 
@@ -447,6 +460,11 @@ set statusline+=\
     " Plugin 'kana/vim-arpeggio'
 
     " Plugin 'fholgado/minibufexpl.vim'
+
+    " Highlight ANSI escape sequences in their respective colors
+    " Plugin 'vim-scripts/AnsiEsc.vim'
+    Plugin 'powerman/vim-plugin-AnsiEsc'
+ 
 
 "### Install bundles ###########################################################
 

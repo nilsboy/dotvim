@@ -32,6 +32,8 @@ function! Man(cmd)
     " silent :setlocal buftype=nofile
 
     " silent map <buffer> <silent> <esc> :bwipeout!<cr>
+    " nnoremap <buffer> <SPACE> <C-F>
+    " nnoremap <buffer> b <C-B>
 
 endfunction
 
