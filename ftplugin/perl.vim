@@ -21,8 +21,8 @@ compiler perl
 nnoremap <buffer> <silent> <Enter> :execute 'e `pmpath ' . expand("<cword>") . '`'<cr>
 
 " runtime! ftplugin/sh.vim
-set keywordprg=!perldoc
-" nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
+" set keywordprg=!perldoc .expand
+nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
 
 "Allow % to bounce between angles too
 set matchpairs+=<:>

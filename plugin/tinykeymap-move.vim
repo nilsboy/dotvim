@@ -57,7 +57,9 @@ call tinykeymap#Map("quickfix", "h", "cprevious")
 call tinykeymap#Map("quickfix", "l", "cnext")
 
 nnoremap <leader>xz :make<cr>:cwindow 999<cr>
-nnoremap <leader>x :call Run()<cr>
+" nnoremap <leader>x :!clear;%:p<cr>
+" nnoremap <leader>x :call Run()<cr>
+nnoremap <leader>x :!clear ; run-or-prove %:p<cr>
 nnoremap <leader>q <silent> :cwindow 999<cr>
 
 " let &grepprg=cd 
@@ -65,10 +67,28 @@ nnoremap <leader>q <silent> :cwindow 999<cr>
 
 function! Run()
 
-    let file = expand("<cfile>")
-    enew
-    setlocal nowrite
-    execute ":r!" . file
+    write
+    let file = expand("%")
+
+    if file =~ "\.t"
+        :!clear ; prove -Pretty "%:p"
+    else
+        :!clear ; "%:p"
+    endif
+
+endfunction
+
+function! RunIntoBuffer()
+
+    write
+    let file = expand("%")
+    execute ":e " . tempname()
+    " redir => g:output
+    " execute ":r!" . file
+    execute ":r!shell-run-and-capture " . file
+    " redir END
+    " let &write = 0
+    setlocal buftype=nowrite
     normal <cr>
     normal ggdd
     AnsiEsc
@@ -79,7 +99,7 @@ endfunction
 function! GrepBuffer(path, ...)
 
     execute "e " . a:path . "/._vim_find"
-    setlocal nowrite
+    setlocal buftype=nowrite
     execute ":r!cd " . a:path . " && find-or-grep " . join(a:000, " ")
     normal ggdd
     nnoremap <buffer> <CR> gf
@@ -90,7 +110,7 @@ command! -nargs=1 G call Grep("~/src", "<args>")
 function! Grep(path, ...)
 
     execute "e " . a:path . "/._vim_find"
-    setlocal nowrite
+    setlocal buftype=nowrite
     execute ":r!cd " . a:path . " && find-or-grep " . join(a:000, " ")
     normal ggdd
     nnoremap <buffer> <CR> gf
@@ -101,7 +121,7 @@ command! -nargs=1 F call Find("~/src", "<args>")
 function! Find(path, ...)
 
     execute "e " . a:path . "/._vim_find"
-    setlocal nowrite
+    setlocal buftype=nowrite
     execute ":r!cd " . a:path . " && find-and " . join(a:000, " ")
     normal ggdd
     nnoremap <buffer> <CR> gf
@@ -111,7 +131,7 @@ endfunction
 function! Tree(path)
 
     enew
-    setlocal nowrite
+    setlocal buftype=nowrite
     setlocal listchars=
     nnoremap <buffer> <CR> gf
     execute ":r!tree --no-colors --exclude '\class$' " . a:path
