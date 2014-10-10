@@ -6,7 +6,7 @@ let g:tinykeymap#message_fmt = "%.0s%.0s"
 " let g:tinykeymap#show_message = "statusline"
 
 " Don't load default keymaps
-let g:tinykeymaps_default = [""]
+" let g:tinykeymaps_default = ["quickfixlist"]
 
 call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
 call tinykeymap#Map('buffers', 'n', 'new') 
@@ -47,94 +47,20 @@ call tinykeymap#EnterMap('file', '<leader>f', {'name': 'file'})
 call tinykeymap#Map("file", "f", ':call Find(".")')
 call tinykeymap#Map("file", "a", ':call Find("~/src")')
 call tinykeymap#Map("file", "g", ':call Find("~/src")')
-call tinykeymap#Map("file", "o", "normal! :e <cfile>")
+call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
 call tinykeymap#Map("file", "t", ':call Tree(".")')
 
+call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
+call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})
+call tinykeymap#Map("help", "m", ':execute ":edit " . g:MY_VIM . "/plugin/tinykeymap.vim"', {'exit': 1})
+call tinykeymap#Map("help", "v", ':call VimEnvironment()', {'exit': 1})
+call tinykeymap#Map("help", "l", ':execute ":edit ' . MY_VIM . '/plugin/helpers.vim"', {'exit' : 1 })
+
+" call tinykeymap#EnterMap('quickfixlist', '<leader>q', {'name': 'quickfix'})
+
 call tinykeymap#EnterMap('quickfix', '<leader>z', {'name': 'quickfix'})
-call tinykeymap#Map("quickfix", "q", ":copen 999")
-call tinykeymap#Map("quickfix", "r", ":make | :copen 999 | normal! <esc>")
+call tinykeymap#Map("quickfix", "q", ":cwindow")
+call tinykeymap#Map("quickfix", "x", ":RunIntoBuffer")
+call tinykeymap#Map("quickfix", "X", ":write | :make | :cwindow")
 call tinykeymap#Map("quickfix", "h", "cprevious")
 call tinykeymap#Map("quickfix", "l", "cnext")
-
-nnoremap <leader>xz :make<cr>:cwindow 999<cr>
-" nnoremap <leader>x :!clear;%:p<cr>
-" nnoremap <leader>x :call Run()<cr>
-nnoremap <leader>x :!clear ; run-or-prove %:p<cr>
-nnoremap <leader>q <silent> :cwindow 999<cr>
-
-" let &grepprg=cd 
-" set grepformat=%f:%l:%m
-
-function! Run()
-
-    write
-    let file = expand("%")
-
-    if file =~ "\.t"
-        :!clear ; prove -Pretty "%:p"
-    else
-        :!clear ; "%:p"
-    endif
-
-endfunction
-
-function! RunIntoBuffer()
-
-    write
-    let file = expand("%")
-    execute ":e " . tempname()
-    " redir => g:output
-    " execute ":r!" . file
-    execute ":r!shell-run-and-capture " . file
-    " redir END
-    " let &write = 0
-    setlocal buftype=nowrite
-    normal <cr>
-    normal ggdd
-    AnsiEsc
-
-endfunction
-
-" command! -nargs=1 GB call GrepFile("<cfile>", "<args>")
-function! GrepBuffer(path, ...)
-
-    execute "e " . a:path . "/._vim_find"
-    setlocal buftype=nowrite
-    execute ":r!cd " . a:path . " && find-or-grep " . join(a:000, " ")
-    normal ggdd
-    nnoremap <buffer> <CR> gf
-
-endfunction
-
-command! -nargs=1 G call Grep("~/src", "<args>")
-function! Grep(path, ...)
-
-    execute "e " . a:path . "/._vim_find"
-    setlocal buftype=nowrite
-    execute ":r!cd " . a:path . " && find-or-grep " . join(a:000, " ")
-    normal ggdd
-    nnoremap <buffer> <CR> gf
-
-endfunction
-
-command! -nargs=1 F call Find("~/src", "<args>")
-function! Find(path, ...)
-
-    execute "e " . a:path . "/._vim_find"
-    setlocal buftype=nowrite
-    execute ":r!cd " . a:path . " && find-and " . join(a:000, " ")
-    normal ggdd
-    nnoremap <buffer> <CR> gf
-
-endfunction
-
-function! Tree(path)
-
-    enew
-    setlocal buftype=nowrite
-    setlocal listchars=
-    nnoremap <buffer> <CR> gf
-    execute ":r!tree --no-colors --exclude '\class$' " . a:path
-    normal gg
-
-endfunction

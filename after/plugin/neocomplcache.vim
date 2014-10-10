@@ -25,8 +25,8 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default'  : '',
-    \ 'vimshell' : VIM_VAR . '/.vimshell_hist',
-    \ 'scheme'   : VIM_VAR . '/.gosh_completions'
+    \ 'vimshell' : MY_VIM_VAR . '/.vimshell_hist',
+    \ 'scheme'   : MY_VIM_VAR . '/.gosh_completions'
         \ }
 
 " Define keyword.

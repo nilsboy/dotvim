@@ -7,24 +7,24 @@
 let mapleader = " "
 
 " vars
-let VIM = $REMOTE_HOME . "/.vim/etc/"
-let VIM_VAR = $REMOTE_HOME . "/.vim/var/"
-let VIM_BUNDLE = $REMOTE_HOME . ".vim/bundle/"
-let TAGS = VIM_VAR . "tags"
+let g:MY_VIM = $REMOTE_HOME . "/.vim/etc/"
+let g:MY_VIM_RC = $REMOTE_HOME . "/.vim/etc/vimrc"
+let g:MY_VIM_VAR = $REMOTE_HOME . "/.vim/var/"
+let TAGS = g:MY_VIM_VAR . "/tags"
 
 let &tags = TAGS
 
 " TODO set viminfo=$REMOTE_HOME/.vim/var/viminfo
 set viminfo='50,<1000,s100,:0,n~/vim/viminfo
 
-" Create VIM_VAR dir if missing
-if isdirectory(VIM_VAR) == 0
-    silent execute '!mkdir -p ' . VIM_VAR
+" Create g:MY_VIM_VAR dir if missing
+if isdirectory(g:MY_VIM_VAR) == 0
+    silent execute '!mkdir -p ' . g:MY_VIM_VAR
 endif
 
 " Keep undo history after closing a file
 set undofile
-let &undodir = VIM_VAR . "undo"
+let &undodir = g:MY_VIM_VAR . "undo"
 
 " Create undodir if missing
 if isdirectory(&undodir) == 0
@@ -42,6 +42,9 @@ set t_Co=256
 
 set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
+
+" Add system PATH to vim path to be used by :find
+let &path = &path . "," . substitute($PATH, ':', ',', 'g')
 
 " Reload vimrc on write
 autocmd BufWritePost vimrc source %
@@ -72,7 +75,7 @@ set showmatch
 set incsearch
 
 " Highlight found text
-" set hlsearch
+set hlsearch
 
 set ignorecase
 
@@ -152,45 +155,36 @@ set nostartofline
 " Highlight the screen line of the cursor with CursorLine
 " set cursorline
 
-" Epic: Force single window mode!
-augroup winEnter_only
+" Epic
+augroup forceSingleWindowMode
     autocmd!
-    " autocmd WinEnter * only
     autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
-        \ if bufname("%") !~ "unite-tagxx"
-        \     | set nowinfixheight
-        \     | resize
-        \     | only
+        \ if &buftype !~ "quickfix"
         \     | set buflisted
         \     | set hidden
+        \     | only
         \ | endif
 augroup END
-
-" Make all unlisted buffers listed
-" augroup bufEnter_setBufListed
-"     autocmd!
-"     autocmd BufCreate,BufAdd,BufEnter *
-"         \     set buflisted
-"         \   | set hidden
-"     " Avoid errors about unsaved data
-"     " setlocal buftype=nowrite
-" augroup END
+        " \     | resize
+        " \     | set nowinfixheight
 
 " Highlight unknown filetypes as text
-autocmd BufRead,BufNewFile * if &filetype == '' | set syntax=txt | endif
+augroup setDefaultSyntax
+    autocmd!
+    autocmd BufEnter *
+        \ if &syntax == '' | setlocal syntax=txt | endif
+augroup END
 
 " Highlight vim documentation if opened directly from file
-augroup buffer_vimdoc
+augroup setVimDocSyntax
     autocmd!
-    autocmd BufCreate,BufAdd,BufEnter *
-        \ if &filetype != "help"
-        \ && expand("<afile>") =~ 'vim/.*/doc/.*\.txt$'
-        \ | setlocal filetype=help
-    \ | endif
+    autocmd BufEnter */vim/*/doc/*.txt
+        \ if &filetype != 'help' | setlocal filetype=help | endif
 augroup END
 
 " show count of selected lines / columns
 set showcmd
+
 
 "### undo and swap #############################################################
 
@@ -223,7 +217,7 @@ set noswapfile
 
 nnoremap <silent> <ESC><ESC> :x!<CR>
 
-nnoremap <silent> - /
+nnoremap <silent> - /\v
 nnoremap <silent> / -
 nnoremap <silent> _ ?
 nnoremap <silent> ? _
@@ -234,17 +228,18 @@ nnoremap <silent> ö ;
 nnoremap <silent> Ä "
 nnoremap <silent> ä '
 
+nnoremap <silent> ü [
+nnoremap <silent> Ü {
+
+nnoremap <silent> + ]
+nnoremap <silent> * }
+
 " nnoremap <silent> : ,
 nnoremap <silent> , :
 nnoremap <silent> <leader>k1 <F1>
 
 nnoremap <silent><C-l> :bnext<cr>
 nnoremap <silent><C-h> :bprev<cr>
-
-" nnoremap <silent><C-k> :tnext<cr>
-" nnoremap <silent><C-j> :tprev<cr>
-" nnoremap <silent>t :execute 'tjump ' . expand("<cword>")<cr>
-" nnoremap <silent>T :tjump 
 
 " Dont use Q for Ex mode
 map Q :q
@@ -253,7 +248,7 @@ map Q :q
 nnoremap <leader>e :!clear ; %:p<cr>
 
 " Alway clear shell screen
-noremap :! :!clear; 
+nnoremap :! :!clear; 
 
 "### Statusline ################################################################
 
@@ -340,7 +335,8 @@ set statusline+=%*
 set statusline+=%=
 
 " filetype
-set statusline+=%{strlen(&ft)?&ft.'\ ':''}
+set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
+set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
 
 " file encoding
 set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
@@ -460,6 +456,7 @@ set statusline+=\
     " Plugin 'kana/vim-arpeggio'
 
     " Plugin 'fholgado/minibufexpl.vim'
+    " let g:miniBufExplVSplit = 20   " column width in chars
 
     " Highlight ANSI escape sequences in their respective colors
     " Plugin 'vim-scripts/AnsiEsc.vim'

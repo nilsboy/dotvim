@@ -1,6 +1,6 @@
 "### general ##################################################################
 
-let g:unite_data_directory = VIM_VAR . "unite"
+let g:unite_data_directory = MY_VIM_VAR . "/unite"
 
 " no clue - but complains if not set
 let g:unite_abbr_highlight = "function"
@@ -81,27 +81,24 @@ endfunction
 call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
 
-nnoremap <silent> <Leader>g :<C-u>Unite
-            \ -buffer-name=grep
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ vimgrep:**<cr>
+" nnoremap <silent> <Leader>g :<C-u>Unite
+"             \ -buffer-name=grep
+"             \ -no-quit
+"             \ -keep-focus
+"             \ -immediately
+"             \ -silent
+"             \ vimgrep:**<cr>
 
 "### mru ######################################################################
 
 call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
-nnoremap <silent> <leader>r :<C-u>Unite
-            \ -buffer-name=mru
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ neomru/file<cr>
-            " \ -default-action=switch
+nnoremap <silent> <leader>r :call MyUniteMru()<cr>
+
+function MyUniteMru()
+    :Unite -buffer-name=mru -default-action=open neomru/file
+endfunction
 
 "### mru-dir ##################################################################
 
@@ -109,7 +106,7 @@ call unite#custom#source('neomru/directory', 'converters', ['converter_full_path
 call unite#custom#source('neomru/directory', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <leader>d :<C-u>Unite
-            \ -buffer-name=mru
+            \ -buffer-name=mrudir
             \ -no-quit
             \ -keep-focus
             \ -immediately
@@ -121,10 +118,16 @@ nnoremap <silent> <leader>d :<C-u>Unite
 autocmd StdinReadPre * let s:std_in=1
 augroup vimEnter_mru
     autocmd!
-    autocmd VimEnter * if argc() == 0 && exists("s:std_in") == 0 && empty($VIM_HAS_ARGS) == 1
-        \ | :exe 'Unite -buffer-name=mru -no-quit neomru/file' 
+    autocmd VimEnter *
+        \ if argc() == 0 && exists("s:std_in") == 0 && empty($VIM_HAS_ARGS) == 1
+        \ | :call MyUniteMru()
         \ | endif
 augroup END
+
+" augroup insertLeave_ChangeKeymap
+"     autocmd!
+"     autocmd InsertLeave * :set keymap=us
+" augroup END
 
 "### outline ##################################################################
 
