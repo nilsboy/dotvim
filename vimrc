@@ -3,9 +3,6 @@
 " - check preview-window
 "### misc ######################################################################
 
-" Use <Leader> as prefix key for own key mappings
-let mapleader = " "
-
 " vars
 let g:MY_VIM = $REMOTE_HOME . "/.vim/etc/"
 let g:MY_VIM_RC = $REMOTE_HOME . "/.vim/etc/vimrc"
@@ -44,7 +41,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
 " Add system PATH to vim path to be used by :find
-let &path = &path . "," . substitute($PATH, ':', ',', 'g')
+let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',', 'g')
 
 " Reload vimrc on write
 autocmd BufWritePost vimrc source %
@@ -65,6 +62,9 @@ set clipboard=unnamed
 
 " Chdir to the dir of the current buffer
 set autochdir
+
+" A history of ":" commands, and a history of previous search patterns
+set history=1000
 
 "### searching #################################################################
 
@@ -159,13 +159,13 @@ set nostartofline
 augroup forceSingleWindowMode
     autocmd!
     autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
-        \ if &buftype !~ "quickfix"
+        \ if &buftype !~ "xxquickfix"
         \     | set buflisted
         \     | set hidden
-        \     | only
+        \     | resize
         \ | endif
 augroup END
-        " \     | resize
+        " \     | only
         " \     | set nowinfixheight
 
 " Highlight unknown filetypes as text
@@ -203,6 +203,44 @@ set noswapfile
 
 "### mappings ##################################################################
 
+" Use <Leader> as prefix key for own key mappings
+let mapleader = " "
+
+" nnoremap <silent> <ESC><ESC> :x!<CR>
+
+vnoremap - /\v
+vnoremap , :
+nnoremap - /\v
+nnoremap , :
+
+nnoremap <leader>k1 <F1>
+
+nnoremap <silent><C-l> :bnext<cr>
+nnoremap <silent><C-h> :bprev<cr>
+
+" Dont use Q for Ex mode
+nnoremap Q <Nop>
+
+" nnoremap <silent> / -
+" nnoremap <silent> _ ?
+" nnoremap <silent> ? _
+
+" nnoremap <silent> Ö :
+" nnoremap <silent> ö ;
+
+" nnoremap <silent> Ä "
+" nnoremap <silent> ä '
+
+" nnoremap <silent> ü [
+" nnoremap <silent> Ü {
+
+" nnoremap <silent> + ]
+" nnoremap <silent> * }
+
+" nnoremap <silent> ( *
+
+" nnoremap <silent> : ,
+
 " These are the same for vim
 " Tab and Ctrl-I
 " Enter and Ctrl-M
@@ -214,41 +252,6 @@ set noswapfile
 " nnoremap <silent> w /(\@<=\W)\w<cr>
 " nnoremap <silent> jj }
 " nnoremap <silent> kk {
-
-nnoremap <silent> <ESC><ESC> :x!<CR>
-
-nnoremap <silent> - /\v
-nnoremap <silent> / -
-nnoremap <silent> _ ?
-nnoremap <silent> ? _
-
-nnoremap <silent> Ö :
-nnoremap <silent> ö ;
-
-nnoremap <silent> Ä "
-nnoremap <silent> ä '
-
-nnoremap <silent> ü [
-nnoremap <silent> Ü {
-
-nnoremap <silent> + ]
-nnoremap <silent> * }
-
-" nnoremap <silent> : ,
-nnoremap <silent> , :
-nnoremap <silent> <leader>k1 <F1>
-
-nnoremap <silent><C-l> :bnext<cr>
-nnoremap <silent><C-h> :bprev<cr>
-
-" Dont use Q for Ex mode
-map Q :q
-
-" Run current buffer
-nnoremap <leader>e :!clear ; %:p<cr>
-
-" Alway clear shell screen
-nnoremap :! :!clear; 
 
 "### Statusline ################################################################
 
@@ -461,7 +464,6 @@ set statusline+=\
     " Highlight ANSI escape sequences in their respective colors
     " Plugin 'vim-scripts/AnsiEsc.vim'
     Plugin 'powerman/vim-plugin-AnsiEsc'
- 
 
 "### Install bundles ###########################################################
 

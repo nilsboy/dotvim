@@ -5,7 +5,7 @@ let g:tinykeymap#timeout = 0
 let g:tinykeymap#message_fmt = "%.0s%.0s"
 " let g:tinykeymap#show_message = "statusline"
 
-" Don't load default keymaps
+" Default keymaps to load
 " let g:tinykeymaps_default = ["quickfixlist"]
 
 call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
@@ -16,6 +16,7 @@ call tinykeymap#Map("buffers", "h", "bprev")
 
 call tinykeymap#EnterMap('windows', '<leader>ww', {'name': 'windows'})
 call tinykeymap#Map('windows', 'n', 'new') 
+call tinykeymap#Map("windows", "o", "only", {'exit': 1 })
 call tinykeymap#Map("windows", "c", "close")
 call tinykeymap#Map("windows", "h", "wincmd h")
 call tinykeymap#Map("windows", "l", "wincmd l")
@@ -53,14 +54,39 @@ call tinykeymap#Map("file", "t", ':call Tree(".")')
 call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
 call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})
 call tinykeymap#Map("help", "m", ':execute ":edit " . g:MY_VIM . "/plugin/tinykeymap.vim"', {'exit': 1})
-call tinykeymap#Map("help", "v", ':call VimEnvironment()', {'exit': 1})
-call tinykeymap#Map("help", "l", ':execute ":edit ' . MY_VIM . '/plugin/helpers.vim"', {'exit' : 1 })
+call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
+call tinykeymap#Map("help", "l", ':execute ":edit ' . MY_VIM . '/plugin/helpers.vim"', {'exit': 1 })
+call tinykeymap#Map("help", "v", ':execute ":e ' . MY_VIM_RC . '"', {'exit': 1 })
+
+"### Quickfix list
 
 " call tinykeymap#EnterMap('quickfixlist', '<leader>q', {'name': 'quickfix'})
 
-call tinykeymap#EnterMap('quickfix', '<leader>z', {'name': 'quickfix'})
-call tinykeymap#Map("quickfix", "q", ":cwindow")
-call tinykeymap#Map("quickfix", "x", ":RunIntoBuffer")
-call tinykeymap#Map("quickfix", "X", ":write | :make | :cwindow")
+call tinykeymap#EnterMap('quickfix', '<leader>q', {'name': 'quickfix'})
+call tinykeymap#Map("quickfix", "q", ":cwindow", {'exit': 1})
+call tinykeymap#Map("quickfix", "X", ":RunIntoBuffer", {'exit': 1 })
+call tinykeymap#Map("quickfix", "x", ":write | :make | :cwindow", {'exit': 1})
 call tinykeymap#Map("quickfix", "h", "cprevious")
 call tinykeymap#Map("quickfix", "l", "cnext")
+
+"### Location list
+
+call tinykeymap#EnterMap('location', '<leader>x', {'name': 'location'})
+call tinykeymap#Map("location", "q", ":lwindow", {'exit': 1})
+call tinykeymap#Map("location", "X", ":RunIntoBuffer", {'exit': 1 })
+call tinykeymap#Map("location", "x", ":write | :make | :lwindow", {'exit': 1})
+call tinykeymap#Map("location", "c", ":Redir :RunCursorLine", {'exit': 1})
+call tinykeymap#Map("location", "C", ":RunCursorLine", {'exit': 1})
+call tinykeymap#Map("location", "0", "lrewind")
+call tinykeymap#Map("location", "$", "llast")
+call tinykeymap#Map("location", "h", "lprevious")
+call tinykeymap#Map("location", "l", "lnext")
+
+" Jump between files
+call tinykeymap#Map("location", "j", "lpfile")
+call tinykeymap#Map("location", "k", "lnfile")
+
+" Change to older location list results
+call tinykeymap#Map("location", "o", "lnewer")
+call tinykeymap#Map("location", "i", "lolder")
+

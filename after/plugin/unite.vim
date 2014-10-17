@@ -98,6 +98,8 @@ nnoremap <silent> <leader>r :call MyUniteMru()<cr>
 
 function MyUniteMru()
     :Unite -buffer-name=mru -default-action=open neomru/file
+    :nunmap <buffer> <C-l>
+    :nunmap <buffer> <C-h>
 endfunction
 
 "### mru-dir ##################################################################

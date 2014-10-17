@@ -26,3 +26,6 @@ nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
 
 "Allow % to bounce between angles too
 set matchpairs+=<:>
+
+" let &makeprg="perl -c %"
+let g:perl_compiler_force_warnings = 0
