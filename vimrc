@@ -206,7 +206,7 @@ set noswapfile
 " Use <Leader> as prefix key for own key mappings
 let mapleader = " "
 
-" nnoremap <silent> <ESC><ESC> :x!<CR>
+nnoremap <silent> <ESC><ESC> <Nop>
 
 vnoremap - /\v
 vnoremap , :

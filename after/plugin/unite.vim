@@ -94,12 +94,14 @@ call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
-nnoremap <silent> <leader>r :call MyUniteMru()<cr>
+nnoremap <silent> <leader>r :MyUniteMru<cr>
 
-function MyUniteMru()
+command! -nargs=0 MyUniteMru call MyUniteMru()
+function! MyUniteMru()
     :Unite -buffer-name=mru -default-action=open neomru/file
     :nunmap <buffer> <C-l>
     :nunmap <buffer> <C-h>
+    :only
 endfunction
 
 "### mru-dir ##################################################################

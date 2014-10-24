@@ -8,7 +8,9 @@ function! BufferClose()
     endif
 
     if BufferIsLast() == 1
-        :q!
+        " :q!
+        :bdelete!
+        :MyUniteMru
     else
         :bdelete!
     endif
@@ -61,17 +63,14 @@ endfunction
 
 nnoremap <silent> <ESC> :call BufferClose()<cr>
 
+command! -nargs=0 BufferCreateTemp call BufferCreateTemp()
 function! BufferCreateTemp()
-
-    execute ":e " . tempname()
+    enew
     setlocal buftype=nowrite
-    normal ggdd
-
 endfunction
 
 command! -nargs=+ Redir call Redir("<args>")
 function! Redir(command)
-    echom a:command
     call BufferCreateTemp()
     call RedirIntoCurrentBuffer(a:command)
     normal ggdddd
@@ -80,9 +79,9 @@ endfunction
 function! RedirIntoCurrentBuffer(command)
 
     let output = ""
-
-    " Redirect output to a variable.
     redir => output
+
+    echom a:command
 
     " Execute the specified command
     try
@@ -90,7 +89,6 @@ function! RedirIntoCurrentBuffer(command)
     catch
         put='command failed'
     finally
-        " Turn off redirection.
         redir END
 
         " Place the output in the destination buffer.
@@ -107,17 +105,22 @@ function! RunIntoBuffer()
 
     call BufferCreateTemp()
 
-    silent execute ":r!run-and-capture " . l:file
-    normal <cr>
+    execute ":r!run-and-capture " . l:file
     normal ggdd
+    %!html-strip
+    %s/\r\n/\r/ge
     AnsiEsc
-    cbuffer
-    set buftype=quickfix
+    set filetype=txt
+    lgetbuffer
+
+    " set buftype=quickfix
     " :copen 999
 
 endfunction
 
-command! -nargs=1 Grep call Grep("~/src", "<args>")
+let g:ack_default_options = '--ignore-file "^\.*"'
+
+command! -nargs=1 Grep call Grep("~/src/*", "<args>")
 function! Grep(path, ...)
     silent execute ':LAck "' . join(a:000, " ") . '" ' . a:path
 endfunction
@@ -145,7 +148,7 @@ function! Find(path, grep_args)
         let &grepformat=grepformat_bak
     endtry
 
-    lopen
+    lwindow
 
 endfunction
 
@@ -175,10 +178,7 @@ function! s:GrepOperator(type)
         return
     endif
 
-    " silent execute "grep! -R " . shellescape(@@) . " ~/src/"
-    " copen 999
-    " silent execute ':LAck "' . join(a:000, " ") . '"<cr>'
-    execute ':LAck! "' . @@ . '" ~/src/'
+    silent execute ':LAck! -Q -k "' . @@ . '" ~/src/*'
 
     let @@ = saved_unnamed_register
 endfunction
@@ -271,7 +271,7 @@ function! VimEnvironment()
 
     for command in g:commands
         put='### ' . command . ' #############################'
-        call RedirIntoCurrentBuffer(command)
+        silent call RedirIntoCurrentBuffer(command)
         put=''
     endfor
 
@@ -290,7 +290,7 @@ function! Notes()
     nnoremap <buffer> k ?\v^([^\s"])<cr>
 
     " clear search register than execute line under cursor
-    nnoremap <silent> <buffer> <CR> :let @/ = "" \| :RunCursorLine<cr>
+    nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
 
 endfunction
 

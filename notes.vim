@@ -21,3 +21,7 @@
 
 " TODO
 " - remove trailing space
+" - 'equalprg' 'ep' string (default "")
+" - https://metacpan.org/release/Perl-Tags
+" - https://github.com/tomtom/trag_vim
+" - Snipmate: http://www.vim.org/scripts/script.php?script_id=2540
