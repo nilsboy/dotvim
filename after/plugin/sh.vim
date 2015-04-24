@@ -28,7 +28,7 @@ function! Man(cmd)
     silent execute 'normal ggdd/^---'
     silent execute ':w'
 
-    " silent :set filetype=man
+    " silent :setlocal filetype=man
     " silent :setlocal buftype=nofile
 
     " silent map <buffer> <silent> <esc> :bwipeout!<cr>

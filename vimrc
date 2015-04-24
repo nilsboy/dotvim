@@ -268,6 +268,9 @@ set laststatus=2
 
 set statusline=\ 
 
+" too slow needs to be ss
+" set statusline+=%{system('git-project')}
+
 " Containing directory
 set statusline+=%{Location()}
 
@@ -464,6 +467,9 @@ set statusline+=\
     " Highlight ANSI escape sequences in their respective colors
     " Plugin 'vim-scripts/AnsiEsc.vim'
     Plugin 'powerman/vim-plugin-AnsiEsc'
+
+    " Forget Vim tabs – now you can have buffer tabs
+    Plugin 'ap/vim-buftabline'
 
 "### Install bundles ###########################################################
 

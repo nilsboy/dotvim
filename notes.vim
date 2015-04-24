@@ -19,6 +19,9 @@
 " IMPROVING BROWSING			
 :h netrw-ssh-hack
 
+" Scripting helpers
+:edit /home/nilsb/.vim/bundle/l9/autoload/l9.vim
+
 " TODO
 " - remove trailing space
 " - 'equalprg' 'ep' string (default "")

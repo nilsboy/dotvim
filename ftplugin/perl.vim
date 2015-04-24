@@ -9,7 +9,7 @@ map <silent> <Leader>w :call PerlTidy()<CR>
 
 compiler perl
 
-nnoremap <buffer> <silent> <Enter> :verbose :call PerlModuleCreate()<cr>
+nnoremap <buffer> <silent> <Enter> :verbose :call PerlModuleCreate()<cr><cr>
 
 " :echo substitute('ha->ha', '\v([\w\:]+)', '\1', 'g')
 
@@ -24,3 +24,4 @@ let &makeprg="perl -c %"
 " let g:perl_compiler_force_warnings = 0
 
 let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
+set errorformat+=\ %m\ at\ %f\ line\ %l

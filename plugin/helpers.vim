@@ -97,25 +97,53 @@ function! RedirIntoCurrentBuffer(command)
 
 endfunction
 
-command! -nargs=0 RunIntoBuffer call RunIntoBuffer()
-function! RunIntoBuffer()
+command! -nargs=* RunIntoBuffer call RunIntoBuffer()
+function! RunIntoBuffer(command)
 
-    write
-    let l:file = expand("%:p")
-
+    wall
     call BufferCreateTemp()
 
-    execute ":r!run-and-capture " . l:file
-    normal ggdd
-    %!html-strip
+    echom "Running command: " . a:command
+    execute ":r!run-and-capture " . a:command
+    " execute ":r! " . a:command
+    " %!html-strip
     %s/\r\n/\r/ge
+    " s/\v\<\@!i/\r</ge
+    " %s/</\r</ge
+    " %s/>/>\r/ge
+
+    " hack remove duplicate perl line number
+    %s/\v,  line \d+//ge
+
+    " Convert ansi colors
     AnsiEsc
-    set filetype=txt
+    " fix invisible ansi white
+    hi ansiWhite ctermfg=gray
+
+    normal ggddG
+    " setlocal filetype=txt
+    set wrap
     lgetbuffer
+    " lwindow
 
     " set buftype=quickfix
     " :copen 999
 
+endfunction
+
+command! -nargs=0 RunIntoBufferCurrentBuffer call RunIntoBufferCurrentBuffer()
+function! RunIntoBufferCurrentBuffer()
+    call RunIntoBufferOrLastCommand("\"$(run-guess-command-by-filename " . expand("%:p"). ")\"")
+endfunction
+
+command! -nargs=* RunIntoBufferOrLastCommand call RunIntoBufferOrLastCommand()
+function! RunIntoBufferOrLastCommand(...)
+
+    if exists('a:1')
+        let g:last_command = a:1
+    endif
+
+    call RunIntoBuffer(g:last_command)
 endfunction
 
 let g:ack_default_options = '--ignore-file "^\.*"'
