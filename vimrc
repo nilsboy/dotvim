@@ -388,6 +388,7 @@ set statusline+=\
 
     " uber awesome syntax and errors highlighter
     Plugin 'Syntastic'
+    " for javascript install: npm install jshint -g
 
     " A Git wrapper so awesome, it should be illegal
     Plugin 'tpope/vim-fugitive'
@@ -470,6 +471,17 @@ set statusline+=\
 
     " Forget Vim tabs – now you can have buffer tabs
     Plugin 'ap/vim-buftabline'
+
+    " Tern plugin for Vim
+    Plugin 'marijnh/tern_for_vim'
+
+    " Sometimes, it's useful to line up text.
+    " Needed by vim-markdown
+    Plugin 'godlygeek/tabular'
+
+    " Syntax highlighting, matching rules and mappings for the original
+    " Markdown and extensions.
+    Plugin 'plasticboy/vim-markdown'
 
 "### Install bundles ###########################################################
 
