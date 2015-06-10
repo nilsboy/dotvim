@@ -213,28 +213,52 @@ endfunction
 
 let g:commands = []
 
+call add(g:commands, 'verbose map<buffer>  ')   " buffer local Normal and Visual mode maps
+call add(g:commands, 'verbose map!<buffer> ')   " buffer local Insert and Command-line mode maps
+
+" ### There are six sets of mappings
+
+" - For Normal mode: When typing commands.
+call add(g:commands, 'verbose nmap         ')   " Normal-mode mappings only
+
+" - For Visual mode: When typing commands while the Visual area is highlighted.
+call add(g:commands, 'verbose xmap         ')   " visual mode maps only
+
+" - For Select mode: like Visual mode but typing text replaces the selection.
+call add(g:commands, 'verbose smap         ')   " Select-mode mappings only
+
+" - For Operator-pending mode: When an operator is pending (after "d", "y", "c",
+"   etc.).  See below: |omap-info|.
+call add(g:commands, 'verbose omap         ')   " Operator-pending mode mappings only
+
+" - For Insert mode.  These are also used in Replace mode.
+call add(g:commands, 'verbose imap         ')   " list insert mode maps
+
+" - For Command-line mode: When entering a ":" or "/" command.
+call add(g:commands, 'verbose cmap         ')   " list command mode maps
+
+call add(g:commands, 'verbose lmap         ')   " language mappings (set by keymap or by lmap)
+
 call add(g:commands, 'abbreviate   ')   " list abbreviations
 call add(g:commands, 'args         ')   " argument list
 call add(g:commands, 'augroup      ')   " augroups
-call add(g:commands, 'autocmd      ')   " list auto-commands
+call add(g:commands, 'verbose autocmd      ')   " list auto-commands
 call add(g:commands, 'buffers      ')   " list buffers
 call add(g:commands, 'breaklist    ')   " list current breakpoints
 call add(g:commands, 'cabbrev      ')   " list command mode abbreviations
 call add(g:commands, 'changes      ')   " changes
-call add(g:commands, 'cmap         ')   " list command mode maps
 call add(g:commands, 'command      ')   " list commands
 call add(g:commands, 'compiler     ')   " list compiler scripts
 call add(g:commands, 'digraphs     ')   " digraphs
 call add(g:commands, 'file         ')   " print filename, cursor position and status (like Ctrl-G)
 call add(g:commands, 'filetype     ')   " on/off settings for filetype detect/plugins/indent
-call add(g:commands, 'function     ')   " list user-defined functions (names and argument lists but not the full code)
+call add(g:commands, 'verbose function     ')   " list user-defined functions (names and argument lists but not the full code)
 call add(g:commands, 'highlight    ')   " highlight groups
 call add(g:commands, 'history c    ')   " command history
 call add(g:commands, 'history =    ')   " expression history
 call add(g:commands, 'history s    ')   " search history
 call add(g:commands, 'history      ')   " your commands
 call add(g:commands, 'iabbrev      ')   " list insert mode abbreviations
-call add(g:commands, 'imap         ')   " list insert mode maps
 call add(g:commands, 'intro        ')   " the Vim splash screen, with summary version info
 call add(g:commands, 'jumps        ')   " your movements
 call add(g:commands, 'language     ')   " current language settings
@@ -242,18 +266,11 @@ call add(g:commands, 'let          ')   " all variables
 call add(g:commands, 'let g:       ')   " global variables
 call add(g:commands, 'let v:       ')   " Vim variables
 call add(g:commands, 'list         ')   " buffer lines (many similar commands)
-call add(g:commands, 'lmap         ')   " language mappings (set by keymap or by lmap)
 call add(g:commands, 'ls           ')   " buffers
 call add(g:commands, 'ls!          ')   " buffers, including unlisted buffers
-call add(g:commands, 'map!         ')   " Insert and Command-line mode maps (imap, cmap)
-call add(g:commands, 'map          ')   " Normal and Visual mode maps (nmap, vmap, xmap, smap, omap)
-call add(g:commands, 'map<buffer>  ')   " buffer local Normal and Visual mode maps
-call add(g:commands, 'map!<buffer> ')   " buffer local Insert and Command-line mode maps
 call add(g:commands, 'marks        ')   " marks
 call add(g:commands, 'menu         ')   " menu items
 call add(g:commands, 'messages     ')   " message history
-call add(g:commands, 'nmap         ')   " Normal-mode mappings only
-call add(g:commands, 'omap         ')   " Operator-pending mode mappings only
 call add(g:commands, 'print        ')   " display buffer lines (useful after :g or with a range)
 call add(g:commands, 'reg          ')   " registers
 call add(g:commands, 'scriptnames  ')   " all scripts sourced so far
@@ -262,18 +279,14 @@ call add(g:commands, 'setglobal    ')   " global option values
 call add(g:commands, 'setlocal     ')   " local option values
 call add(g:commands, 'set          ')   " options with non-default value
 call add(g:commands, 'set termcap  ')   " list terminal codes and terminal keys
-call add(g:commands, 'smap         ')   " Select-mode mappings only
 call add(g:commands, 'spellinfo    ')   " spellfiles used
 call add(g:commands, 'syntax       ')   " syntax items
 call add(g:commands, 'syn sync     ')   " current syntax sync mode
 call add(g:commands, 'tabs         ')   " tab pages
 call add(g:commands, 'tags         ')   " tag stack contents
 call add(g:commands, 'undolist     ')   " leaves of the undo tree
-call add(g:commands, 'verbose      ')   " show info about where a map or autocmd or function is defined
 call add(g:commands, 'version      ')   " list version and build options
-call add(g:commands, 'vmap         ')   " Visual and Select mode mappings only
 call add(g:commands, 'winpos       ')   " Vim window position (gui)
-call add(g:commands, 'xmap         ')   " visual mode maps only
 
 " Add uppercase versions of above-mentioned redirecting into a new buffer
 function! RedirAddUppercaseVersion()

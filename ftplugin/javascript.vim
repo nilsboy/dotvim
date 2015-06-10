@@ -1,5 +1,7 @@
 map <silent> W :call JSTidy()<CR>
 
+let &makeprg="npm run"
+
 function! JSTidy()
     let _view=winsaveview()
 
@@ -20,7 +22,7 @@ function! JSTidy()
 
     " npm install -g js-beautify
     " cannot correct missing curlies or semicolons
-    %!js-format-using-prettydiff
+    "%!js-format-using-prettydiff
 
     %!js-beautify
                 \ -w 80

@@ -1,4 +1,4 @@
-" Mappings
+" Own mappings
 :execute ':e ' . MY_VIM . "/plugin/tinykeymap.vim"
 
 " Helpers
@@ -7,8 +7,14 @@
 " Vim environment
 :call VimEnvironment()
 
-" Vimrc
+" View default mappings and commands
+:help index
+
+" Edit vimrc
 :execute ':e ' . MY_VIM_RC
+
+" Reload vimrc
+:execute 'source ' . MY_VIM_RC
 
 :h functions
 :h file-searching
