@@ -40,7 +40,7 @@ call tinykeymap#Map("marks", "k", "normal! ['")
 call tinykeymap#Map("marks", "j", "normal! ]'")
 
 call tinykeymap#EnterMap('jumps', '<leader>j', {'name': 'jumps'})
-call tinykeymap#Map("jumps", "i", ":Unite jump")
+call tinykeymap#Map("jumps", "o", ":Unite jump")
 call tinykeymap#Map("jumps", "h", "normal! <C-O>")
 call tinykeymap#Map("jumps", "l", "normal! <C-I>")
 
