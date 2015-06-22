@@ -1,6 +1,8 @@
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose()
 
+    :lclose
+
     if BufferIsEmpty() == 1
     elseif BufferIsUnnamed() == 1
     elseif &modified && &write

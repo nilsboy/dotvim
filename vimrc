@@ -342,7 +342,7 @@ set statusline+=%=
 
 " filetype
 set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
-set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
+" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
 
 " file encoding
 set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
@@ -387,8 +387,7 @@ set statusline+=\
     Plugin 'gmarik/vundle'
 
     " uber awesome syntax and errors highlighter
-    Plugin 'Syntastic'
-    " for javascript install: npm install jshint -g
+    Plugin 'scrooloose/syntastic'
 
     " A Git wrapper so awesome, it should be illegal
     Plugin 'tpope/vim-fugitive'
@@ -408,8 +407,6 @@ set statusline+=\
     Plugin 'lokaltog/vim-easymotion'
     " Plugin 't9md/vim-smalls'
     Plugin 'justinmk/vim-sneak'
-
-" let g:sneak#streak = 1
 
     " Search and display information from arbitrary sources
     Plugin 'shougo/unite.vim'

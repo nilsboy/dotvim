@@ -1,6 +1,9 @@
-map <silent> W :call JSTidy()<CR>
+map <silent> W :call JSTidy()<CR><CR>:SyntasticCheck<cr>
 
 let &makeprg="npm run"
+
+" install npm install standard -g
+let g:syntastic_javascript_checkers=['standard']
 
 function! JSTidy()
     let _view=winsaveview()
@@ -24,7 +27,7 @@ function! JSTidy()
     " cannot correct missing curlies or semicolons
     "%!js-format-using-prettydiff
 
-    %!js-beautify
+    "%!js-beautify
                 \ -w 80
                 \ --preserve-newlines
                 \ --max-preserve-newlines 2
@@ -33,7 +36,11 @@ function! JSTidy()
                 \ -f -
 
     " Retabulate the whole file
-    :%retab!
+    " :%retab!
+
+    " %!standard --format --stdin | grep -v 'standard: '
+    %!standard --format --stdin 2>/dev/null
 
     call winrestview(_view)
 endfunction
+
