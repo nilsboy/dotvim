@@ -56,6 +56,9 @@ filetype on
 filetype plugin on
 filetype indent on
 
+" prevent vim from using javascript as filetype for json
+au BufRead,BufNewFile *.json set filetype=json | setlocal syntax=txt
+
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
 set clipboard=unnamed
@@ -95,11 +98,6 @@ set autoread
 
 " Automatically write file if leaving a buffer
 set autowriteall
-
-" Timeout on mappings and key codes (faster escape etc)
-set timeout
-set timeoutlen=300
-set ttimeoutlen=10
 
 " Leave my cursor where it was - even on page jump
 set nostartofline
@@ -159,7 +157,7 @@ set nostartofline
 augroup forceSingleWindowMode
     autocmd!
     autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
-        \ if &buftype !~ "xxquickfix"
+        \ if bufname("%") !~ "Nerd_tree"
         \     | set buflisted
         \     | set hidden
         \     | resize
@@ -203,10 +201,17 @@ set noswapfile
 
 "### mappings ##################################################################
 
+" Timeout on mappings and key codes (faster escape etc)
+set timeout
+set timeoutlen=300
+set ttimeoutlen=10
+
 " Use <Leader> as prefix key for own key mappings
 let mapleader = " "
 
 nnoremap <silent> <ESC><ESC> <Nop>
+
+nnoremap <silent> <leader>l :Explore<cr>
 
 vnoremap - /\v
 vnoremap , :
@@ -252,6 +257,9 @@ nnoremap Q <Nop>
 " nnoremap <silent> w /(\@<=\W)\w<cr>
 " nnoremap <silent> jj }
 " nnoremap <silent> kk {
+
+" write current file with sudo
+cmap w!! w !sudo tee %
 
 "### Statusline ################################################################
 
@@ -398,7 +406,8 @@ set statusline+=\
     " Prerequisite for some vim plugins
     Plugin 'l9'
 
-    Plugin 'shougo/neocomplcache.vim'
+    " Next generation completion framework
+    Plugin 'Shougo/neocomplete.vim'
 
     " Universal syntax script for all txt docs, logs and other types
     Plugin 'txt.vim'
@@ -479,6 +488,9 @@ set statusline+=\
     " Syntax highlighting, matching rules and mappings for the original
     " Markdown and extensions.
     Plugin 'plasticboy/vim-markdown'
+
+    " Gundo.vim is Vim plugin to visualize your Vim undo tree.
+    Plugin 'sjl/gundo.vim'
 
 "### Install bundles ###########################################################
 

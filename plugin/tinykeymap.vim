@@ -13,6 +13,7 @@ call tinykeymap#Map('buffers', 'n', 'new')
 call tinykeymap#Map("buffers", "c", "bdelete")
 call tinykeymap#Map("buffers", "l", "bnext")
 call tinykeymap#Map("buffers", "h", "bprev")
+call tinykeymap#Map("buffers", "g", ":L9GrepBufferAll ")
 
 call tinykeymap#EnterMap('windows', '<leader>ww', {'name': 'windows'})
 call tinykeymap#Map('windows', 'n', 'new') 
@@ -23,15 +24,15 @@ call tinykeymap#Map("windows", "l", "wincmd l")
 call tinykeymap#Map("windows", "j", "wincmd j")
 call tinykeymap#Map("windows", "k", "wincmd k")
 
-call tinykeymap#EnterMap('tags', '<leader>t', {'name': 'tags'})
-call tinykeymap#Map("tags", "t", ':UniteWithCursorWord -buffer-name=unite-tags -keep-focus tag')
-" call tinykeymap#Map("tags", "t", ':new | :UniteWithCursorWord -buffer-name=unite-tags -keep-focus tag')
-" call tinykeymap#Map("tags", "t", 'tjump <C-w>')
-call tinykeymap#Map("tags", "T", "tjump")
-call tinykeymap#Map("tags", "l", "tnext")
-call tinykeymap#Map("tags", "j", "tprev")
-" nnoremap <silent>t :execute 'tjump ' . expand("<cword>")<cr>
-" nnoremap <silent>T :tjump 
+" call tinykeymap#EnterMap('tags', '<leader>t', {'name': 'tags'})
+" call tinykeymap#Map("tags", "t", ':UniteWithCursorWord -buffer-name=unite-tags -keep-focus tag')
+" " call tinykeymap#Map("tags", "t", ':new | :UniteWithCursorWord -buffer-name=unite-tags -keep-focus tag')
+" " call tinykeymap#Map("tags", "t", 'tjump <C-w>')
+" call tinykeymap#Map("tags", "T", "tjump")
+" call tinykeymap#Map("tags", "l", "tnext")
+" call tinykeymap#Map("tags", "j", "tprev")
+" " nnoremap <silent>t :execute 'tjump ' . expand("<cword>")<cr>
+" " nnoremap <silent>T :tjump 
 
 call tinykeymap#EnterMap('marks', '<leader>m', {'name': 'marks'})
 " jump to next lowercase mark
@@ -45,11 +46,12 @@ call tinykeymap#Map("jumps", "h", "normal! <C-O>")
 call tinykeymap#Map("jumps", "l", "normal! <C-I>")
 
 call tinykeymap#EnterMap('file', '<leader>f', {'name': 'file'})
-call tinykeymap#Map("file", "f", ':call Find(".")')
-call tinykeymap#Map("file", "a", ':call Find("~/src")')
-call tinykeymap#Map("file", "g", ':call Find("~/src")')
+call tinykeymap#Map("file", "f", ':call ListFiles()', {'exit': 1})
+call tinykeymap#Map("file", "x", 'new | r! find-and | :normal ggdd', {'exit': 1})
+call tinykeymap#Map("file", "a", ':call Findxx("~/src")')
+call tinykeymap#Map("file", "g", ':call Findxx("~/src")')
 call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
-call tinykeymap#Map("file", "t", ':call Tree(".")')
+call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
 
 call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
 call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})

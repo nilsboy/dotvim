@@ -1,3 +1,7 @@
+finish
+
+" deprecated - replaced by neocomplete.
+
 " From: https://github.com/Shougo/neocomplcache.vim
 
 " Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!

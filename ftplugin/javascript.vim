@@ -3,7 +3,10 @@ map <silent> W :call JSTidy()<CR><CR>:SyntasticCheck<cr>
 let &makeprg="npm run"
 
 " install npm install standard -g
+" https://github.com/feross/standard
 let g:syntastic_javascript_checkers=['standard']
+
+nnoremap <buffer> <silent> K :TernDoc<CR>
 
 function! JSTidy()
     let _view=winsaveview()
@@ -28,12 +31,12 @@ function! JSTidy()
     "%!js-format-using-prettydiff
 
     "%!js-beautify
-                \ -w 80
-                \ --preserve-newlines
-                \ --max-preserve-newlines 2
-                \ --break-chained-methods
-                \ --jslint
-                \ -f -
+"                 \ -w 80
+"                 \ --preserve-newlines
+"                 \ --max-preserve-newlines 2
+"                 \ --break-chained-methods
+"                 \ --jslint
+"                 \ -f -
 
     " Retabulate the whole file
     " :%retab!

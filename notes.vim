@@ -27,6 +27,7 @@
 
 " Scripting helpers
 :edit /home/nilsb/.vim/bundle/l9/autoload/l9.vim
+" lh-vim-lib: https://github.com/LucHermitte/lh-vim-lib
 
 " TODO
 " - remove trailing space
@@ -34,3 +35,6 @@
 " - https://metacpan.org/release/Perl-Tags
 " - https://github.com/tomtom/trag_vim
 " - Snipmate: http://www.vim.org/scripts/script.php?script_id=2540
+" - setl - show all 
+"   Without argument: Display local values for all local
+"   options which are different from the default.

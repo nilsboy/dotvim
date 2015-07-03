@@ -1,7 +1,8 @@
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose()
 
-    :lclose
+    " :lclose
+    " :cclose
 
     if BufferIsEmpty() == 1
     elseif BufferIsUnnamed() == 1
@@ -160,8 +161,8 @@ function! GrepFile(...)
     silent execute ':LAck "' . join(a:000, " ") . '" ' . expand("%")
 endfunction
 
-command! -nargs=+ FFF call Find("~/src/bin", "<args>")
-function! Find(path, grep_args)
+command! -nargs=+ FFF call Findxx("~/src/bin", ".")
+function! Findxx(path, grep_args)
 
     let grepprg_bak = &grepprg
     let grepformat_bak = &grepformat
@@ -182,14 +183,44 @@ function! Find(path, grep_args)
 
 endfunction
 
-command! -nargs=1 Tree call Tree("<args>")
-function! Tree(path)
+" List all files starting from git root
+function! ListFiles()
 
-    call BufferCreateTemp()
+    new files
+    setlocal buftype=nowrite
 
     setlocal listchars=
     nnoremap <buffer> <CR> gf
-    execute ":r!tree --no-colors --exclude '\class$' " . a:path
+    execute "r! root=$(git-root) && cd $root && export abs=1 && find-and | head -1000"
+    normal gg
+    only
+
+endfunction
+
+command! -nargs=+ GrepFiles call GrepFiles("<args>")
+function! GrepFiles(patterns)
+
+    new grep
+    setlocal buftype=nowrite
+
+    setlocal listchars=
+    nnoremap <buffer> <CR> gf
+    execute "r! root=$(git-root) && cd $root && export abs=1 && find-or-grep " a:patterns " | head -1000"
+    normal gg
+    only
+
+endfunction
+
+command! -nargs=1 Tree call Tree("<args>")
+function! Tree(path)
+
+    " call BufferCreateTemp()
+    new tree
+    setlocal buftype=nowrite
+
+    setlocal listchars=
+    nnoremap <buffer> <CR> gf
+    execute ":r! root=$(git-root) && cd $root && tree --no-colors --exclude '\class$' " . a:path
     normal gg
 
 endfunction
