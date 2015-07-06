@@ -19,7 +19,7 @@ function! Man(cmd)
         call mkdir(cache_dir, "p")
     endif
 
-	let file_name = cache_dir . "/" . cmd . ".man"
+    let file_name = cache_dir . "/" . cmd . ".man"
 
     silent execute 'edit' file_name
     silent execute 'normal ggdG'

@@ -1,5 +1,11 @@
 map <silent> W :call JSTidy()<CR><CR>:SyntasticCheck<cr>
 
+" Tab spacing
+set tabstop=2
+
+" Shift width (moved sideways for the shift command)
+set sw=2
+
 let &makeprg="npm run"
 
 " install npm install standard -g
@@ -30,19 +36,19 @@ function! JSTidy()
     " cannot correct missing curlies or semicolons
     "%!js-format-using-prettydiff
 
-    "%!js-beautify
-"                 \ -w 80
-"                 \ --preserve-newlines
-"                 \ --max-preserve-newlines 2
-"                 \ --break-chained-methods
-"                 \ --jslint
-"                 \ -f -
-
-    " Retabulate the whole file
-    " :%retab!
-
     " %!standard --format --stdin | grep -v 'standard: '
     %!standard --format --stdin 2>/dev/null
+
+    %!js-beautify
+                 \ -w 80
+                 \ --preserve-newlines
+                 \ --max-preserve-newlines 2
+                 \ --break-chained-methods
+                 \ --jslint
+                 \ -f -
+
+    " Retabulate the whole file
+    :%retab!
 
     call winrestview(_view)
 endfunction
