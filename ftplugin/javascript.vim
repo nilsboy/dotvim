@@ -1,4 +1,4 @@
-map <silent> W :call JSTidy()<CR><CR>:SyntasticCheck<cr>
+map <buffer><silent><leader>w :call JSTidy()<CR><CR>:SyntasticCheck<cr>
 
 " Tab spacing
 set tabstop=2

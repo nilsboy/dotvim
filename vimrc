@@ -59,6 +59,9 @@ filetype indent on
 " prevent vim from using javascript as filetype for json
 au BufRead,BufNewFile *.json set filetype=json | setlocal syntax=txt
 
+" Recognize .md as markdown for vim < 7.4.480
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
 set clipboard=unnamed
@@ -479,7 +482,7 @@ set statusline+=\
     Plugin 'ap/vim-buftabline'
 
     " Tern plugin for Vim
-    Plugin 'marijnh/tern_for_vim'
+    " Plugin 'marijnh/tern_for_vim'
 
     " Sometimes, it's useful to line up text.
     " Needed by vim-markdown
