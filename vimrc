@@ -1,9 +1,7 @@
-"### TODO ######################################################################
-" - set $XDG_CACHE_DIR from remote_home for neomru etc?
-" - check preview-window
 "### misc ######################################################################
 
 " vars
+let g:MY_VIM_BUNDLE = $REMOTE_HOME . "/.vim/bundle/"
 let g:MY_VIM = $REMOTE_HOME . "/.vim/etc/"
 let g:MY_VIM_RC = $REMOTE_HOME . "/.vim/etc/vimrc"
 let g:MY_VIM_VAR = $REMOTE_HOME . "/.vim/var/"
@@ -37,6 +35,11 @@ set nocompatible
 " Force 256 colors for terminals that call themselfs TERM=xterm
 set t_Co=256
 
+" Show trailing whitespace as red
+highlight ExtraWhitespace ctermbg=darkred guibg=#382424
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+
 set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
@@ -44,23 +47,18 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
 let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',', 'g')
 
 " Reload vimrc on write
-autocmd BufWritePost vimrc source %
+" autocmd BufWritePost vimrc source %
 
 " set colorcolumn=81
 
 " Prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
 
-" Detect filetypes and run filetype plugins
-filetype on
-filetype plugin on
-filetype indent on
-
 " prevent vim from using javascript as filetype for json
-au BufRead,BufNewFile *.json set filetype=json | setlocal syntax=txt
+" au BufRead,BufNewFile *.json set filetype=json | setlocal syntax=txt
 
 " Recognize .md as markdown for vim < 7.4.480
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+" au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -72,29 +70,13 @@ set autochdir
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
 
-"### searching #################################################################
+" Show line numbers
+" set number
+" Relative line numbers
+" set rnu
 
-" Show matching brackets.
-set showmatch
-
-" Incremental search
-set incsearch
-
-" Highlight found text
-set hlsearch
-
-set ignorecase
-
-" Case insensitive search when all lowercase
-set smartcase
-
-" Case inferred by default
-set infercase
-
-" Do not wrap while searching
-" set nowrapscan
-
-"###############################################################################
+" allow the cursor to pass the last character
+set virtualedit=onemore
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -139,7 +121,7 @@ set scrolloff=999
 set sidescrolloff=0
 
 " Scroll by one char at end of line
-set sidescroll=1
+" set sidescroll=1
 
 " None of these are word dividers
 set iskeyword+=:,_,$,@,%,#
@@ -156,18 +138,20 @@ set nostartofline
 " Highlight the screen line of the cursor with CursorLine
 " set cursorline
 
-" Epic
-augroup forceSingleWindowMode
-    autocmd!
-    autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
-        \ if bufname("%") !~ "Nerd_tree"
-        \     | set buflisted
-        \     | set hidden
-        \     | resize
-        \ | endif
-augroup END
-        " \     | only
-        " \     | set nowinfixheight
+" " Epic
+" augroup forceSingleWindowMode
+"     autocmd!
+"     autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
+"         \     set buflisted
+"         \     | set hidden
+"         " \ | if bufname("%") != "[Location List]"
+"         \ | if bufname("%") != ""
+"         \     | echom "bufname: " . bufname("%")
+"         \     | only
+"         \ | endif
+" augroup END
+"         " \     | resize
+"         " \     | set nowinfixheight
 
 " Highlight unknown filetypes as text
 augroup setDefaultSyntax
@@ -186,6 +170,35 @@ augroup END
 " show count of selected lines / columns
 set showcmd
 
+" Make macros render faster (lazy draw)
+set lazyredraw
+
+set display=lastline,uhex
+
+"### searching #################################################################
+
+" Show matching brackets.
+set showmatch
+
+" Don't blink when matching
+set matchtime=0
+
+" Incremental search
+set incsearch
+
+" Highlight found text
+set hlsearch
+
+set ignorecase
+
+" Case insensitive search when all lowercase
+set smartcase
+
+" Case inferred by default
+set infercase
+
+" Do not wrap while searching
+" set nowrapscan
 
 "### undo and swap #############################################################
 
@@ -261,8 +274,8 @@ nnoremap Q <Nop>
 " nnoremap <silent> jj }
 " nnoremap <silent> kk {
 
-" write current file with sudo
-cmap w!! w !sudo tee %
+" Yank from the cursor to the end of the line, to be consistent with C and D.
+nnoremap Y y$
 
 "### Statusline ################################################################
 
@@ -272,7 +285,17 @@ set shortmess=atTIW
 " Increase ruler height
 set cmdheight=2
 
+" always show status line
 set laststatus=2
+
+" always show tab page labels
+set showtabline=2
+
+" No menus, scrollbars, or other junk
+set guioptions=
+
+" disables the GUI tab line in favor of the plain text version
+set guioptions-=e
 
 " Always show ruler (right part of the command line)
 " set ruler
@@ -440,7 +463,7 @@ set statusline+=\
 
     " Plugin 'scrooloose/nerdtree'
 
-    " File operations
+    " Vim sugar for the UNIX shell commands
     Plugin 'tpope/vim-eunuch'
 
     " Bringing GVim colorschemes to the terminal
@@ -450,7 +473,7 @@ set statusline+=\
     Plugin 'KevinGoodsell/vim-csexact'
 
     " Colorschemes
-    Plugin 'altercation/vim-colors-solarized'
+    " Plugin 'altercation/vim-colors-solarized'
     Plugin 'jonathanfilip/vim-lucius'
 
     Plugin 'vim-scripts/CycleColor'
@@ -485,15 +508,51 @@ set statusline+=\
     " Plugin 'marijnh/tern_for_vim'
 
     " Sometimes, it's useful to line up text.
-    " Needed by vim-markdown
     Plugin 'godlygeek/tabular'
 
-    " Syntax highlighting, matching rules and mappings for the original
-    " Markdown and extensions.
-    Plugin 'plasticboy/vim-markdown'
+    " Vim Markdown runtime files 
+    Plugin 'tpope/vim-markdown'
 
     " Gundo.vim is Vim plugin to visualize your Vim undo tree.
     Plugin 'sjl/gundo.vim'
+
+    " Comment stuff out.
+    Plugin 'tpope/vim-commentary'
+
+    " asynchronous build and test dispatcher
+    Plugin 'tpope/vim-dispatch'
+
+    " Configurable and extensible tab line and status line
+    " Plugin 'tpope/vim-flagship'
+
+    " Vim Cucumber runtime files
+    Plugin 'tpope/vim-cucumber'
+
+    " Unicode character metadata
+    " (press ga on top a character)
+    Plugin 'tpope/vim-characterize'
+
+    " Semantic Highlighting
+    Plugin 'jaxbot/semantic-highlight.vim'
+
+    " Seamless navigation between tmux panes and vim splits
+    " TODO Plugin 'christoomey/vim-tmux-navigator'
+
+    " a Vim plugin for making Vim plugins
+    Plugin 'tpope/vim-scriptease'
+
+    " Autocomplete for Node.js
+    Plugin 'myhere/vim-nodejs-complete'
+    " Easy node module opening
+    Plugin 'moll/vim-node'
+    " Better JavaScript syntax handling
+    Plugin 'jelera/vim-javascript-syntax'
+    " CoffeeScript support
+    Plugin 'kchmck/vim-coffee-script'
+    " Better JSON handling
+    Plugin 'elzr/vim-json'
+    " Support library for above
+    Plugin 'pangloss/vim-javascript'
 
 "### Install bundles ###########################################################
 
@@ -502,5 +561,14 @@ set statusline+=\
         echo ""
         :PluginInstall
     endif
+
+"### Install bundles ###########################################################
+
+" syntax on
+
+" Detect filetypes and run filetype plugins
+filetype on
+filetype plugin on
+filetype indent on
 
 "###############################################################################

@@ -14,7 +14,7 @@ let g:unite_source_history_yank_enable = 1
 " TODO
 " checkout source output:messages
 " nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
-" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files   -start-insert file_rec<cr>
+" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files file_rec<cr>
 " nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
 " nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
 
@@ -67,7 +67,6 @@ let g:unite_source_rec_max_cache_files = 0
 "             \ -no-quit
 "             \ -keep-focus
 "             \ -immediately
-"             \ -start-insert
 "             \ -silent
 "             \ file_rec<cr>
 
@@ -76,7 +75,7 @@ let g:unite_source_rec_max_cache_files = 0
 " nnoremap <silent> <leader>ff :call Uniteff()<cr>
 
 function! Uniteff()
-    execute "Unite -silent -start-insert file_rec:" . $HOME . "/src"
+    execute "Unite -silent file_rec:" . $HOME . "/src"
 endfunction
 call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
@@ -120,13 +119,13 @@ nnoremap <silent> <leader>d :<C-u>Unite
 "### mru on vim startup if no file is opened ##################################
 
 autocmd StdinReadPre * let s:std_in=1
-augroup vimEnter_mru
-    autocmd!
-    autocmd VimEnter *
-        \ if argc() == 0 && exists("s:std_in") == 0 && empty($VIM_HAS_ARGS) == 1
-        \ | :call MyUniteMru()
-        \ | endif
-augroup END
+" augroup vimEnter_mru
+"     autocmd!
+"     autocmd VimEnter *
+"         \ if argc() == 0 && exists("s:std_in") == 0 && empty($VIM_HAS_ARGS) == 1
+"         \ | :call MyUniteMru()
+"         \ | endif
+" augroup END
 
 " augroup insertLeave_ChangeKeymap
 "     autocmd!
@@ -139,7 +138,6 @@ nnoremap <silent> <Leader>o :<C-u>Unite
             \ -buffer-name=outline
             \ -keep-focus
             \ -immediately
-            \ -start-insert
             \ -silent
             \ outline<cr>
 
@@ -174,7 +172,6 @@ let g:unite_source_outline_filetype_options = {
 "             \ -no-quit
 "             \ -keep-focus
 "             \ -immediately
-"             \ -start-insert
 "             \ -silent
 "             \ line<cr>
 

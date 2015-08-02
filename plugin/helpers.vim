@@ -1,7 +1,7 @@
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose()
 
-    " :lclose
+    :lclose
     " :cclose
 
     if BufferIsEmpty() == 1
@@ -11,11 +11,13 @@ function! BufferClose()
     endif
 
     if BufferIsLast() == 1
-        " :q!
-        :bdelete!
-        :MyUniteMru
+        if BufferIsEmpty() == 1
+            :q!
+        endif
+        :silent bdelete!
+        " :MyUniteMru
     else
-        :bdelete!
+        :silent bdelete!
     endif
 
 endfunction
@@ -67,14 +69,19 @@ endfunction
 nnoremap <silent> <ESC> :call BufferClose()<cr>
 
 command! -nargs=0 BufferCreateTemp call BufferCreateTemp()
-function! BufferCreateTemp()
-    enew
+function! BufferCreateTemp(name)
+    execute ":new " . a:name
     setlocal buftype=nowrite
 endfunction
 
+function! RedirNew(name, command)
+    call BufferCreateTemp(a:name)
+    silent execute ":Redir :" . a:command
+endfunction
+command! -nargs=+ RedirNew call RedirNew("<args>")
+
 command! -nargs=+ Redir call Redir("<args>")
 function! Redir(command)
-    call BufferCreateTemp()
     call RedirIntoCurrentBuffer(a:command)
     normal ggdddd
 endfunction
@@ -83,8 +90,6 @@ function! RedirIntoCurrentBuffer(command)
 
     let output = ""
     redir => output
-
-    echom a:command
 
     " Execute the specified command
     try
@@ -104,7 +109,7 @@ command! -nargs=* RunIntoBuffer call RunIntoBuffer()
 function! RunIntoBuffer(command)
 
     wall
-    call BufferCreateTemp()
+    call BufferCreateTemp(a:command)
 
     echom "Running command: " . a:command
     execute ":r!run-and-capture " . a:command
@@ -193,7 +198,7 @@ function! ListFiles()
     nnoremap <buffer> <CR> gf
     execute "r! root=$(git-root) && cd $root && export abs=1 && find-and | head -1000"
     normal gg
-    only
+    sort n
 
 endfunction
 
@@ -207,14 +212,12 @@ function! GrepFiles(patterns)
     nnoremap <buffer> <CR> gf
     execute "r! root=$(git-root) && cd $root && export abs=1 && find-or-grep " a:patterns " | head -1000"
     normal gg
-    only
 
 endfunction
 
 command! -nargs=1 Tree call Tree("<args>")
 function! Tree(path)
 
-    " call BufferCreateTemp()
     new tree
     setlocal buftype=nowrite
 
@@ -280,7 +283,7 @@ call add(g:commands, 'buffers      ')   " list buffers
 call add(g:commands, 'breaklist    ')   " list current breakpoints
 call add(g:commands, 'cabbrev      ')   " list command mode abbreviations
 call add(g:commands, 'changes      ')   " changes
-call add(g:commands, 'command      ')   " list commands
+call add(g:commands, 'verbose command      ')   " list commands
 call add(g:commands, 'compiler     ')   " list compiler scripts
 call add(g:commands, 'digraphs     ')   " digraphs
 call add(g:commands, 'file         ')   " print filename, cursor position and status (like Ctrl-G)
@@ -325,12 +328,17 @@ call add(g:commands, 'winpos       ')   " Vim window position (gui)
 function! RedirAddUppercaseVersion()
 
     for command in g:commands
-        let command = substitute(command, '\v\s.*', "", "g")
-        let command = substitute(command, '\v\W.*', "", "g")
-        let uppercase_command = substitute(command, '\v(\w+)', '\u\1', '')
+        let bufferName = command
+        let bufferName = substitute(bufferName, '^verbose ', "", "g")
+        let bufferName = substitute(bufferName , '\v\s*$', "", "g")
+        let bufferName = substitute(bufferName, '\v(\w+)', '\u\1', 'g')
+        let bufferName = substitute(bufferName , '\v\s*', "", "g")
+        let bufferName = substitute(bufferName, '\v\W', "x", "g")
         try
-            silent execute "command! -nargs=0 " . uppercase_command . " :Redir :" . command
+            execute "command! -nargs=0 " . bufferName. 
+                \ " :call RedirNew(':" . bufferName . "', '" . command . "')"
         catch
+            echom "error creating command " . bufferName
         endtry
     endfor
 
@@ -341,7 +349,7 @@ call RedirAddUppercaseVersion()
 command! -nargs=0 VimEnvironment call VimEnvironment()
 function! VimEnvironment()
 
-    call BufferCreateTemp()
+    call BufferCreateTemp("VimEnv")
 
     for command in g:commands
         put='### ' . command . ' #############################'
@@ -360,8 +368,8 @@ function! Notes()
 
     nohlsearch
 
-    nnoremap <buffer> j /\v^([^\s"])<cr>
-    nnoremap <buffer> k ?\v^([^\s"])<cr>
+    " nnoremap <buffer> j /\v^([^\s"])<cr>
+    " nnoremap <buffer> k ?\v^([^\s"])<cr>
 
     " clear search register than execute line under cursor
     nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>

@@ -38,3 +38,7 @@
 " - setl - show all 
 "   Without argument: Display local values for all local
 "   options which are different from the default.
+" - set $XDG_CACHE_DIR from remote_home for neomru etc?
+" - check preview-window
+" - RNB, a Vim colorscheme template
+"   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
