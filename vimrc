@@ -65,7 +65,8 @@ let g:netrw_dirhistmax = 0
 set clipboard=unnamed
 
 " Chdir to the dir of the current buffer
-set autochdir
+" set autochdir
+autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
 
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
@@ -138,15 +139,21 @@ set nostartofline
 " Highlight the screen line of the cursor with CursorLine
 " set cursorline
 
+set hidden
+" set winheight=9999
+" set winminheight=10
+
+" autocmd * qf set winheight=10
+autocmd FileType qf set winheight=10
+autocmd FileType help set buflisted | only
+autocmd BufCreate * set buflisted | only
+
 " " Epic
 " augroup forceSingleWindowMode
 "     autocmd!
-"     autocmd WinEnter,QuickFixCmdPost,VimResized,BufCreate,BufAdd,BufEnter *
-"         \     set buflisted
-"         \     | set hidden
-"         " \ | if bufname("%") != "[Location List]"
-"         \ | if bufname("%") != ""
-"         \     | echom "bufname: " . bufname("%")
+"     autocmd BufCreate,BufAdd,BufEnter *
+"         \ if bufname("%") !~ "Location List"
+"         \     | set buflisted
 "         \     | only
 "         \ | endif
 " augroup END
@@ -226,7 +233,6 @@ set ttimeoutlen=10
 let mapleader = " "
 
 nnoremap <silent> <ESC><ESC> <Nop>
-
 nnoremap <silent> <leader>l :Explore<cr>
 
 vnoremap - /\v
@@ -476,6 +482,8 @@ set statusline+=\
     " Plugin 'altercation/vim-colors-solarized'
     Plugin 'jonathanfilip/vim-lucius'
 
+    " cycle through (almost) all available colorschemes
+    " :CycleColorNext
     Plugin 'vim-scripts/CycleColor'
 
     " Quickfix
@@ -553,6 +561,12 @@ set statusline+=\
     Plugin 'elzr/vim-json'
     " Support library for above
     Plugin 'pangloss/vim-javascript'
+
+    " codesearch source for unite.vim
+    Plugin 'junkblocker/unite-codesearch'
+
+    " Changes Vim working directory to project root
+    Plugin 'airblade/vim-rooter'
 
 "### Install bundles ###########################################################
 

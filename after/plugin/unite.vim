@@ -6,8 +6,9 @@ let g:unite_data_directory = MY_VIM_VAR . "/unite"
 let g:unite_abbr_highlight = "function"
 
 let g:unite_source_history_yank_enable = 1
+let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " call unite#filters#converter_default#use(['converter_file_directory'])
 " call unite#filters#sorter_default#use(['sorter_word'])
 
@@ -17,6 +18,8 @@ let g:unite_source_history_yank_enable = 1
 " nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files file_rec<cr>
 " nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
 " nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
+
+nnoremap <silent><TAB> :UniteWithProjectDir neomru/file file_rec<cr>
 
 "### vim stuff ################################################################
 
@@ -34,26 +37,26 @@ nnoremap <silent> <leader>v :<C-u>Unite
 
 "### find #####################################################################
 
-call unite#custom#source('directory_file_rec', 'converters', ['converter_nothing'])
-call unite#custom#source('directory_file_rec', 'sorters', ['sorter_word'])
+" call unite#custom#source('directory_file_rec', 'converters', ['converter_nothing'])
+" call unite#custom#source('directory_file_rec', 'sorters', ['sorter_word'])
 
-let g:unite_source_alias_aliases = {
-    \   'directory_file_rec' : {
-    \     'source': 'file_rec',
-    \   },
-    \   'b' : 'buffer',
-\ }
+" let g:unite_source_alias_aliases = {
+"     \   'directory_file_rec' : {
+"     \     'source': 'file_rec',
+"     \   },
+"     \   'b' : 'buffer',
+" \ }
 
-let directory_file_rec = {
-    \ 'is_selectable': 0,
-\}
+" let directory_file_rec = {
+"     \ 'is_selectable': 0,
+" \}
 
-function! directory_file_rec.func(candidate)
-    execute ':Unite -buffer-name=filerec directory_file_rec:' . a:candidate.word
-endfunction
+" function! directory_file_rec.func(candidate)
+"     execute ':Unite -buffer-name=filerec directory_file_rec:' . a:candidate.word
+" endfunction
 
-call unite#custom#action('directory', 'directory_file_rec', directory_file_rec)
-call unite#custom#default_action('directory', 'directory_file_rec')
+" call unite#custom#action('directory', 'directory_file_rec', directory_file_rec)
+" call unite#custom#default_action('directory', 'directory_file_rec')
 
 call unite#custom#source('file_rec', 'converters', ['converter_default'])
 call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
@@ -72,11 +75,6 @@ let g:unite_source_rec_max_cache_files = 0
 
 "### find in default dirs #####################################################
 
-" nnoremap <silent> <leader>ff :call Uniteff()<cr>
-
-function! Uniteff()
-    execute "Unite -silent file_rec:" . $HOME . "/src"
-endfunction
 call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
 
@@ -118,7 +116,7 @@ nnoremap <silent> <leader>d :<C-u>Unite
 
 "### mru on vim startup if no file is opened ##################################
 
-autocmd StdinReadPre * let s:std_in=1
+" autocmd StdinReadPre * let s:std_in=1
 " augroup vimEnter_mru
 "     autocmd!
 "     autocmd VimEnter *
@@ -156,14 +154,16 @@ let g:unite_source_outline_filetype_options = {
 
 "### quickfix #################################################################
 
-" nnoremap <silent> <Leader>q :<C-u>Unite
-"             \ -buffer-name=qf
-"             \ -no-quit
-"             \ -keep-focus
-"             \ -immediately
-"             \ -silent
-"             \ qf<cr>
-" call unite#custom#source('line', 'sorters', ['sorter_nothing'])
+            " \ -immediately
+nnoremap <silent><Leader>q :<C-u>Unite
+            \ -buffer-name=locationlist
+            \ -here
+            \ -silent
+            \ locationlist<cr>
+
+"### line #####################################################################
+
+call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
 "### search ###################################################################
 
@@ -185,15 +185,15 @@ call unite#custom#source('tag', 'sorters', ['sorter_word'])
 " specify it, a unite buffer gets closed when you selected an
 " action which is "is_quit".
 
-nnoremap <silent> t :<C-u>UniteWithCursorWord
-            \ -buffer-name=unite-tags
-            \ -no-quit
-            \ -silent
-            \ tag<cr>
+" nnoremap <silent> t :<C-u>UniteWithCursorWord
+"             \ -buffer-name=unite-tags
+"             \ -no-quit
+"             \ -silent
+"             \ tag<cr>
 
-nnoremap <silent> T :<C-u>Unite
-            \ -buffer-name=unite-tags
-            \ -no-quit
-            \ -silent
-            \ tag<cr>
+" nnoremap <silent> T :<C-u>Unite
+"             \ -buffer-name=unite-tags
+"             \ -no-quit
+"             \ -silent
+"             \ tag<cr>
 

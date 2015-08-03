@@ -4,7 +4,7 @@ map <buffer><silent><leader>w :call JSTidy()<CR><CR><silent> :SyntasticCheck<cr>
 set tabstop=2
 
 " Shift width (moved sideways for the shift command)
-set sw=2
+set shiftwidth=2
 
 let &makeprg="npm run"
 
@@ -12,10 +12,10 @@ let &makeprg="npm run"
 " https://github.com/feross/standard
 let g:syntastic_javascript_checkers=['standard']
 
-nnoremap <buffer> <silent> K :TernDoc<CR>
+" nnoremap <buffer> <silent> K :TernDoc<CR>
 
 " Nodejs dictionary, used by neocomplete through omnicomplete
-au FileType javascript set dictionary+=$MY_VIM_BUNDLE/vimfiles/bundle/vim-node/dict/node.dict
+autocmd FileType javascript set dictionary+=$MY_VIM_BUNDLE/bundle/vim-node/dict/node.dict
 
 " node run files
 " TODO autocmd filetype javascript nnoremap <Leader>c :w <CR>:!node %<CR>
