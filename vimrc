@@ -182,6 +182,15 @@ set lazyredraw
 
 set display=lastline,uhex
 
+" Vim will wrap long lines at a character in 'breakat'
+set linebreak
+let &showbreak=repeat(' ', 10) . ">>> "
+" TODO next vim: "This feature has been implemented on June 25, 2014 as patch 7.4.338"
+" (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
+
+set mouse=nvi
+set mousemodel=popup
+
 "### searching #################################################################
 
 " Show matching brackets.

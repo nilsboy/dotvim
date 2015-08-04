@@ -19,7 +19,7 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
 " nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
 
-nnoremap <silent><TAB> :UniteWithProjectDir neomru/file file_rec<cr>
+nnoremap <silent><TAB> :UniteWithProjectDir -start-insert outline neomru/file file_rec<cr>
 
 "### vim stuff ################################################################
 
