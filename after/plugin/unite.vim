@@ -19,7 +19,7 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
 " nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
 
-nnoremap <silent><TAB> :UniteWithProjectDir -start-insert outline neomru/file file_rec<cr>
+nnoremap <silent><TAB> :UniteWithProjectDir -start-insert -hide-source-names outline neomru/file file_rec<cr>
 
 "### vim stuff ################################################################
 
@@ -75,16 +75,30 @@ let g:unite_source_rec_max_cache_files = 0
 
 "### find in default dirs #####################################################
 
-call unite#custom#source('vimgrep', 'converters', ['converter_default'])
+" call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
 
-" nnoremap <silent> <Leader>g :<C-u>Unite
+" nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
 "             \ -buffer-name=grep
 "             \ -no-quit
 "             \ -keep-focus
 "             \ -immediately
 "             \ -silent
 "             \ vimgrep:**<cr>
+
+" nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
+"             \ -buffer-name=grep
+"             \ -no-quit
+"             \ -keep-focus
+"             \ -immediately
+"             \ vimgrep:**<cr>
+
+nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
+            \ -buffer-name=grep
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ vimgrep:**<cr>
 
 "### mru ######################################################################
 

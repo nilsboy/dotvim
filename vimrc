@@ -577,6 +577,27 @@ set statusline+=\
     " Changes Vim working directory to project root
     Plugin 'airblade/vim-rooter'
 
+    " quoting/parenthesizing made simple
+    Plugin 'tpope/vim-surround'
+
+    " enable repeating supported plugin maps with "." 
+    Plugin 'tpope/vim-repeat'
+
+    " HTML5 omnicomplete and syntax
+    Plugin 'othree/html5.vim'
+
+    " Vim's MatchParen for HTML tags
+    Plugin 'gregsexton/MatchTag'
+
+    "TODO checkout:
+    " Plugin 'tpope/vim-unimpaired'
+
+    " super simple vim plugin to show the list of buffers in the command bar
+    Plugin 'bling/vim-bufferline'
+
+    " provides insert mode auto-completion for quotes, parens, brackets, etc.
+    Plugin 'Raimondi/delimitMate'
+
 "### Install bundles ###########################################################
 
     if iCanHazVundle == 0
