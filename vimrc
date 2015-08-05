@@ -416,204 +416,216 @@ set statusline+=%P
 
 set statusline+=\ 
 
-"### Install Vundle - The Plugin Manager #######################################
+"### Install plugin manager ####################################################
 
-    let iCanHazVundle=1
-    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-    if !filereadable(vundle_readme)
-        echo "Installing Vundle.."
+    let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
+    if !filereadable(neobundle_readme)
+        echo "Installing NeoBundle..."
         echo ""
         silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-        let iCanHazVundle=0
+        silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
     endif
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
+
+     " Required:
+     call neobundle#begin(expand('~/.vim/bundle/'))
+
+     " Let NeoBundle manage NeoBundle
+     " Required:
+     NeoBundleFetch 'Shougo/neobundle.vim'
+
+     " My Bundles here:
+     " Refer to |:NeoBundle-examples|.
+     " Note: You don't set neobundle setting in .gvimrc!
 
 "### Bundles ###################################################################
 
-    " Vundle itself
-    Plugin 'gmarik/vundle'
-
     " uber awesome syntax and errors highlighter
-    Plugin 'scrooloose/syntastic'
+    NeoBundle 'scrooloose/syntastic'
 
     " A Git wrapper so awesome, it should be illegal
-    Plugin 'tpope/vim-fugitive'
+    NeoBundle 'tpope/vim-fugitive'
 
     " ack support
-    Plugin 'mileszs/ack.vim'
+    NeoBundle 'mileszs/ack.vim'
 
     " Prerequisite for some vim plugins
-    Plugin 'l9'
+    NeoBundle 'l9'
 
     " Next generation completion framework
-    Plugin 'Shougo/neocomplete.vim'
+    NeoBundle 'Shougo/neocomplete.vim'
 
     " Universal syntax script for all txt docs, logs and other types
-    Plugin 'txt.vim'
+    NeoBundle 'txt.vim'
 
     " EasyMotion and friends
-    Plugin 'lokaltog/vim-easymotion'
-    " Plugin 't9md/vim-smalls'
-    Plugin 'justinmk/vim-sneak'
+    NeoBundle 'lokaltog/vim-easymotion'
+    " NeoBundle 't9md/vim-smalls'
+    NeoBundle 'justinmk/vim-sneak'
 
     " Search and display information from arbitrary sources
-    Plugin 'shougo/unite.vim'
+    NeoBundle 'shougo/unite.vim'
 
     " Most recently used plugin for unite.vim
-    Plugin 'shougo/neomru.vim'
+    NeoBundle 'shougo/neomru.vim'
 
     " Provides your Vim's buffer with the outline view
-    Plugin 'shougo/unite-outline'
+    NeoBundle 'shougo/unite-outline'
 
     " Perl omni completion
-    Plugin 'c9s/perlomni.vim'
+    NeoBundle 'c9s/perlomni.vim'
 
     " Select tags or select files including tags
-    Plugin 'tsukkee/unite-tag'
+    NeoBundle 'tsukkee/unite-tag'
 
     " Lean & mean status/tabline for vim that's light as air.
-    " Plugin 'bling/vim-airline'
+    " NeoBundle 'bling/vim-airline'
 
-    " Plugin 'scrooloose/nerdtree'
+    " NeoBundle 'scrooloose/nerdtree'
 
     " Vim sugar for the UNIX shell commands
-    Plugin 'tpope/vim-eunuch'
+    NeoBundle 'tpope/vim-eunuch'
 
     " Bringing GVim colorschemes to the terminal
-    " Plugin 'godlygeek/csapprox'
+    " NeoBundle 'godlygeek/csapprox'
 
     " Use GUI Color Schemes in Supported Terminals
-    Plugin 'KevinGoodsell/vim-csexact'
+    NeoBundle 'KevinGoodsell/vim-csexact'
 
     " Colorschemes
-    " Plugin 'altercation/vim-colors-solarized'
-    Plugin 'jonathanfilip/vim-lucius'
+    " NeoBundle 'altercation/vim-colors-solarized'
+    NeoBundle 'jonathanfilip/vim-lucius'
 
     " cycle through (almost) all available colorschemes
     " :CycleColorNext
-    Plugin 'vim-scripts/CycleColor'
+    NeoBundle 'vim-scripts/CycleColor'
 
     " Quickfix
-    Plugin 'sgur/unite-qf'
+    NeoBundle 'sgur/unite-qf'
 
     " Show the syntax group name of the item under cursor
     " :call SyntaxAttr()<CR>
-    Plugin 'vim-scripts/SyntaxAttr.vim'
+    NeoBundle 'vim-scripts/SyntaxAttr.vim'
 
     " Support perl regexes
-    Plugin 'vim-scripts/eregex.vim'
+    NeoBundle 'vim-scripts/eregex.vim'
 
     " Define temporary keymaps
-    Plugin 'tomtom/tinykeymap_vim'
+    NeoBundle 'tomtom/tinykeymap_vim'
 
     " Mappings for simultaneously pressed keys
-    " Plugin 'kana/vim-arpeggio'
+    " NeoBundle 'kana/vim-arpeggio'
 
-    " Plugin 'fholgado/minibufexpl.vim'
+    " NeoBundle 'fholgado/minibufexpl.vim'
     " let g:miniBufExplVSplit = 20   " column width in chars
 
     " Highlight ANSI escape sequences in their respective colors
-    " Plugin 'vim-scripts/AnsiEsc.vim'
-    Plugin 'powerman/vim-plugin-AnsiEsc'
+    " NeoBundle 'vim-scripts/AnsiEsc.vim'
+    NeoBundle 'powerman/vim-plugin-AnsiEsc'
 
     " Forget Vim tabs – now you can have buffer tabs
-    Plugin 'ap/vim-buftabline'
+    NeoBundle 'ap/vim-buftabline'
 
     " Tern plugin for Vim
-    " Plugin 'marijnh/tern_for_vim'
+    " NeoBundle 'marijnh/tern_for_vim'
 
     " Sometimes, it's useful to line up text.
-    Plugin 'godlygeek/tabular'
+    NeoBundle 'godlygeek/tabular'
 
     " Vim Markdown runtime files 
-    Plugin 'tpope/vim-markdown'
+    NeoBundle 'tpope/vim-markdown'
 
     " Gundo.vim is Vim plugin to visualize your Vim undo tree.
-    Plugin 'sjl/gundo.vim'
+    NeoBundle 'sjl/gundo.vim'
 
     " Comment stuff out.
-    Plugin 'tpope/vim-commentary'
+    NeoBundle 'tpope/vim-commentary'
 
     " asynchronous build and test dispatcher
-    Plugin 'tpope/vim-dispatch'
+    NeoBundle 'tpope/vim-dispatch'
 
     " Configurable and extensible tab line and status line
-    " Plugin 'tpope/vim-flagship'
+    " NeoBundle 'tpope/vim-flagship'
 
     " Vim Cucumber runtime files
-    Plugin 'tpope/vim-cucumber'
+    NeoBundle 'tpope/vim-cucumber'
 
     " Unicode character metadata
     " (press ga on top a character)
-    Plugin 'tpope/vim-characterize'
+    NeoBundle 'tpope/vim-characterize'
 
     " Semantic Highlighting
-    Plugin 'jaxbot/semantic-highlight.vim'
+    NeoBundle 'jaxbot/semantic-highlight.vim'
 
     " Seamless navigation between tmux panes and vim splits
-    " TODO Plugin 'christoomey/vim-tmux-navigator'
+    " TODO NeoBundle 'christoomey/vim-tmux-navigator'
 
     " a Vim plugin for making Vim plugins
-    Plugin 'tpope/vim-scriptease'
+    NeoBundle 'tpope/vim-scriptease'
 
     " Autocomplete for Node.js
-    Plugin 'myhere/vim-nodejs-complete'
+    NeoBundle 'myhere/vim-nodejs-complete'
     " Easy node module opening
-    Plugin 'moll/vim-node'
+    NeoBundle 'moll/vim-node'
     " Better JavaScript syntax handling
-    Plugin 'jelera/vim-javascript-syntax'
+    NeoBundle 'jelera/vim-javascript-syntax'
     " CoffeeScript support
-    Plugin 'kchmck/vim-coffee-script'
+    NeoBundle 'kchmck/vim-coffee-script'
     " Better JSON handling
-    Plugin 'elzr/vim-json'
+    NeoBundle 'elzr/vim-json'
     " Support library for above
-    Plugin 'pangloss/vim-javascript'
+    NeoBundle 'pangloss/vim-javascript'
 
     " codesearch source for unite.vim
-    Plugin 'junkblocker/unite-codesearch'
+    NeoBundle 'junkblocker/unite-codesearch'
 
     " Changes Vim working directory to project root
-    Plugin 'airblade/vim-rooter'
+    NeoBundle 'airblade/vim-rooter'
 
     " quoting/parenthesizing made simple
-    Plugin 'tpope/vim-surround'
+    NeoBundle 'tpope/vim-surround'
 
     " enable repeating supported plugin maps with "." 
-    Plugin 'tpope/vim-repeat'
+    NeoBundle 'tpope/vim-repeat'
 
     " HTML5 omnicomplete and syntax
-    Plugin 'othree/html5.vim'
+    NeoBundle 'othree/html5.vim'
 
     " Vim's MatchParen for HTML tags
-    Plugin 'gregsexton/MatchTag'
+    NeoBundle 'gregsexton/MatchTag'
 
     "TODO checkout:
-    " Plugin 'tpope/vim-unimpaired'
+    " NeoBundle 'tpope/vim-unimpaired'
 
     " super simple vim plugin to show the list of buffers in the command bar
-    Plugin 'bling/vim-bufferline'
+    NeoBundle 'bling/vim-bufferline'
 
     " provides insert mode auto-completion for quotes, parens, brackets, etc.
-    Plugin 'Raimondi/delimitMate'
+    NeoBundle 'Raimondi/delimitMate'
 
-    Plugin 'unblevable/quick-scope'
+    NeoBundle 'unblevable/quick-scope'
+        let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
+        let g:qs_first_occurrence_highlight_color = 26 " terminal vim
 
-let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
-let g:qs_first_occurrence_highlight_color = 26 " terminal vim
+        let g:qs_second_occurrence_highlight_color = '#5fffff'  " gui vim
+        let g:qs_second_occurrence_highlight_color = 20 " terminal vim
 
-let g:qs_second_occurrence_highlight_color = '#5fffff'  " gui vim
-let g:qs_second_occurrence_highlight_color = 20 " terminal vim
-
+    NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build': {
+        \ 'mac': 'make -f make_mac.mak',
+        \ 'unix': 'make -f make_unix.mak',
+        \ 'cygwin': 'make -f make_cygwin.mak',
+        \ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\nmake.exe" make_msvc32.mak',
+      \ },
+    \ }
 
 "### Install bundles ###########################################################
 
-    if iCanHazVundle == 0
-        echo "Installing Bundles, please ignore key map error messages"
-        echo ""
-        :PluginInstall
-    endif
+    call neobundle#end()
+
+    " If there are uninstalled bundles found on startup,
+    " this will conveniently prompt you to install them.
+    NeoBundleCheck
 
 "### Install bundles ###########################################################
 
