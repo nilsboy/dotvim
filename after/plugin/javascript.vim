@@ -36,3 +36,6 @@ function! JSTidy()
 
     call winrestview(_view)
 endfunction
+
+" Nodejs dictionary, used by neocomplete through omnicomplete
+autocmd FileType javascript set dictionary+=${g:vim.bundle.dir}/vim-node/dict/node.dict

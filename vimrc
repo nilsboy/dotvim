@@ -1,6 +1,13 @@
 "### misc ######################################################################
 
 " vars
+let g:vim = {}
+let g:vim.dir = $REMOTE_HOME . "/.vim/"
+
+let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle/" }
+let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/" }
+let g:vim['var']    = { 'dir' : g:vim.dir . "/var/" }
+
 let g:MY_VIM_BUNDLE = $REMOTE_HOME . "/.vim/bundle/"
 let g:MY_VIM = $REMOTE_HOME . "/.vim/etc/"
 let g:MY_VIM_RC = $REMOTE_HOME . "/.vim/etc/vimrc"
@@ -36,9 +43,9 @@ set nocompatible
 set t_Co=256
 
 " Show trailing whitespace as red
-highlight ExtraWhitespace ctermbg=darkred guibg=#382424
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" highlight ExtraWhitespace ctermbg=darkred guibg=#382424
+" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 
 set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
@@ -146,7 +153,7 @@ set hidden
 " autocmd * qf set winheight=10
 autocmd FileType qf set winheight=10
 autocmd FileType help set buflisted | only
-autocmd BufCreate * set buflisted | only
+" autocmd BufCreate * set buflisted | only
 
 " " Epic
 " augroup forceSingleWindowMode
@@ -291,6 +298,8 @@ nnoremap Q <Nop>
 
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
+
+nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?q=<cword>"<cr><cr> 
 
 "### Statusline ################################################################
 
@@ -603,7 +612,7 @@ set statusline+=\
     " provides insert mode auto-completion for quotes, parens, brackets, etc.
     NeoBundle 'Raimondi/delimitMate'
 
-    NeoBundle 'unblevable/quick-scope'
+    " NeoBundle 'unblevable/quick-scope'
         let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
         let g:qs_first_occurrence_highlight_color = 26 " terminal vim
 
@@ -619,6 +628,9 @@ set statusline+=\
       \ },
     \ }
 
+    " extended % matching for HTML, LaTeX, and many other languages
+    NeoBundle 'matchit.zip'
+
 "### Install bundles ###########################################################
 
     call neobundle#end()
@@ -626,6 +638,8 @@ set statusline+=\
     " If there are uninstalled bundles found on startup,
     " this will conveniently prompt you to install them.
     NeoBundleCheck
+
+    " NeoBundleClean!
 
 "### Install bundles ###########################################################
 

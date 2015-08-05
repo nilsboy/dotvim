@@ -1,6 +1,6 @@
 "### general ##################################################################
 
-let g:unite_data_directory = MY_VIM_VAR . "/unite"
+let g:unite_data_directory = g:vim.cache.dir . "unite"
 
 " no clue - but complains if not set
 let g:unite_abbr_highlight = "function"
@@ -12,16 +12,127 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " call unite#filters#converter_default#use(['converter_file_directory'])
 " call unite#filters#sorter_default#use(['sorter_word'])
 
-" TODO
-" checkout source output:messages
-" nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
-" nnoremap <leader>x :<C-u>UniteWithBufferDir -buffer-name=files file_rec<cr>
-" nnoremap <leader>c :<C-u>UniteWithCursorWord -buffer-name=files -immediately file_rec<cr>
-" nnoremap <leader>b :<C-u>:UniteBookmarkAdd<cr>
+autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
+autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
+autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
+autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
-nnoremap <silent><TAB> :UniteWithProjectDir -start-insert -hide-source-names outline neomru/file file_rec<cr>
+"### any ######################################################################
 
-"### vim stuff ################################################################
+call unite#custom#source('file_rec', 'converters', ['converter_default'])
+call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
+
+nnoremap <silent><TAB> :UniteWithProjectDir
+            \ -buffer-name=any
+            \ -start-insert
+            \ -hide-source-names
+            \ outline
+            \ neomru/file
+            \ file_rec
+            \ <cr>
+
+" matcher_project_ignore_files
+"### grep #####################################################################
+
+" call unite#custom#source('vimgrep', 'converters', ['converter_default'])
+" call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
+
+if executable('ag')
+    let g:unite_source_grep_command='ag'
+    let g:unite_source_grep_default_opts='--nocolor --line-numbers --nogroup -S -C4'
+    let g:unite_source_grep_recursive_opt=''
+elseif executable('ack')
+    let g:unite_source_grep_command='ack'
+    let g:unite_source_grep_default_opts='--no-heading --no-color -C4'
+    let g:unite_source_grep_recursive_opt=''
+endif
+
+nnoremap <silent> <Leader>g :UniteWithCursorWord
+            \ -buffer-name=grep
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -start-insert
+            \ -custom-grep-search-word-highlight=Error
+            \ grep:**<cr>
+
+"### recent files #############################################################
+
+call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
+call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
+
+nnoremap <silent> <leader>r :Unite
+            \ -buffer-name=recent-files
+            \ -start-insert
+            \ -hide-source-names
+            \ neomru/file
+            \ <cr>
+
+"### recent dirs ##############################################################
+
+call unite#custom#source('neomru/directory', 'converters', ['converter_full_path'])
+call unite#custom#source('neomru/directory', 'sorters', ['sorter_nothing'])
+
+nnoremap <silent> <leader>d :<C-u>Unite
+            \ -buffer-name=recent-dir
+            \ -no-quit
+            \ -keep-focus
+            \ -immediately
+            \ -silent
+            \ neomru/directory<cr>
+
+"### outline ##################################################################
+
+let g:unite_source_outline_filetype_options = {
+      \ '*': {
+      \   'auto_update': 1,
+      \   'auto_update_event': 'hold',
+      \ },
+      \ 'java': {
+      \   'ignore_types': ['package'],
+      \ },
+      \ 'perl': {
+      \   'ignore_types': ['package'],
+      \ },
+      \}
+
+nnoremap <silent> <Leader>o :<C-u>Unite
+            \ -buffer-name=outline
+            \ -keep-focus
+            \ -silent
+            \ -start-insert
+            \ outline<cr>
+
+"### quickfix #################################################################
+
+            " \ -immediately
+nnoremap <silent><Leader>q :<C-u>Unite
+            \ -buffer-name=locationlist
+            \ -here
+            \ -silent
+            \ locationlist<cr>
+
+"### line #####################################################################
+
+call unite#custom#source('line', 'sorters', ['sorter_nothing'])
+
+nnoremap <silent> -- :UniteWithCursorWord
+            \ -start-insert
+            \ -hide-source-names
+            \ line
+            \ <cr>
+
+nnoremap <silent> - :Unite
+            \ -start-insert
+            \ -hide-source-names
+            \ line
+            \ <cr>
+
+"### registers ################################################################
+
+nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
+
+"### vim environment ##########################################################
 
 call unite#custom#source('tab', 'sorters', ['sorter_nothing'])
 call unite#custom#source('window', 'sorters', ['sorter_nothing'])
@@ -34,99 +145,6 @@ nnoremap <silent> <leader>v :<C-u>Unite
     \ -immediately
     \ -silent
     \ tab window buffer mapping<cr>
-
-"### find #####################################################################
-
-" call unite#custom#source('directory_file_rec', 'converters', ['converter_nothing'])
-" call unite#custom#source('directory_file_rec', 'sorters', ['sorter_word'])
-
-" let g:unite_source_alias_aliases = {
-"     \   'directory_file_rec' : {
-"     \     'source': 'file_rec',
-"     \   },
-"     \   'b' : 'buffer',
-" \ }
-
-" let directory_file_rec = {
-"     \ 'is_selectable': 0,
-" \}
-
-" function! directory_file_rec.func(candidate)
-"     execute ':Unite -buffer-name=filerec directory_file_rec:' . a:candidate.word
-" endfunction
-
-" call unite#custom#action('directory', 'directory_file_rec', directory_file_rec)
-" call unite#custom#default_action('directory', 'directory_file_rec')
-
-call unite#custom#source('file_rec', 'converters', ['converter_default'])
-call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
-
-" no file limit
-" fails: call unite#custom#source('file_rec' 'max_candidates', 0)
-let g:unite_source_rec_max_cache_files = 0
-
-" nnoremap <silent> <leader>x :<C-u>Unite
-"             \ -buffer-name=files
-"             \ -no-quit
-"             \ -keep-focus
-"             \ -immediately
-"             \ -silent
-"             \ file_rec<cr>
-
-"### find in default dirs #####################################################
-
-" call unite#custom#source('vimgrep', 'converters', ['converter_default'])
-" call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
-
-" nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
-"             \ -buffer-name=grep
-"             \ -no-quit
-"             \ -keep-focus
-"             \ -immediately
-"             \ -silent
-"             \ vimgrep:**<cr>
-
-" nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
-"             \ -buffer-name=grep
-"             \ -no-quit
-"             \ -keep-focus
-"             \ -immediately
-"             \ vimgrep:**<cr>
-
-nnoremap <silent> <Leader>g :UniteWithCursorWord
-            \ -buffer-name=grep
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ vimgrep:**<cr>
-
-"### mru ######################################################################
-
-call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
-call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
-
-nnoremap <silent> <leader>r :MyUniteMru<cr>
-
-command! -nargs=0 MyUniteMru call MyUniteMru()
-function! MyUniteMru()
-    :Unite -buffer-name=mru -default-action=open neomru/file
-    :nunmap <buffer> <C-l>
-    :nunmap <buffer> <C-h>
-    :only
-endfunction
-
-"### mru-dir ##################################################################
-
-call unite#custom#source('neomru/directory', 'converters', ['converter_full_path'])
-call unite#custom#source('neomru/directory', 'sorters', ['sorter_nothing'])
-
-nnoremap <silent> <leader>d :<C-u>Unite
-            \ -buffer-name=mrudir
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ neomru/directory<cr>
 
 "### mru on vim startup if no file is opened ##################################
 
@@ -143,71 +161,4 @@ nnoremap <silent> <leader>d :<C-u>Unite
 "     autocmd!
 "     autocmd InsertLeave * :set keymap=us
 " augroup END
-
-"### outline ##################################################################
-
-nnoremap <silent> <Leader>o :<C-u>Unite
-            \ -buffer-name=outline
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ outline<cr>
-
-let g:unite_source_outline_filetype_options = {
-      \ '*': {
-      \   'auto_update': 1,
-      \   'auto_update_event': 'hold',
-      \ },
-      \ 'java': {
-      \   'ignore_types': ['package'],
-      \ },
-      \ 'perl': {
-      \   'ignore_types': ['package'],
-      \ },
-      \}
-
-"### quickfix #################################################################
-
-            " \ -immediately
-nnoremap <silent><Leader>q :<C-u>Unite
-            \ -buffer-name=locationlist
-            \ -here
-            \ -silent
-            \ locationlist<cr>
-
-"### line #####################################################################
-
-call unite#custom#source('line', 'sorters', ['sorter_nothing'])
-
-"### search ###################################################################
-
-" nnoremap <silent> // :<C-u>Unite
-"             \ -buffer-name=search
-"             \ -no-quit
-"             \ -keep-focus
-"             \ -immediately
-"             \ -silent
-"             \ line<cr>
-
-"### tags #####################################################################
-
-call unite#custom#source('tag', 'converters', ['converter_default'])
-call unite#custom#source('tag', 'sorters', ['sorter_word'])
-
-" -no-quit
-" Doesn't close unite buffer after firing an action.  Unless you
-" specify it, a unite buffer gets closed when you selected an
-" action which is "is_quit".
-
-" nnoremap <silent> t :<C-u>UniteWithCursorWord
-"             \ -buffer-name=unite-tags
-"             \ -no-quit
-"             \ -silent
-"             \ tag<cr>
-
-" nnoremap <silent> T :<C-u>Unite
-"             \ -buffer-name=unite-tags
-"             \ -no-quit
-"             \ -silent
-"             \ tag<cr>
 

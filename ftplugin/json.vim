@@ -1,3 +1,8 @@
+if exists("b:did_ftplugin")
+    finish
+endif
+let b:did_ftplugin = 1
+
 map <silent> W :call JSONTidy()<CR>
 
 " for syntax check to work run: npm -g install jsonlint
