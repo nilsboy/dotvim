@@ -93,7 +93,7 @@ let g:unite_source_rec_max_cache_files = 0
 "             \ -immediately
 "             \ vimgrep:**<cr>
 
-nnoremap <silent> <Leader>g :<C-u>UniteWithCursorWord
+nnoremap <silent> <Leader>g :UniteWithCursorWord
             \ -buffer-name=grep
             \ -no-quit
             \ -keep-focus
