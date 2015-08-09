@@ -8,7 +8,7 @@ let g:unite_abbr_highlight = "function"
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " call unite#filters#converter_default#use(['converter_file_directory'])
 " call unite#filters#sorter_default#use(['sorter_word'])
 
@@ -19,7 +19,7 @@ autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
 "### any ######################################################################
 
-call unite#custom#source('file_rec', 'converters', ['converter_default'])
+" call unite#custom#source('file_rec', 'converters', ['converter_default'])
 call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
 
 nnoremap <silent><TAB> :UniteWithProjectDir
@@ -122,11 +122,11 @@ nnoremap <silent> -- :UniteWithCursorWord
             \ line
             \ <cr>
 
-nnoremap <silent> - :Unite
-            \ -start-insert
-            \ -hide-source-names
-            \ line
-            \ <cr>
+" nnoremap <silent> - :Unite
+"             \ -start-insert
+"             \ -hide-source-names
+"             \ line
+"             \ <cr>
 
 "### registers ################################################################
 

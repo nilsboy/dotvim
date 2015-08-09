@@ -3,6 +3,8 @@
 " vars
 let g:vim = {}
 let g:vim.dir = $REMOTE_HOME . "/.vim/"
+let g:vim.rc = g:vim.dir . "/vimrc"
+let g:vim.rc_local = g:vim.rc . ".local"
 
 let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle/" }
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/" }
@@ -72,7 +74,7 @@ let g:netrw_dirhistmax = 0
 set clipboard=unnamed
 
 " Chdir to the dir of the current buffer
-" set autochdir
+set autochdir
 autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
 
 " A history of ":" commands, and a history of previous search patterns
@@ -190,13 +192,15 @@ set lazyredraw
 set display=lastline,uhex
 
 " Vim will wrap long lines at a character in 'breakat'
+set nolist
 set linebreak
+set breakat&vim
 let &showbreak=repeat(' ', 10) . ">>> "
 " TODO next vim: "This feature has been implemented on June 25, 2014 as patch 7.4.338"
 " (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
 
-set mouse=nvi
-set mousemodel=popup
+" set mouse=nvi
+" set mousemodel=popup
 
 "### searching #################################################################
 
@@ -432,7 +436,8 @@ set statusline+=\
         echo "Installing NeoBundle..."
         echo ""
         silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim
+        silent !git clone https://github.com/Shougo/neobundle.vim
+                    \ ~/.vim/bundle/neobundle.vim
     endif
     set runtimepath+=~/.vim/bundle/neobundle.vim/
 
@@ -447,7 +452,7 @@ set statusline+=\
      " Refer to |:NeoBundle-examples|.
      " Note: You don't set neobundle setting in .gvimrc!
 
-"### Bundles ###################################################################
+"### Plugins ###################################################################
 
     " uber awesome syntax and errors highlighter
     NeoBundle 'scrooloose/syntastic'
@@ -497,6 +502,7 @@ set statusline+=\
 
     " Bringing GVim colorschemes to the terminal
     " NeoBundle 'godlygeek/csapprox'
+        let g:CSApprox_verbose_level = 0
 
     " Use GUI Color Schemes in Supported Terminals
     NeoBundle 'KevinGoodsell/vim-csexact'
@@ -641,7 +647,7 @@ set statusline+=\
 
     " NeoBundleClean!
 
-"### Install bundles ###########################################################
+"###############################################################################
 
 " syntax on
 
@@ -649,5 +655,9 @@ set statusline+=\
 filetype on
 filetype plugin on
 filetype indent on
+
+if filereadable(g:vim.rc_local)
+  execute "source " . g:vim.rc_local
+endif
 
 "###############################################################################

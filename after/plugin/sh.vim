@@ -1,5 +1,3 @@
-" runtime! ftplugin/man.vim
-
 function! Man(cmd)
 
     let cmd = a:cmd
@@ -31,10 +29,11 @@ function! Man(cmd)
     " silent :setlocal filetype=man
     " silent :setlocal buftype=nofile
 
-    " silent map <buffer> <silent> <esc> :bwipeout!<cr>
-    " nnoremap <buffer> <SPACE> <C-F>
-    " nnoremap <buffer> b <C-B>
+    " keywordprg only works for external apps
+    nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>
 
+    nmap <buffer> <SPACE> <C-F>
+    nmap <buffer> b <C-B>
 endfunction
 
 command! -nargs=1 Man call Man("<args>")

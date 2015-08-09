@@ -166,55 +166,6 @@ function! GrepFile(...)
     silent execute ':LAck "' . join(a:000, " ") . '" ' . expand("%")
 endfunction
 
-command! -nargs=+ FFF call Findxx("~/src/bin", ".")
-function! Findxx(path, grep_args)
-
-    let grepprg_bak = &grepprg
-    let grepformat_bak = &grepformat
-
-    let &grepprg="abs=1 find-and"
-    let &grepformat="%f"
-
-    try
-        silent execute "cd " . a:path
-        silent execute "lgrep! " . a:grep_args
-    catch
-    finally
-        let &grepprg=grepprg_bak
-        let &grepformat=grepformat_bak
-    endtry
-
-    lwindow
-
-endfunction
-
-" List all files starting from git root
-function! ListFiles()
-
-    new files
-    setlocal buftype=nowrite
-
-    setlocal listchars=
-    nnoremap <buffer> <CR> gf
-    execute "r! root=$(git-root) && cd $root && export abs=1 && find-and | head -1000"
-    normal gg
-    sort n
-
-endfunction
-
-command! -nargs=+ GrepFiles call GrepFiles("<args>")
-function! GrepFiles(patterns)
-
-    new grep
-    setlocal buftype=nowrite
-
-    setlocal listchars=
-    nnoremap <buffer> <CR> gf
-    execute "r! root=$(git-root) && cd $root && export abs=1 && find-or-grep " a:patterns " | head -1000"
-    normal gg
-
-endfunction
-
 command! -nargs=1 Tree call Tree("<args>")
 function! Tree(path)
 

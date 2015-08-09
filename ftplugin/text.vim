@@ -1,7 +1,7 @@
-if exists("b:did_ftplugin")
+if exists("b:did_ftplugin_text")
     finish
 endif
-let b:did_ftplugin = 1
+let b:did_ftplugin_text = 1
 
 " wrap automatically on edit
 " set textwidth=80

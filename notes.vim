@@ -42,3 +42,4 @@
 " - check preview-window
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
+"   Backup to git before write?: BufWritePre

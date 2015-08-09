@@ -1,6 +1,7 @@
-if exists("b:did_ftplugin")
+if exists("b:did_ftplugin_sh")
     finish
 endif
-let b:did_ftplugin = 1
+let b:did_ftplugin_sh = 1
 
-nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
+" keywordprg only works for external apps
+nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>

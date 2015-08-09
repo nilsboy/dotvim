@@ -1,7 +1,7 @@
-if exists("b:did_ftplugin")
+if exists("b:did_ftplugin_javascript")
     finish
 endif
-let b:did_ftplugin = 1
+let b:did_ftplugin_javascript = 1
 
 map <buffer><silent><leader>w :call JSTidy()<CR><CR><silent> :SyntasticCheck<cr>
 

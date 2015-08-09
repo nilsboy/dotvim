@@ -46,11 +46,8 @@ call tinykeymap#Map("jumps", "h", "normal! <C-O>")
 call tinykeymap#Map("jumps", "l", "normal! <C-I>")
 
 call tinykeymap#EnterMap('file', '<leader>f', {'name': 'file'})
-call tinykeymap#Map("file", "F", ':call ListFiles()', {'exit': 1})
-call tinykeymap#Map("file", "f", ':call _unite()', {'exit': 1})
+call tinykeymap#Map("file", "f", ':Unite -buffer-name=files file_rec', {'exit': 1})
 call tinykeymap#Map("file", "x", 'new | r! find-and | :normal ggdd', {'exit': 1})
-call tinykeymap#Map("file", "a", ':call Findxx("~/src")')
-call tinykeymap#Map("file", "g", ':call Findxx("~/src")')
 call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
 call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
 
@@ -60,11 +57,6 @@ call tinykeymap#Map("help", "m", ':execute ":edit " . g:MY_VIM . "/plugin/tinyke
 call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
 call tinykeymap#Map("help", "l", ':execute ":edit ' . MY_VIM . '/plugin/helpers.vim"', {'exit': 1 })
 call tinykeymap#Map("help", "v", ':execute ":e ' . MY_VIM_RC . '"', {'exit': 1 })
-
-function! _unite()
-  :Unite -buffer-name=files file_rec
-  " :only
-endfunction
 
 "### Quickfix list
 
