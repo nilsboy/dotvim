@@ -53,7 +53,6 @@ nnoremap <silent> <Leader>g :UniteWithCursorWord
             \ -keep-focus
             \ -immediately
             \ -start-insert
-            \ -custom-grep-search-word-highlight=Error
             \ grep:**<cr>
 
 "### recent files #############################################################

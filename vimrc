@@ -1,39 +1,39 @@
 "### misc ######################################################################
 
+" Create a directory if does not exist jet
+function! _mkdir(path)
+    if !isdirectory(expand(a:path))
+      call mkdir(expand(a:path))
+    endif
+endfunction
+
 " vars
-let g:vim = {}
-let g:vim.dir = $REMOTE_HOME . "/.vim/"
-let g:vim.rc = g:vim.dir . "/vimrc"
-let g:vim.rc_local = g:vim.rc . ".local"
+let g:vim           = {}
+let g:vim.dir       = $REMOTE_HOME . "/.vim/"
+let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
+let g:vim.rc        = g:vim.etc.dir . "vimrc"
+let g:vim.rc_local  = g:vim.rc . ".local"
+let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
+let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
+let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle" }
+let g:vim['tags']   = g:vim.var.dir . "tags"
+let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
-let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle/" }
-let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/" }
-let g:vim['var']    = { 'dir' : g:vim.dir . "/var/" }
+call _mkdir(g:vim.dir)
+call _mkdir(g:vim.etc.dir)
+call _mkdir(g:vim.var.dir)
+call _mkdir(g:vim.cache.dir)
 
-let g:MY_VIM_BUNDLE = $REMOTE_HOME . "/.vim/bundle/"
-let g:MY_VIM = $REMOTE_HOME . "/.vim/etc/"
-let g:MY_VIM_RC = $REMOTE_HOME . "/.vim/etc/vimrc"
-let g:MY_VIM_VAR = $REMOTE_HOME . "/.vim/var/"
-let TAGS = g:MY_VIM_VAR . "/tags"
+" reset everything to their defaults
+set all&
 
-let &tags = TAGS
-
-" TODO set viminfo=$REMOTE_HOME/.vim/var/viminfo
-set viminfo='50,<1000,s100,:0,n~/vim/viminfo
-
-" Create g:MY_VIM_VAR dir if missing
-if isdirectory(g:MY_VIM_VAR) == 0
-    silent execute '!mkdir -p ' . g:MY_VIM_VAR
-endif
+let &tags = g:vim.tags
+set showfulltag
 
 " Keep undo history after closing a file
 set undofile
-let &undodir = g:MY_VIM_VAR . "undo"
-
-" Create undodir if missing
-if isdirectory(&undodir) == 0
-    silent execute '!mkdir -p ' . &undodir
-endif
+let &undodir = g:vim.var.dir . "undo"
+call _mkdir(&undodir)
 
 " Security
 set modelines=0
@@ -49,9 +49,11 @@ set t_Co=256
 " autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 " autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 
+" TODO paths
 set runtimepath+=$REMOTE_HOME/.vim/etc
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
+" TODO paths
 " Add system PATH to vim path to be used by :find
 let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',', 'g')
 
@@ -100,16 +102,26 @@ set nostartofline
 " Insert spaces when the tab key is hit
 set expandtab
 
+" automatically indent to match adjacent lines
+set autoindent
+
+" use shiftwidth to enter tabs
+set smarttab
+
 " Tab spacing of 4
 set tabstop=4
 
-" Shift width (moved sideways for the shift command)
-set sw=4
+" number of spaces per tab in insert mode
+set softtabstop=4
 
-set smarttab
+" Shift width (moved sideways for the shift command)
+set shiftwidth=4
 
 " Make backspace more flexible
 set backspace=indent,eol,start
+
+" show list for autocomplete
+set wildmenu
 
 " Use tab expansion in vim prompts
 set wildmode=longest:list
@@ -120,8 +132,11 @@ set wildignorecase
 " Ignore patterns
 set wildignore=.*,*.class
 
+set splitbelow
+set splitright
+
 " No line wrapping of long lines
-set nowrap
+set wrap
 
 " Show arrows for too long lines / show trailing spaces
 set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
@@ -139,7 +154,9 @@ set iskeyword+=:,_,$,@,%,#
 " Don't make noise
 set noerrorbells
 set novisualbell
+set t_vb=
 
+" assume fast terminal connection
 set ttyfast
 
 " Keep cursor position (if possible) when executing certain commands
@@ -195,7 +212,7 @@ set display=lastline,uhex
 set nolist
 set linebreak
 set breakat&vim
-let &showbreak=repeat(' ', 10) . ">>> "
+let &showbreak=repeat(' ', 10) . "↪ "
 " TODO next vim: "This feature has been implemented on June 25, 2014 as patch 7.4.338"
 " (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
 
@@ -462,6 +479,14 @@ set statusline+=\
 
     " ack support
     NeoBundle 'mileszs/ack.vim'
+      if executable('ack')
+        set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+        set grepformat=%f:%l:%c:%m
+      endif
+      if executable('ag')
+        set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+        set grepformat=%f:%l:%c:%m
+      endif
 
     " Prerequisite for some vim plugins
     NeoBundle 'l9'
@@ -625,12 +650,10 @@ set statusline+=\
         let g:qs_second_occurrence_highlight_color = '#5fffff'  " gui vim
         let g:qs_second_occurrence_highlight_color = 20 " terminal vim
 
+    " Interactive command execution in Vim
     NeoBundle 'Shougo/vimproc.vim', {
       \ 'build': {
-        \ 'mac': 'make -f make_mac.mak',
         \ 'unix': 'make -f make_unix.mak',
-        \ 'cygwin': 'make -f make_cygwin.mak',
-        \ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\nmake.exe" make_msvc32.mak',
       \ },
     \ }
 
@@ -659,5 +682,8 @@ filetype indent on
 if filereadable(g:vim.rc_local)
   execute "source " . g:vim.rc_local
 endif
+
+" has to be done last - it set somewhere else before already
+let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
 
 "###############################################################################

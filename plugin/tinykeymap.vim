@@ -53,10 +53,10 @@ call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
 
 call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
 call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})
-call tinykeymap#Map("help", "m", ':execute ":edit " . g:MY_VIM . "/plugin/tinykeymap.vim"', {'exit': 1})
+call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.plugin.dir . '"tinykeymap.vim"', {'exit': 1})
 call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
-call tinykeymap#Map("help", "l", ':execute ":edit ' . MY_VIM . '/plugin/helpers.vim"', {'exit': 1 })
-call tinykeymap#Map("help", "v", ':execute ":e ' . MY_VIM_RC . '"', {'exit': 1 })
+call tinykeymap#Map("help", "l", ':execute ":edit ' . g:vim.plugin.dir . '/helpers.vim"', {'exit': 1 })
+call tinykeymap#Map("help", "v", ':execute ":e ' . g:vim.rc . '"', {'exit': 1 })
 
 "### Quickfix list
 
