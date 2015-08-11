@@ -322,6 +322,9 @@ nnoremap Y y$
 
 nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?q=<cword>"<cr><cr> 
 
+nnoremap <c-u> g,
+nnoremap <c-p> g;
+
 "### Statusline ################################################################
 
 " Avoid 'hit enter prompt'
