@@ -565,7 +565,7 @@ set statusline+=\
     NeoBundle 'vim-scripts/CycleColor'
 
     " Quickfix
-    NeoBundle 'sgur/unite-qf'
+    " NeoBundle 'sgur/unite-qf'
 
     " Show the syntax group name of the item under cursor
     " :call SyntaxAttr()<CR>
@@ -662,7 +662,7 @@ set statusline+=\
     " NeoBundle 'tpope/vim-unimpaired'
 
     " super simple vim plugin to show the list of buffers in the command bar
-    NeoBundle 'bling/vim-bufferline'
+    " NeoBundle 'bling/vim-bufferline'
 
     " provides insert mode auto-completion for quotes, parens, brackets, etc.
     NeoBundle 'Raimondi/delimitMate'

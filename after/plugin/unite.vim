@@ -21,14 +21,14 @@ autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
 " call unite#custom#source('file_rec', 'converters', ['converter_default'])
 call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
+" g:unite_source_rec_max_cache_files
 
-nnoremap <silent><TAB> :UniteWithProjectDir
+nnoremap <silent><TAB> :Unite
             \ -buffer-name=any
             \ -start-insert
             \ -hide-source-names
             \ outline
             \ neomru/file
-            \ file_rec
             \ <cr>
 
 " matcher_project_ignore_files
@@ -37,7 +37,11 @@ nnoremap <silent><TAB> :UniteWithProjectDir
 " call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
 
-if executable('ag')
+if executable('cgrep')
+    let g:unite_source_grep_command='csearch'
+    let g:unite_source_grep_default_opts='-i'
+    let g:unite_source_grep_recursive_opt=''
+elseif executable('ag')
     let g:unite_source_grep_command='ag'
     let g:unite_source_grep_default_opts='--nocolor --line-numbers --nogroup -S -C4'
     let g:unite_source_grep_recursive_opt=''
@@ -101,15 +105,6 @@ nnoremap <silent> <Leader>o :<C-u>Unite
             \ -silent
             \ -start-insert
             \ outline<cr>
-
-"### quickfix #################################################################
-
-            " \ -immediately
-nnoremap <silent><Leader>q :<C-u>Unite
-            \ -buffer-name=locationlist
-            \ -here
-            \ -silent
-            \ locationlist<cr>
 
 "### line #####################################################################
 
