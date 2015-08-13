@@ -225,6 +225,10 @@ set mousehide
 " always assume decimal numbers
 set nrformats-=octal
 
+" Determine how text with the "conceal" syntax attribute
+set conceallevel=1
+set listchars+=conceal:Δ
+
 "### searching #################################################################
 
 " Show matching brackets.
@@ -344,12 +348,6 @@ set laststatus=2
 
 " always show tab page labels
 set showtabline=2
-
-" No menus, scrollbars, or other junk
-set guioptions=
-
-" disables the GUI tab line in favor of the plain text version
-set guioptions-=e
 
 " Always show ruler (right part of the command line)
 " set ruler
@@ -475,6 +473,25 @@ set statusline+=\
   " Recent versions of xterm (282 or above) also support
   " 5 -> blinking vertical bar
   " 6 -> solid vertical bar
+
+set cursorline
+autocmd WinLeave * setlocal nocursorline
+autocmd WinEnter * setlocal cursorline
+
+  " let &colorcolumn=s:settings.max_column
+  " if s:settings.enable_cursorcolumn
+  "   set cursorcolumn
+  "   autocmd WinLeave * setlocal nocursorcolumn
+  "   autocmd WinEnter * setlocal cursorcolumn
+  " endif
+
+"### Gui mode ##################################################################
+
+" No menus, scrollbars, or other junk
+set guioptions=
+
+" disables the GUI tab line in favor of the plain text version
+set guioptions-=e
 
 "### Install plugin manager ####################################################
 
