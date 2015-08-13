@@ -16,7 +16,6 @@ let g:vim.rc_local  = g:vim.rc . ".local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle" }
-let g:vim['tags']   = g:vim.var.dir . "tags"
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
 call _mkdir(g:vim.dir)
@@ -27,6 +26,7 @@ call _mkdir(g:vim.cache.dir)
 " reset everything to their defaults
 set all&
 
+let g:vim['tags']   = g:vim.var.dir . "tags"
 let &tags = g:vim.tags
 set showfulltag
 
@@ -218,6 +218,12 @@ let &showbreak=repeat(' ', 10) . "↪ "
 
 " set mouse=nvi
 " set mousemodel=popup
+
+" hide mouse when characters are typed
+set mousehide
+
+" always assume decimal numbers
+set nrformats-=octal
 
 "### searching #################################################################
 
