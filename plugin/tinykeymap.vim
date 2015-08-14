@@ -8,12 +8,16 @@ let g:tinykeymap#message_fmt = "%.0s%.0s"
 " Default keymaps to load
 " let g:tinykeymaps_default = ["quickfixlist"]
 
+" ### buffers ################################################################
+
 call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
 call tinykeymap#Map('buffers', 'n', 'new') 
 call tinykeymap#Map("buffers", "c", "bdelete")
 call tinykeymap#Map("buffers", "l", "bnext")
 call tinykeymap#Map("buffers", "h", "bprev")
 call tinykeymap#Map("buffers", "g", ":L9GrepBufferAll ")
+
+" ### windows #################################################################
 
 call tinykeymap#EnterMap('windows', '<leader>w', {'name': 'windows'})
 call tinykeymap#Map('windows', 'n', 'new') 
@@ -27,6 +31,8 @@ call tinykeymap#Map("windows", "s", "split")
 call tinykeymap#Map("windows", "v", "vsplit")
 call tinykeymap#Map("windows", "q", "quit")
 call tinykeymap#Map("windows", "i", "", {'exit': 1})
+
+" ##############################################################################
 
 " call tinykeymap#EnterMap('tags', '<leader>t', {'name': 'tags'})
 " call tinykeymap#Map("tags", "t", ':UniteWithCursorWord -buffer-name=unite-tags -keep-focus tag')

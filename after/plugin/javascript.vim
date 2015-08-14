@@ -23,6 +23,8 @@ function! JSTidy()
     " %!standard --format --stdin | grep -v 'standard: '
     %!standard --format --stdin 2>/dev/null
 
+    " TODO test: :call JsBeautify()<cr>
+
     %!js-beautify
                  \ -w 80
                  \ --preserve-newlines
