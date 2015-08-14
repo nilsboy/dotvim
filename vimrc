@@ -15,7 +15,7 @@ let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = g:vim.rc . ".local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
-let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle" }
+let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle/" }
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
 call _mkdir(g:vim.dir)
@@ -372,7 +372,6 @@ function! Location()
     let l:prefix = ""
     let l:dirname = ""
 
-    " let l:fn = substitute(l:fn, $HOME . "/src/", "", "")
     let l:fn = substitute(l:fn, "/home", "", "")
 
     let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
@@ -452,24 +451,24 @@ set statusline+=\
 
 "### Cursor ##################################################################
 
-  " use an orange cursor in insert mode
-  let &t_SI = "\<Esc>]12;red\x7"
-  " use a red cursor otherwise
-  let &t_EI = "\<Esc>]12;orange\x7"
-  " silent !echo -ne "\033]12;red\007"
-  " reset cursor when vim exits
-  " autocmd VimLeave * silent !echo -ne "\033]12;gray\007"
+" use an orange cursor in insert mode
+let &t_SI = "\<Esc>]12;red\x7"
+" use a red cursor otherwise
+let &t_EI = "\<Esc>]12;orange\x7"
+" silent !echo -ne "\033]12;red\007"
+" reset cursor when vim exits
+" autocmd VimLeave * silent !echo -ne "\033]12;gray\007"
 
-  " use \003]12;gray\007 for gnome-terminal
-  " solid underscore
-  " let &t_SI .= "\<Esc>[4 q"
-  " let &t_EI .= "\<Esc>[6 q"
-  " 2 -> solid block
-  " 1 or 0 -> blinking block
-  " 3 -> blinking underscore
-  " Recent versions of xterm (282 or above) also support
-  " 5 -> blinking vertical bar
-  " 6 -> solid vertical bar
+" use \003]12;gray\007 for gnome-terminal
+" solid underscore
+" let &t_SI .= "\<Esc>[4 q"
+" let &t_EI .= "\<Esc>[6 q"
+" 2 -> solid block
+" 1 or 0 -> blinking block
+" 3 -> blinking underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
 
 " set cursorline
 " autocmd WinLeave * setlocal nocursorline
@@ -485,26 +484,29 @@ set guioptions-=e
 
 "### Install plugin manager ####################################################
 
-    let neobundle_readme=expand('~/.vim/bundle/neobundle.vim/README.md')
-    if !filereadable(neobundle_readme)
-        echo "Installing NeoBundle..."
-        echo ""
-        silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/Shougo/neobundle.vim
-                    \ ~/.vim/bundle/neobundle.vim
-    endif
-    set runtimepath+=~/.vim/bundle/neobundle.vim/
+function! IsPluginInstalled(path)
+    let l:basename = fnamemodify(a:path,':t:h')
+    if isdirectory(g:vim.bundle.dir . l:basename)
+        return 1
+    endif 
+    return 0
+endfunction
 
-     " Required:
-     call neobundle#begin(expand('~/.vim/bundle/'))
+if !IsPluginInstalled("neobundle.vim")
+    echo "Installing NeoBundle..."
+    echo ""
+    silent !mkdir -p "$g:vim.bundle.dir"
+    execute "!git clone https://github.com/Shougo/neobundle.vim " .
+                \ g:vim.bundle.dir . "/neobundle.vim"
+endif
+execute "set runtimepath+=" . g:vim.bundle.dir . "/neobundle.vim/"
 
-     " Let NeoBundle manage NeoBundle
-     " Required:
-     NeoBundleFetch 'Shougo/neobundle.vim'
+" Required:
+call neobundle#begin(g:vim.bundle.dir)
 
-     " My Bundles here:
-     " Refer to |:NeoBundle-examples|.
-     " Note: You don't set neobundle setting in .gvimrc!
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
 
 "### Plugins ###################################################################
 
@@ -725,7 +727,7 @@ set guioptions-=e
     NeoBundleLazy 'gregsexton/MatchTag', {'autoload':{'filetypes':['html','xml']}}
     NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}} "{{{
 
-    " javascript"
+    " javascript
     NeoBundleLazy 'marijnh/tern_for_vim', {
       \ 'autoload': { 'filetypes': ['javascript'] },
       \ 'build': {

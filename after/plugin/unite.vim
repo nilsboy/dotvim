@@ -1,3 +1,4 @@
+if !IsPluginInstalled(expand("<sfile>")) | finish | endif
 "### general ##################################################################
 
 let g:unite_data_directory = g:vim.cache.dir . "unite"
@@ -37,7 +38,7 @@ nnoremap <silent><TAB> :Unite
 " call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
 
-if executable('cgrep')
+if executable('xxcgrep')
     let g:unite_source_grep_command='csearch'
     let g:unite_source_grep_default_opts='-i'
     let g:unite_source_grep_recursive_opt=''

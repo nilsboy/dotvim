@@ -1,8 +1,7 @@
-" :NERDTreeFind                                                  *:NERDTreeFind*
-"    Find the current file in the tree.
+if !IsPluginInstalled(expand("<sfile>")) | finish | endif
 
 " nnoremap <silent><leader>t :NERDTree %:h<CR>
-nnoremap <silent><leader>t :NERDTreeFind<CR>
+" nnoremap <silent><leader>t :NERDTreeFind<CR>
 
 " |'NERDTreeAutoCenter'|          Controls whether the NERD tree window centers
 let g:NERDTreeAutoCenter = 1
