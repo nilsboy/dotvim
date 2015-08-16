@@ -1,3 +1,6 @@
+" faq
+:h vim-faq
+
 " Own mappings
 :execute ':e ' . MY_VIM . "/plugin/tinykeymap.vim"
 

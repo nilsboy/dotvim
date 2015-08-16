@@ -279,10 +279,17 @@ let mapleader = " "
 nnoremap <silent> <ESC><ESC> <Nop>
 nnoremap <silent> <leader>l :Explore<cr>
 
+" use saner regexes
+" TODO checkout bundle 'vim-scripts/eregex.vim'
 vnoremap - /\v
 vnoremap , :
 nnoremap - /\v
 nnoremap , :
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
+nnoremap :s/ :s/\v
 
 nnoremap <leader>k1 <F1>
 
@@ -331,6 +338,23 @@ nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?q=<cword>"<cr><cr>
 
 nnoremap <c-u> g,
 nnoremap <c-p> g;
+
+" eval vimscript by line or visual selection
+nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
+vmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
+
+" reselect visual block after indent
+vnoremap < <gv
+vnoremap > >gv
+
+" TODO
+" find current word in quickfix
+" "nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
+" find last search in quickfix
+" "nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
+
+" hide annoying quit message
+nnoremap <C-c> <C-c>:echo<cr>
 
 "### Statusline ################################################################
 
@@ -512,6 +536,10 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
     " uber awesome syntax and errors highlighter
     NeoBundle 'scrooloose/syntastic'
+      let g:syntastic_error_symbol = '✗'
+      let g:syntastic_style_error_symbol = '✠'
+      let g:syntastic_warning_symbol = '∆'
+      let g:syntastic_style_warning_symbol = '≈'
 
     " A Git wrapper so awesome, it should be illegal
     NeoBundle 'tpope/vim-fugitive'
@@ -561,20 +589,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'
     " NeoBundle 't9md/vim-smalls'
     NeoBundle 'justinmk/vim-sneak'
 
-    " Search and display information from arbitrary sources
-    NeoBundle 'shougo/unite.vim'
-
-    " Most recently used plugin for unite.vim
-    NeoBundle 'shougo/neomru.vim'
-
-    " Provides your Vim's buffer with the outline view
-    NeoBundle 'shougo/unite-outline'
-
+    
     " Perl omni completion
     NeoBundle 'c9s/perlomni.vim'
-
-    " Select tags or select files including tags
-    NeoBundle 'tsukkee/unite-tag'
 
     " Lean & mean status/tabline for vim that's light as air.
     " NeoBundle 'bling/vim-airline'
@@ -595,9 +612,12 @@ NeoBundleFetch 'Shougo/neobundle.vim'
     " NeoBundle 'altercation/vim-colors-solarized'
     NeoBundle 'jonathanfilip/vim-lucius'
 
+    " Tomorrow Theme
+    NeoBundle 'chriskempson/vim-tomorrow-theme'
+
     " cycle through (almost) all available colorschemes
     " :CycleColorNext
-    NeoBundle 'vim-scripts/CycleColor'
+    " NeoBundle 'vim-scripts/CycleColor'
 
     " Quickfix
     " NeoBundle 'sgur/unite-qf'
@@ -756,6 +776,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'
     " Syntax file for some JavaScript libraries
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls','typescript']}}
 
+    " List of JavaScript ES6 snippets and syntax highlighting for vim
+    NeoBundleLazy 'isRuslan/vim-es6', {'autoload':{'filetypes':['javascript']}}
+
     " vim-snipmate default snippets
     NeoBundle 'honza/vim-snippets'
 
@@ -806,6 +829,42 @@ NeoBundleFetch 'Shougo/neobundle.vim'
       nnoremap [ctrlp]o :CtrlPFunky<cr>
       nnoremap [ctrlp]b :CtrlPBuffer<cr>
 
+    " Create your own text objects
+    NeoBundle 'kana/vim-textobj-user'
+
+    " Text objects for indented blocks of lines
+    " NeoBundle 'kana/vim-textobj-indent'
+
+    " Text objects for entire buffer
+    NeoBundle 'kana/vim-textobj-entire'
+
+    " Underscore text-object
+    NeoBundle 'lucapette/vim-textobj-underscore'
+
+    " The Vim FAQ from http://vimdoc.sourceforge.net
+    NeoBundle 'chrisbra/vim_faq'
+
+    " Powerful shell implemented by vim
+    NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
+
+      let g:vimshell_editor_command='vim'
+      let g:vimshell_right_prompt='getcwd()'
+      let g:vimshell_data_directory=g:vim.cache.dir . 'vimshell'
+      let g:vimshell_vimshrc_path=g:vim.dir . 'vimshrc'
+
+      " nnoremap <leader>c  :VimShell -split<cr>
+      " nnoremap <leader>cc :VimShell -split<cr>
+      " nnoremap <leader>cn :VimShellInteractive node<cr>
+      " nnoremap <leader>cl :VimShellInteractive lua<cr>
+      " nnoremap <leader>cr :VimShellInteractive irb<cr>
+      " nnoremap <leader>cp :VimShellInteractive python<cr>
+
+    " TODO: test
+    " Always have a nice view for vim split windows
+    NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}
+      let g:goldenview__enable_default_mapping=0
+      " nmap <leader> <g>ToggleGoldenViewAutoResize
+
 "### Install bundles ###########################################################
 
     call neobundle#end()
@@ -817,8 +876,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
     " NeoBundleClean!
 
 "###############################################################################
-
-" syntax on
 
 " Detect filetypes and run filetype plugins
 filetype on
