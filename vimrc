@@ -2,9 +2,9 @@
 
 " Create a directory if does not exist jet
 function! _mkdir(path)
-    if !isdirectory(expand(a:path))
-      call mkdir(expand(a:path))
-    endif
+if !isdirectory(expand(a:path))
+  call mkdir(expand(a:path))
+endif
 endfunction
 
 " vars
@@ -15,7 +15,10 @@ let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = g:vim.rc . ".local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
-let g:vim['bundle'] = { 'dir' : g:vim.dir . "bundle/" }
+let g:vim.bundle = {}
+let g:vim.bundle.dir =  g:vim.dir . "bundle/"
+let g:vim.bundle.to_load = g:vim.etc.dir . "bundle/"
+let g:vim.bundle.settings = g:vim.etc.dir . "settings/"
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
 call _mkdir(g:vim.dir)
@@ -185,16 +188,16 @@ autocmd FileType help set buflisted | only
 
 " Highlight unknown filetypes as text
 augroup setDefaultSyntax
-    autocmd!
-    autocmd BufEnter *
-        \ if &syntax == '' | setlocal syntax=txt | endif
+autocmd!
+autocmd BufEnter *
+    \ if &syntax == '' | setlocal syntax=txt | endif
 augroup END
 
 " Highlight vim documentation if opened directly from file
 augroup setVimDocSyntax
-    autocmd!
-    autocmd BufEnter */vim/*/doc/*.txt
-        \ if &filetype != 'help' | setlocal filetype=help | endif
+autocmd!
+autocmd BufEnter */vim/*/doc/*.txt
+    \ if &filetype != 'help' | setlocal filetype=help | endif
 augroup END
 
 " show count of selected lines / columns
@@ -353,6 +356,15 @@ vnoremap > >gv
 " find last search in quickfix
 " "nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
 
+if executable('ack')
+    set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+    set grepformat=%f:%l:%c:%m
+endif
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+    set grepformat=%f:%l:%c:%m
+endif
+
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
 
@@ -386,45 +398,45 @@ set statusline+=%{Location()}
 
 function! Location()
 
-    let l:fn = "/home/user/src/dotvim/vimrc"
-    let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-    let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
-    let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
-    let l:fn = "/home/user/bashrc"
-    let l:fn = expand("%:p")
+let l:fn = "/home/user/src/dotvim/vimrc"
+let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
+let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
+let l:fn = "/home/user/bashrc"
+let l:fn = expand("%:p")
 
-    let l:prefix = ""
-    let l:dirname = ""
+let l:prefix = ""
+let l:dirname = ""
 
-    let l:fn = substitute(l:fn, "/home", "", "")
+let l:fn = substitute(l:fn, "/home", "", "")
 
-    let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
-    let l:basename = fnamemodify(l:fn,':t:h')
+let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
+let l:basename = fnamemodify(l:fn,':t:h')
 
-    if len(l:dirs) == 0
-        let l:dirname= "~"
-    elseif len(l:dirs) == 1
-        let l:prefix = dirs[0]
-    elseif len(l:dirs) == 2
-        let l:prefix = dirs[0]
-        let l:dirname = dirs[1]
-    elseif len(l:dirs) > 2
-        let l:prefix = dirs[2]
-        if len(dirs) > 3
-            let l:dirname = dirs[len(dirs) - 1]
-        endif
+if len(l:dirs) == 0
+    let l:dirname= "~"
+elseif len(l:dirs) == 1
+    let l:prefix = dirs[0]
+elseif len(l:dirs) == 2
+    let l:prefix = dirs[0]
+    let l:dirname = dirs[1]
+elseif len(l:dirs) > 2
+    let l:prefix = dirs[2]
+    if len(dirs) > 3
+        let l:dirname = dirs[len(dirs) - 1]
     endif
+endif
 
-     if l:dirname != ""
-         let l:dirname .= "/"
-     endif
+ if l:dirname != ""
+     let l:dirname .= "/"
+ endif
 
-    if l:prefix != ""
-        let l:prefix .= ":"
-    endif
+if l:prefix != ""
+    let l:prefix .= ":"
+endif
 
-    let l:fn = l:prefix . l:dirname . l:basename
-    return l:fn
+let l:fn = l:prefix . l:dirname . l:basename
+return l:fn
 
 endfunction
 
@@ -476,9 +488,9 @@ set statusline+=\
 "### Cursor ##################################################################
 
 " use an orange cursor in insert mode
-let &t_SI = "\<Esc>]12;red\x7"
+" TODO let &t_SI = "\<Esc>]12;red\x7"
 " use a red cursor otherwise
-let &t_EI = "\<Esc>]12;orange\x7"
+" TODO let &t_EI = "\<Esc>]12;orange\x7"
 " silent !echo -ne "\033]12;red\007"
 " reset cursor when vim exits
 " autocmd VimLeave * silent !echo -ne "\033]12;gray\007"
@@ -506,7 +518,7 @@ set guioptions=
 " disables the GUI tab line in favor of the plain text version
 set guioptions-=e
 
-"### Install plugin manager ####################################################
+"### plugin manager "###########################################################
 
 function! IsPluginInstalled(path)
     let l:basename = fnamemodify(a:path,':t:h')
@@ -521,7 +533,7 @@ if !IsPluginInstalled("neobundle.vim")
     echo ""
     silent !mkdir -p "$g:vim.bundle.dir"
     execute "!git clone https://github.com/Shougo/neobundle.vim " .
-                \ g:vim.bundle.dir . "/neobundle.vim"
+            \ g:vim.bundle.dir . "/neobundle.vim"
 endif
 execute "set runtimepath+=" . g:vim.bundle.dir . "/neobundle.vim/"
 
@@ -532,348 +544,18 @@ call neobundle#begin(g:vim.bundle.dir)
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-"### Plugins ###################################################################
+for fpath in split(globpath(g:vim.bundle.to_load, '*.vim'), '\n')
+    " echo "sourcing " . fpath
+    execute 'source' fpath
+endfor
 
-    " uber awesome syntax and errors highlighter
-    NeoBundle 'scrooloose/syntastic'
-      let g:syntastic_error_symbol = '✗'
-      let g:syntastic_style_error_symbol = '✠'
-      let g:syntastic_warning_symbol = '∆'
-      let g:syntastic_style_warning_symbol = '≈'
+call neobundle#end()
 
-    " A Git wrapper so awesome, it should be illegal
-    NeoBundle 'tpope/vim-fugitive'
-      " nnoremap <silent> <leader>gs :Gstatus<CR>
-      " nnoremap <silent> <leader>gd :Gdiff<CR>
-      " nnoremap <silent> <leader>gc :Gcommit<CR>
-      " nnoremap <silent> <leader>gb :Gblame<CR>
-      " nnoremap <silent> <leader>gl :Glog<CR>
-      " nnoremap <silent> <leader>gp :Git push<CR>
-      " nnoremap <silent> <leader>gw :Gwrite<CR>
-      " nnoremap <silent> <leader>gr :Gremove<CR>
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
 
-    NeoBundleLazy 'gregsexton/gitv', 
-                \ {'depends':['tpope/vim-fugitive'],
-                \ 'autoload':{'commands':'Gitv'}}
-      " nnoremap <silent> <leader>gv :Gitv<CR>
-      " nnoremap <silent> <leader>gV :Gitv!<CR>
-
-    " shows a git diff in the gutter
-    " TODO some hilight error
-    " NeoBundle 'airblade/vim-gitgutter'
-
-    " ack support
-    NeoBundle 'mileszs/ack.vim'
-      if executable('ack')
-        set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-        set grepformat=%f:%l:%c:%m
-      endif
-      if executable('ag')
-        set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-        set grepformat=%f:%l:%c:%m
-      endif
-
-    " Prerequisite for some vim plugins
-    NeoBundle 'l9'
-
-    " Next generation completion framework
-    NeoBundle 'Shougo/neocomplete.vim'
-        let g:neocomplete#enable_at_startup=1
-        let g:neocomplete#data_directory=g:vim.cache.dir . 'neocomplete'
-
-    " Universal syntax script for all txt docs, logs and other types
-    NeoBundle 'txt.vim'
-
-    " EasyMotion and friends
-    NeoBundle 'lokaltog/vim-easymotion'
-    " NeoBundle 't9md/vim-smalls'
-    NeoBundle 'justinmk/vim-sneak'
-
-    
-    " Perl omni completion
-    NeoBundle 'c9s/perlomni.vim'
-
-    " Lean & mean status/tabline for vim that's light as air.
-    " NeoBundle 'bling/vim-airline'
-
-    " NeoBundle 'scrooloose/nerdtree'
-
-    " Vim sugar for the UNIX shell commands
-    NeoBundle 'tpope/vim-eunuch'
-
-    " Bringing GVim colorschemes to the terminal
-    " NeoBundle 'godlygeek/csapprox'
-        let g:CSApprox_verbose_level = 0
-
-    " Use GUI Color Schemes in Supported Terminals
-    NeoBundle 'KevinGoodsell/vim-csexact'
-
-    " Colorschemes
-    " NeoBundle 'altercation/vim-colors-solarized'
-    NeoBundle 'jonathanfilip/vim-lucius'
-
-    " Tomorrow Theme
-    NeoBundle 'chriskempson/vim-tomorrow-theme'
-
-    " cycle through (almost) all available colorschemes
-    " :CycleColorNext
-    " NeoBundle 'vim-scripts/CycleColor'
-
-    " Quickfix
-    " NeoBundle 'sgur/unite-qf'
-
-    " Show the syntax group name of the item under cursor
-    " :call SyntaxAttr()<CR>
-    NeoBundle 'vim-scripts/SyntaxAttr.vim'
-
-    " Support perl regexes
-    NeoBundle 'vim-scripts/eregex.vim'
-
-    " Define temporary keymaps
-    NeoBundle 'tomtom/tinykeymap_vim'
-
-    " Mappings for simultaneously pressed keys
-    " NeoBundle 'kana/vim-arpeggio'
-
-    " NeoBundle 'fholgado/minibufexpl.vim'
-    " let g:miniBufExplVSplit = 20   " column width in chars
-
-    " Highlight ANSI escape sequences in their respective colors
-    " NeoBundle 'vim-scripts/AnsiEsc.vim'
-    NeoBundle 'powerman/vim-plugin-AnsiEsc'
-
-    " Forget Vim tabs – now you can have buffer tabs
-    NeoBundle 'ap/vim-buftabline'
-
-    " Sometimes, it's useful to line up text.
-    NeoBundle 'godlygeek/tabular'
-      nmap <Leader>a& :Tabularize /&<CR>
-      vmap <Leader>a& :Tabularize /&<CR>
-      nmap <Leader>a= :Tabularize /=<CR>
-      vmap <Leader>a= :Tabularize /=<CR>
-      nmap <Leader>a: :Tabularize /:<CR>
-      vmap <Leader>a: :Tabularize /:<CR>
-      nmap <Leader>a:: :Tabularize /:\zs<CR>
-      vmap <Leader>a:: :Tabularize /:\zs<CR>
-      nmap <Leader>a, :Tabularize /,<CR>
-      vmap <Leader>a, :Tabularize /,<CR>
-      nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-      vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-
-    " Vim Markdown runtime files 
-    NeoBundle 'tpope/vim-markdown'
-
-    " Gundo.vim is Vim plugin to visualize your Vim undo tree.
-    NeoBundle 'sjl/gundo.vim'
-
-    " Comment stuff out.
-    NeoBundle 'tpope/vim-commentary'
-
-    " asynchronous build and test dispatcher
-    NeoBundle 'tpope/vim-dispatch'
-
-    " Configurable and extensible tab line and status line
-    " NeoBundle 'tpope/vim-flagship'
-
-    " Vim Cucumber runtime files
-    NeoBundle 'tpope/vim-cucumber'
-
-    " Unicode character metadata
-    " (press ga on top a character)
-    NeoBundle 'tpope/vim-characterize'
-
-    " Semantic Highlighting
-    NeoBundle 'jaxbot/semantic-highlight.vim'
-
-    " Seamless navigation between tmux panes and vim splits
-    " TODO NeoBundle 'christoomey/vim-tmux-navigator'
-
-    " a Vim plugin for making Vim plugins
-    NeoBundle 'tpope/vim-scriptease'
-
-    " codesearch source for unite.vim
-    NeoBundle 'junkblocker/unite-codesearch'
-
-    " Changes Vim working directory to project root
-    NeoBundle 'airblade/vim-rooter'
-
-    " quoting/parenthesizing made simple
-    NeoBundle 'tpope/vim-surround'
-
-    " enable repeating supported plugin maps with "." 
-    NeoBundle 'tpope/vim-repeat'
-
-    " HTML5 omnicomplete and syntax
-    NeoBundle 'othree/html5.vim'
-
-    " Vim's MatchParen for HTML tags
-    NeoBundle 'gregsexton/MatchTag'
-
-    " TODO checkout:
-    " NeoBundle 'tpope/vim-unimpaired'
-
-    " super simple vim plugin to show the list of buffers in the command bar
-    " NeoBundle 'bling/vim-bufferline'
-
-    " provides insert mode auto-completion for quotes, parens, brackets, etc.
-    NeoBundle 'Raimondi/delimitMate'
-
-    " NeoBundle 'unblevable/quick-scope'
-        let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
-        let g:qs_first_occurrence_highlight_color = 26 " terminal vim
-
-        let g:qs_second_occurrence_highlight_color = '#5fffff'  " gui vim
-        let g:qs_second_occurrence_highlight_color = 20 " terminal vim
-
-    " Interactive command execution in Vim
-    NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build': {
-        \ 'unix': 'make -f make_unix.mak',
-      \ },
-    \ }
-
-    " extended % matching for HTML, LaTeX, and many other languages
-    NeoBundle 'matchit.zip'
-
-    " web stuff
-    NeoBundleLazy 'groenewege/vim-less', {'autoload':{'filetypes':['less']}}
-    NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}}
-    NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
-    NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
-    NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
-    NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
-    NeoBundleLazy 'digitaltoad/vim-jade', {'autoload':{'filetypes':['jade']}}
-    NeoBundleLazy 'juvenn/mustache.vim', {'autoload':{'filetypes':['mustache']}}
-    NeoBundleLazy 'gregsexton/MatchTag', {'autoload':{'filetypes':['html','xml']}}
-    NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}} "{{{
-
-    " javascript
-    NeoBundleLazy 'marijnh/tern_for_vim', {
-      \ 'autoload': { 'filetypes': ['javascript'] },
-      \ 'build': {
-        \ 'unix': 'npm install',
-      \ },
-    \ }
-
-    " Vastly improved Javascript indentation and syntax support in Vim
-    NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
-
-    " vim plugin which formated javascript files by js-beautify
-    NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}}
-
-    " Typescript syntax files for Vim
-    NeoBundleLazy 'leafgarland/typescript-vim', {'autoload':{'filetypes':['typescript']}}
-
-    " CoffeeScript support for vim
-    NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
-
-    " File type detect plugin for vim which detects node.js shebang
-    NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
-
-    " Better JSON handling
-    NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
-
-    " Syntax file for some JavaScript libraries
-    NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls','typescript']}}
-
-    " List of JavaScript ES6 snippets and syntax highlighting for vim
-    NeoBundleLazy 'isRuslan/vim-es6', {'autoload':{'filetypes':['javascript']}}
-
-    " vim-snipmate default snippets
-    NeoBundle 'honza/vim-snippets'
-
-    " search your selection text in Visual-mode
-    NeoBundle 'thinca/vim-visualstar' 
-    
-    " visually select increasingly larger regions
-    NeoBundle 'terryma/vim-expand-region'
-
-    " for focussing on a selected region
-    NeoBundle 'chrisbra/NrrwRgn'
-
-    " insert or delete brackets, parens, quotes in pair
-    NeoBundle 'jiangmiao/auto-pairs'
-
-    " Fast and Easy Find and Replace Across Multiple Files
-    NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}}
-      let g:EasyGrepRecursive=1
-      let g:EasyGrepAllOptionsInExplorer=1
-      let g:EasyGrepCommand=1
-      nnoremap <leader>vo :GrepOptions<cr>
-      
-    " Fuzzy file, buffer, mru, tag, etc finder
-    NeoBundle 'ctrlpvim/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' }
-      let g:ctrlp_clear_cache_on_exit=1
-      let g:ctrlp_max_height=40
-      let g:ctrlp_show_hidden=0
-      let g:ctrlp_follow_symlinks=1
-      let g:ctrlp_max_files=20000
-      let g:ctrlp_cache_dir=g:vim.cache.dir . 'ctrlp'
-      let g:ctrlp_reuse_window='startify'
-      let g:ctrlp_extensions=['funky']
-      let g:ctrlp_custom_ignore = {
-            \ 'dir': '\v[\/]\.(git|hg|svn|idea)$',
-            \ 'file': '\v\.DS_Store$'
-            \ }
-
-      if executable('ag')
-        let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
-      endif
-
-      nmap \ [ctrlp]
-      nnoremap [ctrlp] <nop>
-
-      nnoremap [ctrlp]t :CtrlPBufTag<cr>
-      nnoremap [ctrlp]T :CtrlPTag<cr>
-      nnoremap [ctrlp]l :CtrlPLine<cr>
-      nnoremap [ctrlp]o :CtrlPFunky<cr>
-      nnoremap [ctrlp]b :CtrlPBuffer<cr>
-
-    " Create your own text objects
-    NeoBundle 'kana/vim-textobj-user'
-
-    " Text objects for indented blocks of lines
-    " NeoBundle 'kana/vim-textobj-indent'
-
-    " Text objects for entire buffer
-    NeoBundle 'kana/vim-textobj-entire'
-
-    " Underscore text-object
-    NeoBundle 'lucapette/vim-textobj-underscore'
-
-    " The Vim FAQ from http://vimdoc.sourceforge.net
-    NeoBundle 'chrisbra/vim_faq'
-
-    " Powerful shell implemented by vim
-    NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
-
-      let g:vimshell_editor_command='vim'
-      let g:vimshell_right_prompt='getcwd()'
-      let g:vimshell_data_directory=g:vim.cache.dir . 'vimshell'
-      let g:vimshell_vimshrc_path=g:vim.dir . 'vimshrc'
-
-      " nnoremap <leader>c  :VimShell -split<cr>
-      " nnoremap <leader>cc :VimShell -split<cr>
-      " nnoremap <leader>cn :VimShellInteractive node<cr>
-      " nnoremap <leader>cl :VimShellInteractive lua<cr>
-      " nnoremap <leader>cr :VimShellInteractive irb<cr>
-      " nnoremap <leader>cp :VimShellInteractive python<cr>
-
-    " TODO: test
-    " Always have a nice view for vim split windows
-    NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}
-      let g:goldenview__enable_default_mapping=0
-      " nmap <leader> <g>ToggleGoldenViewAutoResize
-
-"### Install bundles ###########################################################
-
-    call neobundle#end()
-
-    " If there are uninstalled bundles found on startup,
-    " this will conveniently prompt you to install them.
-    NeoBundleCheck
-
-    " NeoBundleClean!
+" NeoBundleClean!
 
 "###############################################################################
 
@@ -881,6 +563,8 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 filetype on
 filetype plugin on
 filetype indent on
+
+colorscheme lucius
 
 if filereadable(g:vim.rc_local)
   execute "source " . g:vim.rc_local
