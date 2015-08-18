@@ -28,28 +28,39 @@ let g:unite_abbr_highlight = "function"
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
+call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " call unite#filters#converter_default#use(['converter_file_directory'])
 " call unite#filters#sorter_default#use(['sorter_word'])
+
+call unite#custom#profile('default', 'context', {
+      \ 'start_insert': 1,
+      \ 'no_split' : 1,
+      \ })
 
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
-"### any ######################################################################
+"### default ##################################################################
 
 " call unite#custom#source('file_rec', 'converters', ['converter_default'])
-call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
-" g:unite_source_rec_max_cache_files
+" call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
+" call unite#custom#source('file_rec', 'sorters', ['sorter_selecta'])
+call unite#custom#source('file_rec', 'matchers', ['matcher_project_ignore_files', 
+    \ 'matcher_default'])
 
-" nnoremap <silent><TAB> :Unite
-"             \ -buffer-name=any
-"             \ -start-insert
-"             \ -hide-source-names
-"             \ outline
-"             \ neomru/file
-"             \ <cr>
+let g:unite_source_rec_max_cache_files = 1000
+
+nnoremap <silent><TAB> :Unite
+            \ -buffer-name=any
+            \ -hide-source-names
+            \ file_rec/async
+            \ <cr>
+
+            " \ outline
+            " \ neomru/file
 
 " matcher_project_ignore_files
 "### grep #####################################################################
@@ -76,7 +87,6 @@ nnoremap <silent> <Leader>g :UniteWithCursorWord
             \ -no-quit
             \ -keep-focus
             \ -immediately
-            \ -start-insert
             \ grep:**<cr>
 
 "### recent files #############################################################
@@ -86,7 +96,6 @@ call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <leader>r :Unite
             \ -buffer-name=recent-files
-            \ -start-insert
             \ -hide-source-names
             \ neomru/file
             \ <cr>
@@ -123,7 +132,6 @@ nnoremap <silent> <Leader>o :<C-u>Unite
             \ -buffer-name=outline
             \ -keep-focus
             \ -silent
-            \ -start-insert
             \ outline<cr>
 
 "### line #####################################################################
@@ -131,13 +139,11 @@ nnoremap <silent> <Leader>o :<C-u>Unite
 call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> -- :UniteWithCursorWord
-            \ -start-insert
             \ -hide-source-names
             \ line
             \ <cr>
 
 " nnoremap <silent> - :Unite
-"             \ -start-insert
 "             \ -hide-source-names
 "             \ line
 "             \ <cr>

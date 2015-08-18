@@ -46,3 +46,7 @@
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 "   Backup to git before write?: BufWritePre
+
+" While testing autocommands, you might find the 'verbose' option to be useful: >
+" 	:set verbose=9
+" This setting makes Vim echo the autocommands as it executes them.

@@ -187,14 +187,10 @@ autocmd FileType help set buflisted | only
 "         " \     | set nowinfixheight
 
 " Highlight unknown filetypes as text
-augroup setDefaultSyntax
-autocmd!
-autocmd BufEnter *
-    \ if &syntax == '' | setlocal syntax=txt | endif
-augroup END
+autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
 
-" Highlight vim documentation if opened directly from file
-autocmd! BufEnter */vim/*/doc/*.txt setlocal filetype=help
+" Highlight vim documentation even if opened directly from file
+autocmd! BufEnter *vim*/doc/*.txt setlocal filetype=help
 
 " show count of selected lines / columns
 set showcmd
@@ -209,7 +205,8 @@ set nolist
 set linebreak
 set breakat&vim
 let &showbreak=repeat(' ', 10) . "↪ "
-" TODO next vim: "This feature has been implemented on June 25, 2014 as patch 7.4.338"
+" TODO next vim:
+" This feature has been implemented on June 25, 2014 as patch 7.4.338"
 " (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
 
 " set mouse=nvi
