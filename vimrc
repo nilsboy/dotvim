@@ -194,11 +194,7 @@ autocmd BufEnter *
 augroup END
 
 " Highlight vim documentation if opened directly from file
-augroup setVimDocSyntax
-autocmd!
-autocmd BufEnter */vim/*/doc/*.txt
-    \ if &filetype != 'help' | setlocal filetype=help | endif
-augroup END
+autocmd! BufEnter */vim/*/doc/*.txt setlocal filetype=help
 
 " show count of selected lines / columns
 set showcmd

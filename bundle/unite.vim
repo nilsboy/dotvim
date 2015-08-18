@@ -43,13 +43,13 @@ autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
 " g:unite_source_rec_max_cache_files
 
-nnoremap <silent><TAB> :Unite
-            \ -buffer-name=any
-            \ -start-insert
-            \ -hide-source-names
-            \ outline
-            \ neomru/file
-            \ <cr>
+" nnoremap <silent><TAB> :Unite
+"             \ -buffer-name=any
+"             \ -start-insert
+"             \ -hide-source-names
+"             \ outline
+"             \ neomru/file
+"             \ <cr>
 
 " matcher_project_ignore_files
 "### grep #####################################################################

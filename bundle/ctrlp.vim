@@ -17,11 +17,13 @@ let g:ctrlp_custom_ignore = {
     \ 'file': '\v\.DS_Store$'
     \ }
 
+let g:ctrlp_open_new_file = 'r'
+
 if executable('ag')
     let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
 endif
 
-nmap \ [ctrlp]
+nnoremap <tab> :CtrlP<cr>
 nnoremap [ctrlp] <nop>
 
 nnoremap [ctrlp]t :CtrlPBufTag<cr>
