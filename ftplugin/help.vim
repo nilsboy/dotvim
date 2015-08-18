@@ -12,8 +12,8 @@ nnoremap <buffer> o /'\l\{2,\}'<CR>
 nnoremap <buffer> O ?'\l\{2,\}'<CR>
 nnoremap <buffer> s /\|\zs\S\+\ze\|<CR>
 nnoremap <buffer> S ?\|\zs\S\+\ze\|<CR>
-nmap <buffer> <SPACE> <C-F>
-nmap <buffer> b <C-B>
+nmap <buffer><nowait> <SPACE> <C-F>
+nmap <buffer><nowait> b <C-B>
 
 setlocal keywordprg=:help
 
