@@ -18,7 +18,7 @@ NeoBundle 'junkblocker/unite-codesearch'
 "## config #####################################################################
 
 if neobundle#tap('unite.vim') 
-    function! neobundle#hooks.on_source(bundle)
+    function! neobundle#hooks.on_post_source(bundle)
 
 let g:unite_data_directory = g:vim.cache.dir . "unite"
 
@@ -27,6 +27,10 @@ let g:unite_abbr_highlight = "function"
 
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
+let g:unite_source_file_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
+let g:unite_source_directory_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
+
+let g:unite_source_rec_max_cache_files = 0
 
 call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -93,6 +97,8 @@ nnoremap <silent> <Leader>g :UniteWithCursorWord
 
 call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
+
+let g:neomru#file_mru_limit=300
 
 nnoremap <silent> <leader>r :Unite
             \ -buffer-name=recent-files
