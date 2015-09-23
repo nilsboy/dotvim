@@ -32,6 +32,11 @@ let g:unite_source_directory_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
 
 let g:unite_source_rec_max_cache_files = 0
 
+" ignore files from wildignore
+" call unite#custom#source('file_rec/async,file_rec/git', 'ignore_globs', [])
+call unite#custom#source('file_rec/async', 'ignore_globs',
+		\ split(&wildignore, ','))
+
 call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 " call unite#filters#converter_default#use(['converter_file_directory'])

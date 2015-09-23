@@ -1,6 +1,6 @@
 "### misc ######################################################################
 
-" Create a directory if does not exist jet
+" Create a directory if it does not exist jet
 function! _mkdir(path)
 if !isdirectory(expand(a:path))
   call mkdir(expand(a:path))
@@ -133,7 +133,7 @@ set wildmode=longest:list
 set wildignorecase
 
 " Ignore patterns
-set wildignore=.*,*.class
+set wildignore=.*,*.class,*/node_modules/*,./node_modules/*
 
 set splitbelow
 set splitright

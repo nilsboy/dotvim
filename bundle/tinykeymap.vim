@@ -27,7 +27,7 @@ call tinykeymap#Map("buffers", "g", ":L9GrepBufferAll ")
 
 " ### windows #################################################################
 
-call tinykeymap#EnterMap('windows', '<leader>w', {'name': 'windows'})
+call tinykeymap#EnterMap('windows', '<leader>q', {'name': 'windows'})
 call tinykeymap#Map('windows', 'n', 'new') 
 call tinykeymap#Map("windows", "o", "only", {'exit': 1 })
 call tinykeymap#Map("windows", "c", "close")

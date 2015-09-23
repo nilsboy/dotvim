@@ -1,5 +1,3 @@
-finish
-
 " Fuzzy file, buffer, mru, tag, etc finder
 " ctrlp-funky: Navigate and jump to function defs
 NeoBundle 'ctrlpvim/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' }
@@ -44,17 +42,6 @@ let g:ctrlp_prompt_mappings = {
 \ }
 
 let g:ctrlp_line_prefix = ''
-
-nnoremap <tab> :CtrlPMixed<cr>
-nnoremap [ctrlp] <nop>
-
-nnoremap <leader>r :CtrlPMRUFiles<cr>
-
-nnoremap [ctrlp]t :CtrlPBufTag<cr>
-nnoremap [ctrlp]T :CtrlPTag<cr>
-nnoremap [ctrlp]l :CtrlPLine<cr>
-nnoremap [ctrlp]o :CtrlPFunky<cr>
-nnoremap [ctrlp]b :CtrlPBuffer<cr>
 
   endfunction
   call neobundle#untap()
