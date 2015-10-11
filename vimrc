@@ -17,8 +17,8 @@ let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
-let g:vim.bundle.to_load = g:vim.etc.dir . "bundle/"
-let g:vim.bundle.settings = g:vim.etc.dir . "settings/"
+let g:vim.bundle.settings = {}
+let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle/"
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
 call _mkdir(g:vim.dir)
@@ -79,8 +79,12 @@ let g:netrw_dirhistmax = 0
 set clipboard=unnamed
 
 " Chdir to the dir of the current buffer
-set autochdir
-autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
+" set autochdir
+" autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
+" autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
+
+" Expand current dir
+cabbrev <expr> ./ expand('%:p:h')
 
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
@@ -537,7 +541,7 @@ call neobundle#begin(g:vim.bundle.dir)
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-for fpath in split(globpath(g:vim.bundle.to_load, '*.vim'), '\n')
+for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
     " echo "sourcing " . fpath
     execute 'source' fpath
 endfor
@@ -548,7 +552,7 @@ call neobundle#end()
 " this will conveniently prompt you to install them.
 NeoBundleCheck
 
-" NeoBundleClean!
+NeoBundleClean!
 
 "###############################################################################
 

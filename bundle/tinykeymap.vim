@@ -16,6 +16,15 @@ let g:tinykeymap#message_fmt = "%.0s%.0s"
 " Default keymaps to load
 " let g:tinykeymaps_default = ["quickfixlist"]
 
+" ### help ###################################################################
+
+call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
+call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})
+call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.bundle.settings.dir . '/tinykeymap.vim"', {'exit': 1})
+call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
+call tinykeymap#Map("help", "l", ':execute ":edit ' . g:vim.plugin.dir . '/helpers.vim"', {'exit': 1 })
+call tinykeymap#Map("help", "v", ':execute ":e ' . g:vim.rc . '"', {'exit': 1 })
+
 " ### buffers ################################################################
 
 call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
@@ -68,13 +77,6 @@ call tinykeymap#Map("file", "f", ':Unite -buffer-name=files -start-insert file_r
 call tinykeymap#Map("file", "x", 'new | r! find-and | :normal ggdd', {'exit': 1})
 call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
 call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
-
-call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
-call tinykeymap#Map("help", "h", ':call Notes()', {'exit' : 1})
-call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.plugin.dir . '"tinykeymap.vim"', {'exit': 1})
-call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
-call tinykeymap#Map("help", "l", ':execute ":edit ' . g:vim.plugin.dir . '/helpers.vim"', {'exit': 1 })
-call tinykeymap#Map("help", "v", ':execute ":e ' . g:vim.rc . '"', {'exit': 1 })
 
 "### Quickfix list
 

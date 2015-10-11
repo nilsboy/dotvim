@@ -20,8 +20,8 @@ function! JSTidy()
     " cannot correct missing curlies or semicolons
     "%!js-format-using-prettydiff
 
-    " %!standard --format --stdin | grep -v 'standard: '
-    %!standard --format --stdin 2>/dev/null
+    %!standard --format --stdin 2>/dev/null | grep -v '^standard: '
+    " %!standard --format --stdin 2>/dev/null
 
     " TODO test: :call JsBeautify()<cr>
 

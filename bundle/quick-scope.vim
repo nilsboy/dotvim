@@ -1,4 +1,4 @@
-finish
+" finish
 
 NeoBundle 'unblevable/quick-scope'
 let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
