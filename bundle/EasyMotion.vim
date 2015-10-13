@@ -1,3 +1,4 @@
+finish
 " Vim motions on speed!
 NeoBundle 'lokaltog/vim-easymotion'
 

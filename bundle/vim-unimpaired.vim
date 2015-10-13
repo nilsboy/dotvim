@@ -1,4 +1,5 @@
 finish
+finish
 
 " TODO checkout:
 " pairs of handy bracket mappings

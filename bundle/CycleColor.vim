@@ -1,4 +1,5 @@
 finish
+finish
 
 " cycle through (almost) all available colorschemes
 " :CycleColorNext

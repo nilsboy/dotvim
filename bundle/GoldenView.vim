@@ -1,3 +1,4 @@
+finish
 " TODO: test
 " Always have a nice view for vim split windows
 NeoBundleLazy 'zhaocai/GoldenView.Vim', {'autoload':{'mappings':['<Plug>ToggleGoldenViewAutoResize']}}

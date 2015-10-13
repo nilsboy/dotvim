@@ -1,3 +1,4 @@
+finish
 " Powerful shell implemented by vim
 NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
 

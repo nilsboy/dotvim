@@ -1,4 +1,5 @@
 finish
+finish
 
 " shows a git diff in the gutter
 " TODO some hilight error

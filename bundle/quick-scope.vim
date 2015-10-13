@@ -1,3 +1,4 @@
+finish
 " finish
 
 NeoBundle 'unblevable/quick-scope'

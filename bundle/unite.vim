@@ -1,6 +1,6 @@
 " Unite and create user interfaces
 NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
-      \ , 'depends' : 'vimproc.vim'
+      \ , 'depends' : 'Shougu/vimproc.vim'
       \ }
 
 " MRU plugin includes unite.vim MRU sources

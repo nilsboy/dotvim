@@ -1,3 +1,4 @@
+finish
 " Sometimes, it's useful to line up text.
 NeoBundle 'godlygeek/tabular'
 

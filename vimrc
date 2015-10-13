@@ -269,9 +269,9 @@ set noswapfile
 "### mappings ##################################################################
 
 " Timeout on mappings and key codes (faster escape etc)
-set timeout
-set timeoutlen=300
-set ttimeoutlen=10
+" set timeout
+" set timeoutlen=300
+" set ttimeoutlen=10
 
 " Use <Leader> as prefix key for own key mappings
 let mapleader = " "
@@ -552,7 +552,8 @@ call neobundle#end()
 " this will conveniently prompt you to install them.
 NeoBundleCheck
 
-NeoBundleClean!
+" Remove installed plugins that are not configured anymore
+" NeoBundleClean!
 
 "###############################################################################
 
@@ -561,13 +562,13 @@ filetype on
 filetype plugin on
 filetype indent on
 
-colorscheme lucius
+" colorscheme lucius
 
 if filereadable(g:vim.rc_local)
   execute "source " . g:vim.rc_local
 endif
 
-" has to be done last - it set somewhere else before already
+" has to be done last - it is set somewhere else before already
 let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
 
 "###############################################################################

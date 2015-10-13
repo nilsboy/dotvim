@@ -1,4 +1,5 @@
 finish
+finish
 
 " Lean & mean status/tabline for vim that's light as air.
 NeoBundle 'bling/vim-airline'

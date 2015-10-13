@@ -1,3 +1,4 @@
+finish
 function! JSTidy()
     let _view=winsaveview()
 

@@ -1,4 +1,5 @@
 finish
+finish
 
 NeoBundle 'fholgado/minibufexpl.vim'
 

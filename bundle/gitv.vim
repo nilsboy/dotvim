@@ -1,3 +1,4 @@
+finish
 " gitk for Vim
 NeoBundleLazy 'gregsexton/gitv', 
     \ {'depends':['tpope/vim-fugitive'],

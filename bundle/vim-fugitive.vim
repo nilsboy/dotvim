@@ -1,3 +1,4 @@
+finish
 " A Git wrapper so awesome, it should be illegal
 NeoBundle 'tpope/vim-fugitive'
 

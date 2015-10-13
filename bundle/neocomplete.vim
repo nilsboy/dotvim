@@ -1,3 +1,4 @@
+finish
 " Next generation completion framework
 NeoBundle 'Shougo/neocomplete.vim'
 

@@ -1,3 +1,4 @@
+finish
 function! Man(cmd)
 
     let cmd = a:cmd
