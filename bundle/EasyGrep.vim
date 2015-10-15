@@ -11,7 +11,12 @@ let g:EasyGrepSearchCurrentBufferDir=1
 " TODO
 let g:EasyGrepJumpToMatch=0
 
-" TODO grep buffer only
+" Specifies the mode in which to start.
+" 0 - All files
+" 1 - Open Buffers
+" 2 - Track the current extension
+" 3 - User mode -- Use a custom, on demand set of extensions
+let g:EasyGrepMode=2
 
 " disable default mappings
 let g:EasyGrepOptionPrefix=''
