@@ -1,7 +1,3 @@
-finish
-" Perl omni completion
-NeoBundle 'c9s/perlomni.vim'
-
 function! PerlTidy()
     let _view=winsaveview()
     "%!perltidy -q
@@ -18,4 +14,3 @@ function! PerlModuleCreate()
     let file = substitute(output, "\v\s+$", "", "g")
     execute ':edit ' . file
 endfunction
-

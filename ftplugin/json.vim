@@ -2,8 +2,8 @@ map <buffer> <leader> w :call JSONTidy()<CR>
 
 " for syntax check to work run: npm -g install jsonlint
 
-autocmd json set syntax=txt
-autocmd json set foldmethod=manual
+autocmd FileType json set syntax=txt
+autocmd FileType json set foldmethod=manual
 
 if exists("b:did_ftplugin_json")
     finish

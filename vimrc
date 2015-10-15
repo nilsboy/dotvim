@@ -81,7 +81,6 @@ set clipboard=unnamed
 " Chdir to the dir of the current buffer
 " set autochdir
 " autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
-" autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
 
 " Expand current dir
 cabbrev <expr> ./ expand('%:p:h')
@@ -137,7 +136,7 @@ set wildmode=longest:list
 set wildignorecase
 
 " Ignore patterns
-set wildignore=.*,*.class,*/node_modules/*,./node_modules/*
+" set wildignore=.*,*.class,*/node_modules/*,./node_modules/*
 
 set splitbelow
 set splitright

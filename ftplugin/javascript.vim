@@ -3,7 +3,8 @@ if exists("b:did_ftplugin_javascript")
 endif
 let b:did_ftplugin_javascript = 1
 
-map <buffer><silent><leader>w :call JSTidy()<CR><CR>
+map <buffer><silent><leader>w :Esformatter<CR>
+" map <buffer><silent><leader>w :call JSTidy()<CR><CR>
 " <silent> :SyntasticCheck<cr>
 
 " Tab spacing
