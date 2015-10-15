@@ -156,16 +156,6 @@ endfunction
 
 let g:ack_default_options = '--ignore-file "^\.*"'
 
-command! -nargs=1 Grep call Grep("~/src/*", "<args>")
-function! Grep(path, ...)
-    silent execute ':LAck "' . join(a:000, " ") . '" ' . a:path
-endfunction
-
-command! -nargs=+ GrepFile call GrepFile("<args>")
-function! GrepFile(...)
-    silent execute ':LAck "' . join(a:000, " ") . '" ' . expand("%")
-endfunction
-
 command! -nargs=1 Tree call Tree("<args>")
 function! Tree(path)
 
@@ -177,25 +167,6 @@ function! Tree(path)
     execute ":r! root=$(git-root) && cd $root && tree --no-colors --exclude '\class$' " . a:path
     normal gg
 
-endfunction
-
-nnoremap <leader>g :set operatorfunc=<SID>GrepOperator<cr>g@
-vnoremap <leader>g :<c-u>call <SID>GrepOperator(visualmode())<cr>
-
-function! s:GrepOperator(type)
-    let saved_unnamed_register = @@
-
-    if a:type ==# 'v'
-        normal! `<v`>y
-    elseif a:type ==# 'char'
-        normal! `[v`]y
-    else
-        return
-    endif
-
-    silent execute ':LAck! -Q -k "' . @@ . '" ~/src/*'
-
-    let @@ = saved_unnamed_register
 endfunction
 
 let g:commands = []

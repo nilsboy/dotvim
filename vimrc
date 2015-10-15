@@ -268,9 +268,9 @@ set noswapfile
 "### mappings ##################################################################
 
 " Timeout on mappings and key codes (faster escape etc)
-" set timeout
-" set timeoutlen=300
-" set ttimeoutlen=10
+set timeout
+set timeoutlen=300
+set ttimeoutlen=10
 
 " Use <Leader> as prefix key for own key mappings
 let mapleader = " "
