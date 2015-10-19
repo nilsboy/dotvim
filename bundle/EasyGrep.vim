@@ -8,8 +8,13 @@ let g:EasyGrepIgnoreCase=1
 let g:EasyGrepFilesToExclude=".git"
 let g:EasyGrepFileAssociationsInExplorer=1
 let g:EasyGrepSearchCurrentBufferDir=1
+
 " TODO
 let g:EasyGrepJumpToMatch=0
+
+" 0 - vimgrep
+" 1 - grep (follows grepprg)
+let g:EasyGrepCommand=1
 
 " Specifies the mode in which to start.
 " 0 - All files
@@ -19,31 +24,24 @@ let g:EasyGrepJumpToMatch=0
 let g:EasyGrepMode=2
 
 " disable default mappings
-let g:EasyGrepOptionPrefix=''
+" let g:EasyGrepOptionPrefix=''
 
-" Grep for the word under the cursor, match all occurences,
-" like 'g*'.  See ":help gstar".
-nnoremap <Leader>gg :Grep <cword><cr>
-
-" Grep for the word under the cursor, match whole word, like
-" '*'.  See ":help star".
-nnoremap <Leader>gG :Grep! <cword><cr>
-
-" Like vv, but add to existing list.
-nnoremap <Leader>ga :GrepAdd <cword><cr>
-
-" Like vV, but add to existing list.
-nnoremap <Leader>gA :GrepAdd! <cword><cr>
-
-" Perform a global search on the word under the cursor
-" and prompt for a pattern with which to replace it.
-" TODO
-nnoremap <Leader>gr :Replace <cword> 
-
-" Like vr, but match whole word.
-" TODO
-nnoremap <Leader>gR :Replace! <cword> 
-
-" Open an options explorer to select the files to search in and
-" set grep options.
-nnoremap <Leader>go :GrepOptions<cr>
+vmap <silent> <leader>gR <Plug>EgMapReplaceSelection_R
+nmap <silent> <leader>gR <Plug>EgMapReplaceCurrentWord_R
+omap <silent> <leader>gR <Plug>EgMapReplaceCurrentWord_R
+vmap <silent> <leader>gr <Plug>EgMapReplaceSelection_r
+nmap <silent> <leader>gr <Plug>EgMapReplaceCurrentWord_r
+omap <silent> <leader>gr <Plug>EgMapReplaceCurrentWord_r
+vmap <silent> <leader>gA <Plug>EgMapGrepSelection_A
+nmap <silent> <leader>gA <Plug>EgMapGrepCurrentWord_A
+omap <silent> <leader>gA <Plug>EgMapGrepCurrentWord_A
+vmap <silent> <leader>ga <Plug>EgMapGrepSelection_a
+nmap <silent> <leader>ga <Plug>EgMapGrepCurrentWord_a
+omap <silent> <leader>ga <Plug>EgMapGrepCurrentWord_a
+vmap <silent> <leader>gG <Plug>EgMapGrepSelection_V
+nmap <silent> <leader>gG <Plug>EgMapGrepCurrentWord_V
+omap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_V
+vmap <silent> <leader>gg <Plug>EgMapGrepSelection_v
+nmap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_v
+omap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_v
+map <silent> <leader>go <Plug>EgMapGrepOptions
