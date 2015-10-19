@@ -346,21 +346,6 @@ vmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" TODO
-" find current word in quickfix
-" "nnoremap <leader>fw :execute "vimgrep ".expand("<cword>")." %"<cr>:copen<cr>
-" find last search in quickfix
-" "nnoremap <leader>ff :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
-
-if executable('ack')
-    set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-    set grepformat=%f:%l:%c:%m
-endif
-if executable('ag')
-    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-    set grepformat=%f:%l:%c:%m
-endif
-
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
 
