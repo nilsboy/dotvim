@@ -44,4 +44,4 @@ omap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_V
 vmap <silent> <leader>gg <Plug>EgMapGrepSelection_v
 nmap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_v
 omap <silent> <leader>gg <Plug>EgMapGrepCurrentWord_v
-map <silent> <leader>go <Plug>EgMapGrepOptions
+map  <silent> <leader>go <Plug>EgMapGrepOptions

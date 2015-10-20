@@ -69,10 +69,10 @@ let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',
 let g:netrw_dirhistmax = 0
 
 " prevent vim from using javascript as filetype for json
-" au BufRead,BufNewFile *.json set filetype=json | setlocal syntax=txt
+" au BufRead,BufNewFile *.json setlocal filetype=json | setlocal syntax=txt
 
 " Recognize .md as markdown for vim < 7.4.480
-" au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+" au BufNewFile,BufFilePre,BufRead *.md setloal filetype=markdown
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -172,22 +172,21 @@ set hidden
 " set winheight=9999
 " set winminheight=10
 
-" autocmd * qf set winheight=10
-autocmd FileType qf set winheight=10
-autocmd FileType help set buflisted | only
-" autocmd BufCreate * set buflisted | only
+autocmd FileType qf setlocal winheight=20
+autocmd FileType help setlocal buflisted | only
+" autocmd BufCreate * setlocal buflisted | only
 
 " " Epic
 " augroup forceSingleWindowMode
 "     autocmd!
 "     autocmd BufCreate,BufAdd,BufEnter *
 "         \ if bufname("%") !~ "Location List"
-"         \     | set buflisted
+"         \     | setlocal buflisted
 "         \     | only
 "         \ | endif
 " augroup END
 "         " \     | resize
-"         " \     | set nowinfixheight
+"         " \     | setlocal nowinfixheight
 
 " Highlight unknown filetypes as text
 autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
@@ -224,6 +223,8 @@ set nrformats-=octal
 " Determine how text with the "conceal" syntax attribute
 set conceallevel=1
 set listchars+=conceal:Δ
+
+set guifont=Monospace\ 11
 
 "### searching #################################################################
 
@@ -273,19 +274,30 @@ set timeoutlen=300
 set ttimeoutlen=10
 
 " Use <Leader> as prefix key for own key mappings
-let mapleader = " "
+" use <leader>! as prefix to remap stuff - like:
+" nnoremap ,!a <C-i>
+let mapleader = ","
 
+" map <silent> q <esc>
+" inoremap <silent> jj <esc>
 nnoremap <silent> <ESC><ESC> <Nop>
 nnoremap <silent> <leader>l :Explore<cr>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
+" vnoremap . :
+" nnoremap . :
+nnoremap ,, :
+
 vnoremap - /\v
-vnoremap , :
 nnoremap - /\v
-nnoremap , :
+
 nnoremap / /\v
 vnoremap / /\v
+
+" vnoremap _ ?\v
+" nnoremap _ ?\v
+
 nnoremap ? ?\v
 vnoremap ? ?\v
 nnoremap :s/ :s/\v
@@ -319,9 +331,9 @@ nnoremap Q <Nop>
 " nnoremap <silent> : ,
 
 " These are the same for vim
-" Tab and Ctrl-I
-" Enter and Ctrl-M
-" Esc and Ctrl-[ 
+" Tab and Ctrl-I (<c-i><c-I>)
+" Enter and Ctrl-M (<c-m>)
+" Esc and Ctrl-[ (<c-[>)
 
 " Clear all mappings
 " :mapclear
@@ -333,10 +345,8 @@ nnoremap Q <Nop>
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
 
-nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?q=<cword>"<cr><cr> 
-
-nnoremap <c-u> g,
-nnoremap <c-p> g;
+nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?
+    \q=<cword>"<cr><cr>
 
 " eval vimscript by line or visual selection
 nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
@@ -487,7 +497,7 @@ set statusline+=\
 " 5 -> blinking vertical bar
 " 6 -> solid vertical bar
 
-" set cursorline
+" setlocal cursorline
 " autocmd WinLeave * setlocal nocursorline
 " autocmd WinEnter * setlocal cursorline
 

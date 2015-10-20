@@ -19,14 +19,14 @@ nnoremap <buffer> <silent> <Enter> :verbose :call PerlModuleCreate()<cr><cr>
 " :echo substitute('ha->ha', '\v([\w\:]+)', '\1', 'g')
 
 " runtime! ftplugin/sh.vim
-" set keywordprg=!perldoc .expand
+" setlocal keywordprg=!perldoc .expand
 nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
 
 "Allow % to bounce between angles too
-set matchpairs+=<:>
+setlocal matchpairs+=<:>
 
 let &makeprg="perl -c %"
 " let g:perl_compiler_force_warnings = 0
 
 let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
-set errorformat+=\ %m\ at\ %f\ line\ %l
+setlocal errorformat+=\ %m\ at\ %f\ line\ %l

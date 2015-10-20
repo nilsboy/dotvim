@@ -10,7 +10,7 @@ autocmd BufEnter * :syntax sync fromstart
 " Remove background set by colorscheme
 " http://stackoverflow.com/questions/12449248
 function! ColorschemeCleanup()
-    hi Normal ctermbg=NONE
+    hi Normal ctermbg=NONE guibg=NONE
     " hi Comment ctermbg=NONE
     " hi Constant ctermbg=NONE
     " hi Special ctermbg=NONE

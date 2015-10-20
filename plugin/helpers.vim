@@ -286,7 +286,7 @@ endfunction
 command! -nargs=0 Notes call Notes()
 function! Notes()
 
-    silent execute ':e ' . g:vim.etc . 'notes.vim'
+    silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
 
     nohlsearch
 
