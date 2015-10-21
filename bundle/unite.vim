@@ -3,9 +3,6 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
       \ , 'depends' : 'Shougu/vimproc.vim'
       \ }
 
-" MRU plugin includes unite.vim MRU sources
-NeoBundle 'Shougo/neomru.vim'
-
 " outline source for unite.vim
 NeoBundle 'Shougo/unite-outline'
 
@@ -13,7 +10,7 @@ NeoBundle 'Shougo/unite-outline'
 " NeoBundle 'sgur/unite-qf'
 
 " codesearch source for unite.vim
-NeoBundle 'junkblocker/unite-codesearch'
+" NeoBundle 'junkblocker/unite-codesearch'
 
 "## config #####################################################################
 
@@ -27,8 +24,6 @@ let g:unite_abbr_highlight = "function"
 
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
-let g:unite_source_file_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
-let g:unite_source_directory_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
 
 let g:unite_source_rec_max_cache_files = 0
 
@@ -84,7 +79,13 @@ nnoremap <silent><TAB> :Unite
 "             \ -immediately
 "             \ grep:**<cr>
 
-"### recent files #############################################################
+"### mru #######################################################################
+
+" MRU plugin includes unite.vim MRU sources
+NeoBundle 'Shougo/neomru.vim'
+
+let g:unite_source_file_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
+let g:unite_source_directory_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
 
 call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
@@ -95,6 +96,16 @@ nnoremap <silent> <leader>r :Unite
             \ -buffer-name=recent-files
             \ -hide-source-names
             \ neomru/file
+            \ <cr>
+
+" call unite#custom#source(
+"     \ 'mru_project', 'matchers',
+"     \ ['matcher_project_files', 'matcher_fuzzy'])
+
+nnoremap <silent> <leader>R :Unite
+            \ -buffer-name=mru-project
+            \ -hide-source-names
+            \ neomru/file !
             \ <cr>
 
 "### recent dirs ##############################################################

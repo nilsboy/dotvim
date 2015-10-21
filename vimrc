@@ -224,7 +224,7 @@ set nrformats-=octal
 set conceallevel=1
 set listchars+=conceal:Δ
 
-set guifont=Monospace\ 11
+set guifont=Monospace\ 13
 
 "### searching #################################################################
 
@@ -500,6 +500,9 @@ set statusline+=\
 " setlocal cursorline
 " autocmd WinLeave * setlocal nocursorline
 " autocmd WinEnter * setlocal cursorline
+
+" Disable all blinking:
+set guicursor+=a:blinkon0
 
 "### Gui mode ##################################################################
 
