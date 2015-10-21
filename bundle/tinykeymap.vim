@@ -104,7 +104,7 @@ call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
 
 " call tinykeymap#EnterMap('quickfixlist', '<leader>q', {'name': 'quickfix'})
 
-call tinykeymap#EnterMap('quickfix', '<leader>q', {'name': 'quickfix'})
+call tinykeymap#EnterMap('quickfix', '<leader>x', {'name': 'quickfix'})
 call tinykeymap#Map("quickfix", "q", ":copen", {'exit': 1})
 call tinykeymap#Map("quickfix", "X", ":RunIntoBuffer", {'exit': 1 })
 call tinykeymap#Map("quickfix", "x", ":write | :make | :cwindow", {'exit': 1})

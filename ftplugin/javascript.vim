@@ -11,4 +11,4 @@ setlocal tabstop=2
 " Shift width (moved sideways for the shift command)
 setlocal shiftwidth=2
 
-setlocal makeprg="npm run"
+setlocal makeprg=npm\ test
