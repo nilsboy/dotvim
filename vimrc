@@ -15,10 +15,15 @@ let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = g:vim.rc . ".local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
+
 let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
 let g:vim.bundle.settings = {}
-let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle/"
+let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle_config/"
+
+let g:vim.config = {}
+let g:vim.config.dir = g:vim.etc.dir . "config/"
+
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
 call _mkdir(g:vim.dir)
@@ -540,7 +545,6 @@ call neobundle#begin(g:vim.bundle.dir)
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
-    " echo "sourcing " . fpath
     execute 'source' fpath
 endfor
 
@@ -552,6 +556,14 @@ NeoBundleCheck
 
 " Remove installed plugins that are not configured anymore
 " NeoBundleClean!
+
+"### my config #################################################################
+
+" loaded after the bundles
+
+for fpath in split(globpath(g:vim.config.dir, '*.vim'), '\n')
+    execute 'source' fpath
+endfor
 
 "###############################################################################
 
