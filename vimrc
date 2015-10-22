@@ -54,6 +54,7 @@ set t_Co=256
 
 " TODO paths
 set runtimepath+=$REMOTE_HOME/.vim/etc
+set runtimepath+=$REMOTE_HOME/.vim/etc/bin
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
 " TODO paths
@@ -155,7 +156,7 @@ set sidescrolloff=0
 " set sidescroll=1
 
 " None of these are word dividers
-set iskeyword+=:,_,$,@,%,#
+set iskeyword+=_,$,@,%,#
 
 " Don't make noise
 set noerrorbells

@@ -39,6 +39,7 @@ endif
 let g:ctrlp_prompt_mappings = {
     \ 'PrtExpandDir()':       [],
     \ 'PrtExit()':            ['<tab>'],
+    \ 'ToggleMRURelative()':  [','],
 \ }
 
 let g:ctrlp_line_prefix = ''

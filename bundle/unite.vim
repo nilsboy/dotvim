@@ -12,7 +12,7 @@ NeoBundle 'Shougo/unite-outline'
 " codesearch source for unite.vim
 " NeoBundle 'junkblocker/unite-codesearch'
 
-"## config #####################################################################
+"## defaults ###################################################################
 
 if neobundle#tap('unite.vim') 
     function! neobundle#hooks.on_post_source(bundle)
@@ -27,16 +27,6 @@ let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
 let g:unite_source_rec_max_cache_files = 0
 
-" ignore files from wildignore
-" call unite#custom#source('file_rec/async,file_rec/git', 'ignore_globs', [])
-call unite#custom#source('file_rec/async', 'ignore_globs',
-		\ split(&wildignore, ','))
-
-call unite#filters#sorter_default#use(['sorter_selecta'])
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-" call unite#filters#converter_default#use(['converter_file_directory'])
-" call unite#filters#sorter_default#use(['sorter_word'])
-
 call unite#custom#profile('default', 'context', {
       \ 'start_insert': 1,
       \ 'no_split' : 1,
@@ -47,27 +37,31 @@ autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
-"### default ##################################################################
+"### files #####################################################################
 
-" call unite#custom#source('file_rec', 'converters', ['converter_default'])
-" call unite#custom#source('file_rec', 'sorters', ['sorter_word'])
-" call unite#custom#source('file_rec', 'sorters', ['sorter_selecta'])
-call unite#custom#source('file_rec', 'matchers', ['matcher_project_ignore_files', 
-    \ 'matcher_default'])
+" call unite#custom#source('file_rec', 'matchers', 
+"     \ ['matcher_project_ignore_files',
+"     \ 'matcher_default']
+" \)
+
+call unite#custom#source('file_rec/async', 'converters', 
+    \ ['converter_file_directory'])
+call unite#custom#source('file_rec/async', 'sorters', ['sorter_selecta'])
+
+" ignore files from wildignore
+" call unite#custom#source('file_rec/async,file_rec/git', 'ignore_globs', [])
+call unite#custom#source('file_rec/async', 'ignore_globs',
+		\ split(&wildignore, ','))
 
 let g:unite_source_rec_max_cache_files = 1000
 
-nnoremap <silent><TAB> :Unite
+nnoremap <silent><TAB> :UniteWithProjectDir
             \ -buffer-name=any
             \ -hide-source-names
             \ file_rec/async
             \ <cr>
 
-            " \ outline
-            " \ neomru/file
-
-" matcher_project_ignore_files
-"### grep #####################################################################
+"### grep ######################################################################
 
 " call unite#custom#source('vimgrep', 'converters', ['converter_default'])
 " call unite#custom#source('vimgrep', 'sorters', ['sorter_word'])
@@ -84,44 +78,42 @@ nnoremap <silent><TAB> :Unite
 " MRU plugin includes unite.vim MRU sources
 NeoBundle 'Shougo/neomru.vim'
 
-let g:unite_source_file_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
-let g:unite_source_directory_mru_time_format = '(%Y-%m-%d %H:%M:%S) '
-
-call unite#custom#source('neomru/file', 'converters', ['converter_file_directory'])
+call unite#custom#source('neomru/file', 'converters', 
+    \ ['converter_file_directory'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
-let g:neomru#file_mru_limit=300
+let g:neomru#file_mru_limit=3000
 
-nnoremap <silent> <leader>r :Unite
+nnoremap <silent> <leader>r :UniteWithProjectDir
+            \ -buffer-name=mru-project
+            \ -hide-source-names
+            \ neomru/file
+            \ <cr>
+
+nnoremap <silent> <leader>rr :Unite
             \ -buffer-name=recent-files
             \ -hide-source-names
             \ neomru/file
             \ <cr>
 
-" call unite#custom#source(
-"     \ 'mru_project', 'matchers',
-"     \ ['matcher_project_files', 'matcher_fuzzy'])
-
-nnoremap <silent> <leader>R :Unite
-            \ -buffer-name=mru-project
+nnoremap <silent> <leader>rd :Unite
+            \ -buffer-name=recent-directories
             \ -hide-source-names
-            \ neomru/file !
+            \ -default-action=project_cd
+            \ neomru/directory
             \ <cr>
 
-"### recent dirs ##############################################################
+call unite#custom#source('script', 'converters', 
+    \ ['converter_file_directory'])
+call unite#custom#source('script', 'sorters', ['sorter_selecta'])
 
-call unite#custom#source('neomru/directory', 'converters', ['converter_full_path'])
-call unite#custom#source('neomru/directory', 'sorters', ['sorter_nothing'])
+nnoremap <silent> <leader>rc :Unite
+            \ -buffer-name=modified-files
+            \ -hide-source-names
+            \ script:bash:vim-unite-git-modified
+            \ <cr>
 
-nnoremap <silent> <leader>d :<C-u>Unite
-            \ -buffer-name=recent-dir
-            \ -no-quit
-            \ -keep-focus
-            \ -immediately
-            \ -silent
-            \ neomru/directory<cr>
-
-"### outline ##################################################################
+"### outline ###################################################################
 
 let g:unite_source_outline_filetype_options = {
       \ '*': {
@@ -142,7 +134,7 @@ nnoremap <silent> <Leader>o :<C-u>Unite
             \ -silent
             \ outline<cr>
 
-"### line #####################################################################
+"### line ######################################################################
 
 call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
@@ -156,11 +148,11 @@ nnoremap <silent> -- :UniteWithCursorWord
 "             \ line
 "             \ <cr>
 
-"### registers ################################################################
+"### registers #################################################################
 
 nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
 
-"### vim environment ##########################################################
+"### vim environment ###########################################################
 
 call unite#custom#source('tab', 'sorters', ['sorter_nothing'])
 call unite#custom#source('window', 'sorters', ['sorter_nothing'])
@@ -174,7 +166,7 @@ call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 "     \ -silent
 "     \ tab window buffer mapping<cr>
 
-"### mru on vim startup if no file is opened ##################################
+"### mru on vim startup if no file is opened ###################################
 
 " autocmd StdinReadPre * let s:std_in=1
 " augroup vimEnter_mru
@@ -189,6 +181,24 @@ call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 "     autocmd!
 "     autocmd InsertLeave * :set keymap=us
 " augroup END
+
+"### Marks #####################################################################
+
+" Unite source for marks
+NeoBundle 'tacroe/unite-mark'
+
+let g:unite_source_mark_marks =
+    \   "abcdefghijklmnopqrstuvwxyz"
+    \ . "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    \ . "0123456789.'`^<>[]{}()\""
+
+nnoremap <silent> <leader>rm :Unite
+            \ -buffer-name=marks
+            \ -hide-source-names
+            \ mark
+            \ <cr>
+
+"### end #######################################################################
 
   endfunction
   call neobundle#untap()
