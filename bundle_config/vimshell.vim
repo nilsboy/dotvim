@@ -1,6 +1,7 @@
 finish
 " Powerful shell implemented by vim
-NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
+NeoBundleLazy 'Shougo/vimshell.vim',
+    \ {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}}
 
 let g:vimshell_editor_command='vim'
 let g:vimshell_right_prompt='getcwd()'

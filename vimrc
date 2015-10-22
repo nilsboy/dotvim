@@ -50,7 +50,7 @@ set modelines=0
 set nocompatible
 
 " Force 256 colors for terminals that call themselfs TERM=xterm
-set t_Co=256
+" set t_Co=256
 
 " Show trailing whitespace as red
 " highlight ExtraWhitespace ctermbg=darkred guibg=#382424
@@ -179,7 +179,7 @@ set hidden
 " set winminheight=10
 
 autocmd FileType qf setlocal winheight=20
-autocmd FileType help setlocal buflisted | only
+" autocmd FileType help setlocal buflisted | only
 " autocmd BufCreate * setlocal buflisted | only
 
 " " Epic

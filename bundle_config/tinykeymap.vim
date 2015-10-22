@@ -66,11 +66,11 @@ call tinykeymap#Map("windows", "<leader>", "", {'exit': 1})
 
 " ### Marks ####################################################################
 
-call tinykeymap#EnterMap('marks', '<leader>m', {'name': 'marks'})
-" jump to next lowercase mark
-call tinykeymap#Map("marks", "k", "normal! ['")
-" jump to previous lowercase mark 
-call tinykeymap#Map("marks", "j", "normal! ]'")
+" call tinykeymap#EnterMap('marks', '<leader>m', {'name': 'marks'})
+" " jump to next lowercase mark
+" call tinykeymap#Map("marks", "k", "normal! ['")
+" " jump to previous lowercase mark 
+" call tinykeymap#Map("marks", "j", "normal! ]'")
 
 " ### Jumps ####################################################################
 
