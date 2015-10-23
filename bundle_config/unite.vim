@@ -28,6 +28,8 @@ let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 let g:unite_source_rec_max_cache_files = 100
 let g:unite_source_rec_min_cache_files = 0
 
+" TODO look at file_rec/git
+
 call unite#custom#profile('default', 'context', {
     \ 'start_insert': 1,
     \ 'no_split' : 1,
@@ -37,58 +39,46 @@ autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
-autocmd FileType unite nmap <buffer> r     <Plug>(unite_restart)
 autocmd FileType unite nmap <buffer> <space> <Plug>(unite_select_next_page)
 autocmd FileType unite nmap <buffer> b     <Plug>(unite_select_previous_page)
-autocmd FileType unite nmap <buffer> i     <Plug>(unite_new_candidate)
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nothing)
 
 "### files #####################################################################
 
-" call unite#custom#source('file_rec', 'matchers', 
-"     \ ['matcher_project_ignore_files',
-"     \ 'matcher_default']
-" \)
+call unite#custom#source('file_rec/async', 'ignore_globs',
+    \ split(&wildignore, ','))
 
 call unite#custom#source('file_rec/async', 'converters', 
     \ ['converter_file_directory'])
 call unite#custom#source('file_rec/async', 'sorters', ['sorter_selecta'])
 
-" ignore files from wildignore
-" call unite#custom#source('file_rec/async,file_rec/git', 'ignore_globs', [])
-call unite#custom#source('file_rec/async', 'ignore_globs',
-    \ split(&wildignore, ','))
-
 nnoremap <silent> <tab> :UniteWithProjectDir
-    \ -buffer-name=haha
+    \ -buffer-name=files
     \ -keep-focus
     \ -auto-preview
     \ file_rec/async
     \ <cr>
 
-" nnoremap <silent> <leader>,fr :UniteWithProjectDir
-    " \ -buffer-name=files
-    " \ -keep-focus
-    " \ -resume
-    " \ file_rec/async
-    " \ <cr>
+nnoremap <silent> <leader>fr :UniteWithProjectDir
+    \ -buffer-name=files
+    \ -keep-focus
+    \ -auto-preview
+    \ -no-start-insert
+    \ -resume
+    \ file_rec/async
+    \ <cr>
 
 "### grep ######################################################################
 
-nnoremap <silent> <Leader>gi :Unite
-    \ -buffer-name=grep-prompt
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ grep:**<cr>
+call unite#custom#source('grep', 'converters', 
+    \ ['converter_tail_abbr'])
 
-nnoremap <silent> <Leader>gir :Unite
-    \ -buffer-name=grep-prompt
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ -resume
-    \ grep:**<cr>
+let g:unite_source_grep_default_opts = ' -inH '
+    \ . ' --exclude-dir "node_modules" '
+    \ . ' --exclude-dir ".git" '
+    \ . ' --exclude ".*" '
+    \ . ' --exclude "*.class" '
+    \ . ' --exclude-dir "classes" '
 
 nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep
@@ -99,6 +89,28 @@ nnoremap <silent> <Leader>gg :UniteWithCursorWord
 
 nnoremap <silent> <Leader>gr :UniteWithCursorWord
     \ -buffer-name=grep
+    \ -keep-focus
+    \ -no-start-insert
+    \ -auto-preview
+    \ -resume
+    \ grep:**<cr>
+
+vnoremap <silent> <Leader>gg y:UniteWithProjectDir
+    \ -buffer-name=grep
+    \ -keep-focus
+    \ -no-start-insert
+    \ -auto-preview
+    \ grep:::<c-r>=escape(@", '\\.*$^[]')<cr><cr>
+
+nnoremap <silent> <Leader>gi :Unite
+    \ -buffer-name=grep-prompt
+    \ -keep-focus
+    \ -no-start-insert
+    \ -auto-preview
+    \ grep:**<cr>
+
+nnoremap <silent> <Leader>gir :Unite
+    \ -buffer-name=grep-prompt
     \ -keep-focus
     \ -no-start-insert
     \ -auto-preview
@@ -118,18 +130,24 @@ let g:neomru#file_mru_limit=3000
 
 nnoremap <silent> <leader>r :UniteWithProjectDir
     \ -buffer-name=mru-project
+    \ -keep-focus
+    \ -auto-preview
     \ -hide-source-names
     \ neomru/file
     \ <cr>
 
 nnoremap <silent> <leader>rr :Unite
     \ -buffer-name=recent-files
+    \ -keep-focus
+    \ -auto-preview
     \ -hide-source-names
     \ neomru/file
     \ <cr>
 
 nnoremap <silent> <leader>rd :Unite
     \ -buffer-name=recent-directories
+    \ -keep-focus
+    \ -auto-preview
     \ -hide-source-names
     \ -default-action=project_cd
     \ neomru/directory
@@ -141,8 +159,19 @@ call unite#custom#source('script', 'sorters', ['sorter_selecta'])
 
 nnoremap <silent> <leader>rc :Unite
     \ -buffer-name=modified-files
+    \ -keep-focus
+    \ -auto-preview
     \ -hide-source-names
     \ script:bash:vim-unite-git-modified
+    \ <cr>
+
+nnoremap <silent> <leader>ff :Unite
+    \ -buffer-name=ff
+    \ -keep-focus
+    \ -auto-preview
+    \ -no-quit
+    \ -hide-source-names
+    \ script:bash:vim-unite-find
     \ <cr>
 
 "### outline ###################################################################
@@ -166,6 +195,7 @@ let g:unite_source_outline_filetype_options = {
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
     \ -keep-focus
+    \ -auto-preview
     \ -silent
     \ outline<cr>
 

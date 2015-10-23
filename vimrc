@@ -90,6 +90,7 @@ set clipboard=unnamed
 
 " Expand current dir
 cabbrev <expr> ./ expand('%:p:h')
+cabbrev <expr> fn expand('%:p') 
 
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
@@ -142,7 +143,8 @@ set wildmode=longest:list
 set wildignorecase
 
 " Ignore patterns
-" set wildignore=.*,*.class,*/node_modules/*,./node_modules/*
+" set wildignore+=.*/**,*.class,node_modules/**,*/target/classes/**
+set wildignore+=*.class,node_modules/**,*/target/classes/**
 
 set splitbelow
 set splitright
@@ -179,7 +181,7 @@ set hidden
 " set winminheight=10
 
 autocmd FileType qf setlocal winheight=20
-" autocmd FileType help setlocal buflisted | only
+autocmd FileType help setlocal buflisted | only
 " autocmd BufCreate * setlocal buflisted | only
 
 " " Epic
