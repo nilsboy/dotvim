@@ -1,7 +1,13 @@
 " Unite and create user interfaces
 NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
       \ , 'depends' : 'Shougu/vimproc.vim'
-      \ }
+\ }
+
+" TODO
+" A: You can change below highlights by |:highlight|.
+" "uniteStatusNormal", "uniteStatusHead"
+" "uniteStatusSourceNames", "uniteStatusSourceCandidates"
+" "uniteStatusMessage", "uniteStatusLineNR"
 
 " Quickfix
 " NeoBundle 'sgur/unite-qf'
@@ -42,6 +48,8 @@ autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <space> <Plug>(unite_select_next_page)
 autocmd FileType unite nmap <buffer> b     <Plug>(unite_select_previous_page)
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nothing)
+autocmd FileType unite nmap <buffer> i ggk0DA
+autocmd FileType unite nmap <buffer> a ggkA
 
 "### files #####################################################################
 
@@ -52,11 +60,24 @@ call unite#custom#source('file_rec/async', 'converters',
     \ ['converter_file_directory'])
 call unite#custom#source('file_rec/async', 'sorters', ['sorter_selecta'])
 
-nnoremap <silent> <tab> :UniteWithProjectDir
+" nnoremap <silent> <tab> :UniteWithProjectDir
+"     \ -buffer-name=files
+"     \ -keep-focus
+"     \ -auto-preview
+"     \ file_rec/async
+"     \ <cr>
+
+call unite#custom#source('script-file', 'converters',
+    \ ['converter_file_directory_pretty'])
+" call unite#custom#source('script-file', 'sorters', ['sorter_length'])
+call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
+
+nnoremap <silent> <tab> :Unite
     \ -buffer-name=files
     \ -keep-focus
     \ -auto-preview
-    \ file_rec/async
+    \ -hide-source-names
+    \ script-file:find-and-limit
     \ <cr>
 
 nnoremap <silent> <leader>fr :UniteWithProjectDir
@@ -153,9 +174,9 @@ nnoremap <silent> <leader>rd :Unite
     \ neomru/directory
     \ <cr>
 
-call unite#custom#source('script', 'converters', 
-    \ ['converter_file_directory'])
-call unite#custom#source('script', 'sorters', ['sorter_selecta'])
+" call unite#custom#source('script', 'converters', 
+"     \ ['converter_file_directory'])
+" call unite#custom#source('script', 'sorters', ['sorter_selecta'])
 
 nnoremap <silent> <leader>rc :Unite
     \ -buffer-name=modified-files
@@ -163,15 +184,6 @@ nnoremap <silent> <leader>rc :Unite
     \ -auto-preview
     \ -hide-source-names
     \ script:bash:vim-unite-git-modified
-    \ <cr>
-
-nnoremap <silent> <leader>ff :Unite
-    \ -buffer-name=ff
-    \ -keep-focus
-    \ -auto-preview
-    \ -no-quit
-    \ -hide-source-names
-    \ script:bash:vim-unite-find
     \ <cr>
 
 "### outline ###################################################################

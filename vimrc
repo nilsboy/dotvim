@@ -181,7 +181,7 @@ set hidden
 " set winminheight=10
 
 autocmd FileType qf setlocal winheight=20
-autocmd FileType help setlocal buflisted | only
+" autocmd FileType help setlocal buflisted | only
 " autocmd BufCreate * setlocal buflisted | only
 
 " " Epic

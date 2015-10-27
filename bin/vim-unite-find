@@ -1,4 +1,0 @@
-#!/bin/sh -e
-(
-    find-and
-) | perl -ne '/^(.+)$/ ; print "$1\t:e " . $1 . "\n"'
