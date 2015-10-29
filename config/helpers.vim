@@ -1,4 +1,6 @@
 " Close a buffer writing its content and closing vim if appropriate.
+" Use bwipe instead of bdelete - otherwise the buffer stays open as
+" an unlisted-buffer.
 function! BufferClose()
 
     :lclose
@@ -14,10 +16,10 @@ function! BufferClose()
         if BufferIsEmpty() == 1
             :q!
         endif
-        :silent bdelete!
+        :silent bwipe!
         " :MyUniteMru
     else
-        :silent bdelete!
+        :silent bwipe!
     endif
 
 endfunction

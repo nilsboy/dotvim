@@ -1,7 +1,6 @@
-if exists("b:did_ftplugin_javascript")
-    finish
+if did_filetype()
+  finish
 endif
-let b:did_ftplugin_javascript = 1
 
 map <buffer><silent><leader>w :Esformatter<CR>:SyntasticCheck<CR>
 

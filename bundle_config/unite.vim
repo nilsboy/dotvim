@@ -60,16 +60,8 @@ call unite#custom#source('file_rec/async', 'converters',
     \ ['converter_file_directory'])
 call unite#custom#source('file_rec/async', 'sorters', ['sorter_selecta'])
 
-" nnoremap <silent> <tab> :UniteWithProjectDir
-"     \ -buffer-name=files
-"     \ -keep-focus
-"     \ -auto-preview
-"     \ file_rec/async
-"     \ <cr>
-
 call unite#custom#source('script-file', 'converters',
     \ ['converter_file_directory_pretty'])
-" call unite#custom#source('script-file', 'sorters', ['sorter_length'])
 call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <tab> :Unite
@@ -77,14 +69,15 @@ nnoremap <silent> <tab> :Unite
     \ -keep-focus
     \ -auto-preview
     \ -hide-source-names
+    \ -resume
     \ script-file:find-and-limit
     \ <cr>
+    " \ -no-start-insert
 
 nnoremap <silent> <leader>fr :UniteWithProjectDir
     \ -buffer-name=files
     \ -keep-focus
     \ -auto-preview
-    \ -no-start-insert
     \ -resume
     \ file_rec/async
     \ <cr>
@@ -183,7 +176,8 @@ nnoremap <silent> <leader>rc :Unite
     \ -keep-focus
     \ -auto-preview
     \ -hide-source-names
-    \ script:bash:vim-unite-git-modified
+    \ -no-start-insert
+    \ script-file:git-modified
     \ <cr>
 
 "### outline ###################################################################
@@ -208,7 +202,6 @@ nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
     \ -keep-focus
     \ -auto-preview
-    \ -silent
     \ outline<cr>
 
 "### line ######################################################################
@@ -220,7 +213,7 @@ nnoremap <silent> -- :Unite
     \ -hide-source-names
     \ -keep-focus
     \ -auto-preview
-    \ -silent
+    \ -resume
     \ line
     \ <cr>
 
@@ -230,7 +223,7 @@ nnoremap <silent> --w :UniteWithCursorWord
     \ -keep-focus
     \ -no-start-insert
     \ -auto-preview
-    \ -silent
+    \ -resume
     \ line
     \ <cr>
 
@@ -240,7 +233,6 @@ nnoremap <silent> --r :Unite
     \ -keep-focus
     \ -no-start-insert
     \ -auto-preview
-    \ -silent
     \ -resume
     \ line
     \ <cr>
@@ -259,14 +251,12 @@ nnoremap <silent> <leader>v :<C-u>Unite
     \ -buffer-name=vimfos
     \ -no-quit
     \ -keep-focus
-    \ -silent
     \ buffer window tab<cr>
 
 nnoremap <silent> <leader>vm :<C-u>Unite
     \ -buffer-name=mappings
     \ -no-quit
     \ -keep-focus
-    \ -silent
     \ mapping<cr>
 
 "### mru on vim startup if no file is opened ###################################

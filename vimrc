@@ -26,6 +26,10 @@ let g:vim.config.dir = g:vim.etc.dir . "config/"
 
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
 
+" Log autocmds etc to file
+" let &verbosefile = g:vim.var.dir . "/verbose.log"
+" let &verbose = 15
+
 call _mkdir(g:vim.dir)
 call _mkdir(g:vim.etc.dir)
 call _mkdir(g:vim.var.dir)
@@ -180,21 +184,60 @@ set hidden
 " set winheight=9999
 " set winminheight=10
 
+autocmd BufCreate * only
 autocmd FileType qf setlocal winheight=20
-" autocmd FileType help setlocal buflisted | only
-" autocmd BufCreate * setlocal buflisted | only
+autocmd FileType unite setlocal winheight=20
+autocmd FileType help setlocal buflisted
 
-" " Epic
-" augroup forceSingleWindowMode
+" let g:unite_open = 0
+
+" augroup UniteSetOpen
 "     autocmd!
-"     autocmd BufCreate,BufAdd,BufEnter *
-"         \ if bufname("%") !~ "Location List"
-"         \     | setlocal buflisted
-"         \     | only
-"         \ | endif
+"     autocmd BufCreate,BufAdd,BufEnter * call UniteSetOpen()
 " augroup END
-"         " \     | resize
-"         " \     | setlocal nowinfixheight
+" function! UniteSetOpen()
+"     if &filetype == "unite"
+"         let g:unite_open = 1
+"     endif
+" endfunction
+
+" augroup UniteSetClosed
+"     autocmd!
+"     autocmd BufLeave * call UniteSetClosed()
+" augroup END
+" function! UniteSetClosed()
+"     let l:buffer = bufnr(expand("<abuf>"))
+"     let l:type = getbufvar(l:buffer, "&filetype")
+"     if &filetype == "unite"
+"         let g:unite_open = 0
+"     endif
+" endfunction
+
+" augroup UniteSetClosed
+"     autocmd!
+"     autocmd BufHidden,BufLeave * call UniteSetClosed()
+" augroup END
+" function! UniteSetClosed()
+"     if &filetype == "unite"
+"         let g:unite_open = 0
+"     endif
+" endfunction
+
+" augroup SingleWindowMode
+"     autocmd!
+"     " autocmd FileType * call SingleWindowMode()
+"     autocmd BufEnter * call SingleWindowMode()
+" augroup END
+" function! SingleWindowMode()
+"     if &filetype == "unitexx"
+"         return
+"     endif
+"     if g:unite_open == 0
+"         " call unite#view#_quit(0)
+"         " only
+"         resize
+"     endif
+" endfunction
 
 " Highlight unknown filetypes as text
 autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
@@ -215,7 +258,7 @@ set nolist
 set linebreak
 set breakat&vim
 let &showbreak=repeat(' ', 10) . "↪ "
-" TODO next vim:
+" Next vim:
 " This feature has been implemented on June 25, 2014 as patch 7.4.338"
 " (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
 
