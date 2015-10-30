@@ -3,6 +3,8 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
       \ , 'depends' : 'Shougu/vimproc.vim'
 \ }
 
+" TODO start in normal mode if resuming
+
 " TODO
 " A: You can change below highlights by |:highlight|.
 " "uniteStatusNormal", "uniteStatusHead"
@@ -15,8 +17,24 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
 " codesearch source for unite.vim
 " NeoBundle 'junkblocker/unite-codesearch'
 
-" Notes
-" -immediately breaks file/async
+" TODO look at file_rec/git
+" TODO combi source grep + filenames
+" TODO source change Nominates results of |:changes| command as candidates.
+" TODO history/unite
+"
+" ?: file_list Nominates files in the filelist.
+" jump_point	Nominates current line of "file:line" format as candidates.
+" 		This source is useful for |vimshell| outputs.
+
+" 						*unite-source-file_point*
+" file_point	Nominates filename or URI at the cursor as candidates.
+" 		This source is useful for |vimshell| outputs.
+
+" 						*unite-source-launcher*
+" launcher	Nominates executable files from $PATH as candidates.
+
+" 		Source arguments:
+" 		1. comma separated executable files' path.
 
 "## defaults ###################################################################
 
@@ -25,28 +43,37 @@ if neobundle#tap('unite.vim')
 
 let g:unite_data_directory = g:vim.cache.dir . "unite"
 
-" no clue - but complains if not set
+" complains if not set
 let g:unite_abbr_highlight = "function"
 
-let g:unite_source_history_yank_enable = 1
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
-let g:unite_source_rec_max_cache_files = 100
-let g:unite_source_rec_min_cache_files = 0
-
-" TODO look at file_rec/git
+" g:unite_enable_auto_select = 0
 
 call unite#custom#profile('default', 'context', {
     \ 'start_insert': 1,
     \ 'no_split' : 1,
     \ 'keep_focus' : 1,
     \ 'auto_preview' : 1,
-    \ 'hide_source_names' : 1,
     \ 'resume' : 1,
     \ 'silent' : 1,
 \ })
+" \ 'hide_source_names' : 1,
+" \ 'quick_match' : 1,
+" print warnings:
+" \ 'verbose' : 1,
 
-" autocmd FileType unite mapclear <buffer>
+" -create
+" Create a new unite buffer.
+
+" -abbr-highlight={highlight-name}
+" Specify abbreviated candidates highlight.
+" Default: "Normal"
+
+" -here
+" Open unite buffer at the cursor position.
+
+" Note: Uses |unite-options-buffer-name| to search for
 
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nilsb_nothing)
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
@@ -54,20 +81,19 @@ autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
-" autocmd FileType unite nmap <buffer> <space> <Plug>(unite_select_next_page)
-" autocmd FileType unite nmap <buffer> b     <Plug>(unite_select_previous_page)
+autocmd FileType unite nmap <buffer> <SPACE> <C-F>
+autocmd FileType unite nmap <buffer><nowait> b <C-B>
 
 autocmd FileType unite nnoremap <buffer> i gg0DA
 autocmd FileType unite nnoremap <buffer> A ggA
 
 "### files #####################################################################
 
-call unite#custom#source('file_rec/async', 'ignore_globs',
-    \ split(&wildignore, ','))
+" let g:unite_source_rec_max_cache_files = 100
+" let g:unite_source_rec_min_cache_files = 0
 
-call unite#custom#source('file_rec/async', 'converters', 
-    \ ['converter_file_directory'])
-call unite#custom#source('file_rec/async', 'sorters', ['sorter_selecta'])
+" call unite#custom#source('file_rec/async', 'ignore_globs',
+"     \ split(&wildignore, ','))
 
 call unite#custom#source('script-file', 'converters',
     \ ['converter_file_directory_pretty'])
@@ -75,6 +101,7 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <tab> :Unite
     \ -buffer-name=files
+    \ -smartcase
     \ script-file:find-and-limit
     \ <cr>
 
@@ -97,6 +124,7 @@ nnoremap <silent> <Leader>gg :UniteWithCursorWord
 vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep
     \ -no-resume
+    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr>
     \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><cr>
 
 nnoremap <silent> <Leader>gi :Unite
@@ -113,12 +141,12 @@ nnoremap <silent> <Leader>gr :Unite
 NeoBundle 'Shougo/neomru.vim'
 
 call unite#custom#source('neomru/file', 'converters', 
-    \ ['converter_file_directory'])
+    \ ['converter_file_directory_pretty'])
 call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
 let g:neomru#file_mru_limit=3000
 
-nnoremap <silent> <leader>r :Unite
+nnoremap <silent> <leader>r :UniteWithProjectDir
     \ -buffer-name=mru-project
     \ neomru/file
     \ <cr>
@@ -182,6 +210,12 @@ nnoremap <silent> --r :Unite
     \ <cr>
 
 "### registers #################################################################
+
+" also see source register
+let g:unite_source_history_yank_enable = 1
+let g:unite_source_history_yank_save_clipboard = 1
+" let g:unite_source_history_yank_limit = 100
+" let g:unite_source_history_yank_file = TODO
 
 nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
 
