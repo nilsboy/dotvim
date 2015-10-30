@@ -82,7 +82,7 @@ let g:netrw_dirhistmax = 0
 " au BufRead,BufNewFile *.json setlocal filetype=json | setlocal syntax=txt
 
 " Recognize .md as markdown for vim < 7.4.480
-" au BufNewFile,BufFilePre,BufRead *.md setloal filetype=markdown
+" au BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -107,7 +107,7 @@ set history=1000
 " allow the cursor to pass the last character
 " set virtualedit=onemore
 
-" Set to auto read when a file is changed from the outside
+" Set reload a file when it is changed from the outside
 set autoread
 
 " Automatically write file if leaving a buffer
@@ -184,7 +184,7 @@ set hidden
 " set winheight=9999
 " set winminheight=10
 
-autocmd BufCreate * only
+" autocmd BufCreate * only
 autocmd FileType qf setlocal winheight=20
 autocmd FileType unite setlocal winheight=20
 autocmd FileType help setlocal buflisted

@@ -39,17 +39,26 @@ let g:unite_source_rec_min_cache_files = 0
 call unite#custom#profile('default', 'context', {
     \ 'start_insert': 1,
     \ 'no_split' : 1,
-    \ })
+    \ 'keep_focus' : 1,
+    \ 'auto_preview' : 1,
+    \ 'hide_source_names' : 1,
+    \ 'resume' : 1,
+    \ 'silent' : 1,
+\ })
 
+" autocmd FileType unite mapclear <buffer>
+
+autocmd FileType unite nmap <buffer> <esc> <Plug>(nilsb_nothing)
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
-autocmd FileType unite nmap <buffer> <space> <Plug>(unite_select_next_page)
-autocmd FileType unite nmap <buffer> b     <Plug>(unite_select_previous_page)
-autocmd FileType unite nmap <buffer> <esc> <Plug>(nothing)
-autocmd FileType unite nmap <buffer> i ggk0DA
-autocmd FileType unite nmap <buffer> a ggkA
+
+" autocmd FileType unite nmap <buffer> <space> <Plug>(unite_select_next_page)
+" autocmd FileType unite nmap <buffer> b     <Plug>(unite_select_previous_page)
+
+autocmd FileType unite nnoremap <buffer> i gg0DA
+autocmd FileType unite nnoremap <buffer> A ggA
 
 "### files #####################################################################
 
@@ -66,20 +75,7 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <tab> :Unite
     \ -buffer-name=files
-    \ -keep-focus
-    \ -auto-preview
-    \ -hide-source-names
-    \ -resume
     \ script-file:find-and-limit
-    \ <cr>
-    " \ -no-start-insert
-
-nnoremap <silent> <leader>fr :UniteWithProjectDir
-    \ -buffer-name=files
-    \ -keep-focus
-    \ -auto-preview
-    \ -resume
-    \ file_rec/async
     \ <cr>
 
 "### grep ######################################################################
@@ -96,40 +92,20 @@ let g:unite_source_grep_default_opts = ' -inH '
 
 nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ grep:**<cr>
+    \ grep:**<cr><esc>
 
-nnoremap <silent> <Leader>gr :UniteWithCursorWord
+vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ -resume
-    \ grep:**<cr>
-
-vnoremap <silent> <Leader>gg y:UniteWithProjectDir
-    \ -buffer-name=grep
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ grep:::<c-r>=escape(@", '\\.*$^[]')<cr><cr>
+    \ -no-resume
+    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><cr>
 
 nnoremap <silent> <Leader>gi :Unite
-    \ -buffer-name=grep-prompt
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
+    \ -buffer-name=grep
     \ grep:**<cr>
 
-nnoremap <silent> <Leader>gir :Unite
-    \ -buffer-name=grep-prompt
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ -resume
-    \ grep:**<cr>
+nnoremap <silent> <Leader>gr :Unite
+    \ -buffer-name=grep
+    \ grep:**<cr><esc>
 
 "### mru #######################################################################
 
@@ -142,43 +118,26 @@ call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
 let g:neomru#file_mru_limit=3000
 
-nnoremap <silent> <leader>r :UniteWithProjectDir
+nnoremap <silent> <leader>r :Unite
     \ -buffer-name=mru-project
-    \ -keep-focus
-    \ -auto-preview
-    \ -hide-source-names
     \ neomru/file
     \ <cr>
 
 nnoremap <silent> <leader>rr :Unite
     \ -buffer-name=recent-files
-    \ -keep-focus
-    \ -auto-preview
-    \ -hide-source-names
     \ neomru/file
     \ <cr>
 
 nnoremap <silent> <leader>rd :Unite
     \ -buffer-name=recent-directories
-    \ -keep-focus
-    \ -auto-preview
-    \ -hide-source-names
     \ -default-action=project_cd
     \ neomru/directory
     \ <cr>
 
-" call unite#custom#source('script', 'converters', 
-"     \ ['converter_file_directory'])
-" call unite#custom#source('script', 'sorters', ['sorter_selecta'])
-
 nnoremap <silent> <leader>rc :Unite
     \ -buffer-name=modified-files
-    \ -keep-focus
-    \ -auto-preview
-    \ -hide-source-names
-    \ -no-start-insert
     \ script-file:git-modified
-    \ <cr>
+    \ <cr><esc>
 
 "### outline ###################################################################
 
@@ -200,8 +159,6 @@ let g:unite_source_outline_filetype_options = {
 
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
-    \ -keep-focus
-    \ -auto-preview
     \ outline<cr>
 
 "### line ######################################################################
@@ -210,30 +167,17 @@ call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> -- :Unite
     \ -buffer-name=line
-    \ -hide-source-names
-    \ -keep-focus
-    \ -auto-preview
-    \ -resume
     \ line
     \ <cr>
 
 nnoremap <silent> --w :UniteWithCursorWord
     \ -buffer-name=line
-    \ -hide-source-names
-    \ -keep-focus
     \ -no-start-insert
-    \ -auto-preview
-    \ -resume
     \ line
     \ <cr>
 
 nnoremap <silent> --r :Unite
     \ -buffer-name=line
-    \ -hide-source-names
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ -resume
     \ line
     \ <cr>
 
@@ -249,14 +193,10 @@ call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent> <leader>v :<C-u>Unite
     \ -buffer-name=vimfos
-    \ -no-quit
-    \ -keep-focus
     \ buffer window tab<cr>
 
 nnoremap <silent> <leader>vm :<C-u>Unite
     \ -buffer-name=mappings
-    \ -no-quit
-    \ -keep-focus
     \ mapping<cr>
 
 "### mru on vim startup if no file is opened ###################################
@@ -287,7 +227,6 @@ let g:unite_source_mark_marks =
 
 nnoremap <silent> <leader>rm :Unite
     \ -buffer-name=marks
-    \ -hide-source-names
     \ mark
     \ <cr>
 
@@ -297,17 +236,10 @@ nnoremap <silent> <Leader>m :UniteBookmarkAdd<cr>
 
 nnoremap <silent> <Leader>mm :Unite
     \ -buffer-name=bookmark
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
     \ bookmark<cr>
 
 nnoremap <silent> <Leader>mr :Unite
     \ -buffer-name=bookmark
-    \ -keep-focus
-    \ -no-start-insert
-    \ -auto-preview
-    \ -resume
     \ bookmark<cr>
 
 "### end #######################################################################
