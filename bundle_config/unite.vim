@@ -3,38 +3,28 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
       \ , 'depends' : 'Shougu/vimproc.vim'
 \ }
 
+"## TODO #######################################################################
+
 " TODO start in normal mode if resuming
 
-" TODO
-" A: You can change below highlights by |:highlight|.
-" "uniteStatusNormal", "uniteStatusHead"
-" "uniteStatusSourceNames", "uniteStatusSourceCandidates"
-" "uniteStatusMessage", "uniteStatusLineNR"
+"## Notes ######################################################################
 
+" Create a new unite buffer.
+" -create
+"
+" rotate-next-source
+"
 " Quickfix
 " NeoBundle 'sgur/unite-qf'
-
+"
 " codesearch source for unite.vim
 " NeoBundle 'junkblocker/unite-codesearch'
-
-" TODO look at file_rec/git
-" TODO combi source grep + filenames
-" TODO source change Nominates results of |:changes| command as candidates.
-" TODO history/unite
 "
-" ?: file_list Nominates files in the filelist.
 " jump_point	Nominates current line of "file:line" format as candidates.
 " 		This source is useful for |vimshell| outputs.
-
-" 						*unite-source-file_point*
+"
 " file_point	Nominates filename or URI at the cursor as candidates.
 " 		This source is useful for |vimshell| outputs.
-
-" 						*unite-source-launcher*
-" launcher	Nominates executable files from $PATH as candidates.
-
-" 		Source arguments:
-" 		1. comma separated executable files' path.
 
 "## defaults ###################################################################
 
@@ -46,10 +36,6 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 " complains if not set
 let g:unite_abbr_highlight = "function"
 
-let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
-
-" g:unite_enable_auto_select = 0
-
 call unite#custom#profile('default', 'context', {
     \ 'start_insert': 1,
     \ 'no_split' : 1,
@@ -57,27 +43,14 @@ call unite#custom#profile('default', 'context', {
     \ 'auto_preview' : 1,
     \ 'resume' : 1,
     \ 'silent' : 1,
+    \ 'sync' : 1,
+    \ 'match_input' : 1,
 \ })
-" \ 'hide_source_names' : 1,
-" \ 'quick_match' : 1,
-" print warnings:
-" \ 'verbose' : 1,
-
-" -create
-" Create a new unite buffer.
-
-" -abbr-highlight={highlight-name}
-" Specify abbreviated candidates highlight.
-" Default: "Normal"
-
-" -here
-" Open unite buffer at the cursor position.
-
-" Note: Uses |unite-options-buffer-name| to search for
 
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nilsb_nothing)
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
+
 autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
 
@@ -119,21 +92,23 @@ let g:unite_source_grep_default_opts = ' -inH '
 
 nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep
-    \ grep:**<cr><esc>
+    \ grep:**
+    \ script-file:find-and-limit
+    \ <cr><esc>
 
 vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep
     \ -no-resume
     \ -input=<c-r>=escape(@", '\\.*$^[]')<cr>
-    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><cr>
+    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr>
+    \ script-file:find-and-limit
+    \ <cr>
 
-nnoremap <silent> <Leader>gi :Unite
+nnoremap <silent> <Leader>gi :UniteWithInput
     \ -buffer-name=grep
-    \ grep:**<cr>
-
-nnoremap <silent> <Leader>gr :Unite
-    \ -buffer-name=grep
-    \ grep:**<cr><esc>
+    \ grep:**
+    \ script-file:find-and-limit
+    \ <cr>
 
 "### mru #######################################################################
 
@@ -162,8 +137,17 @@ nnoremap <silent> <leader>rd :Unite
     \ neomru/directory
     \ <cr>
 
-nnoremap <silent> <leader>rc :Unite
-    \ -buffer-name=modified-files
+"### changes ###################################################################
+
+nnoremap <silent> <leader>c :Unite
+    \ -buffer-name=jump
+    \ change jump
+    \ <cr>
+
+"### git #######################################################################
+
+nnoremap <silent> <leader>gc :Unite
+    \ -buffer-name=git-modified
     \ script-file:git-modified
     \ <cr><esc>
 
@@ -183,7 +167,7 @@ let g:unite_source_outline_filetype_options = {
     \ 'perl': {
     \   'ignore_types': ['package'],
     \ },
-    \}
+\}
 
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
@@ -193,19 +177,14 @@ nnoremap <silent> <Leader>o :<C-u>Unite
 
 call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
-nnoremap <silent> -- :Unite
+nnoremap <silent> ,- :Unite
     \ -buffer-name=line
     \ line
     \ <cr>
 
-nnoremap <silent> --w :UniteWithCursorWord
+nnoremap <silent> ,-- :UniteWithCursorWord
     \ -buffer-name=line
     \ -no-start-insert
-    \ line
-    \ <cr>
-
-nnoremap <silent> --r :Unite
-    \ -buffer-name=line
     \ line
     \ <cr>
 
@@ -217,13 +196,18 @@ let g:unite_source_history_yank_save_clipboard = 1
 " let g:unite_source_history_yank_limit = 100
 " let g:unite_source_history_yank_file = TODO
 
-nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
+nnoremap <leader>y :Unite
+    \ -buffer-name=yank
+    \ history/yank register
+    \ <cr><cr>
 
 "### vim environment ###########################################################
 
 call unite#custom#source('tab', 'sorters', ['sorter_nothing'])
 call unite#custom#source('window', 'sorters', ['sorter_nothing'])
+
 call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
+let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
 nnoremap <silent> <leader>v :<C-u>Unite
     \ -buffer-name=vimfos
@@ -269,10 +253,6 @@ nnoremap <silent> <leader>rm :Unite
 nnoremap <silent> <Leader>m :UniteBookmarkAdd<cr>
 
 nnoremap <silent> <Leader>mm :Unite
-    \ -buffer-name=bookmark
-    \ bookmark<cr>
-
-nnoremap <silent> <Leader>mr :Unite
     \ -buffer-name=bookmark
     \ bookmark<cr>
 
