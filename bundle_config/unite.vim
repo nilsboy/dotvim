@@ -94,7 +94,8 @@ nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep
     \ grep:**
     \ script-file:find-and-limit
-    \ <cr><esc>
+    \ <cr>
+    \ <esc>
 
 vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep
@@ -149,7 +150,8 @@ nnoremap <silent> <leader>c :Unite
 nnoremap <silent> <leader>gc :Unite
     \ -buffer-name=git-modified
     \ script-file:git-modified
-    \ <cr><esc>
+    \ <cr>
+    \ <esc>
 
 "### outline ###################################################################
 
@@ -171,7 +173,8 @@ let g:unite_source_outline_filetype_options = {
 
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
-    \ outline<cr>
+    \ outline
+    \ <cr>
 
 "### line ######################################################################
 
@@ -211,11 +214,13 @@ let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
 nnoremap <silent> <leader>v :<C-u>Unite
     \ -buffer-name=vimfos
-    \ buffer window tab<cr>
+    \ buffer window tab
+    \ <cr>
 
 nnoremap <silent> <leader>vm :<C-u>Unite
     \ -buffer-name=mappings
-    \ mapping<cr>
+    \ mapping
+    \ <cr>
 
 "### mru on vim startup if no file is opened ###################################
 
@@ -254,7 +259,8 @@ nnoremap <silent> <Leader>m :UniteBookmarkAdd<cr>
 
 nnoremap <silent> <Leader>mm :Unite
     \ -buffer-name=bookmark
-    \ bookmark<cr>
+    \ bookmark
+    \ <cr>
 
 "### end #######################################################################
 
