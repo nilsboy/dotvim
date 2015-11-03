@@ -63,7 +63,7 @@ set nocompatible
 
 " TODO paths
 set runtimepath+=$REMOTE_HOME/.vim/etc
-set runtimepath+=$REMOTE_HOME/.vim/etc/bin
+" set runtimepath+=$REMOTE_HOME/.vim/etc/bin
 set runtimepath+=$REMOTE_HOME/.vim/etc/after
 
 " TODO paths
@@ -355,8 +355,8 @@ nnoremap :s/ :s/\v
 
 nnoremap <leader>k1 <F1>
 
-nnoremap <silent><C-l> :bnext<cr>
-nnoremap <silent><C-h> :bprev<cr>
+nmap <silent><C-l> :bnext<cr>
+nmap <silent><C-h> :bprev<cr>
 
 " Dont use Q for Ex mode
 nnoremap Q <Nop>

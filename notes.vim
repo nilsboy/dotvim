@@ -50,3 +50,14 @@
 " While testing autocommands, you might find the 'verbose' option to be useful: >
 " 	:set verbose=9
 " This setting makes Vim echo the autocommands as it executes them.
+"
+" Plugins to checkout:
+" - vim-es6
+" - vimagit
+" - diffchar.vim
+" - quick-scope
+" - ctrlsf.vim
+" - Vdebug
+" - vim-qlist
+" - JavaScript-Context-Coloring
+" - incsearch.vim

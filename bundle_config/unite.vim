@@ -41,18 +41,21 @@ call unite#custom#profile('default', 'context', {
     \ 'no_split' : 1,
     \ 'keep_focus' : 1,
     \ 'auto_preview' : 1,
-    \ 'resume' : 1,
     \ 'silent' : 1,
     \ 'sync' : 1,
     \ 'match_input' : 1,
 \ })
+" \ 'resume' : 1,
 
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nilsb_nothing)
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
 autocmd FileType unite imap <buffer> <TAB> <plug>(unite_exit)
 
-autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_exit)
-autocmd FileType unite imap <buffer> <C-l> <plug>(unite_exit)
+autocmd FileType unite nmap <buffer> <C-l> <plug>(unite_rotate_next_source)
+autocmd FileType unite nmap <buffer> <C-h> <plug>(unite_rotate_previous_source)
+
+autocmd FileType unite imap <buffer> <C-l> <esc><plug>(unite_rotate_next_source)
+autocmd FileType unite imap <buffer> <C-h> <esc><plug>(unite_rotate_previous_source)
 
 autocmd FileType unite nmap <buffer> <SPACE> <C-F>
 autocmd FileType unite nmap <buffer><nowait> b <C-B>
@@ -72,7 +75,9 @@ call unite#custom#source('script-file', 'converters',
     \ ['converter_file_directory_pretty'])
 call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
-nnoremap <silent> <tab> :Unite
+nnoremap <silent> <tab> :UniteResume<cr><esc>
+
+nnoremap <silent> <leader>f :Unite
     \ -buffer-name=files
     \ -smartcase
     \ script-file:find-and-limit
@@ -98,15 +103,14 @@ nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ <esc>
 
 vnoremap <silent> <Leader>gg y:Unite
-    \ -buffer-name=grep
-    \ -no-resume
+    \ -buffer-name=grep-word
     \ -input=<c-r>=escape(@", '\\.*$^[]')<cr>
     \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr>
     \ script-file:find-and-limit
     \ <cr>
 
 nnoremap <silent> <Leader>gi :UniteWithInput
-    \ -buffer-name=grep
+    \ -buffer-name=grep-input
     \ grep:**
     \ script-file:find-and-limit
     \ <cr>
