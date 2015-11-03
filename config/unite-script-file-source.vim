@@ -1,9 +1,6 @@
-" file script source for unite.vim
-" 
-" setting example:
-"
-"   let g:unite_source_grep_default_dir = '~/.vim' 
-"   let g:unite_source_grep_default_opts = '-iR' 
+" Run any executable that returns a file name
+" Spaces have to be quoted i.e.:
+" script-file:ls\ -la
  
 let s:grep_source = { 'name': 'script-file', 'is_volatile': 1 } 
 function! s:grep_source.gather_candidates(args, context) 
