@@ -56,7 +56,7 @@
 " - vimagit
 " - diffchar.vim
 " - quick-scope
-" - ctrlsf.vim
+" - ctrlsf.vim " Grep with edit in-place
 " - Vdebug
 " - vim-qlist
 " - JavaScript-Context-Coloring

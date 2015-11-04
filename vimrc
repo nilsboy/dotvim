@@ -346,6 +346,21 @@ nnoremap - /\v
 nnoremap / /\v
 vnoremap / /\v
 
+nnoremap ö [
+nnoremap ä ]
+inoremap ö [
+inoremap ä ]
+
+nnoremap Ö {
+nnoremap Ä }
+inoremap Ö {
+inoremap Ä }
+
+inoremap °ö ö
+inoremap °ä ä
+inoremap °Ö Ö
+inoremap °Ä Ä
+
 " vnoremap _ ?\v
 " nnoremap _ ?\v
 
