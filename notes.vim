@@ -58,6 +58,6 @@
 " - quick-scope
 " - ctrlsf.vim " Grep with edit in-place
 " - Vdebug
-" - vim-qlist
+" - vim-qlist show :ilist searches in qickfix window
 " - JavaScript-Context-Coloring
 " - incsearch.vim

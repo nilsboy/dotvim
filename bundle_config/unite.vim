@@ -3,6 +3,8 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
       \ , 'depends' : 'Shougu/vimproc.vim'
 \ }
 
+NeoBundle 'sgur/unite-qf'
+
 "## TODO #######################################################################
 
 " TODO start in normal mode if resuming
@@ -13,9 +15,6 @@ NeoBundle 'Shougo/unite.vim', { 'name' : 'unite.vim'
 " -create
 "
 " rotate-next-source
-"
-" Quickfix
-" NeoBundle 'sgur/unite-qf'
 "
 " codesearch source for unite.vim
 " NeoBundle 'junkblocker/unite-codesearch'
@@ -265,6 +264,9 @@ nnoremap <silent> <Leader>mm :Unite
     \ -buffer-name=bookmark
     \ bookmark
     \ <cr>
+
+"### quickfix ##################################################################
+
 
 "### end #######################################################################
 
