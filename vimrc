@@ -24,7 +24,7 @@ let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle_config/"
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim" }
+let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim/" }
 
 " Log autocmds etc to file
 " let &verbosefile = g:vim.var.dir . "/verbose.log"
@@ -181,13 +181,21 @@ set ttyfast
 set nostartofline
 
 set hidden
-" set winheight=9999
-" set winminheight=10
+set winheight=9999
+
+" only show 1 line for minimized windows
+set winminheight=0
 
 " autocmd BufCreate * only
 autocmd FileType qf setlocal winheight=20
 autocmd FileType unite setlocal winheight=20
 autocmd FileType help setlocal buflisted
+
+" autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | set nobuflisted | endif
+" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
+
+" Turn off previewwindow
+set completeopt-=preview
 
 " let g:unite_open = 0
 
@@ -323,6 +331,9 @@ set noswapfile
 set timeout
 set timeoutlen=300
 set ttimeoutlen=10
+
+" used for the CursorHold autocommand event
+set updatetime=500
 
 " Use <Leader> as prefix key for own key mappings
 " use <leader>! as prefix to remap stuff - like:

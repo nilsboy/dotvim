@@ -35,9 +35,7 @@ function! VimTestStrategyMakeUnite(cmd)
     let &makeprg=a:cmd
     " Dispatch does not seem to have an &errorformat!?!
     " execute 'Make' a:cmd
-    redir! >/tmp/foo
     silent! make
-    redir END
     Unite -no-empty qf
     stopinsert
     redraw!
