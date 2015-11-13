@@ -13,6 +13,10 @@ nmap <silent> <leader>tg :TestVisit<CR>
 nmap <silent> <leader>en :cnext<CR>
 nmap <silent> <leader>ep :cprevious<CR>
 
+nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>gg
+
+" let test#javascript#mocha#options = '--colors'
+
 " TODO checkout :Cucumber
 
 " cmd is i.e. node_modules/.bin/mocha
@@ -33,8 +37,6 @@ endfunction
 
 function! VimTestStrategyMakeUnite(cmd)
     let &makeprg=a:cmd
-    " Dispatch does not seem to have an &errorformat!?!
-    " execute 'Make' a:cmd
     silent! make
     Unite -no-empty qf
     stopinsert

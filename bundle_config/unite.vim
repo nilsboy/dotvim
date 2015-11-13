@@ -258,9 +258,9 @@ nnoremap <silent> <leader>rm :Unite
 
 "### bookmark ##################################################################
 
-nnoremap <silent> <Leader>m :UniteBookmarkAdd<cr>
+nnoremap <silent> <Leader>b :UniteBookmarkAdd<cr>
 
-nnoremap <silent> <Leader>mm :Unite
+nnoremap <silent> <Leader>bb :Unite
     \ -buffer-name=bookmark
     \ bookmark
     \ <cr>

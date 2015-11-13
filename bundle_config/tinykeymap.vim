@@ -73,32 +73,35 @@ call tinykeymap#Map("windows", "<leader>", "", {'exit': 1})
 " " jump to previous lowercase mark 
 " call tinykeymap#Map("marks", "j", "normal! ]'")
 
-" ### Jumps ####################################################################
-
-" Remap keys to be usable by tinykeymap and use <tab> somewhere else
-nnoremap <leader>!a <C-o>
-nnoremap <leader>!b <C-i>
+" ### moves ####################################################################
 
 function! Noop(...)
     echo "unknown key"
     return 0
 endfunction
 
-call tinykeymap#EnterMap('jumps', '<leader>j', {'name': 'jumps'
+call tinykeymap#EnterMap('moves', '<leader>m', {'name': 'moves'
     \ , 'unknown_key': 'Noop'
   \ })
-call tinykeymap#Map("jumps", "o", ":Unite jump", { 'exit': 1 })
-call tinykeymap#Map("jumps", "h", "normal ,!a")
-call tinykeymap#Map("jumps", "l", "normal ,!b")
-call tinykeymap#Map("jumps", "i", "", {'exit': 1})
+call tinykeymap#Map("moves", "o", ":Unite jump", { 'exit': 1 })
+
+" Jumplist
+call tinykeymap#Map("moves", "h", "silent! normal ,!a")
+call tinykeymap#Map("moves", "l", "silent! normal ,!b")
+
+" Changelist
+call tinykeymap#Map("moves", "j", "silent! normal g;")
+call tinykeymap#Map("moves", "k", "silent! normal g,")
+
+call tinykeymap#Map("moves", "i", "", {'exit': 1})
 
 " ### Files ####################################################################
 
-call tinykeymap#EnterMap('file', '<leader>f', {'name': 'file'})
-call tinykeymap#Map("file", "f", ':Unite -buffer-name=files -start-insert file_rec', {'exit': 1})
-call tinykeymap#Map("file", "x", 'new | r! find-and | :normal ggdd', {'exit': 1})
-call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
-call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
+" call tinykeymap#EnterMap('file', '<leader>f', {'name': 'file'})
+" call tinykeymap#Map("file", "f", ':Unite -buffer-name=files -start-insert file_rec', {'exit': 1})
+" call tinykeymap#Map("file", "x", 'new | r! find-and | :normal ggdd', {'exit': 1})
+" call tinykeymap#Map("file", "o", "normal! :edit <cfile>")
+" call tinykeymap#Map("file", "t", ':call Tree(".")', {'exit': 1})
 
 
 " ### Quickfix #################################################################

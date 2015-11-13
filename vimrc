@@ -192,7 +192,7 @@ autocmd FileType unite setlocal winheight=20
 autocmd FileType help setlocal buflisted
 
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | set nobuflisted | endif
-" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
+autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
 
 " Turn off previewwindow
 set completeopt-=preview
@@ -342,14 +342,14 @@ let mapleader = ","
 
 " map <silent> q <esc>
 " inoremap <silent> jj <esc>
-nnoremap <silent> <ESC><ESC> <Nop>
+nnoremap <silent> <nowait><ESC><ESC> <Nop>
 nnoremap <silent> <leader>l :Explore<cr>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
 " vnoremap . :
 " nnoremap . :
-nnoremap ,, :
+noremap ,, :
 
 vnoremap - /\v
 nnoremap - /\v
@@ -359,13 +359,18 @@ vnoremap / /\v
 
 nnoremap ö [
 nnoremap ä ]
-inoremap ö [
-inoremap ä ]
-
 nnoremap Ö {
 nnoremap Ä }
+
+inoremap ö [
+inoremap ä ]
 inoremap Ö {
 inoremap Ä }
+
+vnoremap ö [
+vnoremap ä ]
+vnoremap Ö {
+vnoremap Ä }
 
 inoremap °ö ö
 inoremap °ä ä
@@ -384,28 +389,15 @@ nnoremap <leader>k1 <F1>
 nmap <silent><C-l> :bnext<cr>
 nmap <silent><C-h> :bprev<cr>
 
+" Remap <C-i> as it's the same as Tab
+nnoremap <leader>!a <C-o>
+nnoremap <leader>!b <C-i>
+
+nmap <silent><C-j> <leader>!a
+nmap <silent><C-k> <leader>!b
+
 " Dont use Q for Ex mode
 nnoremap Q <Nop>
-
-" nnoremap <silent> / -
-" nnoremap <silent> _ ?
-" nnoremap <silent> ? _
-
-" nnoremap <silent> Ö :
-" nnoremap <silent> ö ;
-
-" nnoremap <silent> Ä "
-" nnoremap <silent> ä '
-
-" nnoremap <silent> ü [
-" nnoremap <silent> Ü {
-
-" nnoremap <silent> + ]
-" nnoremap <silent> * }
-
-" nnoremap <silent> ( *
-
-" nnoremap <silent> : ,
 
 " These are the same for vim
 " Tab and Ctrl-I (<c-i><c-I>)
@@ -415,9 +407,11 @@ nnoremap Q <Nop>
 " Clear all mappings
 " :mapclear
 
-" nnoremap <silent> w /(\@<=\W)\w<cr>
-" nnoremap <silent> jj }
-" nnoremap <silent> kk {
+inoremap ,hh [
+inoremap ,ll ]
+
+inoremap ,jj {
+inoremap ,kk }
 
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
@@ -425,9 +419,8 @@ nnoremap Y y$
 nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?
     \q=<cword>"<cr><cr>
 
-" eval vimscript by line or visual selection
-nmap <silent> <leader>e :call Source(line('.'), line('.'))<CR>
-vmap <silent> <leader>e :call Source(line('v'), line('.'))<CR>
+" run line
+nnoremap <leader>e :silent! :execute ':RunIntoBuffer ' . getline('.')<cr><cr>
 
 " reselect visual block after indent
 vnoremap < <gv

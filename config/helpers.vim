@@ -70,9 +70,10 @@ endfunction
 
 nnoremap <silent> <ESC> :call BufferClose()<cr>
 
-command! -nargs=0 BufferCreateTemp call BufferCreateTemp()
-function! BufferCreateTemp(name)
-    execute ":new " . a:name
+command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
+function! BufferCreateTemp(...)
+    execute ":new /tmp/" . split(a:1, " ")[0]
+    normal ggdG
     setlocal buftype=nowrite
 endfunction
 
@@ -107,37 +108,42 @@ function! RedirIntoCurrentBuffer(command)
 
 endfunction
 
-command! -nargs=* RunIntoBuffer call RunIntoBuffer()
-function! RunIntoBuffer(command)
+command! -nargs=* Run silent! call RunIntoBuffer(<f-args>)
+command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
+function! RunIntoBuffer(...)
+
+    let l:command = join(a:000)
 
     wall
-    call BufferCreateTemp(a:command)
+    call BufferCreateTemp(a:1)
 
-    echom "Running command: " . a:command
-    execute ":r!run-and-capture " . a:command
-    " execute ":r! " . a:command
+    echom "Running command: " . l:command
+    execute ":r!run-and-capture " . l:command
+    " execute ":r! " . l:command
     " %!html-strip
-    %s/\r\n/\r/ge
-    " s/\v\<\@!i/\r</ge
-    " %s/</\r</ge
-    " %s/>/>\r/ge
+    " Remove broken linebreak
+    %s/\r//ge
 
     " hack remove duplicate perl line number
     %s/\v,  line \d+//ge
 
     " Convert ansi colors
-    AnsiEsc
+    " AnsiEsc
     " fix invisible ansi white
-    hi ansiWhite ctermfg=gray
+    " hi ansiWhite ctermfg=black
+    setlocal filetype=txt
 
     normal ggddG
-    " setlocal filetype=txt
     set wrap
-    lgetbuffer
+    " lgetbuffer
     " lwindow
 
     " set buftype=quickfix
     " :copen 999
+    :only
+
+    " autocmd BufEnter <buffer> :AnsiEsc!
+    " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
 
 endfunction
 
