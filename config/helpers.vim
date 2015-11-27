@@ -291,6 +291,23 @@ function! VimEnvironment()
 
 endfunction
 
+" nmap ,, :CommandLine<cr>
+
+command! -nargs=0 CommandLine call CommandLine()
+function! CommandLine()
+    silent execute ':e ' . g:vim.etc.dir . 'command-line.vim'
+    normal Go:
+    startinsert!
+
+    " clear search register than execute line under cursor
+    " nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
+
+    nnoremap <silent> <buffer> <CR> :execute getline(".")<cr>
+    inoremap <silent> <buffer> <CR> <esc> :execute getline(".")<cr>
+
+    nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
+endfunction
+
 command! -nargs=0 Notes call Notes()
 function! Notes()
 

@@ -1,4 +1,3 @@
-finish
 "### Keep cursor position on undo and redo #####################################
 
 map <silent> u :call MyUndo()<CR>
