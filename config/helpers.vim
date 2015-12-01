@@ -112,14 +112,21 @@ command! -nargs=* Run silent! call RunIntoBuffer(<f-args>)
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...)
 
-    let l:command = join(a:000)
+    let command = join(a:000)
 
     wall
-    call BufferCreateTemp(a:1)
+    let buffer_name = a:1
 
-    echom "Running command: " . l:command
-    execute ":r!run-and-capture " . l:command
-    " execute ":r! " . l:command
+    " let buffer_name = substitute(buffer_name, '/', "_", "g")
+    let buffer_name = substitute(buffer_name, '[^a-zA-Z_\-/\.]', "", "g")
+    if buffer_name == ""
+        let buffer_name = "cmd"
+    endif
+    call BufferCreateTemp(buffer_name)
+
+    echom "Running command: " . command
+    execute ":r!run-and-capture " . command
+    " execute ":r! " . command
     " %!html-strip
     " Remove broken linebreak
     %s/\r//ge
@@ -156,7 +163,7 @@ command! -nargs=* RunIntoBufferOrLastCommand call RunIntoBufferOrLastCommand()
 function! RunIntoBufferOrLastCommand(...)
 
     if exists('a:1')
-        let g:last_command = a:1
+        let g:last_command = a:000
     endif
 
     call RunIntoBuffer(g:last_command)

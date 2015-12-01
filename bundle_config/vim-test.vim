@@ -15,6 +15,23 @@ nmap <silent> <leader>ep :cprevious<CR>
 
 nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>gg
 
+nmap <silent> <leader>tf :call VimTestRunCurrentFile()<cr><cr>gg
+
+function! VimTestRunCurrentFile()
+    let cmd = expand('%:p')
+
+    if exists("g:last_command")
+        let cmd=g:last_command
+    endif
+
+    let g:last_command=cmd
+    call RunIntoBuffer(cmd)
+    normal gg
+
+    nmap <buffer> <space> :call VimTestRunCurrentFile()<cr><cr>gg
+
+endfunction
+
 " let test#javascript#mocha#options = '--colors'
 
 " TODO checkout :Cucumber
