@@ -117,11 +117,11 @@ function! RunIntoBuffer(...)
     wall
     let buffer_name = a:1
 
-    " let buffer_name = substitute(buffer_name, '/', "_", "g")
     let buffer_name = substitute(buffer_name, '[^a-zA-Z_\-/\.]', "", "g")
     if buffer_name == ""
         let buffer_name = "cmd"
     endif
+    let buffer_name = buffer_name . ".output"
     call BufferCreateTemp(buffer_name)
 
     echom "Running command: " . command
