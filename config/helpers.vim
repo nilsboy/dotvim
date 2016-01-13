@@ -31,7 +31,6 @@ endfunction
 
 " argument: bufspec
 function! CheckTime(...)
-    echo a:000
 
     let bufspec = ""
     if a:0 != 0

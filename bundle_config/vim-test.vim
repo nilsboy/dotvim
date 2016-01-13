@@ -17,6 +17,9 @@ nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>gg
 
 nmap <silent> <leader>tf :call VimTestRunCurrentFile()<cr><cr>gg
 
+" nmap <silent> <leader>to :TODO open test file<CR>
+" nmap <silent> <leader>tc :TODO open cucumber file<CR>
+
 function! VimTestRunCurrentFile()
     let cmd = expand('%:p')
 

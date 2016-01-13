@@ -1,3 +1,4 @@
+" https://github.com/mhinz/vim-galore
 "### misc ######################################################################
 
 " Create a directory if it does not exist jet
@@ -189,13 +190,16 @@ set winminheight=0
 " autocmd BufCreate * only
 autocmd FileType qf setlocal winheight=20
 autocmd FileType unite setlocal winheight=20
-autocmd FileType help setlocal buflisted
+" autocmd FileType help setlocal buflisted
 
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | set nobuflisted | endif
-autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
+" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
 
 " Turn off previewwindow
-set completeopt-=preview
+" set completeopt-=preview
+
+" Set preview window height
+set previewheight=999
 
 " let g:unite_open = 0
 
@@ -310,6 +314,9 @@ set infercase
 " Do not wrap while searching
 " set nowrapscan
 
+" Switch window if it contains wanted buffer
+set switchbuf=useopen
+
 "### undo and swap #############################################################
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
@@ -351,11 +358,11 @@ nnoremap <silent> <leader>l :Explore<cr>
 " nnoremap . :
 noremap ,, :
 
-vnoremap - /\v
-nnoremap - /\v
+vnoremap - /\V
+nnoremap - /\V
 
-nnoremap / /\v
-vnoremap / /\v
+nnoremap / /\V
+vnoremap / /\V
 
 nnoremap ö [
 nnoremap ä ]
@@ -377,12 +384,12 @@ inoremap °ä ä
 inoremap °Ö Ö
 inoremap °Ä Ä
 
-" vnoremap _ ?\v
-" nnoremap _ ?\v
+" vnoremap _ ?\V
+" nnoremap _ ?\V
 
-nnoremap ? ?\v
-vnoremap ? ?\v
-nnoremap :s/ :s/\v
+nnoremap ? ?\V
+vnoremap ? ?\V
+nnoremap :s/ :s/\V
 
 nnoremap <leader>k1 <F1>
 
@@ -392,6 +399,9 @@ nmap <silent><C-h> :bprev<cr>
 " Remap <C-i> as it's the same as Tab
 nnoremap <leader>!a <C-o>
 nnoremap <leader>!b <C-i>
+
+nnoremap <leader>w :wincmd w<cr>
+nnoremap <leader>wc :wincmd c<cr>
 
 nmap <silent><C-j> <leader>!a
 nmap <silent><C-k> <leader>!b
@@ -428,6 +438,14 @@ vnoremap > >gv
 
 " hide annoying quit message
 nnoremap <C-c> <C-c>:echo<cr>
+
+" always search forward and N backward, use this
+nnoremap <expr> n 'Nn'[v:searchforward]
+nnoremap <expr> N 'nN'[v:searchforward]
+
+" recall command matching current entry
+cnoremap <c-n> <down>
+cnoremap <c-p> <up>
 
 "### Statusline ################################################################
 

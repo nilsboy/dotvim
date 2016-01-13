@@ -36,15 +36,21 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 let g:unite_abbr_highlight = "function"
 
 call unite#custom#profile('default', 'context', {
-    \ 'start_insert': 1,
-    \ 'no_split' : 1,
-    \ 'keep_focus' : 1,
     \ 'auto_preview' : 1,
-    \ 'silent' : 1,
+    \ 'start_insert': 1,
     \ 'sync' : 1,
     \ 'match_input' : 1,
+    \ 'keep_focus' : 1,
+    \ 'no_split' : 1,
+    \ 'silent' : 1,
 \ })
 " \ 'resume' : 1,
+
+nnoremap <silent> <tab> :UniteResume<cr><esc>
+
+call unite#custom#source('script-file', 'converters',
+    \ ['converter_file_directory_pretty'])
+call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
 autocmd FileType unite nmap <buffer> <esc> <Plug>(nilsb_nothing)
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
@@ -70,12 +76,7 @@ autocmd FileType unite nnoremap <buffer> A ggA
 " call unite#custom#source('file_rec/async', 'ignore_globs',
 "     \ split(&wildignore, ','))
 
-call unite#custom#source('script-file', 'converters',
-    \ ['converter_file_directory_pretty'])
-call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
-
-nnoremap <silent> <tab> :UniteResume<cr><esc>
-
+    " \ -default-action=open
 nnoremap <silent> <leader>f :Unite
     \ -buffer-name=files
     \ -smartcase
@@ -113,6 +114,8 @@ nnoremap <silent> <Leader>gi :UniteWithInput
     \ grep:**
     \ script-file:find-and-limit
     \ <cr>
+
+" :UniteWithCursorWord grep:$buffers
 
 "### mru #######################################################################
 
