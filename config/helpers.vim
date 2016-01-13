@@ -3,6 +3,11 @@
 " an unlisted-buffer.
 function! BufferClose()
 
+    if BufferIsCommandLine() == 1
+        :q!
+        return
+    endif
+
     :lclose
     " :cclose
 
@@ -22,6 +27,29 @@ function! BufferClose()
         :silent bwipe!
     endif
 
+endfunction
+
+" argument: bufspec
+function! CheckTime(...)
+    echo a:000
+
+    let bufspec = ""
+    if a:0 != 0
+        let bufspec = a:1
+    endif
+
+    if BufferIsCommandLine()
+        return
+    endif
+
+    execute ":checktime " . bufspec
+endfunction
+
+function! BufferIsCommandLine()
+    if bufname("%") == '[Command Line]'
+        return 1
+    endif
+    return 0
 endfunction
 
 function! BufferIsUnnamed()

@@ -136,17 +136,17 @@ function! WatchForChanges(bufname, ...)
         "exec "au BufDelete    ".a:bufname . " :echomsg 'Removing autocommands for ".id."' | au! ".id . " | augroup! ".id
         exec "au BufDelete    ".a:bufname . " execute 'au! ".id."' | execute 'augroup! ".id."'"
       end
-        exec "au BufEnter     ".event_bufspec . " :checktime ".bufspec
-        exec "au CursorHold   ".event_bufspec . " :checktime ".bufspec
-        exec "au CursorHoldI  ".event_bufspec . " :checktime ".bufspec
+        exec "au BufEnter     ".event_bufspec . " :call CheckTime(" . bufspec . ")"
+        exec "au CursorHold   ".event_bufspec . " :call CheckTime(" . bufspec . ")"
+        exec "au CursorHoldI  ".event_bufspec . " :call CheckTime(" . bufspec . ")"
 
       " The following events might slow things down so we provide a way to disable them...
       " vim docs warn:
       "   Careful: Don't do anything that the user does
       "   not expect or that is slow.
       if more_events
-        exec "au CursorMoved  ".event_bufspec . " :checktime ".bufspec
-        exec "au CursorMovedI ".event_bufspec . " :checktime ".bufspec
+        exec "au CursorMoved  ".event_bufspec . " :call CheckTime(" . bufspec . ")"
+        exec "au CursorMovedI ".event_bufspec . " :call CheckTime(" . bufspec . ")"
       end
     augroup END
     let msg = msg . 'Now watching ' . bufspec . ' for external updates...'
