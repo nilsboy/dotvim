@@ -80,7 +80,7 @@ let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',
 let g:netrw_dirhistmax = 0
 
 " prevent vim from using javascript as filetype for json
-" au BufRead,BufNewFile *.json setlocal filetype=json | setlocal syntax=txt
+au BufRead,BufNewFile *.json setlocal filetype=json | setlocal syntax=txt
 
 " Recognize .md as markdown for vim < 7.4.480
 " au BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
