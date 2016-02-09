@@ -356,7 +356,8 @@ nnoremap <silent> <leader>l :Explore<cr>
 " TODO checkout bundle 'vim-scripts/eregex.vim'
 " vnoremap . :
 " nnoremap . :
-noremap ,, :
+" noremap ,, q:i
+" noremap ,, :
 
 vnoremap - /\V
 nnoremap - /\V

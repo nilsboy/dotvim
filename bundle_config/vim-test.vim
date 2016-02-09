@@ -13,7 +13,7 @@ nmap <silent> <leader>tg :TestVisit<CR>
 nmap <silent> <leader>en :cnext<CR>
 nmap <silent> <leader>ep :cprevious<CR>
 
-nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>gg
+nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>G
 
 nmap <silent> <leader>tf :call VimTestRunCurrentFile()<cr><cr>gg
 
