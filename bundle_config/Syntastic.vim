@@ -1,4 +1,4 @@
-" uber awesome syntax and errors highlighter
+" Syntax and errors highlighter
 NeoBundle 'scrooloose/syntastic'
 
 let g:syntastic_error_symbol = '✗'

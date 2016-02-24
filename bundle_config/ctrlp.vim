@@ -1,5 +1,6 @@
 finish
 " Fuzzy file, buffer, mru, tag, etc finder
+
 " ctrlp-funky: Navigate and jump to function defs
 NeoBundle 'ctrlpvim/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' }
 

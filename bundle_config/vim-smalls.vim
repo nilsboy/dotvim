@@ -1,6 +1,4 @@
 finish
-finish
-
 " spot your cursor with simple search
 NeoBundle 't9md/vim-smalls'
 

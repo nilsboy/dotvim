@@ -3,7 +3,7 @@ if exists("b:did_ftplugin")
 endif
 let b:did_ftplugin = 1
 
-map <silent> <Leader>w :call PerlTidy()<CR><CR>
+map <buffer> <silent> <Leader>w :call PerlTidy()<CR><CR>
 
 " :au CursorHold <buffer>  echo 'hold'
 " augroup perl_tidy

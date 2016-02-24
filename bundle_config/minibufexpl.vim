@@ -1,6 +1,5 @@
 finish
-finish
-
+" Elegant buffer explorer
 NeoBundle 'fholgado/minibufexpl.vim'
 
 " column width in chars

@@ -1,5 +1,6 @@
 finish
 " Fast and Easy Find and Replace Across Multiple Files
+
 " NeoBundleLazy 'EasyGrep', {'autoload':{'commands':'GrepOptions'}}
 NeoBundle 'EasyGrep'
 let g:EasyGrepRecursive=1
