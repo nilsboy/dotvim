@@ -80,10 +80,11 @@ let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',
 let g:netrw_dirhistmax = 0
 
 " prevent vim from using javascript as filetype for json
-au BufRead,BufNewFile *.json setlocal filetype=json | setlocal syntax=txt
+autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json | setlocal syntax=txt
+autocmd BufNewFile,BufRead *.handlebars let b:syntastic_checkers=['']
 
 " Recognize .md as markdown for vim < 7.4.480
-" au BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+" autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -199,7 +200,7 @@ autocmd FileType unite setlocal winheight=20
 " set completeopt-=preview
 
 " Set preview window height
-set previewheight=999
+set previewheight=50
 
 " let g:unite_open = 0
 
@@ -335,9 +336,9 @@ set noswapfile
 "### mappings ##################################################################
 
 " Timeout on mappings and key codes (faster escape etc)
-set timeout
-set timeoutlen=300
-set ttimeoutlen=10
+" set timeout
+" set timeoutlen=300
+" set ttimeoutlen=10
 
 " used for the CursorHold autocommand event
 set updatetime=500

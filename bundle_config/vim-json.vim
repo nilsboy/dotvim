@@ -1,4 +1,3 @@
-finish
 " Better JSON handling
 NeoBundle 'leshill/vim-json' ", {'autoload':{'filetypes':['javascript','json']}}
 
