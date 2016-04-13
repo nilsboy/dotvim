@@ -10,7 +10,7 @@ let b:vrc_cookie_jar = '/tmp/vrc_cookie_jar'
 
 " let b:vrc_follow_redirects = 1
 
-let b:vrc_debug = 1
+let b:vrc_debug = 0
 
 let b:vrc_horizontal_split = 1
 

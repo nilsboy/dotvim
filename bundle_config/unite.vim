@@ -35,6 +35,8 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 " complains if not set
 let g:unite_abbr_highlight = "function"
 
+let g:unite_prompt = "> "
+
 call unite#custom#profile('default', 'context', {
     \ 'auto_preview' : 1,
     \ 'start_insert': 1,
@@ -81,6 +83,17 @@ nnoremap <silent> <leader>f :Unite
     \ -buffer-name=files
     \ -smartcase
     \ script-file:find-and-limit
+    \ <cr>
+
+call unite#custom#source('file_rec', 'converters',
+    \ ['converter_file_directory_pretty'])
+call unite#custom#source('file_rec', 'sorters',
+    \ ['sorter_length'])
+
+" -custom-rec-ignore-directory-pattern: ignore directory pattern
+nnoremap <silent> <leader>d :UniteWithBufferDir file_rec
+    \ -buffer-name=files
+    \ -smartcase
     \ <cr>
 
 "### grep ######################################################################
