@@ -135,7 +135,19 @@ function! RedirIntoCurrentBuffer(command)
 
 endfunction
 
-command! -nargs=* Run silent! call RunIntoBuffer(<f-args>)
+" autocmd BufRead,BufNewFile *.{myfind} setlocal filetype=myfind
+nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
+
+command! -nargs=* Run silent! call Run(<f-args>)
+function Run(...)
+    let buffer_name = a:1
+	let command = join(a:000[1:])
+    echom buffer_name
+    execute ":e " . buffer_name
+    setlocal buftype=nowrite
+    execute ":r! " . command
+endfunction
+
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...)
 
