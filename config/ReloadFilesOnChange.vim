@@ -1,3 +1,4 @@
+finish
 " vim tip from
 "   http://vim.wikia.com/wiki/Have_Vim_check_automatically_if_the_file_has_changed_externally
 "

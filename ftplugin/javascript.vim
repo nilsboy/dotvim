@@ -4,8 +4,8 @@ endif
 let b:did_ftplugin_javascript = 1
 
 " map <buffer><silent><leader>mw :Esformatter<CR>:SyntasticCheck<CR>
-" map <buffer><silent><leader>mw :call JSTidy()<CR>:SyntasticCheck<CR>
-map <buffer><silent><leader>mw :Esformatter<CR>:SyntasticCheck<CR>
+map <buffer><silent><leader>mw :call JSTidy()<CR>:SyntasticCheck<CR>
+" map <buffer><silent><leader>mw :Esformatter<CR>:SyntasticCheck<CR>
 
 " Tab spacing
 setlocal tabstop=2

@@ -431,8 +431,11 @@ nnoremap Y y$
 nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?
     \q=<cword>"<cr><cr>
 
-" run line
-nnoremap <leader>e :silent! :execute ':RunIntoBuffer ' . getline('.')<cr><cr>
+" Run line
+nnoremap <leader>e :RunCursorLine<cr>
+
+" Close buffer
+nnoremap <silent> <ESC> :call BufferClose()<cr>
 
 " reselect visual block after indent
 vnoremap < <gv
@@ -615,7 +618,7 @@ endfunction
 if !IsPluginInstalled("neobundle.vim")
     echo "Installing NeoBundle..."
     echo ""
-    silent !mkdir -p "$g:vim.bundle.dir"
+    silent execute "!mkdir -p " g:vim.bundle.dir
     execute "!git clone https://github.com/Shougo/neobundle.vim " .
             \ g:vim.bundle.dir . "/neobundle.vim"
 endif

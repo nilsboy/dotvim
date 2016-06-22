@@ -95,8 +95,6 @@ function! BufferIsLast()
 
 endfunction
 
-nnoremap <silent> <ESC> :call BufferClose()<cr>
-
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
 function! BufferCreateTemp(...)
     execute ":new /tmp/" . split(a:1, " ")[0]
@@ -139,7 +137,7 @@ endfunction
 nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
 
 command! -nargs=* Run silent! call Run(<f-args>)
-function Run(...)
+function! Run(...)
     let buffer_name = a:1
 	let command = join(a:000[1:])
     echom buffer_name
@@ -164,13 +162,13 @@ function! RunIntoBuffer(...)
     call BufferCreateTemp(buffer_name)
 
     echom "Running command: " . command
-    execute ":r!run-and-capture " . command
+    execute ":r!run-and-capture '" . command . "'"
     " execute ":r! " . command
     " %!html-strip
     " Remove broken linebreak
     %s/\r//ge
 
-    " hack remove duplicate perl line number
+    " Hack: remove duplicate perl line number
     %s/\v,  line \d+//ge
 
     " Convert ansi colors
@@ -370,13 +368,16 @@ function! Notes()
 endfunction
 
 " Run line under cursor as vim script or shell command depending on leading :
-command! -nargs=0 RunCursorLine call Redir(GetRunableCursorLine())
+command! -nargs=0 RunCursorLine call RunCursorLine()
+function! RunCursorLine()
+    let l:cmd = GetRunableCursorLine()
+    silent! call RunIntoBuffer(l:cmd)<cr>
+endfunction
+
 function! GetRunableCursorLine()
-
     let l:cmd = getline(".")
-    let l:cmd = substitute(l:cmd, '\v^["# ]+', "!", "")
-    let l:cmd = substitute(l:cmd, '\v^!:', ":", "")
-
+    let l:cmd = substitute(l:cmd, '\v^["#/ ]+', "", "")
+    " let l:cmd = substitute(l:cmd, '\v^', ":!", "")
+    " let l:cmd = substitute(l:cmd, '\v^:!:', ":", "")
     return l:cmd
-
 endfunction

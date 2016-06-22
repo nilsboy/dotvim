@@ -1,4 +1,3 @@
-finish
 " Syntax and errors highlighter
 NeoBundle 'scrooloose/syntastic'
 

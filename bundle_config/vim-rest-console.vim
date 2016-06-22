@@ -15,5 +15,5 @@ let b:vrc_debug = 0
 let b:vrc_horizontal_split = 1
 
 let b:vrc_set_default_mapping = 0
-nmap <silent> <CR> :call VrcQuery()<cr>:only<cr>:e __REST_response__<cr>
+
 " let g:vrc_trigger = <C-j>
