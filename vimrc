@@ -434,6 +434,9 @@ nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?
 " Run line
 nnoremap <leader>e :RunCursorLine<cr>
 
+" Run current buffer
+nnoremap <leader>x :RunCurrentBuffer<cr>
+
 " Close buffer
 nnoremap <silent> <ESC> :call BufferClose()<cr>
 

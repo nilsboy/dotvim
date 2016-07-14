@@ -186,6 +186,8 @@ function! RunIntoBuffer(...)
     " :copen 999
     :only
 
+    " TODO execute "/" . command
+
     " autocmd BufEnter <buffer> :AnsiEsc!
     " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
 
@@ -365,6 +367,12 @@ function! Notes()
     " clear search register than execute line under cursor
     nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
 
+endfunction
+
+" Run current buffer
+command! -nargs=0 RunCurrentBuffer call RunCurrentBuffer()
+function! RunCurrentBuffer()
+    silent! call RunIntoBuffer(expand("%:p"))<cr>
 endfunction
 
 " Run line under cursor as vim script or shell command depending on leading :
