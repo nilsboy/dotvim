@@ -3,4 +3,4 @@ if exists("b:did_ftplugin_xhtml")
 endif
 let b:did_ftplugin_xhtml = 1
 
-map <silent> W :call XMLTidy()<CR>
+map <silent><leader>W :call XMLTidy()<CR>

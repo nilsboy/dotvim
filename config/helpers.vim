@@ -95,6 +95,31 @@ function! BufferIsLast()
 
 endfunction
 
+function! BufferFindByFiletype()
+
+    let last_buffer = bufnr('$')
+
+    let listed = 0
+    let i = 1
+    while i <= last_buffer
+
+        if buflisted(i) == 1
+            let listed = listed + 1
+        endif
+
+        if listed > 1
+            return 0
+        endif
+
+        let i = i + 1
+
+    endwhile
+
+    return 1
+
+endfunction
+
+
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
 function! BufferCreateTemp(...)
     execute ":new /tmp/" . split(a:1, " ")[0]
@@ -134,7 +159,7 @@ function! RedirIntoCurrentBuffer(command)
 endfunction
 
 " autocmd BufRead,BufNewFile *.{myfind} setlocal filetype=myfind
-nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
+" nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
 
 command! -nargs=* Run silent! call Run(<f-args>)
 function! Run(...)
@@ -175,7 +200,8 @@ function! RunIntoBuffer(...)
     " AnsiEsc
     " fix invisible ansi white
     " hi ansiWhite ctermfg=black
-    setlocal filetype=txt
+    " setlocal filetype=txt
+    :AnsiEsc
 
     normal ggddG
     set wrap
@@ -188,7 +214,9 @@ function! RunIntoBuffer(...)
 
     " TODO execute "/" . command
 
-    " autocmd BufEnter <buffer> :AnsiEsc!
+    " Seems to break CSApprox vim colors:
+    " autocmd BufEnter <buffer> :AnsiEsc
+    
     " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
 
 endfunction
@@ -322,7 +350,6 @@ endfunction
 call RedirAddUppercaseVersion()
 
 " Display all kinds of vim environment information
-command! -nargs=0 VimEnvironment call VimEnvironment()
 function! VimEnvironment()
 
     call BufferCreateTemp("VimEnv")
@@ -354,7 +381,6 @@ function! CommandLine()
     nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
 endfunction
 
-command! -nargs=0 Notes call Notes()
 function! Notes()
 
     silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
@@ -380,6 +406,12 @@ command! -nargs=0 RunCursorLine call RunCursorLine()
 function! RunCursorLine()
     let l:cmd = GetRunableCursorLine()
     silent! call RunIntoBuffer(l:cmd)<cr>
+endfunction
+
+command! -nargs=0 RunCursorLineVim call RunCursorLineVim()
+function! RunCursorLineVim()
+    let l:cmd = GetRunableCursorLine()
+    execute l:cmd
 endfunction
 
 function! GetRunableCursorLine()

@@ -1,5 +1,6 @@
 " faq
 :h vim-faq
+:h help-summary
 
 " Own mappings
 :execute ':e ' . MY_VIM . "/plugin/tinykeymap.vim"
@@ -33,6 +34,8 @@
 " lh-vim-lib: https://github.com/LucHermitte/lh-vim-lib
 
 " TODO
+" - utility functions: tomtom/tlib_vim
+" - use external perl for inline search
 " - remove trailing space
 " - 'equalprg' 'ep' string (default "")
 " - https://metacpan.org/release/Perl-Tags
@@ -46,6 +49,7 @@
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 "   Backup to git before write?: BufWritePre
+" - https://github.com/mhinz/vim-galore
 
 " While testing autocommands, you might find the 'verbose' option to be useful: >
 " 	:set verbose=9

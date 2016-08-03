@@ -1,5 +1,7 @@
-" https://github.com/mhinz/vim-galore
 "### misc ######################################################################
+
+" set verbosefile=/tmp/vim-debug.txt
+" set verbose=15
 
 " Create a directory if it does not exist jet
 function! _mkdir(path)
@@ -16,6 +18,8 @@ let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = g:vim.rc . ".local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
+
+let $MYVIMRC = g:vim.rc
 
 let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
@@ -48,8 +52,13 @@ set undofile
 let &undodir = g:vim.var.dir . "undo"
 call _mkdir(&undodir)
 
-" Security
+" Modlines might be dangerous
+" see also securemodelines.vim
 set modelines=0
+
+" nomodeline can not be revered by plugins
+" but modeline is needed by dbext even though it uses its own parser.
+" set nomodeline
 
 " Enable vim enhancements
 set nocompatible
@@ -72,7 +81,7 @@ set runtimepath+=$REMOTE_HOME/.vim/etc/after
 let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',', 'g')
 
 " Reload vimrc on write
-" autocmd BufWritePost vimrc source %
+" autocmd BufWritePost vimrc source $MYVIMRC
 
 " set colorcolumn=81
 
@@ -96,7 +105,7 @@ set clipboard=unnamed
 
 " Expand current dir
 cabbrev <expr> ./ expand('%:p:h')
-cabbrev <expr> fn expand('%:p') 
+cabbrev <expr> fn expand('%:p')
 
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
@@ -115,7 +124,7 @@ set autoread
 " Automatically write file if leaving a buffer
 set autowriteall
 
-" Leave my cursor where it was - even on page jump
+" Leave cursor where it was - even on page jump
 set nostartofline
 
 " Insert spaces when the tab key is hit
@@ -188,69 +197,18 @@ set winheight=9999
 " only show 1 line for minimized windows
 set winminheight=0
 
-" autocmd BufCreate * only
+" autocmd BufAdd * setlocal buflisted
 autocmd FileType qf setlocal winheight=20
-autocmd FileType unite setlocal winheight=20
-" autocmd FileType help setlocal buflisted
+autocmd FileType help setlocal buflisted
 
-" autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | set nobuflisted | endif
-" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | set nobuflisted | endif
+" autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
+" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | setlocal nobuflisted | endif
 
 " Turn off previewwindow
 " set completeopt-=preview
 
 " Set preview window height
 set previewheight=50
-
-" let g:unite_open = 0
-
-" augroup UniteSetOpen
-"     autocmd!
-"     autocmd BufCreate,BufAdd,BufEnter * call UniteSetOpen()
-" augroup END
-" function! UniteSetOpen()
-"     if &filetype == "unite"
-"         let g:unite_open = 1
-"     endif
-" endfunction
-
-" augroup UniteSetClosed
-"     autocmd!
-"     autocmd BufLeave * call UniteSetClosed()
-" augroup END
-" function! UniteSetClosed()
-"     let l:buffer = bufnr(expand("<abuf>"))
-"     let l:type = getbufvar(l:buffer, "&filetype")
-"     if &filetype == "unite"
-"         let g:unite_open = 0
-"     endif
-" endfunction
-
-" augroup UniteSetClosed
-"     autocmd!
-"     autocmd BufHidden,BufLeave * call UniteSetClosed()
-" augroup END
-" function! UniteSetClosed()
-"     if &filetype == "unite"
-"         let g:unite_open = 0
-"     endif
-" endfunction
-
-" augroup SingleWindowMode
-"     autocmd!
-"     " autocmd FileType * call SingleWindowMode()
-"     autocmd BufEnter * call SingleWindowMode()
-" augroup END
-" function! SingleWindowMode()
-"     if &filetype == "unitexx"
-"         return
-"     endif
-"     if g:unite_open == 0
-"         " call unite#view#_quit(0)
-"         " only
-"         resize
-"     endif
-" endfunction
 
 " Highlight unknown filetypes as text
 autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
@@ -262,7 +220,7 @@ autocmd! BufEnter *vim*/doc/*.txt setlocal filetype=help
 set showcmd
 
 " Make macros render faster (lazy draw)
-set lazyredraw
+" set lazyredraw
 
 set display=lastline,uhex
 
@@ -335,6 +293,9 @@ set noswapfile
 
 "### mappings ##################################################################
 
+" For a list of vim's internal mappings see:
+" :h index
+
 " Timeout on mappings and key codes (faster escape etc)
 " set timeout
 " set timeoutlen=300
@@ -348,65 +309,61 @@ set updatetime=500
 " nnoremap ,!a <C-i>
 let mapleader = ","
 
-" map <silent> q <esc>
-" inoremap <silent> jj <esc>
-nnoremap <silent> <nowait><ESC><ESC> <Nop>
 nnoremap <silent> <leader>l :Explore<cr>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
 " vnoremap . :
 " nnoremap . :
-" noremap ,, q:i
-" noremap ,, :
 
-vnoremap - /\V
-nnoremap - /\V
+" nnoremap - q/\V
+" vnoremap - q/\V
 
-nnoremap / /\V
-vnoremap / /\V
+" nnoremap / /\V
+" vnoremap / /\V
 
-nnoremap ö [
-nnoremap ä ]
-nnoremap Ö {
-nnoremap Ä }
-
-inoremap ö [
-inoremap ä ]
-inoremap Ö {
-inoremap Ä }
-
-vnoremap ö [
-vnoremap ä ]
-vnoremap Ö {
-vnoremap Ä }
-
-inoremap °ö ö
-inoremap °ä ä
-inoremap °Ö Ö
-inoremap °Ä Ä
-
-" vnoremap _ ?\V
-" nnoremap _ ?\V
+nnoremap / q/i\V
+vnoremap / q/i\V
 
 nnoremap ? ?\V
 vnoremap ? ?\V
+
 nnoremap :s/ :s/\V
+nnoremap <leader>z <C-z>
+nnoremap <space> <C-f>
+nnoremap M <C-b>
+
+" Save file as root
+command! -nargs=* WW :silent call WriteSudo()
+function! WriteSudo() abort
+  silent write !env SUDO_EDITOR=tee sudo -e % >/dev/null
+  let &modified = v:shell_error
+endfunction
+
+" Does not work
+" nnoremap < <shift>
+
+" Does not work on terminal vim
+nnoremap <s-space> <C-b>
 
 nnoremap <leader>k1 <F1>
 
-nmap <silent><C-l> :bnext<cr>
-nmap <silent><C-h> :bprev<cr>
+" nmap <silent><C-l> :bnext<cr>
+" nmap <silent><C-h> :bprev<cr>
+
+nmap <silent>L :bnext<cr>
+nmap <silent>H :bprev<cr>
 
 " Remap <C-i> as it's the same as Tab
 nnoremap <leader>!a <C-o>
 nnoremap <leader>!b <C-i>
 
-nnoremap <leader>w :wincmd w<cr>
-nnoremap <leader>wc :wincmd c<cr>
+nnoremap <silent> <leader>w :wincmd w<cr>
+" nnoremap <leader>wc :wincmd c<cr>
+nnoremap <silent> <leader>n :only<cr>
 
-nmap <silent><C-j> <leader>!a
-nmap <silent><C-k> <leader>!b
+" nmap <silent><C-j> <leader>!a
+" nmap <silent><C-k> <leader>!b
 
 " Dont use Q for Ex mode
 nnoremap Q <Nop>
@@ -419,26 +376,59 @@ nnoremap Q <Nop>
 " Clear all mappings
 " :mapclear
 
-inoremap ,hh [
-inoremap ,ll ]
-
-inoremap ,jj {
-inoremap ,kk }
-
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
 
-nnoremap <silent><leader>i :!firefox "https://duckduckgo.com/?
-    \q=<cword>"<cr><cr>
+nnoremap <silent><leader>hf :!firefox "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
+nnoremap <silent><leader>hs :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
+nnoremap <silent><leader>hi :call Browser()<CR>
 
-" Run line
-nnoremap <leader>e :RunCursorLine<cr>
+" nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 
-" Run current buffer
-nnoremap <leader>x :RunCurrentBuffer<cr>
+function! Browser()
+  let line = getline(".")
+  let url = matchstr(line, "http[^ ]*")
+  if url ==""
+    let url = matchstr(line, "ftp[^ ]*")
+  endif
+  if url == ""
+    let url = matchstr(line, "file[^ ]*")
+  endif
+  let url = escape(url, "#?&;|%")
+  if url == ""
+    let url = expand("<cword>")
+    if url != ""
+        let url = "https://duckduckgo.com/html/?q=" . url
+    endif
+  endif
+  silent! :execute ":RunIntoBuffer elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\""
+  normal gg
+endfunction
 
-" Close buffer
-nnoremap <silent> <ESC> :call BufferClose()<cr>
+" Run current buffer in the shell
+nnoremap <silent><leader>ee :RunCurrentBuffer<cr>
+" Run current line in the shell
+nnoremap <silent><leader>el :RunCursorLine<cr>
+" Run current line as vim script
+nnoremap <silent><leader>ev :RunCursorLineVim<cr>
+" TODO call RedirIntoCurrentBuffer('let x = unite#get_kinds() | echo x')
+" format vim structure:
+" - :%s/'/"/g
+" - %!perl -0777 -pe 's/function\(.+?\)/"function"/g'
+" - run json formatter
+
+" Don't wait after escape
+nnoremap <nowait><ESC> <ESC>
+inoremap <nowait><ESC> <ESC>
+vnoremap <nowait><ESC> <ESC>
+onoremap <nowait><ESC> <ESC>
+cnoremap <nowait><ESC> <ESC>
+
+" Don't wait after escape and Close buffer
+nnoremap <nowait><silent><ESC> :call BufferClose()<cr>
+
+" Open command line WINDOW
+nnoremap <leader>, q:i
 
 " reselect visual block after indent
 vnoremap < <gv
@@ -593,9 +583,8 @@ set statusline+=\
 " 5 -> blinking vertical bar
 " 6 -> solid vertical bar
 
-" setlocal cursorline
-" autocmd WinLeave * setlocal nocursorline
-" autocmd WinEnter * setlocal cursorline
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
 
 " Disable all blinking:
 set guicursor+=a:blinkon0
@@ -634,6 +623,7 @@ call neobundle#begin(g:vim.bundle.dir)
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
+" TODO checkout runtime! *.vim
 for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
     execute 'source' fpath
 endfor

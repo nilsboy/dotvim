@@ -1,7 +1,7 @@
 " Vastly improved Javascript indentation and syntax support in Vim
 NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
 
-let g:javascript_enable_domhtmlcss=1
+" let g:javascript_enable_domhtmlcss=1
 
 " TODO fold set by default?
 " b:javascript_fold=0

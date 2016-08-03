@@ -3,7 +3,7 @@ if exists("b:did_ftplugin_html")
 endif
 let b:did_ftplugin_html = 1
 
-map <silent> W :call HTMLTidy()<CR>
+map <silent><leader>W :call HTMLTidy()<CR>
 
 " ignore all unknown tags to support web components
 let g:syntastic_quiet_messages = {
