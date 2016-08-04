@@ -4,7 +4,7 @@ NeoBundle 'Shougo/unite.vim', {
     \ , 'depends' : 'Shougu/vimproc.vim'
 \ }
 
-autocmd FileType unite setlocal winheight=20
+" autocmd FileType unite setlocal winheight=20
 
 "## Notes ######################################################################
 
@@ -27,9 +27,6 @@ autocmd FileType unite setlocal winheight=20
 
 "## defaults ###################################################################
 
-" Quickfix
-NeoBundle 'sgur/unite-qf'
-
 " help source for unite.vim
 NeoBundle 'Shougo/unite-help'
 
@@ -51,6 +48,7 @@ call unite#custom#profile('default', 'context', {
     \ 'silent' : 1,
     \ 'auto_preview' : 1,
 \ })
+" \ 'auto_preview' : 1,
 " \ 'wipe' : 1,
 " \ 'no_split' : 1,
 " \ 'resume' : 1,
@@ -58,6 +56,17 @@ call unite#custom#profile('default', 'context', {
 		" TODO check -previewheight={height}
 
 nnoremap <silent><tab> :UniteResume -no-start-insert<cr>
+
+" Quickfix
+NeoBundle 'sgur/unite-qf'
+
+" Needs to be BufWinEnter not BufReadPost for youcompleteme's
+" GoToReferences to work
+autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
+function s:ReplaceQuickfixWithUnite()
+    cclose
+    Unite -no-auto-preview qf
+endfunction
 
 "### allow open action for script-file #####################################
 
@@ -75,6 +84,7 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 
 "### Unite buffer mappings ######################################################
 
+" Hack sometimes unite does not close
 autocmd FileType unite nmap <buffer><silent> x :pc \| :bwipeout!<cr>
 
 autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
@@ -101,27 +111,33 @@ autocmd FileType unite nnoremap <buffer> A ggA
 nnoremap <silent> <leader>ff :Unite
     \ -buffer-name=files-in-project-dir
     \ -smartcase
-    \ script-file:bash\ -c\ "cd\ $(git-root);find-and-limit"
+    \ script-file:bash\ -c\ "cd\ $(git-root);abs=1\ find-and-limit"
     \ <cr>
 
-" Files in current dir
+" Files in current dir - not really usefull?
 " Does not work if vim-rooter plugin is loaded
 " nnoremap <silent> <leader>fc :Unite
 "     \ -buffer-name=files-in-current-dir
 "     \ -smartcase
-"     \ script-file:find-and-limit
+"     \ script-file:abs=1\ find-and-limit
 "     \ <cr>
 
 " Emulate :UniteWithBufferDir
 nnoremap <silent> <leader>fb :call UniteFindFilesInBufferDir()<cr>
 function! UniteFindFilesInBufferDir()
     let $_VIM_LEADER_FB = expand("%:p:h")
-    echo $_VIM_LEADER_FB
     :Unite
         \ -buffer-name=files-in-buffer-dir
         \ -smartcase
-        \ script-file:bash\ -c\ "cd\ $_VIM_LEADER_FB;find-and-limit"
+        \ script-file:bash\ -c\ "cd\ $_VIM_LEADER_FB;abs=1\ find-and-limit"
 endfunction
+
+" Find inside vim bundle directories
+nnoremap <silent> <leader>vb :Unite
+    \ -buffer-name=vim-bundle-directories
+    \ -smartcase
+    \ script-file:bash\ -c\ "cd\ $_VIM_BUNDLE_DIR;abs=1\ find-and-limit"
+    \ <cr>
 
 "### grep ######################################################################
 
@@ -138,7 +154,7 @@ let g:unite_source_grep_default_opts = ' -inH '
 nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep-cursor
     \ -no-start-insert
-    \ script-file:find-and-limit
+    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
     \ grep:**
     \ <cr>
 
@@ -146,13 +162,13 @@ vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep-word
     \ -no-start-insert
     \ -input=<c-r>=escape(@", '\\.*$^[]')<cr>
-    \ script-file:find-and-limit
+    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
     \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr>
     \ <cr>
 
 nnoremap <silent> <Leader>gi :UniteWithInput
     \ -buffer-name=grep-input
-    \ script-file:find-and-limit
+    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
     \ grep:**
     \ <cr>
 
@@ -381,7 +397,7 @@ endif
 "         :Unite
 "             \ -buffer-name=files
 "             \ -smartcase
-"             \ script-file:find-and-limit
+"             \ script-file:abs=1\ find-and-limit
 "     endif
 " endfunction
 

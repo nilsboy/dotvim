@@ -25,6 +25,7 @@ let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
 let g:vim.bundle.settings = {}
 let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle_config/"
+let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
@@ -198,7 +199,7 @@ set winheight=9999
 set winminheight=0
 
 " autocmd BufAdd * setlocal buflisted
-autocmd FileType qf setlocal winheight=20
+" autocmd FileType qf setlocal winheight=20
 autocmd FileType help setlocal buflisted
 
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
@@ -309,7 +310,7 @@ set updatetime=500
 " nnoremap ,!a <C-i>
 let mapleader = ","
 
-nnoremap <silent> <leader>l :Explore<cr>
+" nnoremap <silent> <leader>l :Explore<cr>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
@@ -418,6 +419,7 @@ nnoremap <silent><leader>ev :RunCursorLineVim<cr>
 " - run json formatter
 
 " Don't wait after escape
+" This breaks keys starting with escape sequences i.e. cursor keys
 nnoremap <nowait><ESC> <ESC>
 inoremap <nowait><ESC> <ESC>
 vnoremap <nowait><ESC> <ESC>
