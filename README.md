@@ -1,25 +1,27 @@
 My vim configuration.
 
-# Inline Help
+# Notes
+
+## Inline Help
 - Help help
 :h help-summary
 - Default mappings and commands
 :help index
 - :h reference_toc
 
-# Online Help
+## Online Help
 - https://github.com/mhinz/vim-galore
 
-# VimL Herlper Libraries
+## VimL Helper Libraries
 - l9.vim
 - https://github.com/LucHermitte/lh-vim-lib
 - tomtom/tlib_vim
 
-# Debugging
+## Debugging
 This setting makes Vim echo the autocommands as it executes them.
   :set verbose=9
 
-# Plugins to checkout
+## Plugins to checkout
 - vim-es6
 - vimagit
 - diffchar.vim
@@ -33,7 +35,7 @@ This setting makes Vim echo the autocommands as it executes them.
 - "Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd)
 - A lot of interesting stuff: https://github.com/kana
 
-# TODO
+## TODO
 - use external perl for inline search
 - set $XDG_CACHE_DIR from remote_home for neomru etc?
 - check preview-window
