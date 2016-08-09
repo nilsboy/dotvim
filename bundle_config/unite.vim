@@ -289,9 +289,6 @@ nnoremap <silent><leader>vM :help index \| :only<cr>
 " vim help
 nnoremap <leader>vh :Unite help<cr>
 
-" vim notes
-nnoremap <leader>vn :call Notes()<cr>
-
 " vim environment
 nnoremap <leader>vee :call VimEnvironment()<cr>
 

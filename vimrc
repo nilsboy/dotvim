@@ -394,9 +394,9 @@ nnoremap Q <Nop>
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
 
-nnoremap <silent><leader>hf :!firefox "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
-nnoremap <silent><leader>hs :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
-nnoremap <silent><leader>hi :call Browser()<CR>
+nnoremap <silent><leader>if :!firefox "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
+nnoremap <silent><leader>is :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
+nnoremap <silent><leader>ii :call Browser()<CR>
 
 " nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 

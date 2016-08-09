@@ -381,19 +381,19 @@ function! CommandLine()
     nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
 endfunction
 
-function! Notes()
+" function! Notes()
 
-    silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
+"     silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
 
-    nohlsearch
+"     nohlsearch
 
-    " nnoremap <buffer> j /\v^([^\s"])<cr>
-    " nnoremap <buffer> k ?\v^([^\s"])<cr>
+"     " nnoremap <buffer> j /\v^([^\s"])<cr>
+"     " nnoremap <buffer> k ?\v^([^\s"])<cr>
 
-    " clear search register than execute line under cursor
-    nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
+"     " clear search register than execute line under cursor
+"     nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
 
-endfunction
+" endfunction
 
 " Run current buffer
 command! -nargs=0 RunCurrentBuffer call RunCurrentBuffer()
