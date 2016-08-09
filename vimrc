@@ -369,18 +369,10 @@ nnoremap <silent> <leader>wk :wincmd k<cr>
 nnoremap <silent> <leader>wh :wincmd h<cr>
 nnoremap <silent> <leader>wl :wincmd l<cr>
 
-nnoremap <silent> <leader>x :Autoformat<cr>
-" nnoremap <silent> <leader>x :call FormatFile() \| :call LintFile()<cr>
+nnoremap <silent> <leader>x :Autoformat \| :Neomake<cr>
 
 " Never use formatprg (it's global) and don't fallback to vim default
 set formatprg=false
-
-" autocmd CursorHold,FileReadPost <buffer> :silent :call LintFile()
-function! LintFile()
-    " Neomake currently can not work with pipes
-    update
-    Neomake
-endfunction
 
 " Use <leader>c to get rid of ctrl mappings
 nnoremap <silent> <leader>cv <c-v>
