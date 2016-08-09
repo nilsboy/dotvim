@@ -26,19 +26,25 @@
 :h reference_toc
 
 " command-line.  You can use "%<" to insert the current file name without
-" IMPROVING BROWSING			
+" IMPROVING BROWSING            
 :h netrw-ssh-hack
 
 " Scripting helpers
 :edit /home/nilsb/.vim/bundle/l9/autoload/l9.vim
-" lh-vim-lib: https://github.com/LucHermitte/lh-vim-lib
-
-" TODO
+" - lh-vim-lib: https://github.com/LucHermitte/lh-vim-lib
 " - utility functions: tomtom/tlib_vim
+
+"   HELP
+" - https://github.com/mhinz/vim-galore
+
+TODO
+- always show vimgutter
+- BufNewFile    When starting to edit a file that doesn't
+                exist.  Can be used to read in a skeleton
+                file.
 " - use external perl for inline search
 " - remove trailing space
 " - 'equalprg' 'ep' string (default "")
-" - https://metacpan.org/release/Perl-Tags
 " - https://github.com/tomtom/trag_vim
 " - Snipmate: http://www.vim.org/scripts/script.php?script_id=2540
 " - setl - show all 
@@ -49,10 +55,9 @@
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 "   Backup to git before write?: BufWritePre
-" - https://github.com/mhinz/vim-galore
 
 " While testing autocommands, you might find the 'verbose' option to be useful: >
-" 	:set verbose=9
+"   :set verbose=9
 " This setting makes Vim echo the autocommands as it executes them.
 "
 " Plugins to checkout:
@@ -65,3 +70,6 @@
 " - vim-qlist show :ilist searches in qickfix window
 " - JavaScript-Context-Coloring
 " - incsearch.vim
+" - "Define your own operator easily" (https://github.com/kana/vim-operator-user)
+" - Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd)
+" - A lot of interesting stuff: https://github.com/kana

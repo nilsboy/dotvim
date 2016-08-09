@@ -1,3 +1,4 @@
+finish
 " Syntax and errors highlighter
 NeoBundle 'scrooloose/syntastic'
 
@@ -24,4 +25,3 @@ let g:syntastic_enable_signs = 1
 " ignore unused variables in js
 " let g:syntastic_quiet_messages = {
 "     \ "regex":   '\((no-unused-vars\|space-before-function-paren\|comma-dangle)\)' }
-

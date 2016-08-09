@@ -5,9 +5,9 @@
 
 " Create a directory if it does not exist jet
 function! _mkdir(path)
-if !isdirectory(expand(a:path))
-  call mkdir(expand(a:path))
-endif
+    if !isdirectory(expand(a:path))
+        call mkdir(expand(a:path))
+    endif
 endfunction
 
 " vars
@@ -84,7 +84,7 @@ let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
 
-" set colorcolumn=81
+set colorcolumn=81
 
 " Prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
@@ -145,6 +145,8 @@ set softtabstop=4
 
 " Shift width (moved sideways for the shift command)
 set shiftwidth=4
+
+set textwidth=80
 
 " Make backspace more flexible
 set backspace=indent,eol,start
@@ -303,7 +305,7 @@ set noswapfile
 " set ttimeoutlen=10
 
 " used for the CursorHold autocommand event
-set updatetime=500
+set updatetime=1000
 
 " Use <Leader> as prefix key for own key mappings
 " use <leader>! as prefix to remap stuff - like:
@@ -337,20 +339,17 @@ nnoremap M <C-b>
 " Save file as root
 command! -nargs=* WW :silent call WriteSudo()
 function! WriteSudo() abort
-  silent write !env SUDO_EDITOR=tee sudo -e % >/dev/null
-  let &modified = v:shell_error
+    silent write !env SUDO_EDITOR=tee sudo -e % >/dev/null
+    let &modified = v:shell_error
 endfunction
 
-" Does not work
+" Expanding left shift does not work like this
 " nnoremap < <shift>
 
 " Does not work on terminal vim
 nnoremap <s-space> <C-b>
 
 nnoremap <leader>k1 <F1>
-
-" nmap <silent><C-l> :bnext<cr>
-" nmap <silent><C-h> :bprev<cr>
 
 nmap <silent>L :bnext<cr>
 nmap <silent>H :bprev<cr>
@@ -359,12 +358,35 @@ nmap <silent>H :bprev<cr>
 nnoremap <leader>!a <C-o>
 nnoremap <leader>!b <C-i>
 
-nnoremap <silent> <leader>w :wincmd w<cr>
-" nnoremap <leader>wc :wincmd c<cr>
-nnoremap <silent> <leader>n :only<cr>
-
 " nmap <silent><C-j> <leader>!a
 " nmap <silent><C-k> <leader>!b
+
+nnoremap <silent> <leader>ww :wincmd w<cr>
+nnoremap <silent> <leader>wo :only<cr>
+
+nnoremap <silent> <leader>wj :wincmd j<cr>
+nnoremap <silent> <leader>wk :wincmd k<cr>
+nnoremap <silent> <leader>wh :wincmd h<cr>
+nnoremap <silent> <leader>wl :wincmd l<cr>
+
+nnoremap <silent> <leader>x :Autoformat<cr>
+" nnoremap <silent> <leader>x :call FormatFile() \| :call LintFile()<cr>
+
+" Never use formatprg (it's global) and don't fallback to vim default
+set formatprg=false
+
+" autocmd CursorHold,FileReadPost <buffer> :silent :call LintFile()
+function! LintFile()
+    " Neomake currently can not work with pipes
+    update
+    Neomake
+endfunction
+
+" Use <leader>c to get rid of ctrl mappings
+nnoremap <silent> <leader>cv <c-v>
+nnoremap <silent> <leader>cp <c-p>
+nnoremap <silent> <leader>cn <c-n>
+nnoremap <silent> <leader>cr <c-r>
 
 " Dont use Q for Ex mode
 nnoremap Q <Nop>
@@ -387,23 +409,23 @@ nnoremap <silent><leader>hi :call Browser()<CR>
 " nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 
 function! Browser()
-  let line = getline(".")
-  let url = matchstr(line, "http[^ ]*")
-  if url ==""
-    let url = matchstr(line, "ftp[^ ]*")
-  endif
-  if url == ""
-    let url = matchstr(line, "file[^ ]*")
-  endif
-  let url = escape(url, "#?&;|%")
-  if url == ""
-    let url = expand("<cword>")
-    if url != ""
-        let url = "https://duckduckgo.com/html/?q=" . url
+    let line = getline(".")
+    let url = matchstr(line, "http[^ ]*")
+    if url ==""
+        let url = matchstr(line, "ftp[^ ]*")
     endif
-  endif
-  silent! :execute ":RunIntoBuffer elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\""
-  normal gg
+    if url == ""
+        let url = matchstr(line, "file[^ ]*")
+    endif
+    let url = escape(url, "#?&;|%")
+    if url == ""
+        let url = expand("<cword>")
+        if url != ""
+            let url = "https://duckduckgo.com/html/?q=" . url
+        endif
+    endif
+    silent! :execute ":RunIntoBuffer elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\""
+    normal gg
 endfunction
 
 " Run current buffer in the shell
@@ -443,126 +465,112 @@ nnoremap <C-c> <C-c>:echo<cr>
 nnoremap <expr> n 'Nn'[v:searchforward]
 nnoremap <expr> N 'nN'[v:searchforward]
 
-" recall command matching current entry
-cnoremap <c-n> <down>
-cnoremap <c-p> <up>
-
 "### Statusline ################################################################
 
-" Avoid 'hit enter prompt'
-set shortmess=atTIW
+" " Avoid 'hit enter prompt'
+" set shortmess=atTIW
 
-" Increase ruler height
-set cmdheight=2
+" " Increase ruler height
+" set cmdheight=2
 
-" always show status line
-set laststatus=2
+" " always show status line
+" set laststatus=2
 
-" always show tab page labels
-set showtabline=2
+" " always show tab page labels
+" set showtabline=2
 
-" Always show ruler (right part of the command line)
-" set ruler
+" " Always show ruler (right part of the command line)
+" " set ruler
 
-set statusline=\ 
+" " too slow needs to be ss
+" " set statusline+=%{system('git-project')}
 
-" too slow needs to be ss
-" set statusline+=%{system('git-project')}
+" " Containing directory
+" set statusline+=%{Location()}
 
-" Containing directory
-set statusline+=%{Location()}
+" " TODO using an echo in statusline removes old messages - maybe a way to
+" " suppress stuff?
 
-" TODO using an echo in statusline removes old messages - maybe a way to
-" suppress stuff?
+" function! Location()
 
-function! Location()
+"     let l:fn = "/home/user/src/dotvim/vimrc"
+"     let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+"     let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
+"     let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
+"     let l:fn = "/home/user/bashrc"
+"     let l:fn = expand("%:p")
 
-let l:fn = "/home/user/src/dotvim/vimrc"
-let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
-let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
-let l:fn = "/home/user/bashrc"
-let l:fn = expand("%:p")
+"     let l:prefix = ""
+"     let l:dirname = ""
 
-let l:prefix = ""
-let l:dirname = ""
+"     let l:fn = substitute(l:fn, "/home", "", "")
 
-let l:fn = substitute(l:fn, "/home", "", "")
+"     let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
+"     let l:basename = fnamemodify(l:fn,':t:h')
 
-let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
-let l:basename = fnamemodify(l:fn,':t:h')
+"     if len(l:dirs) == 0
+"         let l:dirname= "~"
+"     elseif len(l:dirs) == 1
+"         let l:prefix = dirs[0]
+"     elseif len(l:dirs) == 2
+"         let l:prefix = dirs[0]
+"         let l:dirname = dirs[1]
+"     elseif len(l:dirs) > 2
+"         let l:prefix = dirs[2]
+"         if len(dirs) > 3
+"             let l:dirname = dirs[len(dirs) - 1]
+"         endif
+"     endif
 
-if len(l:dirs) == 0
-    let l:dirname= "~"
-elseif len(l:dirs) == 1
-    let l:prefix = dirs[0]
-elseif len(l:dirs) == 2
-    let l:prefix = dirs[0]
-    let l:dirname = dirs[1]
-elseif len(l:dirs) > 2
-    let l:prefix = dirs[2]
-    if len(dirs) > 3
-        let l:dirname = dirs[len(dirs) - 1]
-    endif
-endif
+"     if l:dirname != ""
+"         let l:dirname .= "/"
+"     endif
 
- if l:dirname != ""
-     let l:dirname .= "/"
- endif
+"     if l:prefix != ""
+"         let l:prefix .= ":"
+"     endif
 
-if l:prefix != ""
-    let l:prefix .= ":"
-endif
+"     let l:fn = l:prefix . l:dirname . l:basename
+"     return l:fn
 
-let l:fn = l:prefix . l:dirname . l:basename
-return l:fn
+" endfunction
 
-endfunction
+" " Tail of the filename
+" " set statusline+=%t
 
-" Tail of the filename
-" set statusline+=%t
+" " Separator
+" set statusline+=" "
 
-" Separator
-set statusline+=\ 
+" " Set color of error highlight group
+" set statusline+=%#errormsg#
 
-" Set color of error highlight group
-set statusline+=%#errormsg#
+" " read only flag
+" " set statusline+=%{filewritable(expand('\%'))?'':'RO'}
 
-" read only flag
-" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
+" " Reset color
+" set statusline+=%*
 
-" Reset color
-set statusline+=%*
+" " left/right separator
+" set statusline+=%=
 
-" left/right separator
-set statusline+=%=
+" " filetype
+" set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
+" " set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
 
-" filetype
-set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
-" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
+" " file encoding
+" set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 
-" file encoding
-set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
+" " File format
+" set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
-" File format
-set statusline+=%{&ff=='unix'?'':&ff.'\ '}
+" " Cursor line/total lines
+" set statusline+=\ \ \ \ \ %l/%L
 
-" Separator
-set statusline+=\ \ \ \ \ 
+" " Cursor column
+" set statusline+=:%c
 
-" Cursor line/total lines
-set statusline+=%l/%L
-
-" Cursor column
-set statusline+=:%c
-
-" Separator
-set statusline+=\ \ \ \ \ 
-
-" Percent through file
-set statusline+=%P
-
-set statusline+=\ 
+" " Percent through file
+" set statusline+=\ \ \ \ \ %P
 
 "### Cursor ##################################################################
 
@@ -605,7 +613,7 @@ function! IsPluginInstalled(path)
     let l:basename = fnamemodify(a:path,':t:h')
     if isdirectory(g:vim.bundle.dir . l:basename)
         return 1
-    endif 
+    endif
     return 0
 endfunction
 
@@ -614,7 +622,7 @@ if !IsPluginInstalled("neobundle.vim")
     echo ""
     silent execute "!mkdir -p " g:vim.bundle.dir
     execute "!git clone https://github.com/Shougo/neobundle.vim " .
-            \ g:vim.bundle.dir . "/neobundle.vim"
+                \ g:vim.bundle.dir . "/neobundle.vim"
 endif
 execute "set runtimepath+=" . g:vim.bundle.dir . "/neobundle.vim/"
 
@@ -657,7 +665,7 @@ filetype indent on
 " colorscheme lucius
 
 if filereadable(g:vim.rc_local)
-  execute "source " . g:vim.rc_local
+    execute "source " . g:vim.rc_local
 endif
 
 " has to be done last - it is set somewhere else before already

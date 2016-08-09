@@ -55,7 +55,7 @@ call unite#custom#profile('default', 'context', {
 " \ 'here' : 1,
 		" TODO check -previewheight={height}
 
-nnoremap <silent><tab> :UniteResume -no-start-insert<cr>
+nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr>
 
 " Quickfix
 NeoBundle 'sgur/unite-qf'
@@ -87,19 +87,15 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 " Hack sometimes unite does not close
 autocmd FileType unite nmap <buffer><silent> x :pc \| :bwipeout!<cr>
 
-autocmd FileType unite nmap <buffer> <TAB> <plug>(unite_exit)
-autocmd FileType unite imap <buffer> <TAB> <esc><plug>(unite_exit)
-
-autocmd FileType unite nmap <buffer> <esc> <Plug>(unite_exit)
+autocmd FileType unite nmap <nowait><buffer> <TAB> <plug>(unite_exit)
+" autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_exit)
+autocmd FileType unite imap <nowait><buffer> <TAB> <esc>
 
 autocmd FileType unite nmap <buffer> s <plug>(unite_rotate_next_source)
 autocmd FileType unite nmap <buffer> f <plug>(unite_rotate_previous_source)
 
 " autocmd FileType unite imap <buffer> <C-l> <esc><plug>(unite_rotate_next_source)
 " autocmd FileType unite imap <buffer> <C-h> <esc><plug>(unite_rotate_previous_source)
-
-autocmd FileType unite nmap <buffer> <SPACE> <C-F>
-autocmd FileType unite nmap <buffer><nowait> b <C-B>
 
 autocmd FileType unite nnoremap <buffer> i gg0DA
 autocmd FileType unite nnoremap <buffer> A ggA
@@ -281,6 +277,7 @@ nnoremap <silent><leader>vv :<C-u>Unite
     \ <cr>
     " \ window tab
 
+call unite#custom#source('mapping', 'sorters', ['sorter_word'])
 nnoremap <silent><leader>vm :<C-u>Unite
     \ -buffer-name=mappings
     \ mapping

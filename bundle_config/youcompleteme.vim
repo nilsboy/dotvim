@@ -9,10 +9,6 @@ NeoBundle 'Valloric/YouCompleteMe', {
 
 " Needs .tern-project file in pwd to use working paths
 
-" TODO:
-" There are also other completion engines, like the UltiSnips completer and the
-" filepath completer.
-
 " - You can use Ctrl+Space to trigger the completion suggestions anywhere, even
 "   without a string prefix. This is useful to see which top-level functions
 "   are available for use.
@@ -27,6 +23,7 @@ nnoremap <leader>lt :YcmCompleter GetType<CR>
 nnoremap <leader>ld :YcmCompleter GetDoc<CR>
 nnoremap <leader>lR :YcmCompleter RefactorRename 
 
+" Let unite handle the quickfix list see unite config
 autocmd User YcmQuickFixOpened echo
 
 let g:ycm_allow_changing_updatetime = 0
@@ -41,6 +38,6 @@ let g:ycm_add_preview_to_completeopt = 1
 " TODO
 " let g:ycm_key_list_previous_completion = ['<S-TAB>', '<space>']
 
-let g:ycm_key_invoke_completion = ',,'
+" let g:ycm_key_invoke_completion = ',,'
 let g:ycm_key_detailed_diagnostics = ''
 " let g:ycm_disable_for_files_larger_than_kb = 1000

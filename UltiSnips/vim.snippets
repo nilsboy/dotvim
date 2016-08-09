@@ -1,0 +1,44 @@
+snippet vimrc "Boilerplaite vimrc" b
+set nocompatible
+
+let g:plugin_dir = expand('~/.vim/dein')
+let g:dein_dir = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
+execute 'set runtimepath+=' . g:dein_dir
+
+if !isdirectory(g:dein_dir)
+  call mkdir(g:dein_dir, 'p')
+  silent execute printf('!git clone --depth 1 %s %s', 'http://github.com/Shougo/dein.vim', g:dein_dir)
+endif
+
+call dein#begin(g:plugin_dir)
+
+" Let dein manage dein
+call dein#add('Shougo/dein.vim')
+" call dein#add('Shougo/vimproc.vim', {'build': 'make'})
+" call dein#add('Shougo/unite.vim')
+$0
+sall dein#end()
+
+if dein#check_install() 
+  call dein#install()
+endif
+
+filetype plugin indent on
+endsnippet
+
+snippet ab "Add bundle" b
+call dein#add('$1')
+$0
+endsnippet
+
+snippet fun "Function" b
+function $1 ($2)
+$0
+endfunction
+endsnippet
+
+snippet if "if" b
+if $1
+$0
+endif
+endsnippet

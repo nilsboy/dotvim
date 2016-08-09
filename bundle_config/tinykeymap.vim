@@ -2,6 +2,8 @@ finish
 " Define temporary keymaps
 NeoBundle 'tinykeymap'
 
+" Alternative: vim-submode
+
 "### config ####################################################################
 
 if neobundle#tap('tinykeymap')
