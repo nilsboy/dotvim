@@ -447,7 +447,7 @@ cnoremap <nowait><ESC> <ESC>
 " Don't wait after escape and Close buffer
 nnoremap <nowait><silent><ESC> :call BufferClose()<cr>
 
-" Open command line WINDOW
+" Open command line window
 nnoremap <leader>, q:i
 
 " reselect visual block after indent
@@ -463,110 +463,110 @@ nnoremap <expr> N 'nN'[v:searchforward]
 
 "### Statusline ################################################################
 
-" " Avoid 'hit enter prompt'
-" set shortmess=atTIW
+" Avoid 'hit enter prompt'
+set shortmess=atTIW
 
-" " Increase ruler height
-" set cmdheight=2
+" Increase ruler height
+set cmdheight=2
 
-" " always show status line
-" set laststatus=2
+" always show status line
+set laststatus=2
 
-" " always show tab page labels
-" set showtabline=2
+" always show tab page labels
+set showtabline=2
 
-" " Always show ruler (right part of the command line)
-" " set ruler
+" Always show ruler (right part of the command line)
+" set ruler
 
-" " too slow needs to be ss
-" " set statusline+=%{system('git-project')}
+" too slow needs to be ss
+" set statusline+=%{system('git-project')}
 
-" " Containing directory
-" set statusline+=%{Location()}
+" Containing directory
+set statusline+=%{Location()}
 
-" " TODO using an echo in statusline removes old messages - maybe a way to
-" " suppress stuff?
+" TODO using an echo in statusline removes old messages - maybe a way to
+" suppress stuff?
 
-" function! Location()
+function! Location()
 
-"     let l:fn = "/home/user/src/dotvim/vimrc"
-"     let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-"     let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
-"     let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
-"     let l:fn = "/home/user/bashrc"
-"     let l:fn = expand("%:p")
+    let l:fn = "/home/user/src/dotvim/vimrc"
+    let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+    let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
+    let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
+    let l:fn = "/home/user/bashrc"
+    let l:fn = expand("%:p")
 
-"     let l:prefix = ""
-"     let l:dirname = ""
+    let l:prefix = ""
+    let l:dirname = ""
 
-"     let l:fn = substitute(l:fn, "/home", "", "")
+    let l:fn = substitute(l:fn, "/home", "", "")
 
-"     let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
-"     let l:basename = fnamemodify(l:fn,':t:h')
+    let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
+    let l:basename = fnamemodify(l:fn,':t:h')
 
-"     if len(l:dirs) == 0
-"         let l:dirname= "~"
-"     elseif len(l:dirs) == 1
-"         let l:prefix = dirs[0]
-"     elseif len(l:dirs) == 2
-"         let l:prefix = dirs[0]
-"         let l:dirname = dirs[1]
-"     elseif len(l:dirs) > 2
-"         let l:prefix = dirs[2]
-"         if len(dirs) > 3
-"             let l:dirname = dirs[len(dirs) - 1]
-"         endif
-"     endif
+    if len(l:dirs) == 0
+        let l:dirname= "~"
+    elseif len(l:dirs) == 1
+        let l:prefix = dirs[0]
+    elseif len(l:dirs) == 2
+        let l:prefix = dirs[0]
+        let l:dirname = dirs[1]
+    elseif len(l:dirs) > 2
+        let l:prefix = dirs[2]
+        if len(dirs) > 3
+            let l:dirname = dirs[len(dirs) - 1]
+        endif
+    endif
 
-"     if l:dirname != ""
-"         let l:dirname .= "/"
-"     endif
+    if l:dirname != ""
+        let l:dirname .= "/"
+    endif
 
-"     if l:prefix != ""
-"         let l:prefix .= ":"
-"     endif
+    if l:prefix != ""
+        let l:prefix .= ":"
+    endif
 
-"     let l:fn = l:prefix . l:dirname . l:basename
-"     return l:fn
+    let l:fn = l:prefix . l:dirname . l:basename
+    return l:fn
 
-" endfunction
+endfunction
 
-" " Tail of the filename
-" " set statusline+=%t
+" Tail of the filename
+" set statusline+=%t
 
-" " Separator
-" set statusline+=" "
+" Separator
+set statusline+=" "
 
-" " Set color of error highlight group
-" set statusline+=%#errormsg#
+" Set color of error highlight group
+set statusline+=%#errormsg#
 
-" " read only flag
-" " set statusline+=%{filewritable(expand('\%'))?'':'RO'}
+" read only flag
+" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
 
-" " Reset color
-" set statusline+=%*
+" Reset color
+set statusline+=%*
 
-" " left/right separator
-" set statusline+=%=
+" left/right separator
+set statusline+=%=
 
-" " filetype
-" set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
-" " set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
+" filetype
+set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
+" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
 
-" " file encoding
-" set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
+" file encoding
+set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 
-" " File format
-" set statusline+=%{&ff=='unix'?'':&ff.'\ '}
+" File format
+set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
-" " Cursor line/total lines
-" set statusline+=\ \ \ \ \ %l/%L
+" Cursor line/total lines
+set statusline+=\ \ \ \ \ %l/%L
 
-" " Cursor column
-" set statusline+=:%c
+" Cursor column
+set statusline+=:%c
 
-" " Percent through file
-" set statusline+=\ \ \ \ \ %P
+" Percent through file
+set statusline+=\ \ \ \ \ %P
 
 "### Cursor ##################################################################
 
