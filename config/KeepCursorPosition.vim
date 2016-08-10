@@ -6,5 +6,5 @@ augroup CursorPosition
   autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 augroup END
 
-" Restore last known cursor position
+" Keep cursor position when reopening a file
 autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif

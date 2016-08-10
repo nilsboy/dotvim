@@ -253,9 +253,11 @@ call unite#custom#source('window', 'sorters', ['sorter_nothing'])
 call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
+" nnoremap <nowait><leader>b :Unite -buffer-name=buffers buffer:! <CR>
+
 nnoremap <silent><leader>vv :<C-u>Unite
     \ -buffer-name=buffers
-    \ buffer:!
+    \ buffer
     \ <cr>
     " \ window tab
 

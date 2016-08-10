@@ -1,6 +1,8 @@
 " Close a buffer writing its content and closing vim if appropriate.
 " Use bwipe instead of bdelete - otherwise the buffer stays open as
 " an unlisted-buffer.
+" Using bwipe prevents the current postion mark from being saved - so the file
+" position can not be restored when loading the file again
 function! BufferClose()
 
     if BufferIsCommandLine() == 1
@@ -8,24 +10,26 @@ function! BufferClose()
         return
     endif
 
-    :lclose
+    " :lclose
     " :cclose
-
-    if BufferIsEmpty() == 1
-    elseif BufferIsUnnamed() == 1
-    elseif &modified && &write
-        :w
-    endif
 
     if BufferIsLast() == 1
         if BufferIsEmpty() == 1
             :q!
         endif
-        :silent bwipe!
-        " :MyUniteMru
-    else
-        :silent bwipe!
     endif
+
+    if BufferIsEmpty() == 1
+        bwipe!
+        return
+    elseif BufferIsUnnamed() == 1
+        bwipe!
+        return
+    elseif &write
+        update
+    endif
+
+    bdelete!
 
 endfunction
 
