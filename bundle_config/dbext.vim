@@ -25,7 +25,6 @@ NeoBundle 'dbext.vim', {
 if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
 endif
-
 nnoremap <leader>sp :execute "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"<cr>
 
 " Blog fetch length

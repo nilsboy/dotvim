@@ -1,3 +1,4 @@
+finish
 " A secure alternative to modelines
 
 " Needed for dbext.vim

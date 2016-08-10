@@ -20,11 +20,7 @@ function! BufferClose()
     endif
 
     if BufferIsEmpty() == 1
-        bwipe!
-        return
     elseif BufferIsUnnamed() == 1
-        bwipe!
-        return
     elseif &write
         update
     endif

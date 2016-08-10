@@ -42,3 +42,4 @@ This setting makes Vim echo the autocommands as it executes them.
 - RNB, a Vim colorscheme template
   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 - Backup to git before write?: BufWritePre
+- input() history nnoremap q@ :echo input('')<CR><C-F>" (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)

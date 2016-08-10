@@ -53,10 +53,6 @@ set undofile
 let &undodir = g:vim.var.dir . "undo"
 call _mkdir(&undodir)
 
-" Modlines might be dangerous
-" see also securemodelines.vim
-set modelines=0
-
 " nomodeline can not be revered by plugins
 " but modeline is needed by dbext even though it uses its own parser.
 " set nomodeline
@@ -645,7 +641,7 @@ NeoBundleCheck
 
 "### my config #################################################################
 
-" loaded after the bundles
+" stuff to load after the bundles
 
 for fpath in split(globpath(g:vim.config.dir, '*.vim'), '\n')
     execute 'source' fpath
@@ -657,6 +653,10 @@ endfor
 filetype on
 filetype plugin on
 filetype indent on
+
+" Modlines might be dangerous
+" see also securemodelines.vim
+set modelines=0
 
 " colorscheme lucius
 
