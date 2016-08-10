@@ -88,14 +88,9 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 autocmd FileType unite nmap <buffer><silent> x :pc \| :bwipeout!<cr>
 
 autocmd FileType unite nmap <nowait><buffer> <TAB> <plug>(unite_exit)
-" autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_exit)
 autocmd FileType unite imap <nowait><buffer> <TAB> <esc>
 
-autocmd FileType unite nmap <buffer> s <plug>(unite_rotate_next_source)
-autocmd FileType unite nmap <buffer> f <plug>(unite_rotate_previous_source)
-
-" autocmd FileType unite imap <buffer> <C-l> <esc><plug>(unite_rotate_next_source)
-" autocmd FileType unite imap <buffer> <C-h> <esc><plug>(unite_rotate_previous_source)
+autocmd FileType unite nmap <nowait><buffer> <esc> <plug>(unite_exit)
 
 autocmd FileType unite nnoremap <buffer> i gg0DA
 autocmd FileType unite nnoremap <buffer> A ggA
@@ -249,19 +244,6 @@ nnoremap <silent>,// :UniteWithCursorWord
     \ -no-start-insert
     \ line
     \ <cr>
-
-"### registers #################################################################
-
-" also see source register
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_history_yank_save_clipboard = 1
-" let g:unite_source_history_yank_limit = 100
-" let g:unite_source_history_yank_file = TODO
-
-nnoremap <leader>yy :Unite
-    \ -buffer-name=yank
-    \ history/yank register
-    \ <cr><cr>
 
 "### vim environment ###########################################################
 
