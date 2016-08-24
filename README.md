@@ -10,6 +10,7 @@ My vim configuration.
 - :h reference_toc
 
 ## Online Help
+- https://www.reddit.com/r/vim/
 - https://github.com/mhinz/vim-galore
 
 ## VimL Helper Libraries
@@ -19,7 +20,7 @@ My vim configuration.
 
 ## Debugging
 This setting makes Vim echo the autocommands as it executes them.
-  :set verbose=9
+  `:set verbose=9`
 
 ## Plugins to checkout
 - vim-es6
@@ -34,6 +35,7 @@ This setting makes Vim echo the autocommands as it executes them.
 - "Define your own operator easily" (https://github.com/kana/vim-operator-user)
 - "Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd)
 - A lot of interesting stuff: https://github.com/kana
+- https://github.com/idbrii/vim-renamer
 
 ## TODO
 - use external perl for inline search
@@ -43,3 +45,4 @@ This setting makes Vim echo the autocommands as it executes them.
   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 - Backup to git before write?: BufWritePre
 - input() history nnoremap q@ :echo input('')<CR><C-F>" (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
+- spell inside of comments and txt files - camel case / snail case

@@ -171,6 +171,7 @@ function! Run(...)
     execute ":r! " . command
 endfunction
 
+" https://github.com/thinca/vim-quickrun
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...)
 

@@ -1,0 +1,11 @@
+snippet profile "dbext profile" b
+let g:dbext_default_profile_${5:database}_${1:environment} = 
+	\ 'type=DBI:'
+	\ 'user=${2:user}'
+	\ ':passwd=${3:password}'
+	\ ':driver=${4:driver}'
+	\ ':conn_parms='
+	\ 'database=${5:database};'
+	\ 'host=${6:host}'
+endsnippet
+

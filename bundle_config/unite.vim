@@ -34,6 +34,10 @@ if neobundle#tap('unite.vim')
     function! neobundle#hooks.on_post_source(bundle)
 
 let g:unite_data_directory = g:vim.cache.dir . "unite"
+" let g:unite_enable_auto_select = 0
+
+" Probably does not work with volatile sources
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
 " complains if not set
 let g:unite_abbr_highlight = "function"
@@ -41,32 +45,21 @@ let g:unite_abbr_highlight = "function"
 let g:unite_prompt = "> "
 
 call unite#custom#profile('default', 'context', {
-    \ 'start_insert': 1,
     \ 'sync' : 1,
     \ 'match_input' : 1,
     \ 'keep_focus' : 1,
     \ 'silent' : 1,
     \ 'auto_preview' : 1,
+    \ 'start_insert': 1,
 \ })
 " \ 'auto_preview' : 1,
 " \ 'wipe' : 1,
 " \ 'no_split' : 1,
 " \ 'resume' : 1,
 " \ 'here' : 1,
-		" TODO check -previewheight={height}
+" TODO check -previewheight={height}
 
-nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr>
-
-" Quickfix
-NeoBundle 'sgur/unite-qf'
-
-" Needs to be BufWinEnter not BufReadPost for youcompleteme's
-" GoToReferences to work
-autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
-function s:ReplaceQuickfixWithUnite()
-    cclose
-    Unite -no-auto-preview qf
-endfunction
+nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr><esc>
 
 "### allow open action for script-file #####################################
 
@@ -85,15 +78,19 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 "### Unite buffer mappings ######################################################
 
 " Hack sometimes unite does not close
-autocmd FileType unite nmap <buffer><silent> x :pc \| :bwipeout!<cr>
+autocmd FileType unite nmap <buffer><silent> x :pc! \| :bwipeout!<cr><esc>
 
 autocmd FileType unite nmap <nowait><buffer> <TAB> <plug>(unite_exit)
-autocmd FileType unite imap <nowait><buffer> <TAB> <esc>
+autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_exit)
+" autocmd FileType unite imap <nowait><buffer> <TAB> <esc>
 
 autocmd FileType unite nmap <nowait><buffer> <esc> <plug>(unite_exit)
 
 autocmd FileType unite nnoremap <buffer> i gg0DA
 autocmd FileType unite nnoremap <buffer> A ggA
+
+autocmd FileType unite nnoremap <buffer> <space> <C-f>
+autocmd FileType unite nnoremap <buffer> M <C-b>
 
 "### files #####################################################################
 
@@ -102,33 +99,30 @@ autocmd FileType unite nnoremap <buffer> A ggA
 nnoremap <silent> <leader>ff :Unite
     \ -buffer-name=files-in-project-dir
     \ -smartcase
-    \ script-file:bash\ -c\ "cd\ $(git-root);abs=1\ find-and-limit"
-    \ <cr>
-
-" Files in current dir - not really usefull?
-" Does not work if vim-rooter plugin is loaded
-" nnoremap <silent> <leader>fc :Unite
-"     \ -buffer-name=files-in-current-dir
-"     \ -smartcase
-"     \ script-file:abs=1\ find-and-limit
-"     \ <cr>
+    \ script-file:find-and-limit\ --fallback-to-cwd\ --project\ --abs
+    \ <cr><esc>
 
 " Emulate :UniteWithBufferDir
-nnoremap <silent> <leader>fb :call UniteFindFilesInBufferDir()<cr>
+nnoremap <silent> <leader>fb :call UniteFindFilesInBufferDir()<cr><esc>
 function! UniteFindFilesInBufferDir()
     let $_VIM_LEADER_FB = expand("%:p:h")
     :Unite
         \ -buffer-name=files-in-buffer-dir
         \ -smartcase
-        \ script-file:bash\ -c\ "cd\ $_VIM_LEADER_FB;abs=1\ find-and-limit"
+        \ script-file:find-and-limit\ --fallback-to-cwd\ --dir\ "$_VIM_LEADER_FB"\ --project\ --abs
 endfunction
 
 " Find inside vim bundle directories
 nnoremap <silent> <leader>vb :Unite
     \ -buffer-name=vim-bundle-directories
     \ -smartcase
-    \ script-file:bash\ -c\ "cd\ $_VIM_BUNDLE_DIR;abs=1\ find-and-limit"
-    \ <cr>
+    \ script-file:find-and-limit\ --dir\ "$_VIM_BUNDLE_DIR"\ --abs
+    \ <cr><esc>
+
+nnoremap <silent> <Leader>fg :UniteWithCursorWord
+    \ -buffer-name=grep-cursor
+    \ script-file:find-and-limit\ --abs\ --basename
+    \ <cr><esc>
 
 "### grep ######################################################################
 
@@ -145,21 +139,21 @@ let g:unite_source_grep_default_opts = ' -inH '
 nnoremap <silent> <Leader>gg :UniteWithCursorWord
     \ -buffer-name=grep-cursor
     \ -no-start-insert
-    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
+    \ script-file:find-and-limit\ --abs
     \ grep:**
-    \ <cr>
+    \ <cr><esc>
 
 vnoremap <silent> <Leader>gg y:Unite
     \ -buffer-name=grep-word
     \ -no-start-insert
-    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr>
-    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
-    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr>
-    \ <cr>
+    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+    \ script-file:find-and-limit\ --abs
+    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+    \ <cr><esc>
 
 nnoremap <silent> <Leader>gi :UniteWithInput
     \ -buffer-name=grep-input
-    \ script-file:bash\ -c\ "abs=1\ find-and-limit"
+    \ script-file:find-and-limit\ --abs
     \ grep:**
     \ <cr>
 
@@ -179,25 +173,25 @@ let g:neomru#file_mru_limit=3000
 nnoremap <silent> <leader>rr :Unite
     \ -buffer-name=recent-files
     \ neomru/file
-    \ <cr>
+    \ <cr><esc>
 
 nnoremap <silent> <leader>rp :UniteWithProjectDir
     \ -buffer-name=recent-files-in-project
     \ neomru/file
-    \ <cr>
+    \ <cr><esc>
 
 nnoremap <silent> <leader>rd :Unite
     \ -buffer-name=recent-directories
     \ -default-action=project_cd
     \ neomru/directory
-    \ <cr>
+    \ <cr><esc>
 
 "### change list ###############################################################
 
 nnoremap <silent> <leader>c :Unite
     \ -buffer-name=jump
     \ change jump
-    \ <cr>
+    \ <cr><esc>
 
 "### git #######################################################################
 
@@ -205,7 +199,7 @@ nnoremap <silent> <leader>gc :Unite
     \ -buffer-name=git-modified
     \ -no-start-insert
     \ script-file:git-modified
-    \ <cr>
+    \ <cr><esc>
 
 "### outline ###################################################################
 
@@ -228,7 +222,7 @@ let g:unite_source_outline_filetype_options = {
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline
     \ outline
-    \ <cr>
+    \ <cr><esc>
 
 "### line ######################################################################
 
@@ -237,13 +231,13 @@ call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 nnoremap <silent>,/ :Unite
     \ -buffer-name=line
     \ line
-    \ <cr>
+    \ <cr><esc>
 
 nnoremap <silent>,// :UniteWithCursorWord
     \ -buffer-name=line-cursor
     \ -no-start-insert
     \ line
-    \ <cr>
+    \ <cr><esc>
 
 "### vim environment ###########################################################
 
@@ -253,28 +247,28 @@ call unite#custom#source('window', 'sorters', ['sorter_nothing'])
 call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
-" nnoremap <nowait><leader>b :Unite -buffer-name=buffers buffer:! <CR>
+" nnoremap <nowait><leader>b :Unite -buffer-name=buffers buffer:! <cr><esc>
 
 nnoremap <silent><leader>vv :<C-u>Unite
     \ -buffer-name=buffers
     \ buffer
-    \ <cr>
+    \ <cr><esc>
     " \ window tab
 
 call unite#custom#source('mapping', 'sorters', ['sorter_word'])
 nnoremap <silent><leader>vm :<C-u>Unite
     \ -buffer-name=mappings
     \ mapping
-    \ <cr>
+    \ <cr><esc>
 
 " Show vim's predefined mappings
-nnoremap <silent><leader>vM :help index \| :only<cr>
+nnoremap <silent><leader>vM :help index \| :only<cr><esc>
 
 " vim help
-nnoremap <leader>vh :Unite help<cr>
+nnoremap <leader>vh :Unite help<cr><esc>
 
 " vim environment
-nnoremap <leader>vee :call VimEnvironment()<cr>
+nnoremap <leader>vee :call VimEnvironment()<cr><esc>
 
 "### Marks #####################################################################
 
@@ -289,23 +283,38 @@ let g:unite_source_mark_marks =
 nnoremap <silent> <leader>mm :Unite
     \ -buffer-name=marks
     \ mark
-    \ <cr>
+    \ <cr><esc>
 
 "### bookmark ##################################################################
 
 nnoremap <silent> <Leader>bb :Unite
     \ -buffer-name=bookmark
     \ bookmark
-    \ <cr>
+    \ <cr><esc>
 
-nnoremap <silent> <Leader>ba :UniteBookmarkAdd<cr>
+nnoremap <silent> <Leader>ba :UniteBookmarkAdd<cr><esc>
 
 "### quickfix ##################################################################
 
+NeoBundle 'sgur/unite-qf'
+
 nnoremap <silent> <leader>qq :Unite
     \ -buffer-name=quickfix
+    \ -no-auto-preview
     \ qf
-    \ <cr>
+    \ <cr><esc>
+
+" Needs to be BufWinEnter not BufReadPost for youcompleteme's
+" GoToReferences to work
+autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
+function s:ReplaceQuickfixWithUnite()
+    cclose
+    Unite
+        \ -buffer-name=quickfix
+        \ -no-auto-preview
+        \ qf
+endfunction
+
 
 "### end #######################################################################
 
@@ -367,7 +376,7 @@ endif
 
 " Does not work
 " Use file source on first resume invocation if no unite buffer exists jet.
-" nnoremap <silent><tab> :call UniteResumeWithoutSource()<cr>
+" nnoremap <silent><tab> :call UniteResumeWithoutSource()<cr><esc>
 " function! UniteResumeWithoutSource()
 "     if bufname("unite") != ""
 "         :UniteResume

@@ -15,7 +15,7 @@ let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"
 let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
-let g:vim.rc_local  = g:vim.rc . ".local"
+let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 
@@ -30,6 +30,7 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
+" TODO change to $XDG_CACHE_HOME
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim/" }
 
 " Log autocmds etc to file
@@ -60,14 +61,6 @@ call _mkdir(&undodir)
 " Enable vim enhancements
 set nocompatible
 
-" Force 256 colors for terminals that call themselfs TERM=xterm
-" set t_Co=256
-
-" Show trailing whitespace as red
-" highlight ExtraWhitespace ctermbg=darkred guibg=#382424
-" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-
 " TODO paths
 set runtimepath+=$REMOTE_HOME/.vim/etc
 " set runtimepath+=$REMOTE_HOME/.vim/etc/bin
@@ -85,12 +78,12 @@ set colorcolumn=81
 " Prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
 
-" prevent vim from using javascript as filetype for json
-autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json | setlocal syntax=txt
-autocmd BufNewFile,BufRead *.handlebars let b:syntastic_checkers=['']
+" Use gx to open any file under cursor in appropriate app
+let g:netrw_browsex_viewer="xdg-open"
 
-" Recognize .md as markdown for vim < 7.4.480
-" autocmd BufNewFile,BufFilePre,BufRead *.md setlocal filetype=markdown
+" prevent vim from using javascript as filetype for json
+autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json
+autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -133,14 +126,14 @@ set autoindent
 " use shiftwidth to enter tabs
 set smarttab
 
-" Tab spacing of 4
-set tabstop=4
+" Tab spacing
+set tabstop=2
 
-" number of spaces per tab in insert mode
-set softtabstop=4
+" Number of spaces per tab in insert mode
+set softtabstop=2
 
 " Shift width (moved sideways for the shift command)
-set shiftwidth=4
+set shiftwidth=2
 
 set textwidth=80
 
@@ -191,14 +184,13 @@ set ttyfast
 set nostartofline
 
 set hidden
-set winheight=9999
+" set winheight=9999
 
 " only show 1 line for minimized windows
-set winminheight=0
+" set winminheight=0
 
 " autocmd BufAdd * setlocal buflisted
 " autocmd FileType qf setlocal winheight=20
-autocmd FileType help setlocal buflisted
 
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
 " autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | setlocal nobuflisted | endif
@@ -207,13 +199,19 @@ autocmd FileType help setlocal buflisted
 " set completeopt-=preview
 
 " Set preview window height
-set previewheight=50
+set previewheight=99
 
 " Highlight unknown filetypes as text
 autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
 
 " Highlight vim documentation even if opened directly from file
 autocmd! BufEnter *vim*/doc/*.txt setlocal filetype=help
+
+augroup filetype_help
+autocmd!
+  autocmd BufWinEnter * if &l:buftype ==# 'help' | wincmd _ | endif
+  " autocmd BufWinEnter * if &l:buftype ==# 'help' | only | endif
+augroup END
 
 " show count of selected lines / columns
 set showcmd
@@ -376,6 +374,9 @@ nnoremap <silent> <leader>cp <c-p>
 nnoremap <silent> <leader>cn <c-n>
 nnoremap <silent> <leader>cr <c-r>
 
+" Nicer redo
+nnoremap U <c-r>
+
 " Dont use Q for Ex mode
 nnoremap Q <Nop>
 
@@ -445,8 +446,9 @@ nnoremap <nowait><silent><ESC> :call BufferClose()<cr>
 
 " Open command line window
 nnoremap <leader>, q:i
+vnoremap <leader>, q:i
 
-" reselect visual block after indent
+" Reselect visual block after indent
 vnoremap < <gv
 vnoremap > >gv
 
@@ -456,6 +458,14 @@ nnoremap <C-c> <C-c>:echo<cr>
 " always search forward and N backward, use this
 nnoremap <expr> n 'Nn'[v:searchforward]
 nnoremap <expr> N 'nN'[v:searchforward]
+
+" Make gf work with relative file names and non existent files
+nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
+
+" nnoremap <leader>b :ls<cr>:b
+
+nnoremap ' `
+nnoremap ` '
 
 "### Statusline ################################################################
 
@@ -657,8 +667,6 @@ filetype indent on
 " Modlines might be dangerous
 " see also securemodelines.vim
 set modelines=0
-
-" colorscheme lucius
 
 if filereadable(g:vim.rc_local)
     execute "source " . g:vim.rc_local

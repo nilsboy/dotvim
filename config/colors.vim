@@ -1,6 +1,9 @@
 " Show hightlight groups in their current colors
 " :source $VIMRUNTIME/syntax/hitest.vim
 
+" Force 256 colors for terminals that call themselfs TERM=xterm
+" set t_Co=256
+
 " Prefer light version of a colorscheme
 set background=light
 
@@ -42,3 +45,9 @@ endif
 " Highlight all occurences of word under cursor
 autocmd CursorMoved * exe printf('match todo /\V\<%s\>/', 
     \ escape(expand('<cword>'), '/\'))
+
+" Show trailing whitespace as red
+" highlight ExtraWhitespace ctermbg=darkred guibg=#382424
+" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+
