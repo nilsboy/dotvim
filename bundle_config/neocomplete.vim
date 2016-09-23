@@ -2,6 +2,8 @@ finish
 " Next generation completion framework
 NeoBundle 'Shougo/neocomplete.vim'
 
+" https://www.reddit.com/r/vim/comments/50rjde/finally_i_got_neocomplete_and_ultisnips_to_play/
+
 " TODO https://github.com/Shougo/context_filetype.vim
 
 let g:neocomplete#enable_at_startup = 1

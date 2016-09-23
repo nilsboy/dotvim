@@ -1,7 +1,7 @@
 " A REST console for Vim.
 NeoBundle 'diepm/vim-rest-console'
 
-autocmd BufRead,BufNewFile *.{rest} setlocal filetype=rest
+autocmd BufRead,BufNewFile *.rest setlocal filetype=rest
 
 " This is against W3C recommendations
 let b:vrc_allow_get_request_body = 1

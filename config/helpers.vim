@@ -3,7 +3,7 @@
 " an unlisted-buffer.
 " Using bwipe prevents the current postion mark from being saved - so the file
 " position can not be restored when loading the file again
-function! BufferClose()
+function! BufferClose() abort
 
     if BufferIsCommandLine() == 1
         :q!
@@ -30,7 +30,7 @@ function! BufferClose()
 endfunction
 
 " argument: bufspec
-function! CheckTime(...)
+function! CheckTime(...) abort
 
     let bufspec = ""
     if a:0 != 0
@@ -44,14 +44,14 @@ function! CheckTime(...)
     execute ":checktime " . bufspec
 endfunction
 
-function! BufferIsCommandLine()
+function! BufferIsCommandLine() abort
     if bufname("%") == '[Command Line]'
         return 1
     endif
     return 0
 endfunction
 
-function! BufferIsUnnamed()
+function! BufferIsUnnamed() abort
     if empty(bufname("%"))
         return 1
     else
@@ -59,7 +59,7 @@ function! BufferIsUnnamed()
     endif
 endfunction
 
-function! BufferIsEmpty()
+function! BufferIsEmpty() abort
     if line('$') == 1 && getline(1) == '' 
         return 1
     else
@@ -67,11 +67,11 @@ function! BufferIsEmpty()
     endif
 endfunction
 
-function! BufferCanWrite()
+function! BufferCanWrite() abort
     return &write
 endfunction
 
-function! BufferIsLast()
+function! BufferIsLast() abort
 
     let last_buffer = bufnr('$')
 
@@ -95,7 +95,7 @@ function! BufferIsLast()
 
 endfunction
 
-function! BufferFindByFiletype()
+function! BufferFindByFiletype() abort
 
     let last_buffer = bufnr('$')
 
@@ -121,25 +121,25 @@ endfunction
 
 
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
-function! BufferCreateTemp(...)
+function! BufferCreateTemp(...) abort
     execute ":new /tmp/" . split(a:1, " ")[0]
     normal ggdG
     setlocal buftype=nowrite
 endfunction
 
-function! RedirNew(name, command)
+function! RedirNew(name, command) abort
     call BufferCreateTemp(a:name)
     silent execute ":Redir :" . a:command
 endfunction
 command! -nargs=+ RedirNew call RedirNew("<args>")
 
 command! -nargs=+ Redir call Redir("<args>")
-function! Redir(command)
+function! Redir(command) abort
     call RedirIntoCurrentBuffer(a:command)
     normal ggdddd
 endfunction
 
-function! RedirIntoCurrentBuffer(command)
+function! RedirIntoCurrentBuffer(command) abort
 
     let output = ""
     redir => output
@@ -161,19 +161,19 @@ endfunction
 " autocmd BufRead,BufNewFile *.{myfind} setlocal filetype=myfind
 " nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
 
-command! -nargs=* Run silent! call Run(<f-args>)
-function! Run(...)
+command! -nargs=* Run call Run(<f-args>)
+function! Run(...) abort
     let buffer_name = a:1
-	let command = join(a:000[1:])
+	  let command = join(a:000[1:])
     echom buffer_name
-    execute ":e " . buffer_name
+    silent execute ":e " . buffer_name
     setlocal buftype=nowrite
-    execute ":r! " . command
+    silent execute ":r! " . command
 endfunction
 
 " https://github.com/thinca/vim-quickrun
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
-function! RunIntoBuffer(...)
+function! RunIntoBuffer(...) abort
 
     let command = join(a:000)
 
@@ -187,8 +187,8 @@ function! RunIntoBuffer(...)
     let buffer_name = buffer_name . ".output"
     call BufferCreateTemp(buffer_name)
 
-    echom "Running command: " . command
-    execute ":r!run-and-capture '" . command . "'"
+    " echom "Running command: " . command
+    silent! execute ":r!run-and-capture '" . command . "'"
     " execute ":r! " . command
     " %!html-strip
     " Remove broken linebreak
@@ -198,11 +198,12 @@ function! RunIntoBuffer(...)
     %s/\v,  line \d+//ge
 
     " Convert ansi colors
+    " Screws with color conversion of colorscheme
     " AnsiEsc
     " fix invisible ansi white
     " hi ansiWhite ctermfg=black
+
     " setlocal filetype=txt
-    :AnsiEsc
 
     normal ggddG
     set wrap
@@ -223,12 +224,12 @@ function! RunIntoBuffer(...)
 endfunction
 
 command! -nargs=0 RunIntoBufferCurrentBuffer call RunIntoBufferCurrentBuffer()
-function! RunIntoBufferCurrentBuffer()
+function! RunIntoBufferCurrentBuffer() abort
     call RunIntoBufferOrLastCommand("\"$(run-guess-command-by-filename " . expand("%:p"). ")\"")
 endfunction
 
 command! -nargs=* RunIntoBufferOrLastCommand call RunIntoBufferOrLastCommand()
-function! RunIntoBufferOrLastCommand(...)
+function! RunIntoBufferOrLastCommand(...) abort
 
     if exists('a:1')
         let g:last_command = a:000
@@ -240,7 +241,7 @@ endfunction
 let g:ack_default_options = '--ignore-file "^\.*"'
 
 command! -nargs=1 Tree call Tree("<args>")
-function! Tree(path)
+function! Tree(path) abort
 
     new tree
     setlocal buftype=nowrite
@@ -330,7 +331,7 @@ call add(g:commands, 'version      ')   " list version and build options
 call add(g:commands, 'winpos       ')   " Vim window position (gui)
 
 " Add uppercase versions of above-mentioned redirecting into a new buffer
-function! RedirAddUppercaseVersion()
+function! RedirAddUppercaseVersion() abort
 
     for command in g:commands
         let bufferName = command
@@ -351,13 +352,13 @@ endfunction
 call RedirAddUppercaseVersion()
 
 " Display all kinds of vim environment information
-function! VimEnvironment()
+function! VimEnvironment() abort
 
     call BufferCreateTemp("VimEnv")
 
     for command in g:commands
         put='### ' . command . ' #############################'
-        silent call RedirIntoCurrentBuffer(command)
+        call RedirIntoCurrentBuffer(command)
         put=''
     endfor
 
@@ -368,7 +369,7 @@ endfunction
 " nmap ,, :CommandLine<cr>
 
 command! -nargs=0 CommandLine call CommandLine()
-function! CommandLine()
+function! CommandLine() abort
     silent execute ':e ' . g:vim.etc.dir . 'command-line.vim'
     normal Go:
     startinsert!
@@ -382,40 +383,35 @@ function! CommandLine()
     nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
 endfunction
 
-" function! Notes()
-
+" function! Notes() abort
 "     silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
-
 "     nohlsearch
-
 "     " nnoremap <buffer> j /\v^([^\s"])<cr>
 "     " nnoremap <buffer> k ?\v^([^\s"])<cr>
-
 "     " clear search register than execute line under cursor
 "     nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
-
 " endfunction
 
 " Run current buffer
 command! -nargs=0 RunCurrentBuffer call RunCurrentBuffer()
-function! RunCurrentBuffer()
-    silent! call RunIntoBuffer(expand("%:p"))<cr>
+function! RunCurrentBuffer() abort
+    call RunIntoBuffer(expand("%:p"))
 endfunction
 
 " Run line under cursor as vim script or shell command depending on leading :
 command! -nargs=0 RunCursorLine call RunCursorLine()
-function! RunCursorLine()
+function! RunCursorLine() abort
     let l:cmd = GetRunableCursorLine()
-    silent! call RunIntoBuffer(l:cmd)<cr>
+    call RunIntoBuffer(l:cmd)
 endfunction
 
 command! -nargs=0 RunCursorLineVim call RunCursorLineVim()
-function! RunCursorLineVim()
+function! RunCursorLineVim() abort
     let l:cmd = GetRunableCursorLine()
     execute l:cmd
 endfunction
 
-function! GetRunableCursorLine()
+function! GetRunableCursorLine() abort
     let l:cmd = getline(".")
     let l:cmd = substitute(l:cmd, '\v^["#/ ]+', "", "")
     " let l:cmd = substitute(l:cmd, '\v^', ":!", "")

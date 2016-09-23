@@ -42,6 +42,9 @@ call _mkdir(g:vim.etc.dir)
 call _mkdir(g:vim.var.dir)
 call _mkdir(g:vim.cache.dir)
 
+" Remove all existing autocommands on vimrc reload
+autocmd!
+
 " reset everything to their defaults
 set all&
 
@@ -73,7 +76,7 @@ let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
 
-set colorcolumn=81
+" set colorcolumn=81
 
 " Prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
@@ -84,6 +87,7 @@ let g:netrw_browsex_viewer="xdg-open"
 " prevent vim from using javascript as filetype for json
 autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json
 autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
+autocmd BufRead,BufNewFile swagger.yaml setlocal filetype=swagger
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -135,7 +139,7 @@ set softtabstop=2
 " Shift width (moved sideways for the shift command)
 set shiftwidth=2
 
-set textwidth=80
+" set textwidth=80
 
 " Make backspace more flexible
 set backspace=indent,eol,start
@@ -151,7 +155,7 @@ set wildignorecase
 
 " Ignore patterns
 " set wildignore+=.*/**,*.class,node_modules/**,*/target/classes/**
-set wildignore+=*.class,node_modules/**,*/target/classes/**
+set wildignore+=*.class,*/target/classes/**
 
 set splitbelow
 set splitright
@@ -202,16 +206,10 @@ set hidden
 set previewheight=99
 
 " Highlight unknown filetypes as text
-autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
+autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 
 " Highlight vim documentation even if opened directly from file
-autocmd! BufEnter *vim*/doc/*.txt setlocal filetype=help
-
-augroup filetype_help
-autocmd!
-  autocmd BufWinEnter * if &l:buftype ==# 'help' | wincmd _ | endif
-  " autocmd BufWinEnter * if &l:buftype ==# 'help' | only | endif
-augroup END
+autocmd! BufAdd *vim*/doc/*.txt setlocal filetype=help
 
 " show count of selected lines / columns
 set showcmd
@@ -290,6 +288,9 @@ set noswapfile
 
 "### mappings ##################################################################
 
+" Potentially usable keys for normal mode:
+" sSQZ <cr> <bs>
+
 " For a list of vim's internal mappings see:
 " :h index
 
@@ -304,7 +305,7 @@ set updatetime=1000
 " Use <Leader> as prefix key for own key mappings
 " use <leader>! as prefix to remap stuff - like:
 " nnoremap ,!a <C-i>
-let mapleader = ","
+" let mapleader = "\"
 
 " nnoremap <silent> <leader>l :Explore<cr>
 
@@ -326,9 +327,14 @@ nnoremap ? ?\V
 vnoremap ? ?\V
 
 nnoremap :s/ :s/\V
-nnoremap <leader>z <C-z>
-nnoremap <space> <C-f>
-nnoremap M <C-b>
+nnoremap <leader>z :wall<cr><c-z>
+
+nnoremap <space> <c-f>
+vnoremap <space> <c-f>
+nnoremap <bs> <c-b>
+vnoremap <bs> <c-b>
+nnoremap M <c-b>
+vnoremap M <c-b>
 
 " Save file as root
 command! -nargs=* WW :silent call WriteSudo()
@@ -373,12 +379,14 @@ nnoremap <silent> <leader>cv <c-v>
 nnoremap <silent> <leader>cp <c-p>
 nnoremap <silent> <leader>cn <c-n>
 nnoremap <silent> <leader>cr <c-r>
+nnoremap <silent> <leader>ct <c-t>
+nnoremap <silent> <leader>c] <c-]>
 
 " Nicer redo
 nnoremap U <c-r>
 
 " Dont use Q for Ex mode
-nnoremap Q <Nop>
+nnoremap Q :x<cr>
 
 " These are the same for vim
 " Tab and Ctrl-I (<c-i><c-I>)
@@ -433,20 +441,20 @@ nnoremap <silent><leader>ev :RunCursorLineVim<cr>
 " - %!perl -0777 -pe 's/function\(.+?\)/"function"/g'
 " - run json formatter
 
-" Don't wait after escape
-" This breaks keys starting with escape sequences i.e. cursor keys
-nnoremap <nowait><ESC> <ESC>
+" " Don't wait after escape
+" " This breaks keys starting with escape sequences i.e. cursor keys
+" nnoremap <nowait><ESC> <ESC>
 inoremap <nowait><ESC> <ESC>
-vnoremap <nowait><ESC> <ESC>
-onoremap <nowait><ESC> <ESC>
-cnoremap <nowait><ESC> <ESC>
+" vnoremap <nowait><ESC> <ESC>
+" onoremap <nowait><ESC> <ESC>
+" cnoremap <nowait><ESC> <ESC>
 
 " Don't wait after escape and Close buffer
-nnoremap <nowait><silent><ESC> :call BufferClose()<cr>
+nnoremap <silent><ESC> :call BufferClose()<cr>
 
 " Open command line window
-nnoremap <leader>, q:i
-vnoremap <leader>, q:i
+nnoremap <leader><leader> q:i
+vnoremap <leader><leader> q:i
 
 " Reselect visual block after indent
 vnoremap < <gv
@@ -466,6 +474,13 @@ nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<
 
 nnoremap ' `
 nnoremap ` '
+
+" Keep cursor position after visual yank
+vmap y ygv<Esc>
+
+nnoremap <leader>lr :%s/<C-r><C-w>/
+
+nnoremap MM :Messages<cr>G
 
 "### Statusline ################################################################
 
@@ -501,6 +516,8 @@ function! Location()
     let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
     let l:fn = "/home/user/bashrc"
     let l:fn = expand("%:p")
+
+    return l:fn
 
     let l:prefix = ""
     let l:dirname = ""
@@ -556,8 +573,11 @@ set statusline+=%*
 set statusline+=%=
 
 " filetype
-set statusline+=%{strlen(&filetype)?&filetype.'\ ':''}
+set statusline+=%{strlen(&filetype)?&filetype:''}
 " set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
+
+" region filetype
+set statusline+=%{exists(\"b:region_filetype\")?'/'.b:region_filetype.'\ ':''}
 
 " file encoding
 set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
@@ -566,13 +586,13 @@ set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
 " Cursor line/total lines
-set statusline+=\ \ \ \ \ %l/%L
+set statusline+=\ \ \ \ \ %l
 
 " Cursor column
 set statusline+=:%c
 
 " Percent through file
-set statusline+=\ \ \ \ \ %P
+set statusline+=\ \ \ \ \ %P/%L
 
 "### Cursor ##################################################################
 
@@ -595,10 +615,10 @@ set statusline+=\ \ \ \ \ %P
 " 5 -> blinking vertical bar
 " 6 -> solid vertical bar
 
-autocmd InsertLeave,WinEnter * set cursorline
-autocmd InsertEnter,WinLeave * set nocursorline
+autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
+autocmd InsertEnter * setlocal nocursorline
 
-" Disable all blinking:
+" Disable all blinking
 set guicursor+=a:blinkon0
 
 "### Gui mode ##################################################################

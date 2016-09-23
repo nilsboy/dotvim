@@ -1,19 +1,19 @@
 " Allow language specific keys in insert mode with leader prepended
-inoremap <leader>' ä
-inoremap <leader>" Ä
+inoremap <leader>k' ä
+inoremap <leader>k" Ä
 
-inoremap <leader>; ö
-inoremap <leader>: Ö
+inoremap <leader>k; ö
+inoremap <leader>k: Ö
 
-inoremap <leader>[ ü
-inoremap <leader>{ Ü
+inoremap <leader>k[ ü
+inoremap <leader>k{ Ü
 
-inoremap <leader>e €
-inoremap <leader>m µ
-inoremap <leader>2 ²
-inoremap <leader>3 ³
-inoremap <leader>~ °
-inoremap <leader># §
+inoremap <leader>ke €
+inoremap <leader>km µ
+inoremap <leader>k2 ²
+inoremap <leader>k3 ³
+inoremap <leader>k~ °
+inoremap <leader>k# §
 
 finish
 

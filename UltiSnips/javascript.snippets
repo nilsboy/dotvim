@@ -1,9 +1,31 @@
 snippet req "Require module" b
-const xx = require('${1:module name}')
-`perl -e 'print "jo"'`
-`npm install --save ${1}`
+const ${1:var name} = require('${2:module name}')
 endsnippet
 
-snippet haha "haha" b
-hahaahahahahaha
+snippet csv "CSV parser script" b
+#!/usr/bin/env node
+
+var csv = require('ya-csv')
+
+var file = process.argv[2] || 'my.csv'
+
+var reader = csv.createCsvFileReader(file, {
+  'separator': ',',
+  'quote': '"',
+  'escape': '"',
+  'comment': '',
+  'columnsFromHeader': true,
+})
+
+// reader.setColumnNames([ 'col1', 'col2' ])
+
+reader.addListener('data', function(data) {
+      console.log(data)
+})
+
+// var writer = new csv.CsvWriter(process.stdout)
+//
+// reader.addListener('data', function(data) {
+//   writer.writeRecord([ data[0] ])
+// })
 endsnippet

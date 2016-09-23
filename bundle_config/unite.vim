@@ -27,6 +27,8 @@ NeoBundle 'Shougo/unite.vim', {
 
 "## defaults ###################################################################
 
+let g:unite_no_default_keymappings = 1
+
 " help source for unite.vim
 NeoBundle 'Shougo/unite-help'
 
@@ -86,11 +88,11 @@ autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_exit)
 
 autocmd FileType unite nmap <nowait><buffer> <esc> <plug>(unite_exit)
 
-autocmd FileType unite nnoremap <buffer> i gg0DA
-autocmd FileType unite nnoremap <buffer> A ggA
+autocmd FileType unite nmap <buffer> <cr> <Plug>(unite_do_default_action)
+autocmd FileType unite imap <buffer> <cr> <Plug>(unite_do_default_action)
 
-autocmd FileType unite nnoremap <buffer> <space> <C-f>
-autocmd FileType unite nnoremap <buffer> M <C-b>
+autocmd FileType unite nnoremap <buffer> i gg0"_DA
+autocmd FileType unite nnoremap <buffer> A ggA
 
 "### files #####################################################################
 
@@ -131,6 +133,7 @@ call unite#custom#source('grep', 'converters',
 
 let g:unite_source_grep_default_opts = ' -inH '
     \ . ' --exclude-dir "node_modules" '
+    \ . ' --exclude-dir "bower_components" '
     \ . ' --exclude-dir ".git" '
     \ . ' --exclude ".*" '
     \ . ' --exclude "*.class" '
@@ -153,6 +156,7 @@ vnoremap <silent> <Leader>gg y:Unite
 
 nnoremap <silent> <Leader>gi :UniteWithInput
     \ -buffer-name=grep-input
+    \ -no-start-insert
     \ script-file:find-and-limit\ --abs
     \ grep:**
     \ <cr>
@@ -228,12 +232,12 @@ nnoremap <silent> <Leader>o :<C-u>Unite
 
 call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
-nnoremap <silent>,/ :Unite
+nnoremap <silent><leader>/ :Unite
     \ -buffer-name=line
     \ line
     \ <cr><esc>
 
-nnoremap <silent>,// :UniteWithCursorWord
+nnoremap <silent><leader>// :UniteWithCursorWord
     \ -buffer-name=line-cursor
     \ -no-start-insert
     \ line

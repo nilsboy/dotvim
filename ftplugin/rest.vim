@@ -1,15 +1,19 @@
-if exists("b:did_ftplugin")
+" breaks formatting...
+" let g:vrc_show_command = 1
+
+let b:vrc_output_buffer_name = expand('%') . '.result'
+
+nnoremap <buffer> <silent> <CR> :call RestCall()<cr>
+
+if exists("b:did_ftplugin_rest")
     finish
 endif
-let b:did_ftplugin = 1
+let b:did_ftplugin_rest = 1
 
-nmap <buffer> <silent> <CR> :call RestCall()<cr>
 function! RestCall(...)
     call VrcQuery()
     only
-    edit __REST_response__
-    " Needs to be called twice!?!
-    setlocal filetype=json
-    setlocal filetype=json
+    execute 'edit ' b:vrc_output_buffer_name
+    setlocal filetype=txt
     setlocal modifiable
 endfunction

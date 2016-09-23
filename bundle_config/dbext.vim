@@ -47,8 +47,10 @@ let  g:dbext_default_DBI_commit_on_disconnect = 0
 let g:dbext_default_use_sep_result_buffer = 1
 
 " DBI limit
-" Only works after the result is fetched?
-" let g:dbext_default_DBI_max_rows = 3
+" Needs reload of sql file
+let g:dbext_default_DBI_max_rows = 300
+" Set DBI limit of current buffer - 0 disables it
+" :DBSetOption DBI_max_rows=0
 
 NeoBundle 'dbext.vim', {
   \ 'build': {
@@ -64,19 +66,77 @@ let g:dbext_default_usermaps = 0
 "
 " TODO: deactivate sql complete
 " :h omni-complete
-"
 
-autocmd BufRead,BufNewFile  let b:syntastic_checkers=['']
+let g:dbext#resultBufferId = 0
+
+" Configure result buffer
+function! DBextPostResult(db_type, buf_nr)
+
+  let g:dbext#resultBufferId = g:dbext#resultBufferId + 1
+
+  mapclear <buffer>
+
+  " Remove connection info
+  normal ggdd
+
+  " Move connection info to the bottom
+  " normal ggddG
+  " put='#'
+  " normal pkJgg
+
+  " Duplicate speparator line at bottom
+  normal 2ggyyGkp
+
+  if g:dbext#bufferDescription == ''
+    let g:dbext#bufferDescription = 'result.' . g:dbext#resultBufferId
+  endif
+
+  let l:file='/tmp/' . g:dbext#sourceBufferName . '.' . g:dbext#bufferDescription
+  silent! execute '!rm ' l:file '&>/dev/null'
+
+  " Move  file
+  silent! execute 'file!' l:file
+
+  set ft=dbext-result
+
+  " Slows down large datasets
+  " setlocal syntax=txt
+
+  only
+  redraw!
+
+  " Does not work
+  " execute 'DBSetOption profile=' . g:dbext#currentProfile
+
+  lcd! -
+
+endfunction
 
 " autocmd CursorHold *.sql  :call DBExecSqlLimit100()
 
-nnoremap <leader>se  :DBExecSQLUnderCursor<cr>
-nnoremap <leader>slt :DBListTable ""<cr><c-w>=<c-w>w2ddGpgg
+function! DbExtBefore(bufferDescription) abort
+
+  " Prevent error last window can not be closed
+  " function! dbext#DB_windowClose(buf_name)
+  " endfunction
+
+  let g:dbext#currentProfile = DB_listOption('profile')
+  let g:dbext#sourceBufferName = expand('%:t')
+  let g:dbext#bufferDescription = a:bufferDescription
+
+  lcd! /tmp
+endfunction
+
+nnoremap <leader>se  :call DbExtBefore('') \| :DBExecSQLUnderCursor<cr>
+nnoremap <leader>slt :call DbExtBefore('tables') \| :DBListTable ""<cr><c-w>
 nnoremap <silent> <leader>st :call DBExecSqlLimit100()<cr>
+nnoremap <leader>sdt :call DbExtBefore('desc') \| :DBDescribeTable<CR>
 
 " DBSelectFromTable does not seem to honour the limit
 function! DBExecSqlLimit100()
-    execute ":DBExecSQL select * from " expand("<cword>") " limit 100"
+    let l:table = expand("<cword>")
+    call DbExtBefore(l:table) 
+    execute ":DBExecSQL select * from " l:table " limit 100"
 endfunction
 
 nnoremap <leader>sv :DBListConnections<cr>
@@ -85,6 +145,13 @@ if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
 endif
 nnoremap <leader>sp :execute "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim" \| setlocal filetype=dbext-profile<cr>
+
+let $SQL_FILES_DIR = $HOME . '/src/sql/'
+nnoremap <silent> <leader>sf :Unite
+    \ -buffer-name=sql-files
+    \ -smartcase
+    \ script-file:find-and-limit\ --dir\ $SQL_FILES_DIR\ --abs
+    \ <cr><esc>
 
 " let g:ftplugin_sql_omni_key = "<leader>so"
 " let g:ftplugin_sql_omni_key = "<c-p>"

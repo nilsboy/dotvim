@@ -4,20 +4,20 @@ NeoBundle 'SirVer/ultisnips'
 " vim-snipmate default snippets
 NeoBundle 'honza/vim-snippets'
 
-let g:UltiSnipsExpandTrigger=",se"
+" let g:UltiSnipsExpandTrigger="<leader>se"
 " let g:UltiSnipsJumpForwardTrigger="<space>"
 let g:UltiSnipsJumpForwardTrigger="<cr>"
-let g:UltiSnipsJumpBackwardTrigger=",p"
-let g:UltiSnipsListSnippets = ',sl'
+let g:UltiSnipsJumpBackwardTrigger="<leader>p"
+let g:UltiSnipsListSnippets = "<leader>sl"
 
 " let g:UltiSnipsUsePythonVersion = 2
 
 " Edit snippets for current file type
 " :UltiSnipsEdit
 " has weird suggestions
-nnoremap ,ss :execute ":e " . g:vim.etc.dir . "UltiSnips/" . &filetype
+nnoremap <leader>ss :execute ":e " . g:vim.etc.dir . "UltiSnips/" . &filetype
             \ . ".snippets"<cr>
-nnoremap ,sa :execute ":e " . g:vim.etc.dir . "UltiSnips/all.snippets"<cr>
+nnoremap <leader>sa :execute ":e " . g:vim.etc.dir . "UltiSnips/all.snippets"<cr>
 
 " https://www.reddit.com/r/vim/comments/2oeqrg
 function! ExpandSnippet()

@@ -1,3 +1,5 @@
+finish
+" TODO try supertab if it support tern
 " A code-completion engine for Vim
 " Needs .tern-project file in pwd to use working path
 NeoBundle 'Valloric/YouCompleteMe', {
@@ -58,3 +60,5 @@ let g:ftplugin_sql_omni_key_right = '.'
 let g:ycm_semantic_triggers = {
     \   'sql' : ['.'],
     \ }
+
+let g:ycm_use_ultisnips_completer = 0
