@@ -1,2 +1,2 @@
-" A simple way to create, edit and save files and parent directories
+" Save a file and create its parent directories at the same time
 NeoBundle 'duggiefresh/vim-easydir'

@@ -171,7 +171,7 @@ function! Run(...) abort
     silent execute ":r! " . command
 endfunction
 
-" https://github.com/thinca/vim-quickrun
+" Checkout: https://github.com/thinca/vim-quickrun
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...) abort
 
@@ -180,7 +180,7 @@ function! RunIntoBuffer(...) abort
     wall
     let buffer_name = a:1
 
-    let buffer_name = substitute(buffer_name, '[^a-zA-Z_\-/\.]', "", "g")
+    let buffer_name = substitute(buffer_name, '[^a-zA-Z0-9_\-/\.]', "", "g")
     if buffer_name == ""
         let buffer_name = "cmd"
     endif
@@ -188,7 +188,7 @@ function! RunIntoBuffer(...) abort
     call BufferCreateTemp(buffer_name)
 
     " echom "Running command: " . command
-    silent! execute ":r!run-and-capture '" . command . "'"
+    silent! execute ":r!run-and-capture 'echo " . command . " | bash'"
     " execute ":r! " . command
     " %!html-strip
     " Remove broken linebreak
@@ -363,6 +363,7 @@ function! VimEnvironment() abort
     endfor
 
     normal ggdd
+    only
 
 endfunction
 
@@ -417,4 +418,12 @@ function! GetRunableCursorLine() abort
     " let l:cmd = substitute(l:cmd, '\v^', ":!", "")
     " let l:cmd = substitute(l:cmd, '\v^:!:', ":", "")
     return l:cmd
+endfunction
+
+command! -nargs=* E call EditFileInBufferDir(<f-args>)
+function! EditFileInBufferDir(...) abort
+  let l:dir = expand("%:h")
+  let l:file = l:dir . '/' . join(a:000)
+  let l:file = fnameescape(l:file)
+  execute 'edit ' . l:file
 endfunction

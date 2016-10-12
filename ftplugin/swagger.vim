@@ -7,7 +7,7 @@ let b:did_ftplugin_swagger = 1
 
 " TODO rename to openapi?
 
-autocmd BufWritePost swagger.yaml :call SwaggerLint()
+autocmd BufWritePost *.swagger.{yaml,json} :call SwaggerLint()
 
 function! SwaggerLint() abort
   r!swagger-lint %

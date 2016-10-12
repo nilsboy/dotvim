@@ -69,23 +69,28 @@ let g:dbext_default_usermaps = 0
 
 let g:dbext#resultBufferId = 0
 
+" autocmd CursorHold *.sql  :call DBExecSqlLimit100()
+
+function! DbExtBefore(bufferDescription) abort
+
+  " Prevent error last window can not be closed
+  " function! dbext#DB_windowClose(buf_name)
+  " endfunction
+
+  let g:dbext#currentProfile = DB_listOption('profile')
+  let g:dbext#sourceBufferName = expand('%:t')
+  let g:dbext#bufferDescription = a:bufferDescription
+
+  lcd! /tmp
+endfunction
+
 " Configure result buffer
-function! DBextPostResult(db_type, buf_nr)
+function! DBextPostResult(db_type, buf_nr) abort
 
   let g:dbext#resultBufferId = g:dbext#resultBufferId + 1
 
+  " Needed to avoid remaps of dd etc by dbext
   mapclear <buffer>
-
-  " Remove connection info
-  normal ggdd
-
-  " Move connection info to the bottom
-  " normal ggddG
-  " put='#'
-  " normal pkJgg
-
-  " Duplicate speparator line at bottom
-  normal 2ggyyGkp
 
   if g:dbext#bufferDescription == ''
     let g:dbext#bufferDescription = 'result.' . g:dbext#resultBufferId
@@ -110,36 +115,31 @@ function! DBextPostResult(db_type, buf_nr)
 
   lcd! -
 
-endfunction
+  " Remove connection info
+  normal ggdd
 
-" autocmd CursorHold *.sql  :call DBExecSqlLimit100()
+  " Move connection info to the bottom
+  " normal ggddG
+  " put='#'
+  " normal pkJgg
 
-function! DbExtBefore(bufferDescription) abort
+  " Duplicate separator line at bottom
+  normal 2ggyyGkp
 
-  " Prevent error last window can not be closed
-  " function! dbext#DB_windowClose(buf_name)
-  " endfunction
-
-  let g:dbext#currentProfile = DB_listOption('profile')
-  let g:dbext#sourceBufferName = expand('%:t')
-  let g:dbext#bufferDescription = a:bufferDescription
-
-  lcd! /tmp
 endfunction
 
 nnoremap <leader>se  :call DbExtBefore('') \| :DBExecSQLUnderCursor<cr>
 nnoremap <leader>slt :call DbExtBefore('tables') \| :DBListTable ""<cr><c-w>
-nnoremap <silent> <leader>st :call DBExecSqlLimit100()<cr>
+nnoremap <leader>st  :call DBExecSqlLimit100()<cr>
 nnoremap <leader>sdt :call DbExtBefore('desc') \| :DBDescribeTable<CR>
+nnoremap <leader>sv  :DBListConnections<cr>
 
 " DBSelectFromTable does not seem to honour the limit
-function! DBExecSqlLimit100()
+function! DBExecSqlLimit100() abort
     let l:table = expand("<cword>")
     call DbExtBefore(l:table) 
     execute ":DBExecSQL select * from " l:table " limit 100"
 endfunction
-
-nnoremap <leader>sv :DBListConnections<cr>
 
 if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
@@ -147,7 +147,7 @@ endif
 nnoremap <leader>sp :execute "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim" \| setlocal filetype=dbext-profile<cr>
 
 let $SQL_FILES_DIR = $HOME . '/src/sql/'
-nnoremap <silent> <leader>sf :Unite
+nnoremap <leader>sf :Unite
     \ -buffer-name=sql-files
     \ -smartcase
     \ script-file:find-and-limit\ --dir\ $SQL_FILES_DIR\ --abs
@@ -162,6 +162,8 @@ nnoremap <silent> <leader>sf :Unite
 " If new tables or columns are added to the database it may become
 " necessary to clear the plugins cache.  The default map for this is: >
 "     imap <buffer> <C-C>R <C-\><C-O>:call sqlcomplete#Map('ResetCache')<CR><C-X><C-O>
+
+finish
 
 " dbext Default mappings
 " n  ,sE           <Plug>DBExecSQLUnderTopXCursor
@@ -200,3 +202,12 @@ nnoremap <silent> <leader>sf :Unite
 " x  ,slc          :<C-U>exec "DBListColumn '".DB_getVisualBlock()."'"<CR>
 " x  ,st           :<C-U>exec "DBSelectFromTable '".DB_getVisualBlock()."'"<CR>
 " x  ,stcl         :<C-U>exec "DBListColumn '".DB_getVisualBlock()."'"<CR>
+
+" Result buffer default mappings
+" n  <Space>     *@:DBResultsToggleResize<CR>
+" n  O           *@:DBOrientationToggle<CR>
+" n  R           *@:DBResultsRefresh<CR>
+" n  a           *@:call <SNR>284_DB_set('autoclose', (s:DB_get('autoclose')==1?0:1))<CR>
+" x  d           *@:call dbext#DB_removeVariable()<CR>
+" n  dd          *@:call dbext#DB_removeVariable()<CR>
+" n  q           *@:DBResultsClose<CR>

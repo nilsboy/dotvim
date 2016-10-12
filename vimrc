@@ -87,7 +87,7 @@ let g:netrw_browsex_viewer="xdg-open"
 " prevent vim from using javascript as filetype for json
 autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json
 autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
-autocmd BufRead,BufNewFile swagger.yaml setlocal filetype=swagger
+autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
 
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
@@ -327,7 +327,10 @@ nnoremap ? ?\V
 vnoremap ? ?\V
 
 nnoremap :s/ :s/\V
-nnoremap <leader>z :wall<cr><c-z>
+
+" nnoremap <leader>z :wall<cr><c-z>
+nnoremap <c-z> :wall<cr><c-z>
+inoremap <c-z> <esc>:wall<cr><c-z>
 
 nnoremap <space> <c-f>
 vnoremap <space> <c-f>
@@ -405,29 +408,6 @@ xnoremap . :norm.<CR>
 
 nnoremap <silent><leader>if :!firefox "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
 nnoremap <silent><leader>is :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
-nnoremap <silent><leader>ii :call Browser()<CR>
-
-" nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
-
-function! Browser()
-    let line = getline(".")
-    let url = matchstr(line, "http[^ ]*")
-    if url ==""
-        let url = matchstr(line, "ftp[^ ]*")
-    endif
-    if url == ""
-        let url = matchstr(line, "file[^ ]*")
-    endif
-    let url = escape(url, "#?&;|%")
-    if url == ""
-        let url = expand("<cword>")
-        if url != ""
-            let url = "https://duckduckgo.com/html/?q=" . url
-        endif
-    endif
-    silent! :execute ":RunIntoBuffer elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\""
-    normal gg
-endfunction
 
 " Run current buffer in the shell
 nnoremap <silent><leader>ee :RunCurrentBuffer<cr>
@@ -444,10 +424,13 @@ nnoremap <silent><leader>ev :RunCursorLineVim<cr>
 " " Don't wait after escape
 " " This breaks keys starting with escape sequences i.e. cursor keys
 " nnoremap <nowait><ESC> <ESC>
-inoremap <nowait><ESC> <ESC>
+" inoremap <nowait><ESC> <ESC>
 " vnoremap <nowait><ESC> <ESC>
 " onoremap <nowait><ESC> <ESC>
 " cnoremap <nowait><ESC> <ESC>
+
+" Don't wait after escape in insert mode
+set noesckeys
 
 " Don't wait after escape and Close buffer
 nnoremap <silent><ESC> :call BufferClose()<cr>
@@ -480,7 +463,17 @@ vmap y ygv<Esc>
 
 nnoremap <leader>lr :%s/<C-r><C-w>/
 
-nnoremap MM :Messages<cr>G
+nnoremap MM :Messages<cr> \| :only \| :normal G<cr>
+
+nnoremap <C-j> 7j
+nnoremap <C-k> 7k
+
+" Edit file under cursor even if it does not exist
+nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
+
+"### Misc ######################################################################
+
+command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
 
 "### Statusline ################################################################
 

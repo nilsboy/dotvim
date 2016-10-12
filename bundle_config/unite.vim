@@ -61,7 +61,7 @@ call unite#custom#profile('default', 'context', {
 " \ 'here' : 1,
 " TODO check -previewheight={height}
 
-nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr><esc>
+nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr>
 
 "### allow open action for script-file #####################################
 
@@ -105,13 +105,22 @@ nnoremap <silent> <leader>ff :Unite
     \ <cr><esc>
 
 " Emulate :UniteWithBufferDir
-nnoremap <silent> <leader>fb :call UniteFindFilesInBufferDir()<cr><esc>
-function! UniteFindFilesInBufferDir()
+nnoremap <silent> <leader>fb :call UniteFindFilesInBufferProjectDir()<cr><esc>
+function! UniteFindFilesInBufferProjectDir()
     let $_VIM_LEADER_FB = expand("%:p:h")
     :Unite
         \ -buffer-name=files-in-buffer-dir
         \ -smartcase
         \ script-file:find-and-limit\ --fallback-to-cwd\ --dir\ "$_VIM_LEADER_FB"\ --project\ --abs
+endfunction
+
+nnoremap <silent> <leader>fd :call UniteFindFilesInBufferDir()<cr><esc>
+function! UniteFindFilesInBufferDir()
+  let $_VIM_LEADER_FB = expand("%:p:h")
+  :Unite
+        \ -buffer-name=files-in-buffer-dir
+        \ -smartcase
+        \ script-file:find-and-limit\ --dir\ "$_VIM_LEADER_FB"\ --abs
 endfunction
 
 " Find inside vim bundle directories
