@@ -188,6 +188,7 @@ function! RunIntoBuffer(...) abort
     call BufferCreateTemp(buffer_name)
 
     " echom "Running command: " . command
+    let command = substitute(command, ';', "\\\\;", "g")
     silent! execute ":r!run-and-capture 'echo " . command . " | bash'"
     " execute ":r! " . command
     " %!html-strip
