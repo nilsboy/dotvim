@@ -44,6 +44,8 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 " complains if not set
 let g:unite_abbr_highlight = "function"
 
+let g:unite_source_line_enable_highlight = 1
+
 let g:unite_prompt = "> "
 
 call unite#custom#profile('default', 'context', {
@@ -53,9 +55,16 @@ call unite#custom#profile('default', 'context', {
     \ 'silent' : 1,
     \ 'auto_preview' : 1,
     \ 'start_insert': 1,
+    \ 'smart_case': 1,
+    \ 'abbr_highlight': 'Normal',
+    \ 'auto_highlight': 1,
+    \ 'hide_source_names': 1,
 \ })
+
+" \ 'custom_grep_search_word_highlight': 'Search',
 " \ 'auto_preview' : 1,
 " \ 'wipe' : 1,
+" \ 'wrap' : 1,
 " \ 'no_split' : 1,
 " \ 'resume' : 1,
 " \ 'here' : 1,
@@ -96,49 +105,42 @@ autocmd FileType unite nnoremap <buffer> A ggA
 
 "### files #####################################################################
 
-" See: https://github.com/Shougo/unite.vim/issues/1186
-" Emulate :UniteWithProjectDir
-nnoremap <silent> <leader>ff :Unite
-    \ -buffer-name=files-in-project-dir
-    \ -smartcase
-    \ script-file:find-and-limit\ --fallback-to-cwd\ --project\ --abs
-    \ <cr><esc>
-
-" Emulate :UniteWithBufferDir
-nnoremap <silent> <leader>fb :call UniteFindFilesInBufferProjectDir()<cr><esc>
-function! UniteFindFilesInBufferProjectDir()
-    let $_VIM_LEADER_FB = expand("%:p:h")
+nnoremap <silent> <leader>ff :call Find_Unite()<cr><esc>
+function! Find_Unite() abort
+    call CdProjectRoot()
     :Unite
-        \ -buffer-name=files-in-buffer-dir
-        \ -smartcase
-        \ script-file:find-and-limit\ --fallback-to-cwd\ --dir\ "$_VIM_LEADER_FB"\ --project\ --abs
+      \ -buffer-name=find-project-unite
+      \ script-file:find-and-limit\ --abs
 endfunction
 
-nnoremap <silent> <leader>fd :call UniteFindFilesInBufferDir()<cr><esc>
-function! UniteFindFilesInBufferDir()
-  let $_VIM_LEADER_FB = expand("%:p:h")
-  :Unite
-        \ -buffer-name=files-in-buffer-dir
-        \ -smartcase
-        \ script-file:find-and-limit\ --dir\ "$_VIM_LEADER_FB"\ --abs
+nnoremap <silent> <leader>fd :call FindDir_Unite()<cr><esc>
+function! FindDir_Unite() abort
+    call CdBufferDir()
+    :Unite
+      \ -buffer-name=find-dir-unite
+      \ script-file:find-and-limit\ --abs
 endfunction
 
-" Find inside vim bundle directories
-nnoremap <silent> <leader>vb :Unite
-    \ -buffer-name=vim-bundle-directories
-    \ -smartcase
-    \ script-file:find-and-limit\ --dir\ "$_VIM_BUNDLE_DIR"\ --abs
-    \ <cr><esc>
+nnoremap <silent> <leader>fw :call FindWord_Unite()<cr><esc>
+function! FindWord_Unite() abort
+    call CdProjectRoot()
+    :UniteWithCursorWord
+        \ -buffer-name=find-word-unite
+        \ script-file:find-and-limit\ --abs
+endfunction
 
-nnoremap <silent> <Leader>fg :UniteWithCursorWord
-    \ -buffer-name=grep-cursor
-    \ script-file:find-and-limit\ --abs\ --basename
-    \ <cr><esc>
+nnoremap <silent> <leader>vp :call FindVimPlugins_Unite()<cr><esc>
+function! FindVimPlugins_Unite() abort
+    execute 'lcd' $_VIM_BUNDLE_DIR
+    :UniteWithCursorWord
+        \ -buffer-name=find-vim-plugins-unite
+        \ script-file:find-and-limit\ --abs
+endfunction
 
 "### grep ######################################################################
 
-call unite#custom#source('grep', 'converters', 
-    \ ['converter_tail_abbr'])
+" call unite#custom#source('grep', 'converters', 
+    " \ ['converter_tail_abbr'])
 
 let g:unite_source_grep_default_opts = ' -inH '
     \ . ' --exclude-dir "node_modules" '
@@ -148,31 +150,45 @@ let g:unite_source_grep_default_opts = ' -inH '
     \ . ' --exclude "*.class" '
     \ . ' --exclude-dir "classes" '
 
-nnoremap <silent> <Leader>gg :UniteWithCursorWord
-    \ -buffer-name=grep-cursor
-    \ -no-start-insert
-    \ script-file:find-and-limit\ --abs
-    \ grep:**
-    \ <cr><esc>
+" Use ag for search
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column --smart-case'
+  let g:unite_source_grep_recursive_opt = ''
+endif
 
-vnoremap <silent> <Leader>gg y:Unite
-    \ -buffer-name=grep-word
-    \ -no-start-insert
-    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-    \ script-file:find-and-limit\ --abs
-    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-    \ <cr><esc>
+nnoremap <silent> <leader>gg :call Grep_Word_Unite()<cr><esc>
+function! Grep_Word_Unite() abort
+    call CdProjectRoot()
+    :UniteWithCursorWord
+        \ -buffer-name=grep-word-unite
+        \ script-file:find-grep
+        \ grep:**
+endfunction
 
-nnoremap <silent> <Leader>gi :UniteWithInput
-    \ -buffer-name=grep-input
-    \ -no-start-insert
-    \ script-file:find-and-limit\ --abs
-    \ grep:**
-    \ <cr>
+nnoremap <silent> <leader>gi :call Grep_Input_Unite()<cr><esc>
+function! Grep_Input_Unite() abort
+    call CdProjectRoot()
+    :UniteWithInput
+        \ -buffer-name=grep-input-unite
+        \ script-file:find-grep
+        \ grep:**
+endfunction
 
-" :UniteWithCursorWord grep:$buffers
+" vnoremap <silent> <Leader>gg y:Unite
+"     \ -buffer-name=grep-word-unite
+"     \ -no-start-insert
+"     \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+"     \ script-file:find-and-limit\ --abs
+"     \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+"     \ <cr><esc>
 
-"### mru #######################################################################
+" nnoremap <silent> <Leader>gi :UniteWithProjectDir
+"     \ -buffer-name=grep-unite
+"     \ script-file:ag\ -l::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+"     \ <cr>
+
+"### Recent files ##############################################################
 
 " MRU plugin includes unite.vim MRU sources
 NeoBundle 'Shougo/neomru.vim'
@@ -184,7 +200,7 @@ call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 let g:neomru#file_mru_limit=3000
 
 nnoremap <silent> <leader>rr :Unite
-    \ -buffer-name=recent-files
+    \ -buffer-name=recent-files-unite
     \ neomru/file
     \ <cr><esc>
 
@@ -396,7 +412,6 @@ endif
 "     else
 "         :Unite
 "             \ -buffer-name=files
-"             \ -smartcase
 "             \ script-file:abs=1\ find-and-limit
 "     endif
 " endfunction

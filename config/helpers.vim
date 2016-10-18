@@ -428,3 +428,15 @@ function! EditFileInBufferDir(...) abort
   let l:file = fnameescape(l:file)
   execute 'edit ' . l:file
 endfunction
+
+function! CdProjectRoot() abort
+    let l:dir = expand("%:p:h")
+    execute 'lcd' l:dir
+    let l:project_dir = system("git-root")
+    execute 'lcd' l:project_dir
+endfunction
+
+function! CdBufferDir() abort
+    let l:dir = expand("%:p:h")
+    execute 'lcd' l:dir
+endfunction

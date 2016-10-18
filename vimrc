@@ -208,7 +208,7 @@ set previewheight=99
 " Highlight unknown filetypes as text
 autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 
-" Highlight vim documentation even if opened directly from file
+" Set filetype on vimdocs even when opened directly from file
 autocmd! BufAdd *vim*/doc/*.txt setlocal filetype=help
 
 " show count of selected lines / columns
@@ -288,11 +288,14 @@ set noswapfile
 
 "### mappings ##################################################################
 
-" Potentially usable keys for normal mode:
-" sSQZ <cr> <bs>
-
 " For a list of vim's internal mappings see:
 " :h index
+
+" Potentially usable keys for normal mode:
+" sSQZ <cr> <bs>
+" - r
+" - R - I do use it but should use c-mappings instead
+" - M
 
 " Timeout on mappings and key codes (faster escape etc)
 " set timeout
@@ -306,8 +309,6 @@ set updatetime=1000
 " use <leader>! as prefix to remap stuff - like:
 " nnoremap ,!a <C-i>
 " let mapleader = "\"
-
-" nnoremap <silent> <leader>l :Explore<cr>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
@@ -389,7 +390,7 @@ nnoremap <silent> <leader>c] <c-]>
 nnoremap U <c-r>
 
 " Dont use Q for Ex mode
-nnoremap Q :x<cr>
+nnoremap Q :xa<cr>
 
 " These are the same for vim
 " Tab and Ctrl-I (<c-i><c-I>)
@@ -421,19 +422,17 @@ nnoremap <silent><leader>ev :RunCursorLineVim<cr>
 " - %!perl -0777 -pe 's/function\(.+?\)/"function"/g'
 " - run json formatter
 
-" " Don't wait after escape
-" " This breaks keys starting with escape sequences i.e. cursor keys
-" nnoremap <nowait><ESC> <ESC>
-" inoremap <nowait><ESC> <ESC>
-" vnoremap <nowait><ESC> <ESC>
-" onoremap <nowait><ESC> <ESC>
-" cnoremap <nowait><ESC> <ESC>
-
 " Don't wait after escape in insert mode
+" Breaks curser keys etc.
 set noesckeys
 
-" Don't wait after escape and Close buffer
-nnoremap <silent><ESC> :call BufferClose()<cr>
+" Close buffer
+"Mapping <esc> in vimrc breaks arrow behaviour"
+"(http://stackoverflow.com/questions/11940801)
+nnoremap <silent><esc> :call BufferClose()<cr>
+"
+" Causes delay
+" nnoremap <esc>[ <esc>[
 
 " Open command line window
 nnoremap <leader><leader> q:i
