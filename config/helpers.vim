@@ -261,6 +261,8 @@ call add(g:commands, 'verbose map!<buffer> ')   " buffer local Insert and Comman
 
 " ### There are six sets of mappings
 
+call add(g:commands, 'verbose map         ')   " Normal-mode mappings only
+
 " - For Normal mode: When typing commands.
 call add(g:commands, 'verbose nmap         ')   " Normal-mode mappings only
 

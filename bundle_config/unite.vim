@@ -42,35 +42,38 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 " call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
 " complains if not set
-let g:unite_abbr_highlight = "function"
+" let g:unite_abbr_highlight = "function"
 
-let g:unite_source_line_enable_highlight = 1
+" let g:unite_source_line_enable_highlight = 1
 
 let g:unite_prompt = "> "
+set previewheight=20
 
 call unite#custom#profile('default', 'context', {
     \ 'sync' : 1,
-    \ 'match_input' : 1,
+    \ 'match_input' : 'Search',
     \ 'keep_focus' : 1,
     \ 'silent' : 1,
     \ 'auto_preview' : 1,
     \ 'start_insert': 1,
     \ 'smart_case': 1,
-    \ 'abbr_highlight': 'Normal',
-    \ 'auto_highlight': 1,
     \ 'hide_source_names': 1,
+    \ 'resume' : 1,
+    \ 'is_volatile': 1,
 \ })
 
-" \ 'custom_grep_search_word_highlight': 'Search',
-" \ 'auto_preview' : 1,
-" \ 'wipe' : 1,
-" \ 'wrap' : 1,
-" \ 'no_split' : 1,
-" \ 'resume' : 1,
-" \ 'here' : 1,
-" TODO check -previewheight={height}
+    " \ 'previewheight': 999,
+    " \ 'auto_highlight': 1,
+    " \ 'vertical_preview': 1,
+    " \ 'custom_grep_search_word_highlight': 'Search',
+    " \ 'auto_preview' : 1,
+    " \ 'wipe' : 1,
+    " \ 'wrap' : 1,
+    " \ 'no_split' : 1,
+    " \ 'resume' : 1,
+    " \ 'here' : 1,
 
-nnoremap <nowait><silent><tab> :UniteResume -no-start-insert<cr>
+nnoremap <nowait><silent><tab> :UniteResume<cr><esc>
 
 "### allow open action for script-file #####################################
 
@@ -111,6 +114,7 @@ function! Find_Unite() abort
     :Unite
       \ -buffer-name=find-project-unite
       \ script-file:find-and-limit\ --abs
+    lcd -
 endfunction
 
 nnoremap <silent> <leader>fd :call FindDir_Unite()<cr><esc>
@@ -205,12 +209,12 @@ nnoremap <silent> <leader>rr :Unite
     \ <cr><esc>
 
 nnoremap <silent> <leader>rp :UniteWithProjectDir
-    \ -buffer-name=recent-files-in-project
+    \ -buffer-name=recent-files-in-project-unite
     \ neomru/file
     \ <cr><esc>
 
 nnoremap <silent> <leader>rd :Unite
-    \ -buffer-name=recent-directories
+    \ -buffer-name=recent-directories-unite
     \ -default-action=project_cd
     \ neomru/directory
     \ <cr><esc>
@@ -218,14 +222,14 @@ nnoremap <silent> <leader>rd :Unite
 "### change list ###############################################################
 
 nnoremap <silent> <leader>c :Unite
-    \ -buffer-name=jump
+    \ -buffer-name=jump-unite
     \ change jump
     \ <cr><esc>
 
 "### git #######################################################################
 
 nnoremap <silent> <leader>gc :Unite
-    \ -buffer-name=git-modified
+    \ -buffer-name=git-modified-unite
     \ -no-start-insert
     \ script-file:git-modified
     \ <cr><esc>
@@ -249,7 +253,7 @@ let g:unite_source_outline_filetype_options = {
 \}
 
 nnoremap <silent> <Leader>o :<C-u>Unite
-    \ -buffer-name=outline
+    \ -buffer-name=outline-unite
     \ outline
     \ <cr><esc>
 
@@ -258,12 +262,12 @@ nnoremap <silent> <Leader>o :<C-u>Unite
 call unite#custom#source('line', 'sorters', ['sorter_nothing'])
 
 nnoremap <silent><leader>/ :Unite
-    \ -buffer-name=line
+    \ -buffer-name=line-unite
     \ line
     \ <cr><esc>
 
 nnoremap <silent><leader>// :UniteWithCursorWord
-    \ -buffer-name=line-cursor
+    \ -buffer-name=line-cursor-unite
     \ -no-start-insert
     \ line
     \ <cr><esc>
@@ -276,17 +280,19 @@ call unite#custom#source('window', 'sorters', ['sorter_nothing'])
 call unite#custom#source('buffer', 'sorters', ['sorter_nothing'])
 let g:unite_source_buffer_time_format = "(%Y-%m-%d %H:%M:%S) "
 
-" nnoremap <nowait><leader>b :Unite -buffer-name=buffers buffer:! <cr><esc>
-
 nnoremap <silent><leader>vv :<C-u>Unite
-    \ -buffer-name=buffers
+    \ -buffer-name=buffers-unite
     \ buffer
     \ <cr><esc>
-    " \ window tab
+
+nnoremap <silent><leader>va :<C-u>Unite
+    \ -buffer-name=all-buffers-unite
+    \ buffer:!
+    \ <cr><esc>
 
 call unite#custom#source('mapping', 'sorters', ['sorter_word'])
 nnoremap <silent><leader>vm :<C-u>Unite
-    \ -buffer-name=mappings
+    \ -buffer-name=mappings-unite
     \ mapping
     \ <cr><esc>
 
@@ -310,14 +316,14 @@ let g:unite_source_mark_marks =
     \ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 nnoremap <silent> <leader>mm :Unite
-    \ -buffer-name=marks
+    \ -buffer-name=marks-unite
     \ mark
     \ <cr><esc>
 
 "### bookmark ##################################################################
 
 nnoremap <silent> <Leader>bb :Unite
-    \ -buffer-name=bookmark
+    \ -buffer-name=bookmark-unite
     \ bookmark
     \ <cr><esc>
 
@@ -328,7 +334,7 @@ nnoremap <silent> <Leader>ba :UniteBookmarkAdd<cr><esc>
 NeoBundle 'sgur/unite-qf'
 
 nnoremap <silent> <leader>qq :Unite
-    \ -buffer-name=quickfix
+    \ -buffer-name=quickfix-unite
     \ -no-auto-preview
     \ qf
     \ <cr><esc>
@@ -339,7 +345,7 @@ autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
 function s:ReplaceQuickfixWithUnite()
     cclose
     Unite
-        \ -buffer-name=quickfix
+        \ -buffer-name=quickfix-unite
         \ -no-auto-preview
         \ qf
 endfunction
@@ -411,7 +417,7 @@ endif
 "         :UniteResume
 "     else
 "         :Unite
-"             \ -buffer-name=files
+"             \ -buffer-name=files-unite
 "             \ script-file:abs=1\ find-and-limit
 "     endif
 " endfunction

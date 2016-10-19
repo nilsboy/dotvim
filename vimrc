@@ -203,7 +203,7 @@ set hidden
 " set completeopt-=preview
 
 " Set preview window height
-set previewheight=99
+" set previewheight=99
 
 " Highlight unknown filetypes as text
 autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
@@ -315,18 +315,6 @@ set updatetime=1000
 " vnoremap . :
 " nnoremap . :
 
-" nnoremap - q/\V
-" vnoremap - q/\V
-
-" nnoremap / /\V
-" vnoremap / /\V
-
-nnoremap / q/i\V
-vnoremap / q/i\V
-
-nnoremap ? ?\V
-vnoremap ? ?\V
-
 nnoremap :s/ :s/\V
 
 " nnoremap <leader>z :wall<cr><c-z>
@@ -434,9 +422,29 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 " Causes delay
 " nnoremap <esc>[ <esc>[
 
-" Open command line window
+" Open command-line window
+" :h cmdline-window
 nnoremap <leader><leader> q:i
 vnoremap <leader><leader> q:i
+set cmdwinheight=10
+" autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
+autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
+
+autocmd CmdwinEnter * nmap <buffer><silent> <c-h> :quit<cr><c-h>
+autocmd CmdwinEnter * nmap <buffer><silent> <c-j> :quit<cr><c-j>
+autocmd CmdwinEnter * nmap <buffer><silent> <c-k> :quit<cr>
+autocmd CmdwinEnter * nmap <buffer><silent> <c-l> :quit<cr><c-l>
+
+autocmd CmdwinEnter * imap <buffer><silent> <c-h> <esc>:quit<cr><c-h>
+autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
+autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
+autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
+
+nnoremap / q/i\V
+vnoremap / q/i\V
+
+nnoremap ? ?\V
+vnoremap ? ?\V
 
 " Reselect visual block after indent
 vnoremap < <gv

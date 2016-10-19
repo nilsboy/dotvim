@@ -10,9 +10,10 @@ let g:vrc_cookie_jar = '/tmp/vrc_cookie_jar'
 
 let g:vrc_follow_redirects = 1
 
-let g:vrc_include_response_header = 0
-let g:vrc_debug = 1
-" breaks formatting...
+let g:vrc_include_response_header = 1
+let g:vrc_debug = 0
+
+" breaks result formatting...
 let g:vrc_show_command = 0
 
 let g:vrc_horizontal_split = 1
