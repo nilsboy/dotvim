@@ -499,16 +499,58 @@ set showtabline=2
 " Always show ruler (right part of the command line)
 " set ruler
 
+" TODO using an echo in statusline removes old messages - maybe a way to
+" suppress stuff?
+
 " too slow needs to be ss
 " set statusline+=%{system('git-project')}
 
 " Containing directory
 set statusline+=%{Location()}
 
-" TODO using an echo in statusline removes old messages - maybe a way to
-" suppress stuff?
+" set statusline+=%{pwd()}
 
-function! Location()
+" Tail of the filename
+" set statusline+=%t
+
+" Separator
+set statusline+=" "
+
+" Set color of error highlight group
+set statusline+=%#errormsg#
+
+" read only flag
+" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
+
+" Reset color
+set statusline+=%*
+
+" left/right separator
+set statusline+=%=
+
+" filetype
+set statusline+=%{strlen(&filetype)?&filetype:''}
+" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
+
+" region filetype
+set statusline+=%{exists(\"b:region_filetype\")?'/'.b:region_filetype.'\ ':''}
+
+" file encoding
+set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
+
+" File format
+set statusline+=%{&ff=='unix'?'':&ff.'\ '}
+
+" Cursor line/total lines
+set statusline+=\ \ \ \ \ %l
+
+" Cursor column
+set statusline+=:%c
+
+" Percent through file
+set statusline+=\ \ \ \ \ %P/%L
+
+function! Location() abort
 
     let l:fn = "/home/user/src/dotvim/vimrc"
     let l:fn = "/usr/share/vim/vim74/doc/change.txt"
@@ -553,46 +595,6 @@ function! Location()
     return l:fn
 
 endfunction
-
-" Tail of the filename
-" set statusline+=%t
-
-" Separator
-set statusline+=" "
-
-" Set color of error highlight group
-set statusline+=%#errormsg#
-
-" read only flag
-" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
-
-" Reset color
-set statusline+=%*
-
-" left/right separator
-set statusline+=%=
-
-" filetype
-set statusline+=%{strlen(&filetype)?&filetype:''}
-" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
-
-" region filetype
-set statusline+=%{exists(\"b:region_filetype\")?'/'.b:region_filetype.'\ ':''}
-
-" file encoding
-set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
-
-" File format
-set statusline+=%{&ff=='unix'?'':&ff.'\ '}
-
-" Cursor line/total lines
-set statusline+=\ \ \ \ \ %l
-
-" Cursor column
-set statusline+=:%c
-
-" Percent through file
-set statusline+=\ \ \ \ \ %P/%L
 
 "### Cursor ##################################################################
 

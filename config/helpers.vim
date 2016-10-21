@@ -119,6 +119,17 @@ function! BufferFindByFiletype() abort
 
 endfunction
 
+function! BufferFindByName(name) abort
+    let last_buffer = bufnr('$')
+    let i = 1
+    while i <= last_buffer
+        if bufname(i) =~ fnameescape(a:name)
+          return i
+        endif
+        let i = i + 1
+    endwhile
+    return 0
+endfunction
 
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
 function! BufferCreateTemp(...) abort
@@ -432,13 +443,21 @@ function! EditFileInBufferDir(...) abort
 endfunction
 
 function! CdProjectRoot() abort
+
+    " " see vim-rooter
+    " let l:dir = FindRootDirectory()
+    " if empty(l:dir)
+    "     let l:dir = expand("%:p:h")
+    " endif
+
     let l:dir = expand("%:p:h")
-    execute 'lcd' l:dir
+    execute 'cd' l:dir
     let l:project_dir = system("git-root")
-    execute 'lcd' l:project_dir
+    execute 'cd' l:project_dir
+    echom "changing dir to " l:dir
 endfunction
 
 function! CdBufferDir() abort
     let l:dir = expand("%:p:h")
-    execute 'lcd' l:dir
+    execute 'cd' l:dir
 endfunction

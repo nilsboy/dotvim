@@ -50,7 +50,6 @@ let g:unite_prompt = "> "
 set previewheight=20
 
 call unite#custom#profile('default', 'context', {
-    \ 'sync' : 1,
     \ 'match_input' : 'Search',
     \ 'keep_focus' : 1,
     \ 'silent' : 1,
@@ -58,10 +57,9 @@ call unite#custom#profile('default', 'context', {
     \ 'start_insert': 1,
     \ 'smart_case': 1,
     \ 'hide_source_names': 1,
-    \ 'resume' : 1,
-    \ 'is_volatile': 1,
 \ })
 
+    " \ 'sync' : 1,
     " \ 'previewheight': 999,
     " \ 'auto_highlight': 1,
     " \ 'vertical_preview': 1,
@@ -72,8 +70,6 @@ call unite#custom#profile('default', 'context', {
     " \ 'no_split' : 1,
     " \ 'resume' : 1,
     " \ 'here' : 1,
-
-nnoremap <nowait><silent><tab> :UniteResume<cr><esc>
 
 "### allow open action for script-file #####################################
 
@@ -102,27 +98,34 @@ autocmd FileType unite nmap <nowait><buffer> <esc> <plug>(unite_exit)
 
 autocmd FileType unite nmap <buffer> <cr> <Plug>(unite_do_default_action)
 autocmd FileType unite imap <buffer> <cr> <Plug>(unite_do_default_action)
+autocmd FileType unite nmap <buffer> R <Plug>(unite_redraw)
 
 autocmd FileType unite nnoremap <buffer> i gg0"_DA
 autocmd FileType unite nnoremap <buffer> A ggA
 
+autocmd FileType unite imap <buffer><silent> <c-h> <esc><c-h>
+autocmd FileType unite imap <buffer><silent> <c-j> <esc><c-j>
+autocmd FileType unite imap <buffer><silent> <c-k> <esc><c-k>
+autocmd FileType unite imap <buffer><silent> <c-l> <esc><c-l>
+
 "### files #####################################################################
+
+let g:unite_source_rec_max_cache_files = 0
 
 nnoremap <silent> <leader>ff :call Find_Unite()<cr><esc>
 function! Find_Unite() abort
     call CdProjectRoot()
     :Unite
       \ -buffer-name=find-project-unite
-      \ script-file:find-and-limit\ --abs
-    lcd -
+      \ script-file:find-and
 endfunction
 
 nnoremap <silent> <leader>fd :call FindDir_Unite()<cr><esc>
 function! FindDir_Unite() abort
-    call CdBufferDir()
+    execute "lcd" expand("%:p:h")
     :Unite
       \ -buffer-name=find-dir-unite
-      \ script-file:find-and-limit\ --abs
+      \ script-file:find-and
 endfunction
 
 nnoremap <silent> <leader>fw :call FindWord_Unite()<cr><esc>
@@ -130,15 +133,15 @@ function! FindWord_Unite() abort
     call CdProjectRoot()
     :UniteWithCursorWord
         \ -buffer-name=find-word-unite
-        \ script-file:find-and-limit\ --abs
+        \ script-file:find-and
 endfunction
 
 nnoremap <silent> <leader>vp :call FindVimPlugins_Unite()<cr><esc>
 function! FindVimPlugins_Unite() abort
-    execute 'lcd' $_VIM_BUNDLE_DIR
-    :UniteWithCursorWord
+    lcd $_VIM_BUNDLE_DIR
+    :Unite
         \ -buffer-name=find-vim-plugins-unite
-        \ script-file:find-and-limit\ --abs
+        \ script-file:find-and
 endfunction
 
 "### grep ######################################################################
@@ -166,7 +169,7 @@ function! Grep_Word_Unite() abort
     call CdProjectRoot()
     :UniteWithCursorWord
         \ -buffer-name=grep-word-unite
-        \ script-file:find-grep
+        \ script-file:find-and
         \ grep:**
 endfunction
 
@@ -175,24 +178,19 @@ function! Grep_Input_Unite() abort
     call CdProjectRoot()
     :UniteWithInput
         \ -buffer-name=grep-input-unite
-        \ script-file:find-grep
+        \ script-file:find-and
         \ grep:**
 endfunction
 
-" vnoremap <silent> <Leader>gg y:Unite
-"     \ -buffer-name=grep-word-unite
-"     \ -no-start-insert
-"     \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-"     \ script-file:find-and-limit\ --abs
-"     \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-"     \ <cr><esc>
+vnoremap <silent> <Leader>gg y:Unite
+    \ -buffer-name=grep-selection-unite
+    \ -no-start-insert
+    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+    \ script-file:find-and
+    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
+    \ <cr><esc>
 
-" nnoremap <silent> <Leader>gi :UniteWithProjectDir
-"     \ -buffer-name=grep-unite
-"     \ script-file:ag\ -l::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-"     \ <cr>
-
-"### Recent files ##############################################################
+"### Most Recent files #########################################################
 
 " MRU plugin includes unite.vim MRU sources
 NeoBundle 'Shougo/neomru.vim'
@@ -203,12 +201,23 @@ call unite#custom#source('neomru/file', 'sorters', ['sorter_nothing'])
 
 let g:neomru#file_mru_limit=3000
 
-nnoremap <silent> <leader>rr :Unite
+nnoremap <silent> <tab> :call UniteResumeOrFallback()<cr><esc>
+function! UniteResumeOrFallback() abort
+  if BufferFindByName('[unite]')
+    :UniteResume
+  else
+    call Recent_Global_Unite()
+  endif
+endfunction
+
+nnoremap <silent> <leader>rg :call Recent_Global_Unite()<cr><esc>
+function! Recent_Global_Unite() abort
+  :Unite
     \ -buffer-name=recent-files-unite
     \ neomru/file
-    \ <cr><esc>
+endfunction
 
-nnoremap <silent> <leader>rp :UniteWithProjectDir
+nnoremap <silent> <leader>rr :UniteWithProjectDir
     \ -buffer-name=recent-files-in-project-unite
     \ neomru/file
     \ <cr><esc>
@@ -418,7 +427,7 @@ endif
 "     else
 "         :Unite
 "             \ -buffer-name=files-unite
-"             \ script-file:abs=1\ find-and-limit
+"             \ script-file:abs=1\ find-and
 "     endif
 " endfunction
 
