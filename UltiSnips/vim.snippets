@@ -16,7 +16,7 @@ call dein#begin(g:plugin_dir)
 call dein#add('Shougo/dein.vim')
 " call dein#add('Shougo/vimproc.vim', {'build': 'make'})
 " call dein#add('Shougo/unite.vim')
-$0
+	$0
 sall dein#end()
 
 if dein#check_install() 
@@ -28,17 +28,17 @@ endsnippet
 
 snippet ab "Add bundle" b
 call dein#add('$1')
-$0
+	$0
 endsnippet
 
 snippet fun "Function" b
 function! $1($2) abort
-$0
+	$0
 endfunction
 endsnippet
 
 snippet if "if" b
 if $1
-$0
+	$0
 endif
 endsnippet

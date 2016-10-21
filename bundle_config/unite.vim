@@ -108,6 +108,9 @@ autocmd FileType unite imap <buffer><silent> <c-j> <esc><c-j>
 autocmd FileType unite imap <buffer><silent> <c-k> <esc><c-k>
 autocmd FileType unite imap <buffer><silent> <c-l> <esc><c-l>
 
+autocmd FileType unite nmap <buffer><silent> L :call BufferSwitchToNextByName('[unite]')<cr>
+autocmd FileType unite nmap <buffer><silent> H :call BufferSwitchToPreviousByName('[unite]')<cr>
+
 "### files #####################################################################
 
 let g:unite_source_rec_max_cache_files = 0
@@ -204,7 +207,7 @@ let g:neomru#file_mru_limit=3000
 nnoremap <silent> <tab> :call UniteResumeOrFallback()<cr><esc>
 function! UniteResumeOrFallback() abort
   if BufferFindByName('[unite]')
-    :UniteResume
+    UniteResume
   else
     call Recent_Global_Unite()
   endif

@@ -131,6 +131,52 @@ function! BufferFindByName(name) abort
     return 0
 endfunction
 
+function! BufferFindNextByName(name, current) abort
+  return BufferFindAnotherByName(a:name, a:current, 1)
+endfunction
+
+function! BufferFindPreviousByName(name, current) abort
+  return BufferFindAnotherByName(a:name, a:current, -1)
+endfunction
+
+function! BufferFindAnotherByName(name, current, direction) abort
+    let l:last_buffer = bufnr('$')
+    let l:i = bufnr(a:current)
+    while l:i * a:direction <= last_buffer
+        let l:name = bufname(l:i)
+
+        if l:name == a:current
+          let l:i = l:i + a:direction
+          continue
+        endif
+
+        if l:name =~ fnameescape(a:name)
+          return l:i
+        endif
+
+        let l:i = l:i + a:direction
+    endwhile
+    return 0
+endfunction
+
+function! BufferSwitchToNextByName(name) abort
+  let l:unite_buffer = BufferFindNextByName(a:name, expand('%'))
+  if l:unite_buffer == 0
+    echo "No next " . a:name . " buffer found."
+    return
+  endif
+  execute ":buffer " . l:unite_buffer
+endfunction
+
+function! BufferSwitchToPreviousByName(name) abort
+  let l:unite_buffer = BufferFindPreviousByName(a:name, expand('%'))
+  if l:unite_buffer == 0
+    echo "No previous " . a:name . " buffer found."
+    return
+  endif
+  execute ":buffer " . l:unite_buffer
+endfunction
+
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
 function! BufferCreateTemp(...) abort
     execute ":new /tmp/" . split(a:1, " ")[0]
