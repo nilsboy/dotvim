@@ -90,8 +90,8 @@ call unite#custom#source('script-file', 'sorters', ['sorter_nothing'])
 " Hack sometimes unite does not close
 autocmd FileType unite nmap <buffer><silent> x :pc! \| :bwipeout!<cr><esc>
 
-autocmd FileType unite nmap <nowait><buffer> <TAB> <plug>(unite_exit)
-autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_exit)
+autocmd FileType unite nmap <nowait><buffer> <TAB> <plug>(unite_all_exit)
+autocmd FileType unite imap <nowait><buffer> <TAB> <esc><plug>(unite_all_exit)
 " autocmd FileType unite imap <nowait><buffer> <TAB> <esc>
 
 autocmd FileType unite nmap <nowait><buffer> <esc> <plug>(unite_exit)
@@ -176,13 +176,18 @@ function! Grep_Word_Unite() abort
         \ grep:**
 endfunction
 
-nnoremap <silent> <leader>gi :call Grep_Input_Unite()<cr><esc>
+nnoremap <silent> <leader>gi :call Grep_Input_Unite()<cr>
 function! Grep_Input_Unite() abort
+    let l:term = input("Grep for: ")
     call CdProjectRoot()
-    :UniteWithInput
-        \ -buffer-name=grep-input-unite
-        \ script-file:find-and
-        \ grep:**
+    execute "
+      \ Unite
+          \ -buffer-name=grep-input-unite
+          \ -input=" . l:term . "
+          \ -no-start-insert
+          \ script-file:find-and
+          \ grep:**
+      \ "
 endfunction
 
 vnoremap <silent> <Leader>gg y:Unite

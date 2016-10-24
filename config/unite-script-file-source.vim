@@ -2,8 +2,8 @@
 " Spaces have to be quoted i.e.:
 " script-file:ls\ -la
  
-let s:grep_source = { 'name': 'script-file', 'is_volatile': 1 } 
-function! s:grep_source.gather_candidates(args, context) 
+let s:source = { 'name': 'script-file', 'is_volatile': 1 } 
+function! s:source.gather_candidates(args, context) 
   let l:command = get(a:args, 0,
     \ 'echo specify command in unite config')
 
@@ -21,5 +21,4 @@ function! s:grep_source.gather_candidates(args, context)
     \   "action__path" : v:val,
     \ }') 
 endfunction 
-  " fnamemodify(v:val, ":p:h")
-call unite#define_source(s:grep_source) 
+call unite#define_source(s:source) 

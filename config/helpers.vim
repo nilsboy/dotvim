@@ -500,7 +500,6 @@ function! CdProjectRoot() abort
     execute 'cd' l:dir
     let l:project_dir = system("git-root")
     execute 'cd' l:project_dir
-    echom "changing dir to " l:dir
 endfunction
 
 function! CdBufferDir() abort
