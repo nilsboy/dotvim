@@ -167,18 +167,13 @@ if executable('ag')
   let g:unite_source_grep_recursive_opt = ''
 endif
 
-nnoremap <silent> <leader>gg :call Grep_Word_Unite()<cr><esc>
-function! Grep_Word_Unite() abort
-    call CdProjectRoot()
-    :UniteWithCursorWord
-        \ -buffer-name=grep-word-unite
-        \ script-file:find-and
-        \ grep:**
-endfunction
+nnoremap <silent> <leader>gg yiw:call Grep_Unite(@")<cr>
+nnoremap <silent> <leader>gW yiW:call Grep_Unite(@")<cr>
+vnoremap <silent> <Leader>gg y:call Grep_Unite(@")<cr>
+nnoremap <silent> <leader>gi :call Grep_Unite(input("Grep for: "))<cr>
 
-nnoremap <silent> <leader>gi :call Grep_Input_Unite()<cr>
-function! Grep_Input_Unite() abort
-    let l:term = input("Grep for: ")
+function! Grep_Unite(term) abort
+    let l:term = escape(a:term, " ")
     call CdProjectRoot()
     execute "
       \ Unite
@@ -189,14 +184,6 @@ function! Grep_Input_Unite() abort
           \ grep:**
       \ "
 endfunction
-
-vnoremap <silent> <Leader>gg y:Unite
-    \ -buffer-name=grep-selection-unite
-    \ -no-start-insert
-    \ -input=<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-    \ script-file:find-and
-    \ grep:**::<c-r>=escape(@", '\\.*$^[]')<cr><esc>
-    \ <cr><esc>
 
 "### Most Recent files #########################################################
 
