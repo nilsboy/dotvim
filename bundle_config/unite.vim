@@ -232,7 +232,7 @@ nnoremap <silent> <leader>rr :UniteWithProjectDir
 
 nnoremap <silent> <leader>rd :Unite
     \ -buffer-name=recent-directories-unite
-    \ -default-action=project_cd
+    \ -default-action=vimfiler
     \ neomru/directory
     \ <cr><esc>
 
