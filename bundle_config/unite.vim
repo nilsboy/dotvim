@@ -300,14 +300,9 @@ nnoremap <silent><leader>vm :<C-u>Unite
     \ mapping
     \ <cr><esc>
 
-" Show vim's predefined mappings
-nnoremap <silent><leader>vM :help index \| :only<cr><esc>
-
 " vim help
-nnoremap <leader>vh :Unite help<cr><esc>
-
-" vim environment
-nnoremap <leader>vee :call VimEnvironment()<cr><esc>
+" Don't use! locks vim up
+" nnoremap <leader>vh :Unite help<cr><esc>
 
 "### Marks #####################################################################
 

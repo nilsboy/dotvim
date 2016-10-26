@@ -196,6 +196,7 @@ function! Redir(command) abort
     normal ggdddd
 endfunction
 
+" TODO checkout :Verbose
 function! RedirIntoCurrentBuffer(command) abort
 
     let output = ""
@@ -214,9 +215,6 @@ function! RedirIntoCurrentBuffer(command) abort
     endtry
 
 endfunction
-
-" autocmd BufRead,BufNewFile *.{myfind} setlocal filetype=myfind
-" nnoremap <silent> <leader>d :Run ls.myfind find-and-limit<cr>gg
 
 command! -nargs=* Run call Run(<f-args>)
 function! Run(...) abort
@@ -318,7 +316,7 @@ call add(g:commands, 'verbose map!<buffer> ')   " buffer local Insert and Comman
 
 " ### There are six sets of mappings
 
-call add(g:commands, 'verbose map         ')   " Normal-mode mappings only
+call add(g:commands, 'verbose map          ')   " Normal-mode mappings only
 
 " - For Normal mode: When typing commands.
 call add(g:commands, 'verbose nmap         ')   " Normal-mode mappings only
@@ -426,6 +424,9 @@ function! VimEnvironment() abort
     only
 
 endfunction
+
+" show vim environment
+nnoremap <leader>vee :call VimEnvironment()<cr><esc>
 
 " nmap ,, :CommandLine<cr>
 

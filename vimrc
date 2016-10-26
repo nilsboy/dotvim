@@ -341,8 +341,6 @@ endfunction
 " Does not work on terminal vim
 nnoremap <s-space> <C-b>
 
-nnoremap <leader>k1 <F1>
-
 nmap <silent>L :bnext<cr>
 nmap <silent>H :bprev<cr>
 
@@ -477,6 +475,16 @@ nnoremap <C-k> 7k
 
 " Edit file under cursor even if it does not exist
 nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
+
+" Easier change and replace word
+nnoremap c* *Ncgn
+nnoremap c# #NcgN
+nnoremap cg* g*Ncgn
+nnoremap cg# g#NcgN
+
+" TODO
+nnoremap <leader>* /\<<C-R>=expand('<cword>')<CR>\><CR>
+nnoremap <leader># ?\<<C-R>=expand('<cword>')<CR>\><CR>
 
 "### Misc ######################################################################
 
