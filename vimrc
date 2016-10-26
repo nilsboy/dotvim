@@ -14,6 +14,7 @@ endfunction
 let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"
 let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
+let g:vim['after']    = { 'dir' : g:vim.dir . "after/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
@@ -64,14 +65,8 @@ call _mkdir(&undodir)
 " Enable vim enhancements
 set nocompatible
 
-" TODO paths
-set runtimepath+=$REMOTE_HOME/.vim/etc
-" set runtimepath+=$REMOTE_HOME/.vim/etc/bin
-set runtimepath+=$REMOTE_HOME/.vim/etc/after
-
-" TODO paths
-" Add system PATH to vim path to be used by :find
-let &path = &path . ",**," . $HOME . "/src/**" . "," . substitute($PATH, ':', ',', 'g')
+set runtimepath+=g:vim.etc
+set runtimepath+=g:vim.after
 
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
@@ -402,11 +397,6 @@ nnoremap <silent><leader>ee :RunCurrentBuffer<cr>
 nnoremap <silent><leader>el :RunCursorLine<cr>
 " Run current line as vim script
 nnoremap <silent><leader>ev :RunCursorLineVim<cr>
-" TODO call RedirIntoCurrentBuffer('let x = unite#get_kinds() | echo x')
-" format vim structure:
-" - :%s/'/"/g
-" - %!perl -0777 -pe 's/function\(.+?\)/"function"/g'
-" - run json formatter
 
 " Don't wait after escape in insert mode
 " Breaks curser keys etc.
@@ -605,25 +595,6 @@ function! Location() abort
 endfunction
 
 "### Cursor ##################################################################
-
-" use an orange cursor in insert mode
-" TODO let &t_SI = "\<Esc>]12;red\x7"
-" use a red cursor otherwise
-" TODO let &t_EI = "\<Esc>]12;orange\x7"
-" silent !echo -ne "\033]12;red\007"
-" reset cursor when vim exits
-" autocmd VimLeave * silent !echo -ne "\033]12;gray\007"
-
-" use \003]12;gray\007 for gnome-terminal
-" solid underscore
-" let &t_SI .= "\<Esc>[4 q"
-" let &t_EI .= "\<Esc>[6 q"
-" 2 -> solid block
-" 1 or 0 -> blinking block
-" 3 -> blinking underscore
-" Recent versions of xterm (282 or above) also support
-" 5 -> blinking vertical bar
-" 6 -> solid vertical bar
 
 autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
 autocmd InsertEnter * setlocal nocursorline
