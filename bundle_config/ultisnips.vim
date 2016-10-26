@@ -4,7 +4,7 @@ NeoBundle 'SirVer/ultisnips'
 " vim-snipmate default snippets
 NeoBundle 'honza/vim-snippets'
 
-" let g:UltiSnipsExpandTrigger="<leader>se"
+let g:UltiSnipsExpandTrigger="<leader>ss"
 " let g:UltiSnipsJumpForwardTrigger="<space>"
 let g:UltiSnipsJumpForwardTrigger="<cr>"
 let g:UltiSnipsJumpBackwardTrigger="<leader>p"
@@ -15,10 +15,13 @@ let g:UltiSnipsListSnippets = "<leader>sl"
 " Edit snippets for current file type
 " :UltiSnipsEdit
 " has weird suggestions
-nnoremap <leader>ss :execute ":e " . g:vim.etc.dir . "UltiSnips/" . &filetype
+nnoremap <leader>se :execute ":e " . g:vim.etc.dir . "UltiSnips/" . &filetype
             \ . ".snippets"<cr>
 nnoremap <leader>sa :execute ":e " . g:vim.etc.dir . "UltiSnips/all.snippets"<cr>
 
+finish
+
+" This seems to mess up completion in i.e. the command window
 " https://www.reddit.com/r/vim/comments/2oeqrg
 function! ExpandSnippet()
     if delimitMate#WithinEmptyPair()
