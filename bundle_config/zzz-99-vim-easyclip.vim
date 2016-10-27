@@ -1,5 +1,7 @@
 " Simplified clipboard functionality for Vim
-NeoBundle 'svermeulen/vim-easyclip'
+NeoBundle 'svermeulen/vim-easyclip', {
+    \ 'build': 'sudo apt-get install xsel'
+    \ }
 
 " Needs to be loaded after vim-sneak to not clobber s-mappings:
 " https://github.com/svermeulen/vim-easyclip/issues/60
