@@ -32,6 +32,7 @@ let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
 " TODO change to $XDG_CACHE_HOME
+" TODO use $XDG_CACHE_DIR
 let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim/" }
 
 " Log autocmds etc to file
@@ -233,7 +234,7 @@ let &showbreak=repeat(' ', 10) . "↪ "
 set mousehide
 
 " Disable mouse
-" set mouse=
+set mouse=
 
 " always assume decimal numbers
 set nrformats-=octal
@@ -494,7 +495,7 @@ command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
 set shortmess=atTIW
 
 " Increase ruler height
-set cmdheight=2
+" set cmdheight=2
 
 " always show status line
 set laststatus=2

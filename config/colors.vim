@@ -1,6 +1,9 @@
 " Show hightlight groups in their current colors
 " :source $VIMRUNTIME/syntax/hitest.vim
 
+" - RNB, a Vim colorscheme template
+"   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
+
 " Force 256 colors for terminals that call themselfs TERM=xterm
 " set t_Co=256
 

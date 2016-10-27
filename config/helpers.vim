@@ -1,3 +1,8 @@
+" VimL Helper Libraries
+" - l9.vim
+" - https://github.com/LucHermitte/lh-vim-lib
+" - tomtom/tlib_vim
+
 " Close a buffer writing its content and closing vim if appropriate.
 " Use bwipe instead of bdelete - otherwise the buffer stays open as
 " an unlisted-buffer.
