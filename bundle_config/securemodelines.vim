@@ -1,4 +1,5 @@
 finish
+" Using secureexmodelines now.
 " A secure alternative to modelines
 
 " Needed for dbext.vim

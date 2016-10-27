@@ -30,7 +30,7 @@ NeoBundle 'Shougo/unite.vim', {
 let g:unite_no_default_keymappings = 1
 
 " help source for unite.vim
-NeoBundle 'Shougo/unite-help'
+" NeoBundle 'Shougo/unite-help'
 
 if neobundle#tap('unite.vim') 
     function! neobundle#hooks.on_post_source(bundle)
@@ -47,7 +47,7 @@ let g:unite_data_directory = g:vim.cache.dir . "unite"
 " let g:unite_source_line_enable_highlight = 1
 
 let g:unite_prompt = "> "
-set previewheight=20
+" set previewheight=20
 
 call unite#custom#profile('default', 'context', {
     \ 'match_input' : 'Search',

@@ -65,8 +65,8 @@ call _mkdir(&undodir)
 " Enable vim enhancements
 set nocompatible
 
-set runtimepath+=g:vim.etc
-set runtimepath+=g:vim.after
+execute "set runtimepath+=" . g:vim.etc.dir
+execute "set runtimepath+=" . g:vim.after.dir
 
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
@@ -194,8 +194,11 @@ set hidden
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
 " autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | setlocal nobuflisted | endif
 
-" Turn off previewwindow
-" set completeopt-=preview
+" Turn off previewwindow for completion
+set completeopt-=preview
+
+" Use tab key to move down in popup menu
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Set preview window height
 " set previewheight=99
@@ -229,14 +232,19 @@ let &showbreak=repeat(' ', 10) . "↪ "
 " hide mouse when characters are typed
 set mousehide
 
+" Disable mouse
+" set mouse=
+
 " always assume decimal numbers
 set nrformats-=octal
 
-" Determine how text with the "conceal" syntax attribute
-set conceallevel=1
-set listchars+=conceal:Δ
+" Determine how text with the "conceal" syntax attribute is shown
+" set conceallevel=1
+" set listchars+=conceal:Δ
 
 set guifont=Monospace\ 13
+
+set isfname-==
 
 "### searching #################################################################
 
@@ -494,6 +502,9 @@ set laststatus=2
 " always show tab page labels
 set showtabline=2
 
+" Prevent mode info messages on the last line to prevent 'hit enter prompt'
+set noshowmode
+
 " Always show ruler (right part of the command line)
 " set ruler
 
@@ -637,6 +648,7 @@ call neobundle#begin(g:vim.bundle.dir)
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " TODO checkout runtime! *.vim
+" execute "runtime! " . g:vim.bundle.settings.dir . "/*.vim"
 for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
     execute 'source' fpath
 endfor
@@ -674,6 +686,6 @@ if filereadable(g:vim.rc_local)
 endif
 
 " has to be done last - it is set somewhere else before already
-let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
+" let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
 
 "###############################################################################

@@ -38,6 +38,8 @@ This setting makes Vim echo the autocommands as it executes them.
 - https://github.com/idbrii/vim-renamer
 
 ## TODO
+- :h runtime for directory structure
+- Messes with preview window: /usr/share/nvim/runtime/syntax/man.vim
 - use external perl for inline search
 - set $XDG_CACHE_DIR from remote_home for neomru etc?
 - check preview-window
