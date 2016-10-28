@@ -290,16 +290,7 @@ set nowritebackup
 " Never create swapfiles
 set noswapfile
 
-"### mappings ##################################################################
-
-" For a list of vim's internal mappings see:
-" :h index
-
-" Potentially usable keys for normal mode:
-" sSQZ <cr> <bs>
-" - r
-" - R - I do use it but should use c-mappings instead
-" - M
+"### timeouts ##################################################################
 
 " Timeout on mappings and key codes (faster escape etc)
 " set timeout
@@ -309,28 +300,36 @@ set noswapfile
 " used for the CursorHold autocommand event
 set updatetime=1000
 
-" Use <Leader> as prefix key for own key mappings
+"### mappings ##################################################################
+
+" For a list of vim's internal mappings see:
+" :h index
+
+" Potentially reassignable keys for normal mode:
+" s, S, Q, Z, <bs>, M, m, r, R, <space>
+" <cr> is used in quickfix etc for jumping
+
+" Map space to leader instead of the other way around to keep the original
+" leader in insert mode - because space does not work well there.
+nmap <space> <leader>
+
 " use <leader>! as prefix to remap stuff - like:
-" nnoremap ,!a <C-i>
-" let mapleader = "\"
+" nnoremap <leader>!a <C-i>
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
-" vnoremap . :
-" nnoremap . :
-
 nnoremap :s/ :s/\V
 
-" nnoremap <leader>z :wall<cr><c-z>
 nnoremap <c-z> :wall<cr><c-z>
 inoremap <c-z> <esc>:wall<cr><c-z>
 
-nnoremap <space> <c-f>
-vnoremap <space> <c-f>
-nnoremap <bs> <c-b>
-vnoremap <bs> <c-b>
-nnoremap M <c-b>
-vnoremap M <c-b>
+" Switch to alternative file
+nnoremap <BS> <C-^>
+
+" nnoremap <leader>j <c-f>
+" vnoremap <leader>j <c-f>
+" nnoremap <leader>k <c-b>
+" vnoremap <leader>k <c-b>
 
 " Save file as root
 command! -nargs=* WW :silent call WriteSudo()
@@ -343,7 +342,7 @@ endfunction
 " nnoremap < <shift>
 
 " Does not work on terminal vim
-nnoremap <s-space> <C-b>
+" nnoremap <s-space> <C-b>
 
 nmap <silent>L :bnext<cr>
 nmap <silent>H :bprev<cr>
@@ -415,15 +414,17 @@ set noesckeys
 "Mapping <esc> in vimrc breaks arrow behaviour"
 "(http://stackoverflow.com/questions/11940801)
 nnoremap <silent><esc> :call BufferClose()<cr>
-"
+
 " Causes delay
 " nnoremap <esc>[ <esc>[
 
 " Open command-line window
 " :h cmdline-window
-nnoremap <leader><leader> q:i
-vnoremap <leader><leader> q:i
+nnoremap <space><space> q:i
+vnoremap <space><space> q:i
+
 set cmdwinheight=10
+
 " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
 autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
 
