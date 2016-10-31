@@ -35,7 +35,7 @@ This setting makes Vim echo the autocommands as it executes them.
 - Messes with preview window: /usr/share/nvim/runtime/syntax/man.vim
 
 ## TODO
-- :h runtime for directory structure
+- see `:h runtime` for directory structure
 - Backup to git before write?: BufWritePre
 - input() history nnoremap q@ :echo input('')<CR><C-F>" (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
 - spell inside of comments and txt files - camel case / snail case

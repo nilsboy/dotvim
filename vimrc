@@ -324,7 +324,7 @@ nnoremap <c-z> :wall<cr><c-z>
 inoremap <c-z> <esc>:wall<cr><c-z>
 
 " Switch to alternative file
-nnoremap <BS> <C-^>
+" nnoremap <BS> <C-^>
 
 " nnoremap <leader>j <c-f>
 " vnoremap <leader>j <c-f>
@@ -470,8 +470,9 @@ nnoremap <leader>lr :%s/<C-r><C-w>/
 
 nnoremap MM :Messages<cr> \| :only \| :normal G<cr>
 
-nnoremap <C-j> 7j
-nnoremap <C-k> 7k
+" TODO
+" nnoremap <C-j> 7j
+" nnoremap <C-k> 7k
 
 " Edit file under cursor even if it does not exist
 nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
@@ -657,12 +658,10 @@ endfor
 
 call neobundle#end()
 
-" If there are uninstalled bundles found on startup,
-" this will conveniently prompt you to install them.
 NeoBundleCheck
 
 " Remove installed plugins that are not configured anymore
-" NeoBundleClean!
+" :NeoBundleClean!
 
 "### my config #################################################################
 

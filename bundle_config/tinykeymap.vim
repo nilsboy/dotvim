@@ -1,6 +1,6 @@
 finish
 " Define temporary keymaps
-NeoBundle 'tinykeymap'
+NeoBundle 'tomtom/tinykeymap_vim'
 
 " Alternative: vim-submode
 
@@ -21,38 +21,38 @@ let g:tinykeymaps_default = []
 
 " ### help ###################################################################
 
-call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
-call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.bundle.settings.dir . '/tinykeymap.vim"', {'exit': 1})
-call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
-call tinykeymap#Map("help", "l", ':execute ":edit ' . g:vim.plugin.dir . '/helpers.vim"', {'exit': 1 })
-call tinykeymap#Map("help", "v", ':execute ":e ' . g:vim.rc . '"', {'exit': 1 })
+" call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
+" call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.bundle.settings.dir . '/tinykeymap.vim"', {'exit': 1})
+" call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
+" call tinykeymap#Map("help", "l", ':execute ":edit ' . g:vim.plugin.dir . '/helpers.vim"', {'exit': 1 })
+" call tinykeymap#Map("help", "v", ':execute ":e ' . g:vim.rc . '"', {'exit': 1 })
 
 " ### buffers ################################################################
 
-call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
-call tinykeymap#Map('buffers', 'n', 'new') 
-call tinykeymap#Map("buffers", "c", "bdelete")
-call tinykeymap#Map("buffers", "l", "bnext")
-call tinykeymap#Map("buffers", "h", "bprev")
-call tinykeymap#Map("buffers", "g", ":L9GrepBufferAll ")
-call tinykeymap#Map("buffers", "i", "", {'exit': 1})
-call tinykeymap#Map("buffers", "<leader>", "", {'exit': 1})
+" call tinykeymap#EnterMap('buffers', '<leader>b', {'name': 'buffers'})
+" call tinykeymap#Map('buffers', 'n', 'new') 
+" call tinykeymap#Map("buffers", "c", "bdelete")
+" call tinykeymap#Map("buffers", "l", "bnext")
+" call tinykeymap#Map("buffers", "h", "bprev")
+" call tinykeymap#Map("buffers", "g", ":L9GrepBufferAll ")
+" call tinykeymap#Map("buffers", "i", "", {'exit': 1})
+" call tinykeymap#Map("buffers", "<leader>", "", {'exit': 1})
 
 " ### windows #################################################################
 
-call tinykeymap#EnterMap('windows', '<leader>w', {'name': 'windows'})
-call tinykeymap#Map('windows', 'n', ':new')
-call tinykeymap#Map("windows", "o", "only", {'exit': 1 })
-call tinykeymap#Map("windows", "c", "close")
-call tinykeymap#Map("windows", "h", "wincmd h")
-call tinykeymap#Map("windows", "l", "wincmd l")
-call tinykeymap#Map("windows", "j", "wincmd j")
-call tinykeymap#Map("windows", "k", "wincmd k")
-call tinykeymap#Map("windows", "s", "split")
-call tinykeymap#Map("windows", "v", "vsplit")
-call tinykeymap#Map("windows", "q", "quit")
-call tinykeymap#Map("windows", "i", "", {'exit': 1})
-call tinykeymap#Map("windows", "<leader>", "", {'exit': 1})
+" call tinykeymap#EnterMap('windows', '<leader>w', {'name': 'windows'})
+" call tinykeymap#Map('windows', 'n', ':new')
+" call tinykeymap#Map("windows", "o", "only", {'exit': 1 })
+" call tinykeymap#Map("windows", "c", "close")
+" call tinykeymap#Map("windows", "h", "wincmd h")
+" call tinykeymap#Map("windows", "l", "wincmd l")
+" call tinykeymap#Map("windows", "j", "wincmd j")
+" call tinykeymap#Map("windows", "k", "wincmd k")
+" call tinykeymap#Map("windows", "s", "split")
+" call tinykeymap#Map("windows", "v", "vsplit")
+" call tinykeymap#Map("windows", "q", "quit")
+" call tinykeymap#Map("windows", "i", "", {'exit': 1})
+" call tinykeymap#Map("windows", "<leader>", "", {'exit': 1})
 
 " ### Tags #####################################################################
 
@@ -90,9 +90,12 @@ call tinykeymap#Map("moves", "o", ":Unite jump", { 'exit': 1 })
 call tinykeymap#Map("moves", "h", "silent! normal ,!a")
 call tinykeymap#Map("moves", "l", "silent! normal ,!b")
 
-" Changelist
-call tinykeymap#Map("moves", "j", "silent! normal g;")
-call tinykeymap#Map("moves", "k", "silent! normal g,")
+" " Changelist
+" call tinykeymap#Map("moves", "j", "silent! normal g;")
+" call tinykeymap#Map("moves", "k", "silent! normal g,")
+
+call tinykeymap#Map("moves", "j", ":normal! 2j")
+call tinykeymap#Map("moves", "k", ":normal! 2k")
 
 call tinykeymap#Map("moves", "i", "", {'exit': 1})
 

@@ -314,10 +314,10 @@ NeoBundle 'tacroe/unite-mark'
 let g:unite_source_mark_marks =
     \ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-nnoremap <silent> <leader>mm :Unite
-    \ -buffer-name=marks-unite
-    \ mark
-    \ <cr><esc>
+" nnoremap <silent> <leader>mm :Unite
+"     \ -buffer-name=marks-unite
+"     \ mark
+"     \ <cr><esc>
 
 "### bookmark ##################################################################
 
