@@ -1,8 +1,5 @@
 "### misc ######################################################################
 
-" set verbosefile=/tmp/vim-debug.txt
-" set verbose=15
-
 " Create a directory if it does not exist jet
 function! _mkdir(path)
     if !isdirectory(expand(a:path))
@@ -362,8 +359,6 @@ nnoremap <silent> <leader>wk :wincmd k<cr>
 nnoremap <silent> <leader>wh :wincmd h<cr>
 nnoremap <silent> <leader>wl :wincmd l<cr>
 
-nnoremap <silent> <leader>x :Autoformat \| :Neomake<cr>
-
 " Never use formatprg (it's global) and don't fallback to vim default
 set formatprg=false
 
@@ -690,3 +685,8 @@ endif
 " let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
 
 "###############################################################################
+
+" set verbosefile=/tmp/vim-debug.txt
+" set verbose=15
+" set verbose=9
+
