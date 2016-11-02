@@ -4,6 +4,10 @@ NeoBundle 'Shougo/unite.vim', {
     \ , 'depends' : 'Shougu/vimproc.vim'
 \ }
 
+" Unite still needed to use some unite sources with denite.
+
+finish
+
 " autocmd FileType unite setlocal winheight=20
 
 "## Notes ######################################################################
@@ -237,24 +241,6 @@ nnoremap <silent> <leader>gc :Unite
     \ -no-start-insert
     \ script-file:git-modified
     \ <cr><esc>
-
-"### outline ###################################################################
-
-" outline source for unite.vim
-NeoBundle 'Shougo/unite-outline'
-
-let g:unite_source_outline_filetype_options = {
-    \ '*': {
-    \   'auto_update': 1,
-    \   'auto_update_event': 'hold',
-    \ },
-    \ 'java': {
-    \   'ignore_types': ['package'],
-    \ },
-    \ 'perl': {
-    \   'ignore_types': ['package'],
-    \ },
-\}
 
 nnoremap <silent> <Leader>o :<C-u>Unite
     \ -buffer-name=outline-unite

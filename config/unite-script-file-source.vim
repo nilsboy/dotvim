@@ -1,3 +1,4 @@
+finish
 " Run any executable that returns a file name
 " Spaces have to be quoted i.e.:
 " script-file:ls\ -la
