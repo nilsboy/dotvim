@@ -4,6 +4,8 @@
 " :UpdateRemotePlugins
 NeoBundle 'Shougo/denite.nvim', { 'name' : 'denite' }
 
+" TODO check if mappings in command mode can be added
+
 " MRU plugin includes unite.vim MRU sources
 NeoBundle 'Shougo/neomru.vim'
 
@@ -48,8 +50,8 @@ nnoremap <silent> <leader>vp :call _Denite('plugin_dir', 'file_rec', $_VIM_BUNDL
 nnoremap <silent> <leader>fw :call _Denite('project_file_word', 'file_rec', 'project', 'cword')<cr>
 
 nnoremap <silent> <leader>gi :call _Denite('project_grep', 'grep', 'project', '')<cr>
-nnoremap <silent> <leader>gg yiw:call _Denite('project_grep', 'grep', 'project', @")<cr>
-nnoremap <silent> <leader>gW yiW:call _Denite('project_grep', 'grep', 'project', @")<cr>
+nnoremap <silent> <leader>gg yiw:call _Denite('project_grep_cword', 'grep', 'project', @")<cr>
+nnoremap <silent> <leader>gW yiW:call _Denite('project_grep_cWORD', 'grep', 'project', @")<cr>
 
 nnoremap <silent><leader>vb :call _Denite('buffers', 'buffer:!', '', '')<cr>
 nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
