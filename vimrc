@@ -11,13 +11,17 @@ endfunction
 let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"
 let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
-let g:vim['after']    = { 'dir' : g:vim.dir . "after/" }
+let g:vim['after']    = { 'dir' : g:vim.etc.dir . "after/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
 let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 
 let $MYVIMRC = g:vim.rc
+
+if empty($XDG_CONFIG_HOME)
+    let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
+endif
 
 let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
@@ -141,7 +145,7 @@ set backspace=indent,eol,start
 set wildmenu
 
 " Use tab expansion in vim prompts
-set wildmode=longest:list
+" set wildmode=longest:list
 
 " Ignore case in file names
 set wildignorecase
@@ -177,9 +181,6 @@ set t_vb=
 " assume fast terminal connection
 set ttyfast
 
-" Keep cursor position (if possible) when executing certain commands
-set nostartofline
-
 set hidden
 " set winheight=9999
 
@@ -196,7 +197,7 @@ set hidden
 set completeopt-=preview
 
 " Use tab key to move down in popup menu
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Set preview window height
 " set previewheight=99
@@ -309,6 +310,7 @@ set updatetime=1000
 " Map space to leader instead of the other way around to keep the original
 " leader in insert mode - because space does not work well there.
 nmap <space> <leader>
+vmap <space> <leader>
 
 " use <leader>! as prefix to remap stuff - like:
 " nnoremap <leader>!a <C-i>
@@ -433,11 +435,8 @@ autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
 autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
 autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
 
-nnoremap / q/i\V
-vnoremap / q/i\V
-
-nnoremap ? ?\V
-vnoremap ? ?\V
+nnoremap // q/k
+vnoremap // q/k
 
 " Reselect visual block after indent
 vnoremap < <gv
@@ -481,6 +480,10 @@ nnoremap cg# g#NcgN
 " TODO
 nnoremap <leader>* /\<<C-R>=expand('<cword>')<CR>\><CR>
 nnoremap <leader># ?\<<C-R>=expand('<cword>')<CR>\><CR>
+
+nnoremap <leader>hW :execute 'help ' . expand('<cWORD>')<cr>
+nnoremap <leader>hh :execute 'help ' . expand('<cword>')<cr>
+vnoremap <leader>hh y:execute 'help ' . escape(expand(@"), ' ')<cr>
 
 "### Misc ######################################################################
 

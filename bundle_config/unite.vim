@@ -1,3 +1,4 @@
+finish
 " Unite and create user interfaces
 NeoBundle 'Shougo/unite.vim', {
     \ 'name' : 'unite.vim'

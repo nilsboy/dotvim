@@ -1,3 +1,4 @@
+finish
 " Dark powered asynchronous unite all interfaces
 ":h Denite
 " Needs after install:
@@ -56,10 +57,10 @@ nnoremap <silent> <leader>gW yiW:call _Denite('project_grep_cWORD', 'grep', 'pro
 nnoremap <silent><leader>vb :call _Denite('buffers', 'buffer:!', '', '')<cr>
 nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 
-nnoremap <silent> <Leader>o :call _Denite('outline', 'unite:outline', '', '')<cr>
+" nnoremap <silent> <Leader>o :call _Denite('outline', 'unite:outline', '', '')<cr>
 
-nnoremap <silent><leader>/ :call _Denite('lines', 'line', '', '')<cr>
-nnoremap <silent><leader>// :call _Denite('lines', 'line', '', 'cword')<cr>
+" nnoremap <silent><leader>/ :call _Denite('lines', 'line', '', '')<cr>
+" nnoremap <silent><leader>// :call _Denite('lines', 'line', '', 'cword')<cr>
 
 nnoremap <silent> <Leader>bb :call _Denite('bookmarks', 'unite:bookmark', '', '')<cr>
 nnoremap <silent> <Leader>ba :UniteBookmarkAdd<cr><esc>
@@ -72,11 +73,11 @@ endif
 
 NeoBundle 'sgur/unite-qf'
 
-nnoremap <silent> <leader>qq :call _Denite('quickfix', 'unite:qf', '', '')<cr>
+" nnoremap <silent> <leader>qq :call _Denite('quickfix', 'unite:qf', '', '')<cr>
 
 " Needs to be BufWinEnter not BufReadPost for youcompleteme's
 " GoToReferences to work
-autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
+" autocmd BufWinEnter quickfix call s:ReplaceQuickfixWithUnite()
 function s:ReplaceQuickfixWithUnite()
     cclose
     call _Denite('quickfix', 'unite:qf', '', '')

@@ -1,3 +1,4 @@
+finish
 " Saves yank history includes unite.vim history/yank source. 
 NeoBundle 'Shougo/neoyank.vim'
 
