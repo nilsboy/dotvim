@@ -1,9 +1,7 @@
 compiler perl
 
 nnoremap <buffer> <silent> <Leader>x :call PerlTidy()<CR><CR>
-nnoremap <buffer> <silent> <Enter> :verbose :call PerlModuleCreate()<cr><cr>
 
-" runtime! ftplugin/sh.vim
 " setlocal keywordprg=!perldoc .expand
 nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
 
@@ -15,10 +13,10 @@ setlocal makeprg=perl\ -c\ %
 
 setlocal errorformat+=\ %m\ at\ %f\ line\ %l
 
-if exists("b:did_ftplugin")
+if exists("b:did_ftplugin_perl")
     finish
 endif
-let b:did_ftplugin = 1
+let b:did_ftplugin_perl = 1
 
 let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
 
@@ -29,3 +27,10 @@ let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
 "                 \ call PerlTidy()
 " augroup END
 
+function! PerlTidy()
+    let _view=winsaveview()
+    "%!perltidy -q
+    %!perltidier -q
+    " %!tidyall --conf-name ~/.tidyallrc -p ~/.tidyallrc
+    call winrestview(_view)
+endfunction

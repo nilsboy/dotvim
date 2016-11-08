@@ -62,13 +62,15 @@ if executable('ag')
 endif
 
 nnoremap <leader>gg yiw:call <SID>grep(@", '')<cr>
+vnoremap <leader>gg y:call <SID>grep(@", '')<cr>
 nnoremap <leader>gW yiW:call <SID>grep(@", '')<cr>
 nnoremap <leader>gi :call <SID>grep(input('Grep for: '), '')<cr>
 nnoremap <leader>gs :call <SID>grep(input('Grep for: '), '~/src/')<cr>
 command! -bang -nargs=1 Grep call <SID>grep(<q-args>, '')
 function! s:grep(term, directory) abort
     call s:Cd(a:directory)
-    let &l:makeprg=s:grep_command . ' ' . escape(a:term, ' ')
+    let &l:makeprg=s:grep_command . ' ' . escape(a:term, ' "')
+    echom &l:makeprg
     let &l:errorformat="%f:%l:%m,%f:%l%m,%f  %l%m"
     silent! make!
     copen

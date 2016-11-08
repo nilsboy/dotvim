@@ -193,7 +193,6 @@ set hidden
 " autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
 " autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | setlocal nobuflisted | endif
 
-" Turn off previewwindow for completion
 set completeopt-=preview
 
 " Use tab key to move down in popup menu
@@ -337,7 +336,7 @@ function! WriteSudo() abort
     let &modified = v:shell_error
 endfunction
 
-" Expanding left shift does not work like this
+" Adding a left shift key does not work like this
 " nnoremap < <shift>
 
 " Does not work on terminal vim
@@ -356,21 +355,8 @@ nnoremap <leader>!b <C-i>
 nnoremap <silent> <leader>ww :wincmd w<cr>
 nnoremap <silent> <leader>wo :only<cr>
 
-nnoremap <silent> <leader>wj :wincmd j<cr>
-nnoremap <silent> <leader>wk :wincmd k<cr>
-nnoremap <silent> <leader>wh :wincmd h<cr>
-nnoremap <silent> <leader>wl :wincmd l<cr>
-
 " Never use formatprg (it's global) and don't fallback to vim default
 set formatprg=false
-
-" Use <leader>c to get rid of ctrl mappings
-nnoremap <silent> <leader>cv <c-v>
-nnoremap <silent> <leader>cp <c-p>
-nnoremap <silent> <leader>cn <c-n>
-nnoremap <silent> <leader>cr <c-r>
-nnoremap <silent> <leader>ct <c-t>
-nnoremap <silent> <leader>c] <c-]>
 
 " Nicer redo
 nnoremap U <c-r>
@@ -660,14 +646,6 @@ NeoBundleCheck
 
 " Remove installed plugins that are not configured anymore
 " :NeoBundleClean!
-
-"### my config #################################################################
-
-" stuff to load after the bundles
-
-for fpath in split(globpath(g:vim.config.dir, '*.vim'), '\n')
-    execute 'source' fpath
-endfor
 
 "###############################################################################
 
