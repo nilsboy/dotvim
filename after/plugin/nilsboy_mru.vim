@@ -22,3 +22,13 @@ endfunction
 function! nilsboy_mru#files() abort
     return s:mru_files
 endfunction
+
+function! nilsboy_mru#list_files() abort
+    let &l:makeprg='tac ' . nilsboy_mru#files() . ' \| head -1001'
+    setlocal errorformat=%f
+    silent! make!
+    copen
+endfunction
+
+nnoremap <silent> <leader>rr :call nilsboy_mru#list_files()<cr>
+nnoremap <silent> <leader>re :silent! execute 'silent! edit ' . nilsboy_mru#files()<cr>
