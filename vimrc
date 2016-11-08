@@ -81,11 +81,6 @@ let g:netrw_dirhistmax = 0
 " Use gx to open any file under cursor in appropriate app
 let g:netrw_browsex_viewer="xdg-open"
 
-" prevent vim from using javascript as filetype for json
-autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json
-autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
-autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
-
 " Make the clipboard register the same as the default register
 " this allows easy copy to other x11 apps
 set clipboard=unnamed
@@ -144,6 +139,11 @@ set backspace=indent,eol,start
 " show list for autocomplete
 set wildmenu
 
+set completeopt-=preview
+
+" Use tab key to move down in popup menu
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
 " Use tab expansion in vim prompts
 " set wildmode=longest:list
 
@@ -188,24 +188,12 @@ set hidden
 " set winminheight=0
 
 " autocmd BufAdd * setlocal buflisted
-" autocmd FileType qf setlocal winheight=20
-
-" autocmd BufCreate,BufAdd,BufEnter * if expand('%') ==# '' | setlocal nobuflisted | endif
-" autocmd BufNew,BufCreate,BufAdd,BufEnter * if &previewwindow | setlocal nobuflisted | endif
-
-set completeopt-=preview
-
-" Use tab key to move down in popup menu
-" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Set preview window height
 " set previewheight=99
 
 " Highlight unknown filetypes as text
 autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
-
-" Set filetype on vimdocs even when opened directly from file
-autocmd! BufAdd *vim*/doc/*.txt setlocal filetype=help
 
 " show count of selected lines / columns
 set showcmd
