@@ -1,27 +1,29 @@
 "### misc ######################################################################
 
-" Create a directory if it does not exist jet
-function! _mkdir(path)
-    if !isdirectory(expand(a:path))
-        call mkdir(expand(a:path))
-    endif
-endfunction
+if empty($XDG_CONFIG_HOME)
+    let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
+endif
+
+if empty($XDG_DATA_HOME)
+    let $XDG_DATA_HOME = $REMOTE_HOME . "/.local/share"
+endif
+
+if empty($XDG_CACHE_DIR)
+    let $XDG_CACHE_DIR = $REMOTE_HOME . "/.cache"
+endif
 
 " vars
 let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"
 let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
-let g:vim['after']    = { 'dir' : g:vim.etc.dir . "after/" }
+let g:vim['after']  = { 'dir' : g:vim.etc.dir . "after/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
-let g:vim['var']    = { 'dir' : g:vim.dir . "var/" }
+let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim' }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
+let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR }
 
 let $MYVIMRC = g:vim.rc
-
-if empty($XDG_CONFIG_HOME)
-    let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
-endif
 
 let g:vim.bundle = {}
 let g:vim.bundle.dir =  g:vim.dir . "bundle/"
@@ -32,18 +34,13 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-" TODO change to $XDG_CACHE_HOME
-" TODO use $XDG_CACHE_DIR
-let g:vim['cache']  = { 'dir' : $REMOTE_HOME . "/.cache/vim/" }
-
 " Log autocmds etc to file
 " let &verbosefile = g:vim.var.dir . "/verbose.log"
 " let &verbose = 15
 
-call _mkdir(g:vim.dir)
-call _mkdir(g:vim.etc.dir)
-call _mkdir(g:vim.var.dir)
-call _mkdir(g:vim.cache.dir)
+call mkdir(g:vim.dir, "p")
+call mkdir(g:vim.etc.dir, "p")
+call mkdir(g:vim.var.dir, "p")
 
 " Remove all existing autocommands on vimrc reload
 autocmd!
@@ -58,7 +55,7 @@ set showfulltag
 " Keep undo history after closing a file
 set undofile
 let &undodir = g:vim.var.dir . "undo"
-call _mkdir(&undodir)
+call mkdir(&undodir, "p")
 
 " nomodeline can not be revered by plugins
 " but modeline is needed by dbext even though it uses its own parser.
@@ -436,7 +433,7 @@ vmap y ygv<Esc>
 
 nnoremap <leader>lr :%s/<C-r><C-w>/
 
-nnoremap MM :Messages<cr> \| :only \| :normal G<cr>
+nnoremap MM :Verbose messages<cr> \| :only \| :normal G<cr>
 
 " TODO
 " nnoremap <C-j> 7j
@@ -609,7 +606,7 @@ endfunction
 if !IsPluginInstalled("neobundle.vim")
     echo "Installing NeoBundle..."
     echo ""
-    silent execute "!mkdir -p " g:vim.bundle.dir
+    call mkdir(g:vim.bundle.dir, "p")
     execute "!git clone https://github.com/Shougo/neobundle.vim " .
                 \ g:vim.bundle.dir . "/neobundle.vim"
 endif

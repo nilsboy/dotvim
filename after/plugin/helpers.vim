@@ -512,3 +512,13 @@ function! CdBufferDir() abort
     let l:dir = expand("%:p:h")
     execute 'cd' l:dir
 endfunction
+
+function! helpers#touch(path) abort
+    if empty(a:path)
+        throw "Specify non empty path to create"
+    endif
+    let l:path = fnamemodify(a:path, ':p')
+    let l:dir = fnamemodify(a:path, ':p:h')
+    call mkdir(l:dir, 'p')
+    call writefile([], l:path, 'a')
+endfunction

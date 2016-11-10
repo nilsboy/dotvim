@@ -1,4 +1,3 @@
-finish
 " The ultimate snippet solution for Vim.
 NeoBundle 'SirVer/ultisnips'
 

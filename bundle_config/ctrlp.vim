@@ -15,7 +15,7 @@ let g:ctrlp_max_height=40
 let g:ctrlp_show_hidden=0
 let g:ctrlp_follow_symlinks=1
 let g:ctrlp_max_files=1000
-let g:ctrlp_cache_dir=g:vim.cache.dir . 'ctrlp'
+let g:ctrlp_cache_dir=$XDG_CACHE_DIR . '/ctrlp'
 
 " let g:ctrlp_custom_ignore = {
 "     \ 'dir': '\v[\/]\.(git|hg|svn|idea)$',

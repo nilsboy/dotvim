@@ -40,7 +40,7 @@ let g:unite_no_default_keymappings = 1
 if neobundle#tap('unite.vim') 
     function! neobundle#hooks.on_post_source(bundle)
 
-let g:unite_data_directory = g:vim.cache.dir . "unite"
+let g:unite_data_directory = $XDG_CACHE_DIR . "/unite"
 " let g:unite_enable_auto_select = 0
 
 " Probably does not work with volatile sources

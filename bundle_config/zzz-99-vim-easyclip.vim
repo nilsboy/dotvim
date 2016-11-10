@@ -17,5 +17,5 @@ let g:EasyClipPreserveCursorPositionAfterYank = 1
 " Store yanks to file
 let g:EasyClipShareYanksDirectory = g:vim.var.dir . "/easyclip"
 let g:EasyClipShareYanksFile = "shared-yanks"
-call _mkdir(g:EasyClipShareYanksDirectory)
+call mkdir(g:EasyClipShareYanksDirectory, 'p')
 let g:EasyClipShareYanks = 1

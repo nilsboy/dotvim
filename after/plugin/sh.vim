@@ -1,3 +1,7 @@
+let s:cache_dir = $XDG_CACHE_DIR . "/vim-normal-buffer-man"
+
+call mkdir(s:cache_dir, "p")
+
 function! Man(cmd) abort
 
     let cmd = a:cmd
@@ -7,17 +11,7 @@ function! Man(cmd) abort
         return
     endif
 
-    let cache_dir = $XDG_CACHE_DIR
-    if empty(cache_dir)
-        let cache_dir = $HOME . "/.cache"
-    endif
-    let cache_dir .= "/vim-normal-buffer-man"
-
-    if empty(glob(cache_dir))
-        call mkdir(cache_dir, "p")
-    endif
-
-    let file_name = cache_dir . "/" . cmd . ".man"
+    let file_name = s:cache_dir . "/" . cmd . ".man"
 
     " Needs ! to supress error from /usr/share/nvim/runtime/syntax/man.vim
     silent! execute 'edit ' file_name

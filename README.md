@@ -25,12 +25,9 @@ This setting makes Vim echo the autocommands as it executes them.
 - JavaScript-Context-Coloring
 - insearch.vim
 - "Define your own operator easily" (https://github.com/kana/vim-operator-user)
-- "Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd)
+- "Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd) (tags: alias)
 - A lot of interesting stuff: https://github.com/kana
 - https://github.com/idbrii/vim-renamer
-
-# Vim bugs
-- Messes with preview window: /usr/share/nvim/runtime/syntax/man.vim
 
 ## TODO
 - checkout https://github.com/skywind3000/asyncrun.vim/wiki/Cooperate-with-famous-plugins

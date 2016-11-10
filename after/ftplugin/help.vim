@@ -1,6 +1,6 @@
-if &previewwindow
-  finish
-endif
+" if &previewwindow
+"   finish
+" endif
 
 setlocal buflisted
 setlocal keywordprg=:help

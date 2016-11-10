@@ -1,9 +1,9 @@
 autocmd BufEnter * :call nilsboy_mru#add_file(expand('%:p'))
 
-let s:mru_dir = $XDG_CONFIG_HOME . '/nilsboy_mru'
+let s:mru_dir = $XDG_DATA_HOME . '/nilsboy_mru'
 let s:mru_files = s:mru_dir . '/mru_files'
 
-silent execute '!mkdir -p ' . escape(s:mru_dir, ' ')
+call helpers#touch(s:mru_files)
 
 function! nilsboy_mru#add_file(file) abort
     if exists('b:MyMru_done')
@@ -16,7 +16,7 @@ function! nilsboy_mru#add_file(file) abort
         return
     endif
     let b:MyMru_done = 1
-    silent execute '!echo ' . escape(a:file, ' ') . '>> ' . s:mru_files
+    call writefile([a:file], s:mru_files, 'a')
 endfunction
 
 function! nilsboy_mru#files() abort

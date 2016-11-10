@@ -1,13 +1,13 @@
-let s:bookmarks_dir = $XDG_CONFIG_HOME . '/nilsboy_bookmarks'
+let s:bookmarks_dir = $XDG_DATA_HOME . '/nilsboy_bookmarks'
 let s:bookmarks_file = s:bookmarks_dir . '/bookmarks'
 
-silent execute '!mkdir -p ' . escape(s:bookmarks_dir, ' ')
+call helpers#touch(s:bookmarks_file)
 
 function! nilsboy_bookmarks#add(file) abort
     if empty(a:file)
         return
     endif
-    silent execute '!echo ' . escape(a:file, ' ') . '>> ' . s:bookmarks_file
+    call writefile([a:file], s:bookmarks_file, 'a')
 endfunction
 
 function! nilsboy_bookmarks#file() abort
