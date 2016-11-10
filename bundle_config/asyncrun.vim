@@ -1,5 +1,5 @@
 finish
-" See dispatch.vim instead?
+" See neomake instead
 " Run Async Shell Commands in Vim 8.0 and Output to Quickfix Window
 NeoBundle 'skywind3000/asyncrun.vim'
 

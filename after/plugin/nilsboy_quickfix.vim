@@ -61,7 +61,7 @@ function! s:find(term, directory) abort
     call s:Cd(a:directory)
     let &l:makeprg="find-and-limit\ " . escape(a:term, '$ "')
     setlocal errorformat=%f
-    silent! make!
+    Neomake!
     copen
 endfunction
 
@@ -93,7 +93,7 @@ function! s:grep(term, directory) abort
     let &l:makeprg=s:grep_command . ' ' . escape(a:term, '$ "')
     echom &l:makeprg
     let &l:errorformat="%f:%l:%m,%f:%l%m,%f  %l%m"
-    silent! make!
+    Neomake!
     copen
 		" TODO execute 'match Search /' . a:term . '/'
 endfunction
@@ -101,9 +101,9 @@ endfunction
 nnoremap <leader>o :call <SID>outline()<cr>
 function! s:outline() abort
     call s:setNavigationType('quickfix')
-    let &l:makeprg='ctags -f - --fields=n % \| vim-errorformat-cleaner'
+    let &l:makeprg='ctags -f - --fields=n % | vim-errorformat-cleaner'
     setlocal errorformat=%f:%l:%c:%m
-    silent! make!
+    Neomake!
     copen
 endfunction
 

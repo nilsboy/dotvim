@@ -15,9 +15,9 @@ function! nilsboy_bookmarks#file() abort
 endfunction
 
 function! nilsboy_bookmarks#list() abort
-    let &l:makeprg='tac ' . nilsboy_bookmarks#file() . ' \| head -1001'
+    let &l:makeprg='tac ' . nilsboy_bookmarks#file() . ' | head -1001'
     setlocal errorformat=%f
-    silent! make!
+    Neomake!
     copen
 endfunction
 

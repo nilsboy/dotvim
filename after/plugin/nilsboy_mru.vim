@@ -24,9 +24,9 @@ function! nilsboy_mru#files() abort
 endfunction
 
 function! nilsboy_mru#list_files() abort
-    let &l:makeprg='tac ' . nilsboy_mru#files() . ' \| head -1001'
+    let &l:makeprg='tac ' . nilsboy_mru#files() . ' | head -1001'
     setlocal errorformat=%f
-    silent! make!
+    Neomake!
     copen
 endfunction
 
