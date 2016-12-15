@@ -146,7 +146,7 @@ endfunction
 
 nnoremap <silent> <leader>vp :call FindVimPlugins_Unite()<cr><esc>
 function! FindVimPlugins_Unite() abort
-    lcd $_VIM_BUNDLE_DIR
+    execute 'lcd ' . g:vim.bundle.dir
     :Unite
         \ -buffer-name=find-vim-plugins-unite
         \ script-file:find-and

@@ -1,4 +1,33 @@
+" Keyboard layout helpers
+
+" Use insert abbreviations to insert german keyboard special characters
+
+function! EatWhitespace(pat) abort
+  let c = nr2char(getchar(0))
+  normal X
+  return a:pat
+endfunction
+
+iabbrev ae <c-r>=EatWhitespace('ä')<cr>
+iabbrev Ae <c-r>=EatWhitespace('Ä')<cr>
+
+iabbrev oe <c-r>=EatWhitespace('ö')<cr>
+iabbrev Oe <c-r>=EatWhitespace('Ö')<cr>
+                           
+iabbrev ue <c-r>=EatWhitespace('ü')<cr>
+iabbrev Ue <c-r>=EatWhitespace('Ü')<cr>
+                           
+iabbrev ee <c-r>=EatWhitespace('€')<cr>
+iabbrev me <c-r>=EatWhitespace('µ')<cr>
+iabbrev 2e <c-r>=EatWhitespace('²')<cr>
+iabbrev 3e <c-r>=EatWhitespace('³')<cr>
+iabbrev 0e <c-r>=EatWhitespace('°')<cr>
+iabbrev #e <c-r>=EatWhitespace('§')<cr>
+
+finish
+
 " Allow language specific keys in insert mode with leader prepended
+
 inoremap <leader>k' ä
 inoremap <leader>k" Ä
 
@@ -17,9 +46,8 @@ inoremap <leader>k# §
 
 finish
 
-" Make german keyboard more programmer friendly
-
 " Allow language specific keys in insert mode with leader prepended
+
 inoremap <leader>ä ä
 inoremap <leader>Ä Ä
 
@@ -35,6 +63,8 @@ inoremap <leader>2 ²
 inoremap <leader>3 ³
 inoremap <leader>° °
 inoremap <leader>§ §
+
+finish
 
 " Make german keyboard more programmer friendly
 noremap ö [

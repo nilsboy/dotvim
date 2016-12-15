@@ -290,11 +290,20 @@ set updatetime=1000
 " Potentially reassignable keys for normal mode:
 " s, S, Q, Z, <bs>, M, m, r, R, <space>
 " <cr> is used in quickfix etc for jumping
+" Maybe use r as secondary leader?
+
+" Possible insert mode leaders:
+" imap <c-b>
+" imap <c-space>
 
 " Map space to leader instead of the other way around to keep the original
 " leader in insert mode - because space does not work well there.
 nmap <space> <leader>
 vmap <space> <leader>
+" nmap r <leader>
+
+" TODO used by mucomplete
+imap <c-l> <esc><c-l>
 
 " use <leader>! as prefix to remap stuff - like:
 " nnoremap <leader>!a <C-i>
@@ -368,11 +377,19 @@ nnoremap <silent><leader>if :!firefox "https://duckduckgo.com/?q=<cword> site:st
 nnoremap <silent><leader>is :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
 
 " Run current buffer in the shell
-nnoremap <silent><leader>ee :RunCurrentBuffer<cr>
+" nnoremap <silent><leader>ee :silent RunCurrentBuffer<cr>
+nnoremap <silent><leader>ee :call MyRun()<cr>
+function! MyRun() abort
+    write
+    NeomakeSh ./%
+    copen
+    execute "normal \<c-w>p"
+endfunction
+" TODO
+" autocmd TextChanged,InsertLeave index.js :call MyRun()
+
 " Run current line in the shell
 nnoremap <silent><leader>el :RunCursorLine<cr>
-" Run current line as vim script
-nnoremap <silent><leader>ev :RunCursorLineVim<cr>
 
 " Don't wait after escape in insert mode
 " Breaks curser keys etc.
@@ -423,6 +440,9 @@ nnoremap <expr> N 'nN'[v:searchforward]
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
 
+" Edit file under cursor even if it does not exist
+" nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
+
 " nnoremap <leader>b :ls<cr>:b
 
 nnoremap ' `
@@ -434,13 +454,11 @@ vmap y ygv<Esc>
 nnoremap <leader>lr :%s/<C-r><C-w>/
 
 nnoremap MM :Verbose messages<cr> \| :only \| :normal G<cr>
+" TODO set verbosefile=/tmp/haha
 
 " TODO
 " nnoremap <C-j> 7j
 " nnoremap <C-k> 7k
-
-" Edit file under cursor even if it does not exist
-nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -483,53 +501,26 @@ set noshowmode
 " TODO using an echo in statusline removes old messages - maybe a way to
 " suppress stuff?
 
-" too slow needs to be ss
-" set statusline+=%{system('git-project')}
+" set statusline+=%#TabLineSel#
+set statusline+=%-39.40{Location()}
+" set statusline+=%#TabLine#
 
-" Containing directory
-set statusline+=%{Location()}
-
-" set statusline+=%{pwd()}
-
-" Tail of the filename
-" set statusline+=%t
-
-" Separator
-set statusline+=" "
-
-" Set color of error highlight group
-set statusline+=%#errormsg#
-
-" read only flag
-" set statusline+=%{filewritable(expand('\%'))?'':'RO'}
-
-" Reset color
-set statusline+=%*
-
-" left/right separator
 set statusline+=%=
 
-" filetype
+" Filetype
 set statusline+=%{strlen(&filetype)?&filetype:''}
-" set statusline+=%{strlen(&syntax)?&syntax.'\ ':''}
 
-" region filetype
+" Region filetype
 set statusline+=%{exists(\"b:region_filetype\")?'/'.b:region_filetype.'\ ':''}
 
-" file encoding
+" File encoding
 set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 
 " File format
 set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
-" Cursor line/total lines
-set statusline+=\ \ \ \ \ %l
-
-" Cursor column
-set statusline+=:%c
-
-" Percent through file
-set statusline+=\ \ \ \ \ %P/%L
+let &statusline .= ' | %P | '
+set statusline+=%l:%-02c
 
 function! Location() abort
 
@@ -539,8 +530,6 @@ function! Location() abort
     let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
     let l:fn = "/home/user/bashrc"
     let l:fn = expand("%:p")
-
-    return l:fn
 
     let l:prefix = ""
     let l:dirname = ""
@@ -577,13 +566,13 @@ function! Location() abort
 
 endfunction
 
-"### Cursor ##################################################################
-
-autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-autocmd InsertEnter * setlocal nocursorline
-
-" Disable all blinking
-set guicursor+=a:blinkon0
+" " TODO
+" if len(getqflist()) > 0
+"   " Quickfix error count
+"   set statusline+=%{len(filter(getqflist(),'v:val.valid'))}
+"   set statusline+=%{'/'}
+"   set statusline+=%{len(getqflist())}
+" endif
 
 "### Gui mode ##################################################################
 

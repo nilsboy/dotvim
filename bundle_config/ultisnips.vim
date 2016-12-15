@@ -1,10 +1,13 @@
+finish
 " The ultimate snippet solution for Vim.
 NeoBundle 'SirVer/ultisnips'
 
 " vim-snipmate default snippets
 NeoBundle 'honza/vim-snippets'
 
-let g:UltiSnipsExpandTrigger="<leader>ss"
+" let g:UltiSnipsExpandTrigger="<leader>ss"
+" TODO:
+let g:UltiSnipsExpandTrigger="<c-space>"
 " let g:UltiSnipsJumpForwardTrigger="<space>"
 let g:UltiSnipsJumpForwardTrigger="<cr>"
 let g:UltiSnipsJumpBackwardTrigger="<leader>p"

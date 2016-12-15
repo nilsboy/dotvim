@@ -2,6 +2,7 @@
 " - l9.vim
 " - https://github.com/LucHermitte/lh-vim-lib
 " - tomtom/tlib_vim
+" - ingo-library
 
 " Close a buffer writing its content and closing vim if appropriate.
 " Use bwipe instead of bdelete - otherwise the buffer stays open as
@@ -472,10 +473,17 @@ function! RunCursorLine() abort
     call RunIntoBuffer(l:cmd)
 endfunction
 
-command! -nargs=0 RunCursorLineVim call RunCursorLineVim()
+" Run current line as vim script
+nnoremap <silent><leader>ev :call RunCursorLineVim()<cr>
+nnoremap <silent><leader>eV :call RunCursorLineVimVerbose()<cr>
 function! RunCursorLineVim() abort
     let l:cmd = GetRunableCursorLine()
     execute l:cmd
+endfunction
+
+function! RunCursorLineVimVerbose() abort
+    let l:cmd = GetRunableCursorLine()
+    execute 'Verbose ' . l:cmd
 endfunction
 
 function! GetRunableCursorLine() abort

@@ -1,3 +1,9 @@
+" Sometimes produces error on start:
+" Error detected while processing function EasyClip#Init[10]..EasyClip#Shared#Init[14]..EasyClip#Yank#GetYankstackHead[1]..EasyClip#Yank#GetYankInfoForReg[1]..provider#clipboard#Call[1]..20[4]..<SNR>225_try_cmd:
+" line    2:
+" E5677: Error writing input to shell-command: EPIPE
+" Press ENTER or type command to continue
+
 " Simplified clipboard functionality for Vim
 NeoBundle 'svermeulen/vim-easyclip', {
     \ 'build': 'sudo apt-get install xsel'

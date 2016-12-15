@@ -1,3 +1,4 @@
+finish
 " Dark powered asynchronous completion framework for neovim 
 NeoBundle 'Shougo/deoplete.nvim'
 

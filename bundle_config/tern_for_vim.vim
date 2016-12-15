@@ -1,4 +1,3 @@
-finish
 " Tern plugin for Vim
 NeoBundleLazy 'marijnh/tern_for_vim', {
   \ 'autoload': { 'filetypes': ['javascript'] },

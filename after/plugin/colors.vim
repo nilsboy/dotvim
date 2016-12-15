@@ -1,6 +1,3 @@
-" Show hightlight groups in their current colors
-" :source $VIMRUNTIME/syntax/hitest.vim
-
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 
@@ -16,22 +13,16 @@ autocmd BufEnter * :syntax sync fromstart
 " Remove background set by colorscheme
 " http://stackoverflow.com/questions/12449248
 function! ColorschemeCleanup()
-    hi Normal ctermbg=NONE guibg=NONE
-    " hi Comment ctermbg=NONE
-    " hi Constant ctermbg=NONE
-    " hi Special ctermbg=NONE
-    " hi Identifier ctermbg=NONE
-    " hi Statement ctermbg=NONE
-    " hi PreProc ctermbg=NONE
-    " hi Type ctermbg=NONE
-    " hi Underlined ctermbg=NONE
-    " hi Todo ctermbg=NONE
-    " hi String ctermbg=NONE
-    " hi Function ctermbg=NONE
-    " hi Conditional ctermbg=NONE
-    " hi Repeat ctermbg=NONE
-    " hi Operator ctermbg=NONE
-    " hi Structure ctermbg=NONE
+    hi Normal ctermbg=NONE
+
+    hi StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
+    hi StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
+
+    hi TabLine      ctermbg=249 ctermfg=240 cterm=NONE
+    hi TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
+    hi TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
+
+    hi CursorLine   ctermbg=254 ctermfg=NONE
 endfunction
 autocmd ColorScheme * call ColorschemeCleanup()
 
@@ -57,4 +48,14 @@ autocmd CursorMoved * execute printf('match todo /\V\<%s\>/',
 command! ColorsListCurrentHiGroups :so $VIMRUNTIME/syntax/hitest.vim
 
 " Show syntax groups
-nnoremap <leader>gs :echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<cr>
+nnoremap <leader>gh :echo map(synstack(line('.'), col('.')), 
+      \ 'synIDattr(v:val, "name")')<cr>
+
+"### Cursor
+
+autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
+autocmd InsertEnter * setlocal nocursorline
+
+" Disable all blinking
+set guicursor+=a:blinkon0
+
