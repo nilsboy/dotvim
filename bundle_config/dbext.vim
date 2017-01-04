@@ -147,6 +147,7 @@ endif
 nnoremap <leader>sp :execute "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim" \| setlocal filetype=dbext-profile<cr>
 
 let $SQL_FILES_DIR = $HOME . '/src/sql/'
+" TODO remove Unite
 nnoremap <leader>sf :Unite
     \ -buffer-name=sql-files
     \ -smartcase

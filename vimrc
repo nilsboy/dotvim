@@ -138,9 +138,6 @@ set wildmenu
 
 set completeopt-=preview
 
-" Use tab key to move down in popup menu
-" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
 " Use tab expansion in vim prompts
 " set wildmode=longest:list
 
@@ -204,18 +201,10 @@ set display=lastline,uhex
 set nolist
 set linebreak
 set breakat&vim
-let &showbreak=repeat(' ', 10) . "↪ "
-" Next vim:
-" This feature has been implemented on June 25, 2014 as patch 7.4.338"
-" (https://stackoverflow.com/questions/1204149/smart-wrap-in-vim)
+let &showbreak=repeat(' ', &tabstop) . "↪ "
+set breakindent
 
-" set mouse=nvi
-" set mousemodel=popup
-
-" hide mouse when characters are typed
 set mousehide
-
-" Disable mouse
 set mouse=
 
 " always assume decimal numbers
@@ -225,9 +214,9 @@ set nrformats-=octal
 " set conceallevel=1
 " set listchars+=conceal:Δ
 
-set guifont=Monospace\ 13
-
 set isfname-==
+
+command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
 
 "### searching #################################################################
 
@@ -345,6 +334,11 @@ nnoremap <leader>!b <C-i>
 
 " nmap <silent><C-j> <leader>!a
 " nmap <silent><C-k> <leader>!b
+
+nmap <silent><c-j> :wall<cr><c-j>
+nmap <silent><c-k> :wall<cr><c-k>
+nmap <silent><c-h> :wall<cr><c-h>
+nmap <silent><c-l> :wall<cr><c-l>
 
 nnoremap <silent> <leader>ww :wincmd w<cr>
 nnoremap <silent> <leader>wo :only<cr>
@@ -470,13 +464,9 @@ nnoremap cg# g#NcgN
 nnoremap <leader>* /\<<C-R>=expand('<cword>')<CR>\><CR>
 nnoremap <leader># ?\<<C-R>=expand('<cword>')<CR>\><CR>
 
-nnoremap <leader>hW :execute 'help ' . expand('<cWORD>')<cr>
-nnoremap <leader>hh :execute 'help ' . expand('<cword>')<cr>
-vnoremap <leader>hh y:execute 'help ' . escape(expand(@"), ' ')<cr>
-
-"### Misc ######################################################################
-
-command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
+nnoremap <leader>hW :execute 'Help ' . expand('<cWORD>')<cr>
+nnoremap <leader>hh :execute 'Help ' . expand('<cword>')<cr>
+vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
 
 "### Statusline ################################################################
 
@@ -519,8 +509,7 @@ set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 " File format
 set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
-let &statusline .= ' | %P | '
-set statusline+=%l:%-02c
+let &statusline .= ' | %3l,%-02c | %P'
 
 function! Location() abort
 
@@ -617,6 +606,11 @@ endfor
 call neobundle#end()
 
 NeoBundleCheck
+
+" Provides Neovim's UpdateRemotePlugins but does not seem to be sourced jet:
+source /usr/share/nvim/runtime/plugin/rplugin.vim
+" Calls UpdateRemotePlugins the NeoBundle way
+silent! NeoBundleRemotePlugins
 
 " Remove installed plugins that are not configured anymore
 " :NeoBundleClean!

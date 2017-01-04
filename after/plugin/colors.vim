@@ -10,19 +10,18 @@ set background=light
 " highlight the whole file not just the window - slower but more accurate.
 autocmd BufEnter * :syntax sync fromstart
 
-" Remove background set by colorscheme
-" http://stackoverflow.com/questions/12449248
 function! ColorschemeCleanup()
-    hi Normal ctermbg=NONE
+    highlight Normal ctermbg=NONE
+    highlight SignColumn ctermbg=254
 
-    hi StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
-    hi StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
+    highlight TabLine      ctermbg=249 ctermfg=240 cterm=NONE
+    highlight TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
+    highlight TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
 
-    hi TabLine      ctermbg=249 ctermfg=240 cterm=NONE
-    hi TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
-    hi TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
+    highlight CursorLine   ctermbg=254 ctermfg=NONE
 
-    hi CursorLine   ctermbg=254 ctermfg=NONE
+    highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
+    highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 endfunction
 autocmd ColorScheme * call ColorschemeCleanup()
 

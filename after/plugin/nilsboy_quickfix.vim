@@ -41,8 +41,6 @@
 " :sign place
 " Clear quickfix: :cex[]
 
-highlight SignColumn ctermbg=NONE
-
 " Always show signs column
 autocmd BufEnter * execute 'sign define nilsboy_quickfixEmpty'
 autocmd BufEnter * execute 'execute ":sign place 9999 line=1

@@ -1,0 +1,106 @@
+### Brackets
+
+# parens
+snippet ( "" w
+( ${1} )$0
+endsnippet
+
+snippet p "" w
+( ${1} )$0
+endsnippet
+
+# braces
+snippet { "" w
+{ ${1} }$0
+endsnippet
+
+snippet b "" w
+{ ${1} }$0
+endsnippet
+
+# [square] brackets
+snippet s "" w
+[ ${1} ]$0
+endsnippet
+
+snippet [ "" w
+[ ${1} ]$0
+endsnippet
+
+# angle brackets
+snippet < "" w
+< ${1} >$0
+endsnippet
+
+snippet a "" w
+< ${1} >$0
+endsnippet
+
+### Quotes
+
+snippet " "" w
+"${1}"$0
+endsnippet
+
+snippet ' "" w
+'${1}'$0
+endsnippet
+
+snippet ` "" w
+\`${1}\`$0
+endsnippet
+
+### Non-Ascii-characters
+
+snippet "(.*)ae" "umlaut" r
+`!p snip.rv = match.group(1)`ä
+endsnippet
+
+snippet "(.*)Ae" "umlaut" r
+`!p snip.rv = match.group(1)`Ä
+endsnippet
+
+snippet "(.*)oe" "umlaut" r
+`!p snip.rv = match.group(1)`ö
+endsnippet
+
+snippet "(.*)Oe" "umlaut" r
+`!p snip.rv = match.group(1)`Ö
+endsnippet
+
+snippet "(.*)ue" "umlaut" r
+`!p snip.rv = match.group(1)`ü
+endsnippet
+
+snippet "(.*)Ue" "umlaut" r
+`!p snip.rv = match.group(1)`Ü
+endsnippet
+
+snippet "(.*)ss" "umlaut" r
+`!p snip.rv = match.group(1)`ß
+endsnippet
+
+snippet eur "Euro sign" w
+€
+endsnippet
+
+snippet micro "Micro sign" w
+µ
+endsnippet
+
+snippet paragraph "Paragraph sign" w
+§
+endsnippet
+
+snippet degree "Degree sign" w
+°
+endsnippet
+
+### Misc
+
+# comments
+snippet / "" w
+/* ${1} */
+$0
+endsnippet
+

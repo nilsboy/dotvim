@@ -1,3 +1,4 @@
+finish
 " Chained completion that works the way you want!
 NeoBundle 'lifepillar/vim-mucomplete'
 
@@ -13,3 +14,5 @@ set completeopt+=noinsert " or
 " set completeopt+=noinsert,noselect
 
 let g:mucomplete#enable_auto_at_startup = 1
+
+let g:mucomplete#cycle_with_trigger = 1

@@ -530,3 +530,11 @@ function! helpers#touch(path) abort
     call mkdir(l:dir, 'p')
     call writefile([], l:path, 'a')
 endfunction
+
+command! -nargs=* Help call Help(<f-args>)
+function! Help(...) abort
+  execute "help " a:1
+  silent only
+  set buflisted
+endfunction
+

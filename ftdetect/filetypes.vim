@@ -9,3 +9,5 @@ autocmd BufRead,BufNewFile *.{json,handlebars} setlocal filetype=json
 autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
 autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
 
+autocmd BufRead,BufNewFile */bin/* 
+      \ if &filetype == '' | setlocal filetype=sh | endif

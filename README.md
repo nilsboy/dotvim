@@ -29,6 +29,9 @@ This setting makes Vim echo the autocommands as it executes them.
 - A lot of interesting stuff: https://github.com/kana
 - https://github.com/idbrii/vim-renamer
 
+## Vim script
+- get global var or default: get(g:,'deoplete#omni#input_patterns',{})
+
 ## TODO
 - checkout https://github.com/skywind3000/asyncrun.vim/wiki/Cooperate-with-famous-plugins
 - see `:h runtime` for directory structure

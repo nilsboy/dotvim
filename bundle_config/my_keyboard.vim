@@ -1,7 +1,10 @@
+" Deprecated see all.snippets instead
+
 " Keyboard layout helpers
 
-" Use insert abbreviations to insert german keyboard special characters
+finish
 
+" Use insert abbreviations to insert german keyboard special characters
 function! EatWhitespace(pat) abort
   let c = nr2char(getchar(0))
   normal X

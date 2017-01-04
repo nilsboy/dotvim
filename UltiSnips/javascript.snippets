@@ -7,11 +7,11 @@ $0
 endsnippet
 
 snippet req "Require module" b
-const ${1:var name} = require('${2:module name}')
+const ${2:var name} = require('${1:module name}')
 $0
 endsnippet
 
-snippet csv "CSV parser script" b
+snippet csvParserCli "CSV parser CLI" b
 #!/usr/bin/env node
 
 var csv = require('ya-csv')
@@ -37,4 +37,38 @@ reader.addListener('data', function(data) {
 // reader.addListener('data', function(data) {
 //   writer.writeRecord([ data[0] ])
 // })
+endsnippet
+
+snippet trace "Trace" w
+TRACE(\`$1\`)
+$0
+endsnippet
+
+snippet debug "Debug" w
+DEBUG(\`$1\`)
+$0
+endsnippet
+
+snippet info "Info" w
+INFO(\`$1\`)
+$0
+endsnippet
+
+snippet warn "Warn" w
+WARN(\`$1\`)
+$0
+endsnippet
+
+snippet error "Error" w
+ERROR(\`$1\`)
+$0
+endsnippet
+
+snippet d "Interpolated var" w
+\$\{${1:var}\}$0
+endsnippet
+
+snippet cl "console.log" b
+console.log(\`${1:value}\`)
+$0
 endsnippet
