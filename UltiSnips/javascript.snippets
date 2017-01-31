@@ -1,24 +1,46 @@
-snippet node "Description" b
-#!/usr/bin/env node
+extends json
 
-// ${1:description}
+snippet req "Require module" b
+const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require('$1')
+endsnippet
 
+snippet ex "module.exports"
+module.exports = $1;
+endsnippet
+
+snippet stdout "stdout"
+process.stdout
+endsnippet
+
+snippet stdin "stdin"
+process.stdin
+endsnippet
+
+snippet stderr "stderr"
+process.stderr
+endsnippet
+
+snippet	reqlodash "require lodash" b
+const _ = require(\`lodash\`)
 $0
 endsnippet
 
-snippet req "Require module" b
-const ${2:var name} = require('${1:module name}')
+snippet	requtil "require util" b
+const util = require(\`util\`)
+$0
+endsnippet
+
+snippet	reqfs "require fs" b
+const fs = require(\`fs\`)
 $0
 endsnippet
 
 snippet csvParserCli "CSV parser CLI" b
-#!/usr/bin/env node
+$0let csv = require(\`ya-csv\`)
 
-var csv = require('ya-csv')
+let file = process.argv[2] || 'my.csv'
 
-var file = process.argv[2] || 'my.csv'
-
-var reader = csv.createCsvFileReader(file, {
+let reader = csv.createCsvFileReader(file, {
   'separator': ',',
   'quote': '"',
   'escape': '"',
@@ -32,7 +54,7 @@ reader.addListener('data', function(data) {
       console.log(data)
 })
 
-// var writer = new csv.CsvWriter(process.stdout)
+// let writer = new csv.CsvWriter(process.stdout)
 //
 // reader.addListener('data', function(data) {
 //   writer.writeRecord([ data[0] ])
@@ -68,7 +90,60 @@ snippet d "Interpolated var" w
 \$\{${1:var}\}$0
 endsnippet
 
-snippet cl "console.log" b
-console.log(\`${1:value}\`)
+snippet cc "console.error" b
+console.error(\`### $1\`)
 $0
+endsnippet
+
+snippet ccc "console.error" b
+console.error(\`### $1:\`, $1)
+$0
+endsnippet
+
+snippet reqasyncawait "require Async/Await" b
+const async = require(\`asyncawait/async\`)
+const await = require(\`asyncawait/await\`)
+$0
+endsnippet
+
+snippet c "const" w
+const $1 = $2
+$0
+endsnippet
+
+snippet l "let" w
+let $1 = ${2:\`$3\`}
+$0
+endsnippet
+
+# TODO
+# let dump = require(`circular-json`).stringify
+# console.error(`### node: \n`, dump(node, null, '  '))
+
+snippet dump "dump a var" b
+let util = require(\`util\`)
+console.error(\`### $1\`, util.inspect($1, {depth: 3}))
+endsnippet
+
+snippet xx "here"
+console.error(\`### HERE`!v
+	line('.')
+	` `!v
+	expand('%:t') . ':' . line('.')
+	`\`)
+endsnippet
+
+snippet e "equals" w
+= \`$1\`
+$0
+endsnippet
+
+snippet	if "if"
+if($1) {
+	$0
+}
+endsnippet
+
+snippet todo "TODO"
+// TODO: $0
 endsnippet

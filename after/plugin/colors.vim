@@ -36,8 +36,8 @@ if &t_Co > 1
 endif
 
 " Highlight all occurences of word under cursor
-autocmd CursorMoved * execute printf('match todo /\V\<%s\>/',
-    \ escape(expand('<cword>'), '/\'))
+" autocmd CursorMoved * execute printf('match todo /\V\<%s\>/',
+"     \ escape(expand('<cword>'), '/\'))
 
 " Show trailing whitespace as red
 " highlight ExtraWhitespace ctermbg=darkred guibg=#382424

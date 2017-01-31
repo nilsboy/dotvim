@@ -17,13 +17,13 @@ This setting makes Vim echo the autocommands as it executes them.
   `:set verbose=9`
 
 ## Plugins to checkout
+- https://github.com/mattboehm/vim-unstack
 - vim-es6
 - vimagit
 - diffchar.vim
 - ctrlsf.vim " Grep with edit in-place
 - Vdebug
 - JavaScript-Context-Coloring
-- insearch.vim
 - "Define your own operator easily" (https://github.com/kana/vim-operator-user)
 - "Alter built-in Ex commands by your own ones" (https://github.com/kana/vim-altercmd) (tags: alias)
 - A lot of interesting stuff: https://github.com/kana

@@ -9,6 +9,10 @@ autocmd BufWritePost * :call nilsboy_mru#add_file(expand('%:p'), s:mru_files_wri
 call helpers#touch(s:mru_files)
 
 function! nilsboy_mru#add_file(file, mru_file) abort
+    " exclude temp files from NrrwRgn plugin
+    if a:file =~ '/tmp/NrrwRgn_.*'
+      return
+    endif
     let l:flag = printf('%s%s', 'b:nilsboy_mru_', fnamemodify(a:mru_file, ':t'))
     if exists(l:flag)
         return

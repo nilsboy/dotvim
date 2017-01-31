@@ -1,3 +1,4 @@
+finish
 function! XMLTidy()
     let _view=winsaveview()
 

@@ -1,4 +1,6 @@
-nnoremap <silent><leader>ii :call Browser()<CR>
+" Note: checkout surfraw
+
+" nnoremap <silent><leader>ii :call Browser()<CR>
 
 " nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 

@@ -1,52 +1,54 @@
+priority -100
+
 ### Brackets
 
 # parens
-snippet ( "" w
+snippet ( "parens"
 ( ${1} )$0
 endsnippet
 
-snippet p "" w
+snippet p "parens"
 ( ${1} )$0
 endsnippet
 
 # braces
-snippet { "" w
+snippet { "curly braces"
 { ${1} }$0
 endsnippet
 
-snippet b "" w
+snippet b "curly braces"
 { ${1} }$0
 endsnippet
 
 # [square] brackets
-snippet s "" w
+snippet s "brackets"
 [ ${1} ]$0
 endsnippet
 
-snippet [ "" w
+snippet [ "brackets"
 [ ${1} ]$0
 endsnippet
 
 # angle brackets
-snippet < "" w
+snippet < "angle brackets"
 < ${1} >$0
 endsnippet
 
-snippet a "" w
+snippet a "angle brackets"
 < ${1} >$0
 endsnippet
 
 ### Quotes
 
-snippet " "" w
+snippet " "double quotes"
 "${1}"$0
 endsnippet
 
-snippet ' "" w
+snippet ' "single quotes"
 '${1}'$0
 endsnippet
 
-snippet ` "" w
+snippet ` "backticks" w
 \`${1}\`$0
 endsnippet
 
@@ -80,8 +82,8 @@ snippet "(.*)ss" "umlaut" r
 `!p snip.rv = match.group(1)`ß
 endsnippet
 
-snippet eur "Euro sign" w
-€
+snippet "(.*)eur" "Euro sign" r
+`!p snip.rv = match.group(1)`€
 endsnippet
 
 snippet micro "Micro sign" w
@@ -102,5 +104,58 @@ endsnippet
 snippet / "" w
 /* ${1} */
 $0
+endsnippet
+
+snippet	node "node shebang" b
+#!/usr/bin/env node${1: --harmony}
+
+// ${1:description}
+
+$0
+endsnippet
+
+snippet bash "bash shebang" b
+#!/usr/bin/env bash
+
+# ${1:Description}
+
+${2:source bash-helpers}
+
+endsnippet
+
+snippet perl "perl shebang" b
+#!/usr/bin/env perl
+
+# ${1:description}
+
+use strict;
+use warnings;
+no warnings 'uninitialized';
+use Data::Dumper;
+
+$0
+endsnippet
+
+snippet date "YYYY-MM-DD" w
+(`!v strftime("%F")`)
+endsnippet
+
+snippet diso "ISO format datetime" w
+`!v strftime("%FT%H:%M:%S%z")`
+endsnippet
+
+snippet time "hh:mm" w
+`!v strftime("%H:%M")`
+endsnippet
+
+snippet datetime "YYYY-MM-DD hh:mm" w
+`!v strftime("%Y-%m-%d %H:%M")`
+endsnippet
+
+snippet lorem "Lorem Ipsum - 50 Words" b
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+no sea takimata sanctus est Lorem ipsum dolor sit amet.
 endsnippet
 

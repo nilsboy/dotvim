@@ -1,3 +1,4 @@
+" See twice as much of the same file using a horizontal split
 " https://www.reddit.com/r/vim/comments/4a4b1j/vim_porn_2_post_your_vim_screenshots/d0xam5d?st=itfuckf9&sh=ab73b30b
 function! s:scroll()
     let l:save = &scrolloff

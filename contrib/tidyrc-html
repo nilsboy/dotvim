@@ -1,0 +1,13 @@
+char-encoding: utf8
+output-encoding: utf8
+tidy-mark: false
+indent-spaces: 2
+vertical-space: yes
+indent-attributes: true
+indent: true
+markup: 1
+sort-attributes: alpha
+tab-size: 2
+wrap: 80
+wrap-attributes: true
+enclose-text: true

@@ -1,4 +1,4 @@
-"### misc ######################################################################
+"### Misc
 
 if empty($XDG_CONFIG_HOME)
     let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
@@ -19,9 +19,10 @@ let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
 let g:vim['after']  = { 'dir' : g:vim.etc.dir . "after/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
-let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim' }
+let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim/' }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR }
+let g:vim['contrib']  = { 'dir' : g:vim.etc.dir . '/contrib/' }
 
 let $MYVIMRC = g:vim.rc
 
@@ -69,6 +70,7 @@ execute "set runtimepath+=" . g:vim.after.dir
 
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
+" nnoremap <leader>vr :execute "source " . $MYVIMRC<cr>
 
 " set colorcolumn=81
 
@@ -110,48 +112,24 @@ set autowriteall
 " Leave cursor where it was - even on page jump
 set nostartofline
 
-" Insert spaces when the tab key is hit
+let &tabstop = 2
+let &softtabstop = &tabstop
+let &shiftwidth = &tabstop
+set smarttab
 set expandtab
 
 " automatically indent to match adjacent lines
 set autoindent
-
-" use shiftwidth to enter tabs
-set smarttab
-
-" Tab spacing
-set tabstop=2
-
-" Number of spaces per tab in insert mode
-set softtabstop=2
-
-" Shift width (moved sideways for the shift command)
-set shiftwidth=2
 
 " set textwidth=80
 
 " Make backspace more flexible
 set backspace=indent,eol,start
 
-" show list for autocomplete
-set wildmenu
-
-set completeopt-=preview
-
-" Use tab expansion in vim prompts
-" set wildmode=longest:list
-
-" Ignore case in file names
-set wildignorecase
-
-" Ignore patterns
-" set wildignore+=.*/**,*.class,node_modules/**,*/target/classes/**
-set wildignore+=*.class,*/target/classes/**
-
 set splitbelow
 set splitright
 
-" No line wrapping of long lines
+" Line wrapping
 set wrap
 
 " Show arrows for too long lines / show trailing spaces
@@ -201,7 +179,7 @@ set display=lastline,uhex
 set nolist
 set linebreak
 set breakat&vim
-let &showbreak=repeat(' ', &tabstop) . "↪ "
+let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
 set breakindent
 
 set mousehide
@@ -218,9 +196,9 @@ set isfname-==
 
 command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
 
-"### searching #################################################################
+"### Searching
 
-" Show matching brackets.
+" Show matching brackets
 set showmatch
 
 " Don't blink when matching
@@ -230,7 +208,10 @@ set matchtime=0
 set incsearch
 
 " Highlight found text
-set hlsearch
+" set hlsearch
+
+" Stop hightlightin current matches
+" nmap <c-c> :nohlsearch<cr>
 
 set ignorecase
 
@@ -246,7 +227,7 @@ set infercase
 " Switch window if it contains wanted buffer
 set switchbuf=useopen
 
-"### undo and swap #############################################################
+"### Undo and swap
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
 set maxmemtot=2048
@@ -261,7 +242,7 @@ set nowritebackup
 " Never create swapfiles
 set noswapfile
 
-"### timeouts ##################################################################
+"### Timeouts
 
 " Timeout on mappings and key codes (faster escape etc)
 " set timeout
@@ -271,7 +252,7 @@ set noswapfile
 " used for the CursorHold autocommand event
 set updatetime=1000
 
-"### mappings ##################################################################
+"### Mappings
 
 " For a list of vim's internal mappings see:
 " :h index
@@ -285,24 +266,27 @@ set updatetime=1000
 " imap <c-b>
 " imap <c-space>
 
+" These are the same for vim
+" Tab and Ctrl-I (<c-i><c-I>)
+" Enter and Ctrl-M (<c-m>)
+" Esc and Ctrl-[ (<c-[>)
+
+" Clear all mappings
+" :mapclear
+
 " Map space to leader instead of the other way around to keep the original
 " leader in insert mode - because space does not work well there.
 nmap <space> <leader>
 vmap <space> <leader>
-" nmap r <leader>
 
-" TODO used by mucomplete
-imap <c-l> <esc><c-l>
-
-" use <leader>! as prefix to remap stuff - like:
-" nnoremap <leader>!a <C-i>
+" also use <space> for custom text-objects - i.e. see: vim-textobj-lastpat.vim
 
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
 nnoremap :s/ :s/\V
 
-nnoremap <c-z> :wall<cr><c-z>
-inoremap <c-z> <esc>:wall<cr><c-z>
+nnoremap <c-z> :silent wall<cr><c-z>
+inoremap <c-z> <esc>:silent wall<cr><c-z>
 
 " Switch to alternative file
 " nnoremap <BS> <C-^>
@@ -328,17 +312,23 @@ endfunction
 nmap <silent>L :bnext<cr>
 nmap <silent>H :bprev<cr>
 
+" use <leader>! as prefix to remap stuff
 " Remap <C-i> as it's the same as Tab
 nnoremap <leader>!a <C-o>
 nnoremap <leader>!b <C-i>
-
 " nmap <silent><C-j> <leader>!a
 " nmap <silent><C-k> <leader>!b
 
-nmap <silent><c-j> :wall<cr><c-j>
-nmap <silent><c-k> :wall<cr><c-k>
-nmap <silent><c-h> :wall<cr><c-h>
-nmap <silent><c-l> :wall<cr><c-l>
+" Write all when leaving a tmux pane
+nmap <silent><c-j> :silent wall<cr><c-j>
+nmap <silent><c-k> :silent wall<cr><c-k>
+nmap <silent><c-h> :silent wall<cr><c-h>
+nmap <silent><c-l> :silent wall<cr><c-l>
+
+imap <c-h> <esc><c-h>
+imap <c-l> <esc><c-l>
+imap <c-j> <esc><c-j>
+imap <c-k> <esc><c-k>
 
 nnoremap <silent> <leader>ww :wincmd w<cr>
 nnoremap <silent> <leader>wo :only<cr>
@@ -351,14 +341,6 @@ nnoremap U <c-r>
 
 " Dont use Q for Ex mode
 nnoremap Q :xa<cr>
-
-" These are the same for vim
-" Tab and Ctrl-I (<c-i><c-I>)
-" Enter and Ctrl-M (<c-m>)
-" Esc and Ctrl-[ (<c-[>)
-
-" Clear all mappings
-" :mapclear
 
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
@@ -386,7 +368,7 @@ endfunction
 nnoremap <silent><leader>el :RunCursorLine<cr>
 
 " Don't wait after escape in insert mode
-" Breaks curser keys etc.
+" Breaks curser keys etc. (apparently not in Neovim)
 set noesckeys
 
 " Close buffer
@@ -417,19 +399,42 @@ autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
 autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
 autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
 
-nnoremap // q/k
-vnoremap // q/k
-
 " Reselect visual block after indent
-vnoremap < <gv
-vnoremap > >gv
+vnoremap <nowait>< <gv
+vnoremap <nowait>> >gv
 
 " hide annoying quit message
-nnoremap <C-c> <C-c>:echo<cr>
+" nnoremap <C-c> <C-c>:echo<cr>
 
 " always search forward and N backward, use this
-nnoremap <expr> n 'Nn'[v:searchforward]
-nnoremap <expr> N 'nN'[v:searchforward]
+" nnoremap <expr> n 'Nn'[v:searchforward]
+" nnoremap <expr> N 'nN'[v:searchforward]
+
+nmap <leader>?? <leader>vr
+nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
+nnoremap <leader>vv :execute "edit " . $MYVIMRC<cr>
+
+" Show all <leader> mappings
+nnoremap <leader>vm :Verbose map <leader><cr>
+
+" Show all <leader> search mappings
+nnoremap <leader>/? :Verbose map <leader>/<cr>
+
+" open search history / select last entry
+nnoremap <leader>// q/k
+vnoremap <leader>// q/k
+
+" Search for debugging marker
+" nnoremap <leader>/c /^["]*###\ <cr>
+nnoremap <leader>/c /^["#=-]\{2,}<cr>
+
+" nnoremap <leader>/b /^\ *{<cr>
+nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
+
+nnoremap <leader>/i /^\S\+<cr>
+
+" Search for keyword under cursor
+nmap <silent> <leader>/k [I
 
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
@@ -437,20 +442,25 @@ nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<
 " Edit file under cursor even if it does not exist
 " nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
 
+" Quickly jump to buffers
 " nnoremap <leader>b :ls<cr>:b
 
 nnoremap ' `
 nnoremap ` '
 
-" Keep cursor position after visual yank
-vmap y ygv<Esc>
+" Restore cursor position after visual selection
+nnoremap v m`v
+nnoremap V m`V
+nnoremap <C-v> m`<C-v>
+vnoremap <esc> <esc>``
+vnoremap y y``
 
+" TODO: clean up <leader>l namespace
 nnoremap <leader>lr :%s/<C-r><C-w>/
 
 nnoremap MM :Verbose messages<cr> \| :only \| :normal G<cr>
-" TODO set verbosefile=/tmp/haha
 
-" TODO
+" TODO nicer scrollg
 " nnoremap <C-j> 7j
 " nnoremap <C-k> 7k
 
@@ -468,7 +478,13 @@ nnoremap <leader>hW :execute 'Help ' . expand('<cWORD>')<cr>
 nnoremap <leader>hh :execute 'Help ' . expand('<cword>')<cr>
 vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
 
-"### Statusline ################################################################
+" TODO: tune
+map [[ ?{<CR>w99[{
+map ][ /}<CR>b99]}
+map ]] j0[[%/{<CR>
+map [] k$][%?}<CR>
+
+"### Statusline
 
 " Avoid 'hit enter prompt'
 set shortmess=atTIW
@@ -563,7 +579,7 @@ endfunction
 "   set statusline+=%{len(getqflist())}
 " endif
 
-"### Gui mode ##################################################################
+"### Gui mode
 
 " No menus, scrollbars, or other junk
 set guioptions=
@@ -571,7 +587,7 @@ set guioptions=
 " disables the GUI tab line in favor of the plain text version
 set guioptions-=e
 
-"### plugin manager "###########################################################
+"### Plugin manager
 
 function! IsPluginInstalled(path)
     let l:basename = fnamemodify(a:path,':t:h')
@@ -615,7 +631,7 @@ silent! NeoBundleRemotePlugins
 " Remove installed plugins that are not configured anymore
 " :NeoBundleClean!
 
-"###############################################################################
+"### Must run last
 
 " Detect filetypes and run filetype plugins
 filetype on
@@ -633,9 +649,10 @@ endif
 " has to be done last - it is set somewhere else before already
 " let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
 
-"###############################################################################
+"### Debugging
 
-" set verbosefile=/tmp/vim-debug.txt
+" set verbosefile=/tmp/vim-debug.log
 " set verbose=15
 " set verbose=9
+" set verbose=1
 

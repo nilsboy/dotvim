@@ -236,28 +236,34 @@ endfunction
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...) abort
 
-    let command = join(a:000)
-
     wall
-    let buffer_name = a:1
 
+    let buffer_name = a:1
     let buffer_name = substitute(buffer_name, '[^a-zA-Z0-9_\-/\.]', "", "g")
     if buffer_name == ""
         let buffer_name = "cmd"
     endif
     let buffer_name = buffer_name . ".output"
-    call BufferCreateTemp(buffer_name)
 
+    call BufferCreateTemp(buffer_name)
+    normal die
+    only
+
+    let command = join(a:000)
+    " let command = substitute(command, ';', "\\\\;", "g")
+    " silent! execute ":r!run-and-capture 'echo " . command . " | bash'"
+    let command = shellescape(command)
     " echom "Running command: " . command
-    let command = substitute(command, ';', "\\\\;", "g")
-    silent! execute ":r!run-and-capture 'echo " . command . " | bash'"
-    " execute ":r! " . command
+    silent! execute ":r!run-and-capture " . command
+    normal ggddG
+
     " %!html-strip
+
     " Remove broken linebreak
     %s/\r//ge
 
     " Hack: remove duplicate perl line number
-    %s/\v,  line \d+//ge
+    " %s/\v,  line \d+//ge
 
     " Convert ansi colors
     " Screws with color conversion of colorscheme
@@ -265,22 +271,16 @@ function! RunIntoBuffer(...) abort
     " fix invisible ansi white
     " hi ansiWhite ctermfg=black
 
-    " setlocal filetype=txt
-
-    normal ggddG
-    set wrap
-    " lgetbuffer
-    " lwindow
-
-    " set buftype=quickfix
-    " :copen 999
-    :only
+    setlocal wrap
 
     " TODO execute "/" . command
 
     " Seems to break CSApprox vim colors:
+    " AnsiEsc
+
+    setlocal syntax=txt
+
     " autocmd BufEnter <buffer> :AnsiEsc
-    
     " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
 
 endfunction
@@ -434,8 +434,6 @@ endfunction
 " show vim environment
 nnoremap <leader>vee :call VimEnvironment()<cr><esc>
 
-" nmap ,, :CommandLine<cr>
-
 command! -nargs=0 CommandLine call CommandLine()
 function! CommandLine() abort
     silent execute ':e ' . g:vim.etc.dir . 'command-line.vim'
@@ -448,17 +446,8 @@ function! CommandLine() abort
     nnoremap <silent> <buffer> <CR> :execute getline(".")<cr>
     inoremap <silent> <buffer> <CR> <esc> :execute getline(".")<cr>
 
-    nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
+    " nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
 endfunction
-
-" function! Notes() abort
-"     silent execute ':e ' . g:vim.etc.dir . 'notes.vim'
-"     nohlsearch
-"     " nnoremap <buffer> j /\v^([^\s"])<cr>
-"     " nnoremap <buffer> k ?\v^([^\s"])<cr>
-"     " clear search register than execute line under cursor
-"     nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
-" endfunction
 
 " Run current buffer
 command! -nargs=0 RunCurrentBuffer call RunCurrentBuffer()
@@ -538,3 +527,10 @@ function! Help(...) abort
   set buflisted
 endfunction
 
+function! DEBUG(...) abort
+  unsilent echom "DEBUG> " . join(a:000, ' ')
+endfunction
+
+function! INFO(...) abort
+  unsilent echom "INFO> " . join(a:000, ' ')
+endfunction

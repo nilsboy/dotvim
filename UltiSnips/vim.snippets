@@ -28,7 +28,7 @@ endsnippet
 
 snippet ab "Add bundle" b
 call dein#add('$1')
-	$0
+$0
 endsnippet
 
 snippet fun "Function" b
@@ -40,5 +40,35 @@ endsnippet
 snippet if "if" b
 if $1
 	$0
+endif
+endsnippet
+
+snippet exists "exists" w
+exists("$1")$0
+endsnippet
+
+snippet todo "TODO"
+" TODO: $0
+endsnippet
+
+snippet debug "Debug" 
+call DEBUG('$1')$0
+endsnippet
+
+snippet info "info" 
+call INFO('$1')$0
+endsnippet
+
+snippet neobundle "Description" b
+" ${1:description}
+NeoBundle '${2:plugin name or github url}'
+endsnippet
+
+snippet neobundlepost "do something after plugin is loaded" b
+if neobundle#tap('${1:plugin name}') 
+  function! neobundle#hooks.on_post_source(bundle) abort
+		$0
+  endfunction
+  call neobundle#untap()
 endif
 endsnippet

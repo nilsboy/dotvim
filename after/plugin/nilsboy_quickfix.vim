@@ -49,9 +49,11 @@ autocmd BufEnter * execute 'execute ":sign place 9999 line=1
 let g:quickfix_mode = ''
 function! s:toggleNavigationType() abort
     if g:quickfix_mode == 'quickfix'
-      call nilsboy_quickfix#setNavigationType('locationlist')
+      silent call nilsboy_quickfix#setNavigationType('locationlist')
+      echo "Locationlist navigation activated"
     else
-      call nilsboy_quickfix#setNavigationType('quickfix')
+      silent call nilsboy_quickfix#setNavigationType('quickfix')
+      echo "Quickfix navigation activated"
     endif
 endfunction
 
@@ -70,12 +72,16 @@ function! nilsboy_quickfix#setNavigationType(type) abort
     endif
 endfunction
 
+" TODO: does not work?
+"       nnoremap <silent> <c-;> :silent! lnext<cr>
+"       nnoremap <silent> <c-,> :silent! lprevious<cr>
+
 function! AfterFormat(...) abort
     " does not reload otherwise
     silent! edit
 endfunction
 
-nnoremap <silent> <leader>x :call FFormat()<cr>
+" nnoremap <silent> <leader>x :call FFormat()<cr>
 function! FFormat() abort
     if ! exists('b:formatprg')
         return
@@ -98,11 +104,11 @@ call nilsboy_quickfix#setNavigationType('quickfix')
 nnoremap <leader>ll :call <SID>toggleNavigationType()<cr>
 
 nnoremap <silent> <leader>ff :call <SID>find('', 'project')<cr>
+vnoremap <silent> <leader>ff y:call <SID>find(@", 'project')<cr>
 nnoremap <silent> <leader>fd :call <SID>find('', 'buffer_dir')<cr>
 nnoremap <silent> <leader>fw yiw:call <SID>find(@", 'project')<cr>
 nnoremap <silent> <leader>fW yiW:call <SID>find(@", 'project')<cr>
 nnoremap <silent> <leader>fi :call <SID>find(input('File name: '), 'project')<cr>
-nnoremap <silent> <leader>fpi :call <SID>find(input('File name: '), 'project/..')<cr>
 nnoremap <silent> <leader>fs :call <SID>find(input('File name: '), '~/src')<cr>
 
 nnoremap <silent> <leader>vff :call <SID>find('', g:vim.etc.dir)<cr>
@@ -122,6 +128,21 @@ function! s:find(term, directory) abort
     setlocal errorformat=%f
     Neomake!
     copen
+endfunction
+
+nnoremap <silent> <leader>fp :call <SID>findInPath('')<cr>
+
+function! s:findInPath(term) abort
+    call nilsboy_quickfix#setNavigationType('quickfix')
+
+    " Make sure the quickfix cwd isn't used as starting directory
+    cclose
+
+    let &l:makeprg="compgen -c \| sort -u"
+    setlocal errorformat=%f
+    Neomake!
+    copen
+    let b:quickfix_action = ':echo "haha"'
 endfunction
 
 function! s:Cd(directory) abort
@@ -179,9 +200,14 @@ endfunction
 
 nnoremap <leader>o :call <SID>outline()<cr>
 function! s:outline() abort
+  let l:filetype = &filetype
+  if exists("b:filetype")
+    let l:filetype = b:filetype
+  endif
   setlocal errorformat=%f:%l:%c:%m
-  let &l:makeprg='outline % ' . &filetype
-  Neomake!
+  let &l:makeprg='outline --filename ' . expand('%') 
+        \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
+  :Neomake!
   copen
 endfunction
 
@@ -196,8 +222,6 @@ function! s:buffers(hidden) abort
     cexpr execute(':buffers' . a:hidden)
     copen
 endfunction
-
-nmap <silent> <leader>/ [I
 
 " http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list
 function! s:FilterQuickfixList(bang, pattern)

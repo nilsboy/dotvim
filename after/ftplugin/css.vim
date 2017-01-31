@@ -1,12 +1,23 @@
-nnoremap <silent> <buffer>x :call CSSTidy()<CR>
-
 if exists("b:did_ftplugin_css")
-    finish
+  finish
 endif
 let b:did_ftplugin_css = 1
 
-function! CSSTidy() abort
-    let _view=winsaveview()
-    %!csstidy - --silent=true --template=low --sort_properties=true --sort_selectors=true --preserve_css=true
-    call winrestview(_view)
-endfunction
+" npm install csscomb -g
+let g:neoformat_enabled_css = [ 'csscomb' ]
+let g:neoformat_css_csscomb = {
+      \ 'exe': 'csscomb',
+      \ 'args': ['-c ' . g:vim.etc.dir . 'contrib/csscombrc'],
+      \ 'replace': 1
+      \ }
+
+" npm install csslint -g
+let g:ale_linters['css'] = ['mycsslint']
+call ale#linter#Define('css', {
+      \ 'name': 'mycsslint',
+      \ 'executable': 'csslint',
+      \ 'command': g:ale#util#stdin_wrapper . 
+      \ ' .css csslint --format=compact --ignore=important,universal-selector,empty-rules,regex-selectors',
+      \ 'callback': 'ale#handlers#HandleCSSLintFormat',
+      \})
+
