@@ -1,7 +1,7 @@
 " Code documentation written as code!
 NeoBundle 'adambard/learnxinyminutes-docs'
 
-function! HelpLearnXInMinutes(topic) 
+function! HelpLearnXInMinutes(topic) abort
     let l:file = &filetype
     if a:topic != ''
         let l:file = a:topic

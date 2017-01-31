@@ -1,10 +1,15 @@
 " Dark powered asynchronous completion framework for neovim 
 NeoBundle 'Shougo/deoplete.nvim'
 
+" set completeopt-=preview
+set nowildmenu
+" autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
+  
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_refresh_always = 1
 
 let g:deoplete#enable_ignore_case = 1
+
 let g:deoplete#enable_smart_case = 0
 let g:deoplete#enable_camel_case = 1
 
@@ -27,12 +32,18 @@ if neobundle#tap('deoplete.nvim')
     " TODO
 		let g:deoplete#sources = {}
     " let g:deoplete#sources.javascript = ['ultisnips', 'ternjs']
+    " let g:deoplete#sources._ = ['ultisnips']
     let g:deoplete#sources.javascript = []
     " let g:deoplete#sources.javascript = ['ultisnips']
     " let g:deoplete#sources.sh = ['buffer', 'tag']
   endfunction
   call neobundle#untap()
 endif
+
+function! DeopleteInfo() abort
+  
+		let g:deoplete#keyword_patterns = {}
+endfunction
 
 finish
 

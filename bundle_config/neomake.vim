@@ -1,6 +1,7 @@
 " A plugin for asynchronous :make using Neovim's job-control functionality
 NeoBundle 'neomake/neomake'
 
+" let g:neomake_verbose = 3
 " Does not have stdin support:
 " https://github.com/neomake/neomake/issues/190
 

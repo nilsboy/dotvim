@@ -1,3 +1,3 @@
 " Provides additional text objects
-" tags: textobj
+" tags: textobj motion
 NeoBundle 'wellle/targets.vim' 

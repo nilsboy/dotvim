@@ -1,2 +1,10 @@
+finish
 " highlight and navigate through (multiple) different words in a buffer 
+" tags: search highlight todo
 NeoBundle 'lfv89/vim-interestingwords' 
+
+nnoremap <silent> //k :call InterestingWords('n')<cr>
+nnoremap <silent> //K :call UncolorAllWords()<cr>
+
+nnoremap <silent> n :call WordNavigation('forward')<cr>
+nnoremap <silent> N :call WordNavigation('backward')<cr>

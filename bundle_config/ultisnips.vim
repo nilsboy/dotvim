@@ -1,8 +1,8 @@
 " The ultimate snippet solution for Vim.
 NeoBundle 'SirVer/ultisnips'
 
-" vim-snipmate default snippets
-NeoBundle 'honza/vim-snippets'
+" Example snippet files:
+" https://github.com/honza/vim-snippets/tree/master/UltiSnips
 
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
@@ -15,6 +15,7 @@ nnoremap <silent><leader>se :execute ":e "
 nnoremap <leader>sE :UltiSnipsEdit!<cr>
 nnoremap <leader>sa :execute ":e " . g:vim.etc.dir . 
       \ "UltiSnips/all.snippets"<cr>
+
 finish
 
 " This seems to mess up completion in i.e. the command window
@@ -31,3 +32,4 @@ function! ExpandSnippet()
     return ""
 endfunction
 inoremap <expr> <CR> "\<C-R>=ExpandSnippet()\<CR>"
+

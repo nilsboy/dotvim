@@ -1,4 +1,3 @@
-finish
 " See neomake instead
 " asynchronous build and test dispatcher
 NeoBundle 'tpope/vim-dispatch'

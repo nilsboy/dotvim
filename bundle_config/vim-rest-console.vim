@@ -23,7 +23,7 @@ let g:vrc_set_default_mapping = 0
 " let g:vrc_connect_timeout = 1
 let g:vrc_max_time = 1
 
-function! RestCall(...)
+function! RestCall(...) abort
     " VrcQuery messes up current buffer position
     let b:winview = winsaveview()
     call VrcQuery()

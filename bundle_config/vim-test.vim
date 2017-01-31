@@ -1,69 +1,48 @@
 " Run your tests at the speed of thought
 NeoBundle 'janko-m/vim-test'
 
-" make test commands execute using dispatch.vim
-" let test#strategy = "dispatch"
+let g:test#preserve_screen = 1
+let test#filename_modifier = ':p'
 
-nmap <silent> <leader>tt :TestLast<CR>
-nmap <silent> <leader>tn :TestNearest<CR>
-nmap <silent> <leader>tT :TestFile<CR>
-nmap <silent> <leader>ta :TestSuite<CR>
-nmap <silent> <leader>tg :TestVisit<CR>
+nmap <silent> <leader>tt :wall \| :TestLast<CR>
+nmap <silent> <leader>tn :wall \| let test#strategy = "TestNeomakeSh" \| :TestNearest<CR>
+nmap <silent> <leader>tT :wall \| let test#strategy = "Haha" \| :TestFile<CR>
+nmap <silent> <leader>ta :wall \| let test#strategy = "Haha" \| :TestSuite<CR>
+nmap <silent> <leader>tg :wall \| let test#strategy = "Haha" \| :TestVisit<CR>
 
-nmap <silent> <leader>en :cnext<CR>
-nmap <silent> <leader>ep :cprevious<CR>
+" TODO: to - open corresponding test file
 
-nmap <silent> <leader>tr :call RunIntoBuffer(g:test#last_command)<cr><cr>G
-
-nmap <silent> <leader>tf :call VimTestRunCurrentFile()<cr><cr>gg
-
-" nmap <silent> <leader>to :TODO open test file<CR>
-" nmap <silent> <leader>tc :TODO open cucumber file<CR>
-
-function! VimTestRunCurrentFile()
-    let cmd = expand('%:p')
-
-    if exists("g:last_command")
-        let cmd=g:last_command
-    endif
-
-    let g:last_command=cmd
-    call RunIntoBuffer(cmd)
-    normal gg
-
-    nmap <buffer> <space> :call VimTestRunCurrentFile()<cr><cr>gg
-
-endfunction
-
-" let test#javascript#mocha#options = '--colors'
-
-" TODO checkout :Cucumber
+let test#javascript#mocha#options = 
+      \ ' --full-trace --no-colors'
 
 " cmd is i.e. node_modules/.bin/mocha
-function! VimTestStrategyFixedDispatch2(cmd)
-    " vim-test prepends makeprg to own command so have to remove it first
-    set makeprg=
-    " Dispatch does not seem to have an &errorformat!?!
-    execute 'Make' a:cmd
+function! Haha(cmd) abort
+  let &l:errorformat = "%f:%l:%c:%m"
+  let &l:makeprg = a:cmd . "| outline --filetype mocha"
+  Neomake!
+  copen
 endfunction
 
-function! VimTestStrategyMake(cmd)
-    let &makeprg=a:cmd
-    " Dispatch does not seem to have an &errorformat!?!
-    " execute 'Make' a:cmd
-    silent make
-    cwindow
-endfunction
-
-function! VimTestStrategyMakeUnite(cmd)
-    let &makeprg=a:cmd
-    silent! make
-    Unite -no-empty qf
-    stopinsert
-    redraw!
+function! TestNeomakeSh(cmd) abort
+  silent execute "RunIntoBuffer " . a:cmd
+  " silent! :%s/AssertionError:\ /AssertionError:\r/g
+  " silent! :%s/==\ /==\r/g
 endfunction
 
 let g:test#custom_strategies = {
-    \ 'VimTestStrategyMakeUnite': function('VimTestStrategyMakeUnite')
+    \ 'Haha': function('Haha'),
+    \ 'TestNeomakeSh': function('TestNeomakeSh')
 \}
-let g:test#strategy = 'VimTestStrategyMakeUnite'
+
+" Dicitionary usage currently broken:
+" https://github.com/janko-m/vim-test/issues/151
+" let test#strategy = {
+"   \ 'nearest': 'TestNeomakeSh',
+"   \ 'file':    'Haha',
+"   \ 'suite':   'Haha',
+" \}
+
+" let test#strategy = "dispatch"
+" let test#strategy = "make"
+" let test#strategy = "neovim"
+

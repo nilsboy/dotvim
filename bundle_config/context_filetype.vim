@@ -1,3 +1,5 @@
+finish
 " Context filetype library for Vim script
-" Allows completion in mix language files like html with javascript
+" Provides functions to find fenced code blocks and their filetype.
+" The fenced code is detected by predefined regular expressions.
 NeoBundle 'Shougo/context_filetype.vim'

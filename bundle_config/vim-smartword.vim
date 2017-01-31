@@ -1,3 +1,5 @@
+finish
+" Note: Annoying - maybe use with different keys than the default w etc.
 " Smart motions on words
 NeoBundle 'kana/vim-smartword'
 

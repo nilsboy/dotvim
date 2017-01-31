@@ -1,35 +1,43 @@
+finish
 " To focus on a selected region while making the rest inaccessible
+" tags: narrow region
 NeoBundle 'chrisbra/NrrwRgn'
 
-" See also:
-" - https://github.com/vim-scripts/OnSyntaxChange
-" - https://github.com/vim-scripts/SyntaxRange
-" - https://www.reddit.com/r/vim/comments/2x5yav/markdown_with_fenced_code_blocks_is_great/
-
 let g:nrrw_rgn_nohl = 1
-let g:nrrw_rgn_protect = 'n'
 let g:nrrw_rgn_update_orig_win = 1
-
-" autocmd BufCreate,BufAdd,BufEnter * set buflisted
 
 " Disable default mapping
 xmap <NOP> <Plug>NrrwrgnDo
 
-nnoremap <leader>nr :call MyNarrow()<cr>
-
+" Edit content of a tag in a seperate buffer using the corresponding filetype
+" for the tag
 function! MyNarrow() abort
 
-  " set buflisted does not take effect here
-  " let b:nrrw_aucmd_create = "setlocal ft=javascript|setlocal buflisted"
-  
-  let b:nrrw_aucmd_create = "setlocal ft=javascript"
-  " let b:nrrw_aucmd_close  = "%UnArrangeColumn"
+  silent normal vit
 
-  " When the data is written back in the original window
-  " let b:nrrw_aucmd_written = ':update'
+  " b:region_filetype is set via OnSyntaxChange
+  if ! exists('b:region_filetype')
+    echo 'Region filetype not set.'
+    return
+  endif
+  let l:region_filetype = b:region_filetype
 
-  normal vit
-  normal :<c-u>
-  call nrrwrgn#NrrwRgn(visualmode(),'!')
+  " ?\<script\|\<style
+  " normal ``
+  let b:tag_indent = indent('.') / &shiftwidth + 1
+  call DEBUG('Found indent: ' . b:tag_indent)
+
+  let b:nrrw_aucmd_close  = ":normal ggO\<esc>Go"
+  let b:nrrw_aucmd_written = ':normal vit' . b:tag_indent . '>'
+
+  " NRV! (single window mode) is currently broken (2017-01-20)
+  silent NRV
+  execute 'setlocal filetype=' . l:region_filetype
+  setlocal winheight=999
+  silent normal =ie
+  " TODO: does neoformat toggle the extra line?
+  Neoformat
 
 endfunction
+nnoremap <silent> <leader>ii :call MyNarrow()<cr>
+
