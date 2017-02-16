@@ -13,3 +13,5 @@ autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
 "       \ if &filetype == '' | setlocal filetype=sh | endif
 
 autocmd BufRead,BufNewFile *.docopt setlocal filetype=docopt
+
+autocmd BufRead,BufNewFile .babelrc setlocal filetype=babelrc

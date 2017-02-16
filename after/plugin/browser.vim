@@ -1,4 +1,4 @@
-" Note: checkout surfraw
+" NOTE: checkout surfraw
 
 " nnoremap <silent><leader>ii :call Browser()<CR>
 

@@ -19,6 +19,10 @@ let g:EasyClipShareYanks = 1
 
 finish
 
+" Notes
+" Also discards deletes when prefixed by a register - like: normal "adgg<esc>
+" - need to use normal! instead
+
 " Needs to be loaded after vim-sneak to not clobber s-mappings:
 " https://github.com/svermeulen/vim-easyclip/issues/60
 
@@ -27,6 +31,3 @@ finish
 " line    2:
 " E5677: Error writing input to shell-command: EPIPE
 " Press ENTER or type command to continue
-
-" Also discards deletes when prefixed by a register - like: normal "adgg<esc>
-" - need to use normal! instead

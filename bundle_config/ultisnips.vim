@@ -15,6 +15,7 @@ nnoremap <silent><leader>se :execute ":e "
 nnoremap <leader>sE :UltiSnipsEdit!<cr>
 nnoremap <leader>sa :execute ":e " . g:vim.etc.dir . 
       \ "UltiSnips/all.snippets"<cr>
+nnoremap <leader>sf :execute ":Explore " . g:vim.etc.dir . "UltiSnips/"<cr>
 
 finish
 

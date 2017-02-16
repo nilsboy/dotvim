@@ -16,7 +16,7 @@ if exists("b:did_ftplugin_html")
 endif
 let b:did_ftplugin_html = 1
 
-" tidy break indentation of script and style tags if their content is not wrapped
+" tidy breaks indentation of script and style tags if their content is not wrapped
 " in newlines
 " https://github.com/htacg/tidy-html5/issues/56
 function! ShrinkBeforeRestore() abort
@@ -24,13 +24,32 @@ function! ShrinkBeforeRestore() abort
   normal Go
 endfunction
 
+" posthtml-cli
+" https://libraries.io/npm/posthtml-cli
+" Needs a package json / every option is a npm package
+let g:neoformat_enabled_html = [ 'posthtml' ]
+let g:neoformat_html_posthtml = {
+      \ 'exe': 'posthtmlwrapper'
+      \ }
+
+finish
+
+" clean-html has all kinds of problems
+" https://www.npmjs.com/package/clean-html
+" i.e. can't handle doctype tag, wrap seems to create a deep recursion.
+let g:neoformat_enabled_html = ['clean_html']
+let g:neoformat_html_clean_html = {
+      \ 'exe': 'clean-html'
+      \ ,'args': [ '--break-around-tags true', '--wrap 80' ]
+      \ }
+
+" Tidy does not currently support custom elements (2017-02-01):
+" https://github.com/htacg/tidy-html5/issues/119
 let g:neoformat_enabled_html = ['tidy']
 let g:neoformat_html_tidy = {
       \ 'exe': 'tidy'
       \ ,'args': [ '-quiet -config ' . g:vim.contrib.dir . 'tidyrc-html']
       \ }
-
-finish
 
 " incrementally indent html when using "="
 let g:html_indent_script1 = "inc"
@@ -43,9 +62,6 @@ let g:html_indent_style1 = "inc"
 " call OnSyntaxChange#Install('Css', 'cssStyle' , 1, 'a')
 " autocmd User SyntaxCssEnterA let b:region_filetype = 'css'
 " autocmd User SyntaxCssLeaveA unlet! b:region_filetype
-
-" TODO test:
-" https://www.npmjs.com/package/clean-html
 
 " html-beautify minimizes scripts or unevens indenting of the script tag itself
 let g:neoformat_enabled_html = ['htmlbeautify']
@@ -63,7 +79,6 @@ let g:neoformat_html_htmlbeautify = {
       \ --unformatted style
       \ ']
       \ }
-
 
 " Can not leave javscript alone - seems to have eslint option though
 "

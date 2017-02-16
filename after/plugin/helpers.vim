@@ -431,9 +431,6 @@ function! VimEnvironment() abort
 
 endfunction
 
-" show vim environment
-nnoremap <leader>vee :call VimEnvironment()<cr><esc>
-
 command! -nargs=0 CommandLine call CommandLine()
 function! CommandLine() abort
     silent execute ':e ' . g:vim.etc.dir . 'command-line.vim'
@@ -533,4 +530,36 @@ endfunction
 
 function! INFO(...) abort
   unsilent echom "INFO> " . join(a:000, ' ')
+endfunction
+
+function! DUMP(input) abort
+  Verbose echo _DUMP(a:input)
+  only
+  normal ggdd
+  setlocal filetype=json
+  Neoformat
+endfunction
+
+" dump any vim structure to json
+function! _DUMP(input) abort
+    let json = ''
+    if type(a:input) == type({})
+        let parts = copy(a:input)
+        call map(parts, '"\"" . escape(v:key, "\"") . "\":" . _DUMP(v:val)')
+        let json .= "{" . join(values(parts), ",") . "}"
+    elseif type(a:input) == type([])
+        let parts = map(copy(a:input), '_DUMP(v:val)')
+        let json .= "[" . join(parts, ",") . "]"
+    elseif type(a:input) == 2
+      " TODO: how to convert funcrefs to string?
+    else
+        let json .= '"'.escape(a:input, '"').'"'
+    endif
+    return json
+endfunction
+
+" Copy current buffer to a new file in the buffers directory
+command! -nargs=* Copy call Copy(<f-args>)
+function! Copy(dst) abort
+  silent execute 'saveas %:p:h/' . a:dst
 endfunction

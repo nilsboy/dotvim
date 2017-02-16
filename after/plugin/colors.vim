@@ -50,6 +50,12 @@ command! ColorsListCurrentHiGroups :so $VIMRUNTIME/syntax/hitest.vim
 nnoremap <leader>gh :echo map(synstack(line('.'), col('.')), 
       \ 'synIDattr(v:val, "name")')<cr>
 
+nnoremap <leader>gh :call Haha(line('.'))<cr>
+
+function! Haha(linenr) abort
+  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')) =~? 'comment'
+endfunction
+
 "### Cursor
 
 autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline

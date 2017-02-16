@@ -6,7 +6,6 @@ NeoBundle 'neomake/neomake'
 " https://github.com/neomake/neomake/issues/190
 
 let g:neomake_open_list = 2
-" let g:neomake_verbose = 3
 
 let g:neomake_error_sign = {
     \ 'text': '=>',

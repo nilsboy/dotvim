@@ -1,7 +1,7 @@
 finish
 " To focus on a selected region while making the rest inaccessible
-" tags: narrow region
 NeoBundle 'chrisbra/NrrwRgn'
+" TAGS: narrow region
 
 let g:nrrw_rgn_nohl = 1
 let g:nrrw_rgn_update_orig_win = 1

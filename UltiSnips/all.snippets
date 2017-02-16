@@ -101,13 +101,13 @@ endsnippet
 ### Misc
 
 # comments
-snippet / "" w
+snippet // "" w
 /* ${1} */
 $0
 endsnippet
 
 snippet	node "node shebang" b
-#!/usr/bin/env node${1: --harmony}
+#!/usr/bin/env node
 
 // ${1:description}
 
@@ -121,6 +121,7 @@ snippet bash "bash shebang" b
 
 ${2:source bash-helpers}
 
+$0
 endsnippet
 
 snippet perl "perl shebang" b

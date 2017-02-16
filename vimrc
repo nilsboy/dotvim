@@ -43,6 +43,8 @@ call mkdir(g:vim.dir, "p")
 call mkdir(g:vim.etc.dir, "p")
 call mkdir(g:vim.var.dir, "p")
 
+execute "source " . g:vim.after.dir . '/plugin/helpers.vim'
+
 " Remove all existing autocommands on vimrc reload
 autocmd!
 
@@ -194,7 +196,8 @@ set nrformats-=octal
 
 set isfname-==
 
-command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e
+command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e | :nohlsearch
+command! -nargs=* RemoveNewlineBlocks :%s/\n\n\+/\r\r/e | :nohlsearch
 
 "### Searching
 
@@ -211,7 +214,7 @@ set incsearch
 " set hlsearch
 
 " Stop hightlightin current matches
-" nmap <c-c> :nohlsearch<cr>
+nmap <silent><c-c> :nohlsearch<cr>
 
 set ignorecase
 
@@ -281,6 +284,9 @@ vmap <space> <leader>
 
 " also use <space> for custom text-objects - i.e. see: vim-textobj-lastpat.vim
 
+nnoremap <leader>vee :call VimEnvironment()<cr><esc>
+nnoremap <leader>veg :call DUMP(g:)<cr>
+
 " use saner regexes
 " TODO checkout bundle 'vim-scripts/eregex.vim'
 nnoremap :s/ :s/\V
@@ -290,11 +296,6 @@ inoremap <c-z> <esc>:silent wall<cr><c-z>
 
 " Switch to alternative file
 " nnoremap <BS> <C-^>
-
-" nnoremap <leader>j <c-f>
-" vnoremap <leader>j <c-f>
-" nnoremap <leader>k <c-b>
-" vnoremap <leader>k <c-b>
 
 " Save file as root
 command! -nargs=* WW :silent call WriteSudo()
@@ -330,6 +331,11 @@ imap <c-l> <esc><c-l>
 imap <c-j> <esc><c-j>
 imap <c-k> <esc><c-k>
 
+vmap <c-h> <esc><c-h>
+vmap <c-l> <esc><c-l>
+vmap <c-j> <esc><c-j>
+vmap <c-k> <esc><c-k>
+
 nnoremap <silent> <leader>ww :wincmd w<cr>
 nnoremap <silent> <leader>wo :only<cr>
 
@@ -356,10 +362,9 @@ nnoremap <silent><leader>is :execute ":RunIntoBuffer so-lucky ". expand("<cword>
 " nnoremap <silent><leader>ee :silent RunCurrentBuffer<cr>
 nnoremap <silent><leader>ee :call MyRun()<cr>
 function! MyRun() abort
-    write
-    NeomakeSh ./%
+    wall
+    NeomakeSh! ./%
     copen
-    execute "normal \<c-w>p"
 endfunction
 " TODO
 " autocmd TextChanged,InsertLeave index.js :call MyRun()
@@ -414,8 +419,11 @@ nmap <leader>?? <leader>vr
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
 nnoremap <leader>vv :execute "edit " . $MYVIMRC<cr>
 
+command! -nargs=* EditInBufferDir 
+      \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
+
 " Show all <leader> mappings
-nnoremap <leader>vm :Verbose map <leader><cr>
+nnoremap <leader>vm :Verbose map <leader> \| :only<cr>
 
 " Show all <leader> search mappings
 nnoremap <leader>/? :Verbose map <leader>/<cr>
@@ -508,10 +516,13 @@ set noshowmode
 " suppress stuff?
 
 " set statusline+=%#TabLineSel#
+let &statusline .= ' '
 set statusline+=%-39.40{Location()}
 " set statusline+=%#TabLine#
 
 set statusline+=%=
+
+let &statusline .= ' | '
 
 " Filetype
 set statusline+=%{strlen(&filetype)?&filetype:''}
@@ -525,7 +536,7 @@ set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
 " File format
 set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
-let &statusline .= ' | %3l,%-02c | %P'
+let &statusline .= ' | %3l,%-02c | %P '
 
 function! Location() abort
 

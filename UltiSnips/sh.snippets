@@ -6,3 +6,15 @@ snippet info "INFO" b
 INFO "$1"
 $0
 endsnippet
+
+snippet if "if" b
+if [[ $1 ]] ; then
+	$0
+fi
+endsnippet
+
+snippet fun "function" b
+function $1() {
+	$0
+}
+endsnippet

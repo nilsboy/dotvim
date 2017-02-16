@@ -8,6 +8,6 @@ NeoBundle 't9md/vim-smalls'
 " omap s <Plug>(smalls)
 " xmap s <Plug>(smalls)
 
-" [NOTE] optionally it might be comfortable if you enable 'smartcase'
+" NOTE: optionally it might be comfortable if you enable 'smartcase'
 " comment-in following line if you want to.
 " set ignorecase smartcase " let g:EasyMotion_re_anywhere='\v'

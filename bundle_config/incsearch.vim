@@ -1,9 +1,9 @@
-" Currently segfaults neovim (2017-01-25):
-" https://github.com/haya14busa/incsearch.vim/issues/125
 finish
 " Improved incremental searching for Vim
-" tags: search stophighlight
 NeoBundle 'haya14busa/incsearch.vim'
+" NOTE: Currently segfaults neovim (2017-01-25):
+"   https://github.com/haya14busa/incsearch.vim/issues/125
+" TAGS: search stophighlight
 
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)

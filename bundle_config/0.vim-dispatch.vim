@@ -1,6 +1,6 @@
-" See neomake instead
 " asynchronous build and test dispatcher
 NeoBundle 'tpope/vim-dispatch'
+" NOTE: See neomake instead
 
 " Notes 2016-11
 " - Can not open quickfix after Dispatch! is done

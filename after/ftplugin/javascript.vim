@@ -1,4 +1,5 @@
 " FormatterSet eslint-formatter
+" TODO: add?: https://github.com/lebab/lebab
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <leader>li yi`:execute ':terminal npm install --save '

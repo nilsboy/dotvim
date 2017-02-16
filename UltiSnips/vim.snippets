@@ -44,11 +44,23 @@ endif
 endsnippet
 
 snippet exists "exists" w
-exists("$1")$0
+exists("$1")
 endsnippet
 
 snippet todo "TODO"
 " TODO: $0
+endsnippet
+
+snippet fix "FIX"
+" FIX: $0
+endsnippet
+
+snippet note "NOTE"
+" NOTE: $0
+endsnippet
+
+snippet tag "TAGS"
+" TAGS: $0
 endsnippet
 
 snippet debug "Debug" 
@@ -57,6 +69,10 @@ endsnippet
 
 snippet info "info" 
 call INFO('$1')$0
+endsnippet
+
+snippet infoo "infoo" 
+call INFO('$1: ', $1)$0
 endsnippet
 
 snippet neobundle "Description" b
@@ -71,4 +87,15 @@ if neobundle#tap('${1:plugin name}')
   endfunction
   call neobundle#untap()
 endif
+endsnippet
+
+snippet command "command" b
+command! -nargs=* ${1:name} call $1(<f-args>)}
+function! $1(...) abort
+	$0
+endfunction
+endsnippet
+
+snippet / "comment" b
+" 
 endsnippet

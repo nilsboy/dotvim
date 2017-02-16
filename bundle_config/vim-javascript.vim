@@ -15,3 +15,5 @@ NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']
 " let g:javascript_conceal_prototype  = "¶"
 " let g:javascript_conceal_static     = "•"
 " let g:javascript_conceal_super      = "Ω"
+
+" let g:javascript_plugin_flow = 1

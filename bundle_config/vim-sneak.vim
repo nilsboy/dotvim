@@ -1,11 +1,11 @@
 " The missing motion for Vim
-" tags: motion
 NeoBundle 'justinmk/vim-sneak'
+" TAGS: motion
 
 let g:sneak#absolute_dir = 0
 let g:sneak#prompt = 'sneak> '
 let g:sneak#use_ic_scs = 1
-let g:sneak#s_next = 1
+let g:sneak#s_next = 0
 
 " 1-character enhanced 'f'
 nmap f <Plug>Sneak_f
@@ -27,3 +27,5 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
+" Don't hightlight sneak targets
+autocmd ColorScheme * hi! link Sneak Normal

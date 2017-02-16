@@ -13,11 +13,15 @@
 " - asyncrun
 " - autoformat
 "   - does not have a lot of preconfigured formatters
+" - neomake-multiprocess
 "
+" TODO include search for related snail-, camel-, etc, case
+" TODO Format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
 " TODO checkout quickfixsigns for resetting the signes on :colder etc
 " TODO use winsaveview to prevent window resizing on copen
 " TODO always close buffer of preview window - is there a plugin for that?
 " TODO checkout https://github.com/stefandtw/quickfix-reflector.vim
+" TODO add description to quickfix window title
 
 " See also: 
 " :Man scanf
@@ -26,7 +30,6 @@
 " - For errorformat debugging see:
 " :h neomake
 " section: 6.3 How to develop/debug the errorformat setting?
-" TODO Format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
 " To send to stdin see:
 " :h jobsend()
 
@@ -50,10 +53,10 @@ let g:quickfix_mode = ''
 function! s:toggleNavigationType() abort
     if g:quickfix_mode == 'quickfix'
       silent call nilsboy_quickfix#setNavigationType('locationlist')
-      echo "Locationlist navigation activated"
+      call INFO("Locationlist navigation activated")
     else
       silent call nilsboy_quickfix#setNavigationType('quickfix')
-      echo "Quickfix navigation activated"
+      call INFO("Quickfix navigation activated")
     endif
 endfunction
 
@@ -72,130 +75,152 @@ function! nilsboy_quickfix#setNavigationType(type) abort
     endif
 endfunction
 
-" TODO: does not work?
-"       nnoremap <silent> <c-;> :silent! lnext<cr>
-"       nnoremap <silent> <c-,> :silent! lprevious<cr>
-
-function! AfterFormat(...) abort
-    " does not reload otherwise
-    silent! edit
-endfunction
-
-" nnoremap <silent> <leader>x :call FFormat()<cr>
-function! FFormat() abort
-    if ! exists('b:formatprg')
-        return
-    endif
-    write
-    call neomake#Sh(b:formatprg, 'AfterFormat')
-endfunction
-
-command! -bang -nargs=1 FormatterSet call <SID>FormatterSet(<q-args>)
-function! s:FormatterSet(formatterName) abort
-    execute 'compiler ' . a:formatterName
-endfunction
-
-" augroup my_qf_autoformat
-"   autocmd!
-"   autocmd InsertLeave *.js :call FFormat()
-" augroup END
-
 call nilsboy_quickfix#setNavigationType('quickfix')
 nnoremap <leader>ll :call <SID>toggleNavigationType()<cr>
 
-nnoremap <silent> <leader>ff :call <SID>find('', 'project')<cr>
-vnoremap <silent> <leader>ff y:call <SID>find(@", 'project')<cr>
-nnoremap <silent> <leader>fd :call <SID>find('', 'buffer_dir')<cr>
-nnoremap <silent> <leader>fw yiw:call <SID>find(@", 'project')<cr>
-nnoremap <silent> <leader>fW yiW:call <SID>find(@", 'project')<cr>
-nnoremap <silent> <leader>fi :call <SID>find(input('File name: '), 'project')<cr>
-nnoremap <silent> <leader>fs :call <SID>find(input('File name: '), '~/src')<cr>
-
-nnoremap <silent> <leader>vff :call <SID>find('', g:vim.etc.dir)<cr>
-nnoremap <silent> <leader>vfi :call <SID>find(input('File name in vim config: '), g:vim.etc.dir)<cr>
-
-nnoremap <silent> <leader>vpff :call <SID>find('', g:vim.bundle.dir)<cr>
-nnoremap <silent> <leader>vpfi :call <SID>find(input('File name in plugins: '), g:vim.bundle.dir)<cr>
-
-function! s:find(term, directory) abort
-    call nilsboy_quickfix#setNavigationType('quickfix')
-
-    " Make sure the quickfix cwd isn't used as starting directory
-    cclose
-
-    call s:Cd(a:directory)
-    let &l:makeprg="find-and-limit\ " . escape(a:term, '<>$ "')
-    setlocal errorformat=%f
-    Neomake!
-    copen
+function! s:bufferDir() abort
+  return expand("%:p:h")
 endfunction
 
-nnoremap <silent> <leader>fp :call <SID>findInPath('')<cr>
-
-function! s:findInPath(term) abort
-    call nilsboy_quickfix#setNavigationType('quickfix')
-
-    " Make sure the quickfix cwd isn't used as starting directory
-    cclose
-
-    let &l:makeprg="compgen -c \| sort -u"
-    setlocal errorformat=%f
-    Neomake!
-    copen
-    let b:quickfix_action = ':echo "haha"'
-endfunction
-
-function! s:Cd(directory) abort
-    if a:directory == ''
-    elseif a:directory == 'project'
-      call CdProjectRoot()
-    elseif a:directory == 'project/..'
-      call CdProjectRoot()
-      lcd ..
-    elseif a:directory == 'buffer_dir'
-      execute "lcd" expand("%:p:h")
-    else
-      execute "lcd" a:directory
-    endif
-endfunction
-
-let s:grep_command = 'grep -inHR'
+let s:ignore_file = g:vim.contrib.dir . 'ignore-files'
+let s:grep_command = 'grep -inHR --exclude-from ' . s:ignore_file
 if executable('ag')
-  let s:grep_command = 'ag --nogroup --nocolor --column --ignore-case --all-text'
+  let s:grep_command = 'ag --nogroup --nocolor --column '
+        \ . ' --ignore-case --all-text'
+        \ . ' -p ' . s:ignore_file
 endif
 
-nnoremap <leader>gg yiw:call <SID>grep(@", '')<cr>
-vnoremap <leader>gg y:call <SID>grep(@", '')<cr>
-nnoremap <leader>gW yiW:call <SID>grep(@", '')<cr>
-nnoremap <leader>gi :call <SID>grep(input('Grep for: '), '')<cr>
-nnoremap <leader>gpi :call <SID>grep(input('Grep for: '), 'project/..')<cr>
-nnoremap <leader>gpg yiw:call <SID>grep(@", 'project/..')<cr>
-nnoremap <leader>gs :call <SID>grep(input('Grep for: '), '~/src/')<cr>
-nnoremap <leader>gf yiw:call <SID>grep(@", '', expand('%'))<cr>
+nnoremap <silent> <leader>ff :call <SID>search({})<cr>
+vnoremap <silent> <leader>ff y:call <SID>search({
+      \ 'term': @"})<cr>
 
-nnoremap <leader>vgi :call <SID>grep(input('Grep vim for: '), g:vim.etc.dir)<cr>
-nnoremap <leader>vgg yiw:call <SID>grep(@", g:vim.etc.dir)<cr>
+nnoremap <silent> <leader>fw yiw:call <SID>search({
+      \ 'term': '\b' . @" . '\b'})<cr>
+nnoremap <silent> <leader>fW yiW:call <SID>search({
+      \ 'term': @"})<cr>
+nnoremap <silent> <leader>fi :call <SID>search({
+      \ 'term': input('Search: ')})<cr>
 
-nnoremap <leader>vpgi :call <SID>grep(input('Grep for: '), g:vim.bundle.dir)<cr>
-nnoremap <leader>vpgg yiw:call <SID>grep(@", g:vim.bundle.dir)<cr>
+nnoremap <silent> <leader>fsf yiw:call <SID>search({
+      \ 'term': @",
+      \ 'path': '~/src/'})<cr>
+vnoremap <silent> <leader>fsf y:call <SID>search({
+      \ 'term': @", 
+      \ 'path': '~/src/'})<cr>
+nnoremap <silent> <leader>fsW yiW:call <SID>search({
+      \ 'term': @", 
+      \ 'path': '~/src/'})<cr>
+nnoremap <silent> <leader>fsi :call <SID>search({
+      \ 'term': input('Search: '), 
+      \ 'path': '~/src/'})<cr>
 
-command! -bang -nargs=1 Grep call <SID>grep(<q-args>, '')
-function! s:grep(term, directory, ...) abort
-    let l:path = ''
-    if exists('a:1')
-        " add /dev/null to force result with filename
-        let l:path = ' /dev/null ' . a:1
+nnoremap <silent> <leader>fd :call <SID>search({
+      \ 'path': <SID>bufferDir()})<cr>
+nnoremap <silent> <leader>ft :call <SID>search({
+      \ 'term': 'todo'})<cr>
+nnoremap <silent> <leader>fb yiw:call <SID>search({
+      \ 'term': @", 
+      \ 'path': expand('%:p'),
+      \ 'find': 0})<cr>
+
+nnoremap <silent> <leader>fvf yiw:call <SID>search({
+      \ 'path': g:vim.etc.dir})<cr>
+nnoremap <silent> <leader>fvw yiw:call <SID>search({
+      \ 'term': @", 
+      \ 'path': g:vim.etc.dir})<cr>
+nnoremap <silent> <leader>fvi :call <SID>search({
+      \ 'term': input('Search: '), 
+      \ 'path': g:vim.etc.dir})<cr>
+
+nnoremap <silent> <leader>fvpf yiw:call <SID>search({
+      \ 'path': g:vim.bundle.dir})<cr>
+nnoremap <silent> <leader>fvpw yiw:call <SID>search({
+      \ 'term': @", 
+      \ 'path': g:vim.bundle.dir})<cr>
+nnoremap <silent> <leader>fvpi :call <SID>search({
+      \ 'term': input('Search: '), 
+      \ 'path': g:vim.bundle.dir})<cr>
+
+let s:searchType = 'all'
+let s:searchLimit = '500'
+nnoremap <leader>fSS :call <SID>setVar('searchType', 'all')<cr>
+nnoremap <leader>fSf :call <SID>setVar('searchType', 'files')<cr>
+nnoremap <leader>fSg :call <SID>setVar('searchType', 'grep')<cr>
+nnoremap <leader>fSl :call <SID>toggleVar('searchLimit', '500', '')<cr>
+
+function! s:toggleVar(var, value1, value2) abort
+  execute 'let current = s:' . a:var
+  let next = a:value1
+  if current == a:value1
+    let next = a:value2
+  endif
+  execute 'let s:' . a:var . ' = "' . next . '"'
+  call INFO('Setting ' . a:var . ' to: ' . next)
+endfunction
+
+function! s:setVar(var, value) abort
+  execute 'let s:' . a:var . ' = "' . a:value . '"'
+  call INFO('Setting ' . a:var . ' to: ' . a:value)
+endfunction
+
+command! -bang -nargs=1 Search call <SID>search({'term': <q-args>})
+function! s:search(options) abort
+  let term = get(a:options, 'term', '')
+  let find = get(a:options, 'find', '1')
+
+  if term != ''
+    call INFO('Searching for ' . term)
+  endif
+
+  " TODO: use get()?
+  let project_dir = FindRootDirectory()
+  if ! project_dir
+    let project_dir = s:bufferDir()
+  endif
+  let path = get(a:options, 'path', project_dir)
+  let path = fnamemodify(path, ':p')
+
+  let grepprg = s:grep_command
+
+  let limit = ''
+  if s:searchLimit
+    let limit = ' -' . s:searchLimit
+  endif
+
+  " /dev/null forces absolute paths if greping a single file
+  let findprg = grepprg
+        \ . ' -g ' . shellescape(term)
+        \ . ' ' . fnameescape(path) 
+        \ . ' /dev/null'
+        \ . ' | head-warn ' . limit
+        \ . ' | sort-by-path-depth'
+
+  let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
+        \ . ' /dev/null'
+        \ . ' | head-warn ' . limit
+
+  " TODO: check if add to qf can be intercepted and input stopped 
+  " after a certain amount of lines
+
+  call nilsboy_quickfix#setNavigationType('quickfix')
+  let &l:errorformat="%f:%l:%m,%f:%l%m,%f  %l%m,%f"
+
+  if find
+    if s:searchType =~ '\v(files|all)'
+      let &l:makeprg = findprg
+      Neomake!
     endif
-    call nilsboy_quickfix#setNavigationType('quickfix')
-    call s:Cd(a:directory)
-    let &l:makeprg=s:grep_command . ' ' . escape(a:term, '<>$ "')
-    if !empty(l:path)
-        let &l:makeprg=&l:makeprg . l:path
+  endif
+
+  if s:searchType =~ '\v(grep|all)'
+    if term != ''
+      let &l:makeprg = grepprg
+      Neomake!
     endif
-    let &l:errorformat="%f:%l:%m,%f:%l%m,%f  %l%m"
-    Neomake!
-    copen
-		" TODO execute 'match Search /' . a:term . '/'
+  endif
+
+  copen
+  " TODO execute 'match Search /' . term . '/'
 endfunction
 
 nnoremap <leader>o :call <SID>outline()<cr>
@@ -205,7 +230,7 @@ function! s:outline() abort
     let l:filetype = b:filetype
   endif
   setlocal errorformat=%f:%l:%c:%m
-  let &l:makeprg='outline --filename ' . expand('%') 
+  let &l:makeprg='outline --filename ' . expand('%:p') 
         \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
   :Neomake!
   copen
@@ -246,12 +271,102 @@ endfunction
 
 finish
 
-" augroup s:quickfix
-"     " QuickFixCmd* Does not match :ltag
-"     autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
-"     autocmd QuickFixCmdPost [^l]* botright copen
-"     autocmd QuickFixCmdPost [^l]* let b:isQuickfix = 1
-"     autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
-"     autocmd QuickFixCmdPost    l* botright lopen
-" augroup END
+augroup s:quickfix
+    " QuickFixCmd* Does not match :ltag
+    autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
+    autocmd QuickFixCmdPost [^l]* botright copen
+    autocmd QuickFixCmdPost [^l]* let b:isQuickfix = 1
+    autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
+    autocmd QuickFixCmdPost    l* botright lopen
+augroup END
+
+augroup my_qf_autoformat
+  autocmd!
+  autocmd InsertLeave *.js :call FFormat()
+augroup END
+
+" TODO
+nnoremap <silent> <leader>fp :call <SID>findInPath('')<cr>
+function! s:findInPath(term) abort
+    call nilsboy_quickfix#setNavigationType('quickfix')
+
+    " Make sure the quickfix cwd isn't used as starting directory
+    cclose
+
+    let &l:makeprg="compgen -c \| sort -u"
+    setlocal errorformat=%f
+    Neomake!
+    copen
+    let b:quickfix_action = ':echo "haha"'
+endfunction
+
+finish
+
+" if neobundle#tap('vim-operator-user') 
+"   function! neobundle#hooks.on_post_source(bundle) abort
+
+"     call operator#user#define('grep', 'OpGrep')
+"     function! OpGrep(motion_wise)
+" 	    let v = operator#user#visual_command_from_wise_name(a:motion_wise)
+" 	    execute 'normal!' '`[' . v . '`]"xy'
+"       " call INFO('X: ', getreg(operator#user#register()))
+"       call <SID>grep({'term': @x})
+"     endfunction
+
+"   endfunction
+"   call neobundle#untap()
+" endif
+
+" map <leader>g  <Plug>(operator-grep)
+" map <leader>gs  <Plug>(operator-grep)
+
+" function! s:find(term, directory) abort
+"     call nilsboy_quickfix#setNavigationType('quickfix')
+
+"     " Make sure the quickfix cwd isn't used as starting directory
+"     cclose
+
+"     call s:Cd(a:directory)
+"     let &l:makeprg="find-and-limit\ " . shellescape(a:term)
+"     setlocal errorformat=%f
+"     Neomake!
+"     copen
+" endfunction
+
+" TODO: does not work?
+"       nnoremap <silent> <c-;> :silent! lnext<cr>
+"       nnoremap <silent> <c-,> :silent! lprevious<cr>
+
+function! AfterFormat(...) abort
+    " does not reload otherwise
+    silent! edit
+endfunction
+
+" nnoremap <silent> <leader>x :call FFormat()<cr>
+function! FFormat() abort
+    if ! exists('b:formatprg')
+        return
+    endif
+    write
+    call neomake#Sh(b:formatprg, 'AfterFormat')
+endfunction
+
+command! -bang -nargs=1 FormatterSet call <SID>FormatterSet(<q-args>)
+function! s:FormatterSet(formatterName) abort
+    execute 'compiler ' . a:formatterName
+endfunction
+
+function! s:Cd(directory) abort
+    if a:directory == ''
+    elseif a:directory == 'project'
+      call CdProjectRoot()
+    elseif a:directory == 'project/..'
+      call CdProjectRoot()
+      lcd ..
+    elseif a:directory == 'buffer_dir'
+      execute "lcd" expand("%:p:h")
+    else
+      execute "lcd" a:directory
+    endif
+endfunction
 

@@ -1,3 +1,7 @@
+" see also:
+" https://stylelint.io/
+" https://github.com/morishitter/stylefmt
+
 if exists("b:did_ftplugin_css")
   finish
 endif

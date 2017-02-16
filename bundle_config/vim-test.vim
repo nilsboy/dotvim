@@ -1,6 +1,12 @@
 " Run your tests at the speed of thought
 NeoBundle 'janko-m/vim-test'
 
+nmap <silent> <leader>ta :wall \| TestSuite<CR>
+nmap <silent> <leader>tn :wall \| TestNearest<CR>
+nmap <silent> <leader>tt :wall \| TestLast<CR>
+
+finish
+
 let g:test#preserve_screen = 1
 let test#filename_modifier = ':p'
 
@@ -8,6 +14,7 @@ nmap <silent> <leader>tt :wall \| :TestLast<CR>
 nmap <silent> <leader>tn :wall \| let test#strategy = "TestNeomakeSh" \| :TestNearest<CR>
 nmap <silent> <leader>tT :wall \| let test#strategy = "Haha" \| :TestFile<CR>
 nmap <silent> <leader>ta :wall \| let test#strategy = "Haha" \| :TestSuite<CR>
+nmap <silent> <leader>tg :wall \| let test#strategy = "Haha" \| :TestVisit<CR>
 nmap <silent> <leader>tg :wall \| let test#strategy = "Haha" \| :TestVisit<CR>
 
 " TODO: to - open corresponding test file
@@ -18,7 +25,8 @@ let test#javascript#mocha#options =
 " cmd is i.e. node_modules/.bin/mocha
 function! Haha(cmd) abort
   let &l:errorformat = "%f:%l:%c:%m"
-  let &l:makeprg = a:cmd . "| outline --filetype mocha"
+  " let &l:makeprg = a:cmd . "| outline --filetype mocha"
+  let &l:makeprg = a:cmd
   Neomake!
   copen
 endfunction

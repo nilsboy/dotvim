@@ -2,9 +2,6 @@ finish
 " Chained completion that works the way you want!
 NeoBundle 'lifepillar/vim-mucomplete'
 
-" Notes
-" :h mucomplete.txt
-
 set completeopt+=menu,menuone
 
 set shortmess+=c

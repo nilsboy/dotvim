@@ -1,11 +1,17 @@
 extends json
 
+# babel:
+# checkout: babel-preset-es2015
+# npm install --save babel-cli babel-preset-es2015
+# then run babel-node ....js
+
+# const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require('$1')
 snippet req "Require module" b
-const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require('$1')
+const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/$2/g}} = require('$1')
 endsnippet
 
 snippet ex "module.exports"
-module.exports = $1;
+module.exports = $1
 endsnippet
 
 snippet stdout "stdout"
@@ -22,17 +28,14 @@ endsnippet
 
 snippet	reqlodash "require lodash" b
 const _ = require(\`lodash\`)
-$0
 endsnippet
 
 snippet	requtil "require util" b
 const util = require(\`util\`)
-$0
 endsnippet
 
 snippet	reqfs "require fs" b
 const fs = require(\`fs\`)
-$0
 endsnippet
 
 snippet csvParserCli "CSV parser CLI" b
@@ -63,57 +66,51 @@ endsnippet
 
 snippet trace "Trace" w
 TRACE(\`$1\`)
-$0
 endsnippet
 
 snippet debug "Debug" w
 DEBUG(\`$1\`)
-$0
 endsnippet
 
 snippet info "Info" w
 INFO(\`$1\`)
-$0
 endsnippet
 
 snippet warn "Warn" w
 WARN(\`$1\`)
-$0
 endsnippet
 
 snippet error "Error" w
 ERROR(\`$1\`)
-$0
 endsnippet
 
 snippet d "Interpolated var" w
-\$\{${1:var}\}$0
+\$\{${1:var}\}
 endsnippet
 
-snippet cc "console.error" b
+snippet ce "console.error" b
 console.error(\`### $1\`)
-$0
 endsnippet
 
-snippet ccc "console.error" b
+snippet cee "console.error" b
 console.error(\`### $1:\`, $1)
-$0
+endsnippet
+
+snippet cl "console.log" b
+console.log(\`### $1\`)
 endsnippet
 
 snippet reqasyncawait "require Async/Await" b
 const async = require(\`asyncawait/async\`)
 const await = require(\`asyncawait/await\`)
-$0
 endsnippet
 
 snippet c "const" w
 const $1 = $2
-$0
 endsnippet
 
 snippet l "let" w
 let $1 = ${2:\`$3\`}
-$0
 endsnippet
 
 # TODO
@@ -135,7 +132,6 @@ endsnippet
 
 snippet e "equals" w
 = \`$1\`
-$0
 endsnippet
 
 snippet	if "if"
@@ -144,6 +140,110 @@ if($1) {
 }
 endsnippet
 
+snippet else "else"
+else {
+	$0
+}
+endsnippet
+
 snippet todo "TODO"
 // TODO: $0
+endsnippet
+
+snippet note "NOTE"
+// NOTE: $0
+endsnippet
+
+snippet tag "TAGS"
+// TAGS: $0
+endsnippet
+
+snippet / "comment" b
+// $0
+endsnippet
+
+snippet fore "for each object" b
+for(let ${2:variable} in ${1:iterable}) {
+	$0
+}
+endsnippet
+
+snippet exit "process.exit" b
+process.exit(${1:1})
+endsnippet
+
+# const { TRACE, DEBUG, INFO, ERROR, EXIT, logger } = require(\`log-dwim\`)
+snippet log "logging" b
+import Logger from \`log-dwim\`
+const { TRACE, DEBUG, INFO, WARN, ERROR, EXIT } = new Logger()
+endsnippet
+
+snippet pkginfo "add package.json info to module global" b
+require('pkginfo')(module)
+endsnippet
+
+snippet constructor "constructor" b
+constructor() {
+	$0
+}
+endsnippet
+
+snippet class "class" b
+class {
+	$0
+}
+endsnippet
+
+snippet f "function" b
+$1() {
+	$0
+}
+endsnippet
+
+snippet af "anonymous function" b
+($1) => { $0 }
+endsnippet
+
+snippet it "it" b
+it(\`$1\`, () => {
+	$0
+})
+endsnippet
+
+snippet asserteq "assert" b
+assert.equal($1, \`$0\`)
+endsnippet
+
+snippet asok "assert.ok" b
+assert.ok($1)
+endsnippet
+
+snippet beforeeach "before each test" b
+beforeEach(() => {
+	$0
+})
+endsnippet
+
+snippet aftereach "before each" b
+afterEach(() => {
+	$0
+})
+endsnippet
+
+snippet mockstdout "mock stdout and stderr" b
+const stdMocks = require(\`std-mocks\`)
+
+afterEach(() => {
+  // make sure std* get restored after failing tests
+  stdMocks.restore()
+})
+
+it(\`$1\`, () => {
+  stdMocks.use()
+  ${2:test code}
+  stdMocks.restore()
+  const output = stdMocks.flush()
+
+  assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
+})
 endsnippet
