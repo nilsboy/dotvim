@@ -1,7 +1,7 @@
 " Run your tests at the speed of thought
 NeoBundle 'janko-m/vim-test'
 
-nmap <silent> <leader>ta :wall \| TestSuite<CR>
+nmap <silent> <leader>tf :wall \| TestSuite<CR>
 nmap <silent> <leader>tn :wall \| TestNearest<CR>
 nmap <silent> <leader>tt :wall \| TestLast<CR>
 

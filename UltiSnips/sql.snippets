@@ -2,3 +2,28 @@ snippet profile "Set dbext profile name" b
 // vimex: DBSetOption profile=$1
 endsnippet
 
+snippet sel "select" b
+SELECT
+	${1:*}
+FROM
+	$0
+LIMIT 10
+
+endsnippet
+
+snippet wh "Description" b
+WHERE 1
+	AND $1
+endsnippet
+
+snippet count "count" b
+SELECT
+	COUNT(*)
+FROM
+	$0
+
+endsnippet
+
+snippet e "equals" w
+\`$1\` = \`$2\`
+endsnippet

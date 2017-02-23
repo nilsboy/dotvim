@@ -7,7 +7,9 @@ function! nilsboy_bookmarks#add(file) abort
     if empty(a:file)
         return
     endif
-    call writefile([a:file], s:bookmarks_file, 'a')
+    if IsNeoVim()
+      call writefile([a:file], s:bookmarks_file, 'a')
+    endif
 endfunction
 
 function! nilsboy_bookmarks#file() abort

@@ -2,9 +2,9 @@ let s:mru_dir = $XDG_DATA_HOME . '/nilsboy_mru/'
 let s:mru_files = s:mru_dir . 'mru_files'
 let s:mru_files_written = s:mru_dir . 'mru_files_written'
 
-" autocmd BufEnter * :call nilsboy_mru#add_file(expand('%:p'), s:mru_files)
 autocmd BufWinLeave * :call nilsboy_mru#add_file(expand('%:p'), s:mru_files)
-autocmd BufWritePost * :call nilsboy_mru#add_file(expand('%:p'), s:mru_files_written)
+autocmd BufWritePost *
+      \ :call nilsboy_mru#add_file(expand('%:p'), s:mru_files_written)
 
 call helpers#touch(s:mru_files)
 
@@ -24,7 +24,9 @@ function! nilsboy_mru#add_file(file, mru_file) abort
         return
     endif
     execute 'let ' . l:flag . ' = 1'
-    call writefile([a:file], a:mru_file, 'a')
+    if IsNeoVim()
+      call writefile([a:file], a:mru_file, 'a')
+    endif
 endfunction
 
 function! nilsboy_mru#mru_files() abort

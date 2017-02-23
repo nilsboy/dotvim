@@ -5,9 +5,12 @@ extends json
 # npm install --save babel-cli babel-preset-es2015
 # then run babel-node ....js
 
-# const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require('$1')
-snippet req "Require module" b
-const ${0:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/$2/g}} = require('$1')
+snippet req "require" b
+const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = require(\`$1\`)$0
+endsnippet
+
+snippet reqc "require class" b
+const ${2:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require(\`$1\`)$0
 endsnippet
 
 snippet ex "module.exports"
@@ -26,24 +29,24 @@ snippet stderr "stderr"
 process.stderr
 endsnippet
 
-snippet	reqlodash "require lodash" b
+snippet	lodash "require lodash" b
 const _ = require(\`lodash\`)
 endsnippet
 
-snippet	requtil "require util" b
+snippet	util "require util" b
 const util = require(\`util\`)
 endsnippet
 
-snippet	reqfs "require fs" b
-const fs = require(\`fs\`)
+snippet	fs "require fs" b
+const fs = require(\`fs-extra\`)
 endsnippet
 
 snippet csvParserCli "CSV parser CLI" b
-$0let csv = require(\`ya-csv\`)
+$0const csv = require(\`ya-csv\`)
 
-let file = process.argv[2] || 'my.csv'
+const file = process.argv[2] || \`my.csv\`
 
-let reader = csv.createCsvFileReader(file, {
+const reader = csv.createCsvFileReader(file, {
   'separator': ',',
   'quote': '"',
   'escape': '"',
@@ -54,10 +57,10 @@ let reader = csv.createCsvFileReader(file, {
 // reader.setColumnNames([ 'col1', 'col2' ])
 
 reader.addListener('data', function(data) {
-      console.log(data)
+  console.log(data)
 })
 
-// let writer = new csv.CsvWriter(process.stdout)
+// const writer = new csv.CsvWriter(process.stdout)
 //
 // reader.addListener('data', function(data) {
 //   writer.writeRecord([ data[0] ])
@@ -74,6 +77,10 @@ endsnippet
 
 snippet info "Info" w
 INFO(\`$1\`)
+endsnippet
+
+snippet infoo "Info object" w
+INFO(\`$1: ${$1}\`)
 endsnippet
 
 snippet warn "Warn" w
@@ -100,11 +107,6 @@ snippet cl "console.log" b
 console.log(\`### $1\`)
 endsnippet
 
-snippet reqasyncawait "require Async/Await" b
-const async = require(\`asyncawait/async\`)
-const await = require(\`asyncawait/await\`)
-endsnippet
-
 snippet c "const" w
 const $1 = $2
 endsnippet
@@ -118,7 +120,7 @@ endsnippet
 # console.error(`### node: \n`, dump(node, null, '  '))
 
 snippet dump "dump a var" b
-let util = require(\`util\`)
+const util = require(\`util\`)
 console.error(\`### $1\`, util.inspect($1, {depth: 3}))
 endsnippet
 
@@ -163,7 +165,7 @@ snippet / "comment" b
 endsnippet
 
 snippet fore "for each object" b
-for(let ${2:variable} in ${1:iterable}) {
+for(const ${2:variable} in ${1:iterable}) {
 	$0
 }
 endsnippet
@@ -172,7 +174,6 @@ snippet exit "process.exit" b
 process.exit(${1:1})
 endsnippet
 
-# const { TRACE, DEBUG, INFO, ERROR, EXIT, logger } = require(\`log-dwim\`)
 snippet log "logging" b
 import Logger from \`log-dwim\`
 const { TRACE, DEBUG, INFO, WARN, ERROR, EXIT } = new Logger()
@@ -182,26 +183,16 @@ snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
 
-snippet constructor "constructor" b
-constructor() {
-	$0
-}
-endsnippet
-
 snippet class "class" b
 class {
 	$0
 }
 endsnippet
 
-snippet f "function" b
-$1() {
+snippet cs "constructor" b
+constructor(${1:options = {${2:key: defaultValue}}}) {
 	$0
 }
-endsnippet
-
-snippet af "anonymous function" b
-($1) => { $0 }
 endsnippet
 
 snippet it "it" b
@@ -246,4 +237,83 @@ it(\`$1\`, () => {
 
   assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
 })
+endsnippet
+
+snippet lockfile "Create lockfile" b
+const lockFile = require(\`lockfile\`)
+// TODO: use default paths module
+lockFile.lockSync(\`/var/lock/$1.lock\`)
+lockFile.unlockSync(\`/var/lock/$1.lock\`)
+endsnippet
+
+snippet promise "promise" b
+const Promise = require(\`bluebird\`)
+// const mv = Promise.promisify(fs.move)
+endsnippet
+
+snippet walk "file walk" b
+const fileWalker = require(\`klaw-sync\`)
+const paths = fileWalker($1).map((entry) => {
+	${0:entry = entry.path}
+})
+endsnippet
+
+snippet glob "glob" b
+const glob = require(\`glob\`).sync
+endsnippet
+
+snippet globfor "loop through all globbed files" b
+for (const entry of glob(path.join($1))) {
+	${0:const basename = path.basename(entry)}
+}
+endsnippet
+
+snippet globcheck "glob check for files" b
+if(glob(path.join($1)).length !== 0) {
+	$0
+}
+endsnippet
+
+snippet qw "qw" b
+function qw(strings, ...keys) {
+  return strings
+    .join(\` \`, strings)
+    .replace(/^\s+/, \`\`)
+    .replace(/\s+$/, \`\`)
+    .split(/\s+/)
+}
+endsnippet
+
+snippet f "anonymous function expression" w
+($1) => { $0 }
+endsnippet
+
+snippet fun "function" b
+function $1($2) {
+	$0
+}
+endsnippet
+
+snippet readdir "readdir" b
+for(let entry of fs.readdirSync(${1:directory})) {
+	entry = path.join($1, entry)
+	$0
+}
+endsnippet
+
+snippet pj "path.join" w
+path.join($0)
+endsnippet
+
+snippet mkdir "mkdir from fs-extra" b
+fs.mkdirsSync($1)
+endsnippet
+
+snippet paths "xdg default paths" b
+const xdgPaths = require(\`env-paths\`)(${1:appName})${2:.log}
+endsnippet
+
+snippet tilde "expand tilde in filenames" b
+const expandTilde = require(\`expand-tilde\`)
+${1:file} = expandTilde($1)
 endsnippet

@@ -4,7 +4,14 @@ endsnippet
 
 snippet info "INFO" b
 INFO "$1"
-$0
+endsnippet
+
+snippet infoo "INFO" b
+INFO '$1:' $1
+endsnippet
+
+snippet echoo "echo with var" b
+echo '$1:' $$1 >&2
 endsnippet
 
 snippet if "if" b
@@ -17,4 +24,8 @@ snippet fun "function" b
 function $1() {
 	$0
 }
+endsnippet
+
+snippet todo "TODO" b
+# TODO: $0
 endsnippet

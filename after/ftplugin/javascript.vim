@@ -22,7 +22,8 @@ let g:ale_linters['javascript'] = ['eslint']
 " The result can not be send to stdout - the file is changed in place.
 let g:neoformat_javascript_eslint = {
       \ 'exe': 'eslint'
-      \ ,'args': ['--fix', '--quiet', '-c', g:vim.etc.dir . '/contrib/eslintrc-format.yml']
+      \ ,'args': ['--fix', '--quiet', '-c',
+      \ g:vim.etc.dir . '/contrib/eslintrc-format.yml']
       \ , 'replace': 1
       \ }
 

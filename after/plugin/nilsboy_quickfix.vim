@@ -93,6 +93,9 @@ endif
 nnoremap <silent> <leader>ff :call <SID>search({})<cr>
 vnoremap <silent> <leader>ff y:call <SID>search({
       \ 'term': @"})<cr>
+nnoremap <silent> <leader>fB :call <SID>search({
+      \ 'term': input('Search: '),
+      \ 'matchBasenameOnly': 1})<cr>
 
 nnoremap <silent> <leader>fw yiw:call <SID>search({
       \ 'term': '\b' . @" . '\b'})<cr>
@@ -141,6 +144,9 @@ nnoremap <silent> <leader>fvpi :call <SID>search({
       \ 'term': input('Search: '), 
       \ 'path': g:vim.bundle.dir})<cr>
 
+nnoremap <silent> <leader>df :call <SID>search({
+      \ 'path': $HOME . '/src/sql/'})<cr>
+
 let s:searchType = 'all'
 let s:searchLimit = '500'
 nnoremap <leader>fSS :call <SID>setVar('searchType', 'all')<cr>
@@ -167,18 +173,23 @@ command! -bang -nargs=1 Search call <SID>search({'term': <q-args>})
 function! s:search(options) abort
   let term = get(a:options, 'term', '')
   let find = get(a:options, 'find', '1')
+  let matchBasenameOnly = get(a:options, 'matchBasenameOnly', '0')
 
-  if term != ''
-    call INFO('Searching for ' . term)
+  let findTerm = term
+  if matchBasenameOnly
+    let findTerm = '\/.*' . term . '[^/]*$'
   endif
 
-  " TODO: use get()?
   let project_dir = FindRootDirectory()
-  if ! project_dir
+  if project_dir == ''
     let project_dir = s:bufferDir()
   endif
   let path = get(a:options, 'path', project_dir)
   let path = fnamemodify(path, ':p')
+
+  if term != ''
+    call INFO('Searching for ' . term . ' in ' . path)
+  endif
 
   let grepprg = s:grep_command
 
@@ -189,7 +200,7 @@ function! s:search(options) abort
 
   " /dev/null forces absolute paths if greping a single file
   let findprg = grepprg
-        \ . ' -g ' . shellescape(term)
+        \ . ' -g ' . shellescape(findTerm)
         \ . ' ' . fnameescape(path) 
         \ . ' /dev/null'
         \ . ' | head-warn ' . limit
@@ -230,6 +241,7 @@ function! s:outline() abort
     let l:filetype = b:filetype
   endif
   setlocal errorformat=%f:%l:%c:%m
+  wall
   let &l:makeprg='outline --filename ' . expand('%:p') 
         \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
   :Neomake!

@@ -5,8 +5,8 @@ NeoBundle 'SirVer/ultisnips'
 " https://github.com/honza/vim-snippets/tree/master/UltiSnips
 
 let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsJumpForwardTrigger = "<c-l>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
 " let g:UltiSnipsListSnippets = "<c-space>"
 
 nnoremap <silent><leader>se :execute ":e " 
@@ -21,7 +21,7 @@ finish
 
 " This seems to mess up completion in i.e. the command window
 " https://www.reddit.com/r/vim/comments/2oeqrg
-function! ExpandSnippet()
+function! ExpandSnippet() abort
     if delimitMate#WithinEmptyPair()
         return "\<C-R>=delimitMate#ExpandReturn()\<CR>"
     else

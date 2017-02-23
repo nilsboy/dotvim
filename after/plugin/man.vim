@@ -1,6 +1,6 @@
 let s:cache_dir = $XDG_CACHE_DIR . "/vim-normal-buffer-man"
 
-call mkdir(s:cache_dir, "p")
+call Mkdir(s:cache_dir, "p")
 
 function! Man(cmd) abort
 

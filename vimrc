@@ -39,11 +39,11 @@ let g:vim.config.dir = g:vim.etc.dir . "config/"
 " let &verbosefile = g:vim.var.dir . "/verbose.log"
 " let &verbose = 15
 
-call mkdir(g:vim.dir, "p")
-call mkdir(g:vim.etc.dir, "p")
-call mkdir(g:vim.var.dir, "p")
-
 execute "source " . g:vim.after.dir . '/plugin/helpers.vim'
+
+call Mkdir(g:vim.dir, "p")
+call Mkdir(g:vim.etc.dir, "p")
+call Mkdir(g:vim.var.dir, "p")
 
 " Remove all existing autocommands on vimrc reload
 autocmd!
@@ -58,7 +58,7 @@ set showfulltag
 " Keep undo history after closing a file
 set undofile
 let &undodir = g:vim.var.dir . "undo"
-call mkdir(&undodir, "p")
+call Mkdir(&undodir, "p")
 
 " nomodeline can not be revered by plugins
 " but modeline is needed by dbext even though it uses its own parser.
@@ -182,7 +182,9 @@ set nolist
 set linebreak
 set breakat&vim
 let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
-set breakindent
+if IsNeoVim()
+  set breakindent
+endif
 
 set mousehide
 set mouse=
@@ -432,14 +434,11 @@ nnoremap <leader>/? :Verbose map <leader>/<cr>
 nnoremap <leader>// q/k
 vnoremap <leader>// q/k
 
-" Search for debugging marker
-" nnoremap <leader>/c /^["]*###\ <cr>
-nnoremap <leader>/c /^["#=-]\{2,}<cr>
-
-" nnoremap <leader>/b /^\ *{<cr>
+nnoremap <leader>/c /\v^["#=-]{2,}<cr>
 nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
-
 nnoremap <leader>/i /^\S\+<cr>
+nnoremap <leader>/w /\<\><left><left>
+nnoremap <leader>/r gg/require<cr>}
 
 " Search for keyword under cursor
 nmap <silent> <leader>/k [I
@@ -611,7 +610,7 @@ endfunction
 if !IsPluginInstalled("neobundle.vim")
     echo "Installing NeoBundle..."
     echo ""
-    call mkdir(g:vim.bundle.dir, "p")
+    call Mkdir(g:vim.bundle.dir, "p")
     execute "!git clone https://github.com/Shougo/neobundle.vim " .
                 \ g:vim.bundle.dir . "/neobundle.vim"
 endif
@@ -634,10 +633,12 @@ call neobundle#end()
 
 NeoBundleCheck
 
-" Provides Neovim's UpdateRemotePlugins but does not seem to be sourced jet:
-source /usr/share/nvim/runtime/plugin/rplugin.vim
-" Calls UpdateRemotePlugins the NeoBundle way
-silent! NeoBundleRemotePlugins
+if IsNeoVim()
+  " Provides Neovim's UpdateRemotePlugins but does not seem to be sourced jet:
+  source /usr/share/nvim/runtime/plugin/rplugin.vim
+  " Calls UpdateRemotePlugins the NeoBundle way
+  silent! NeoBundleRemotePlugins
+endif
 
 " Remove installed plugins that are not configured anymore
 " :NeoBundleClean!

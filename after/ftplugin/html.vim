@@ -20,6 +20,7 @@ let b:did_ftplugin_html = 1
 " in newlines
 " https://github.com/htacg/tidy-html5/issues/56
 function! ShrinkBeforeRestore() abort
+  return
   normal ggO
   normal Go
 endfunction

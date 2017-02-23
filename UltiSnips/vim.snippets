@@ -6,7 +6,7 @@ let g:dein_dir = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 execute 'set runtimepath+=' . g:dein_dir
 
 if !isdirectory(g:dein_dir)
-  call mkdir(g:dein_dir, 'p')
+  call Mkdir(g:dein_dir, 'p')
   silent execute printf('!git clone --depth 1 %s %s', 'http://github.com/Shougo/dein.vim', g:dein_dir)
 endif
 
@@ -98,4 +98,16 @@ endsnippet
 
 snippet / "comment" b
 " 
+endsnippet
+
+snippet ifneo "if is neovim" b
+if IsNeoVim()
+  $0
+endif
+endsnippet
+
+snippet autocmd "autocmd" b
+augroup s:$1
+    autocmd $0
+augroup END
 endsnippet

@@ -69,8 +69,6 @@ let g:dbext_default_usermaps = 0
 
 let g:dbext#resultBufferId = 0
 
-" autocmd CursorHold *.sql  :call DBExecSqlLimit100()
-
 function! DbExtBefore(bufferDescription) abort
 
   " Prevent error last window can not be closed
@@ -81,8 +79,15 @@ function! DbExtBefore(bufferDescription) abort
   let g:dbext#sourceBufferName = expand('%:t')
   let g:dbext#bufferDescription = a:bufferDescription
 
+  let b:dbext_winview = winsaveview()
+
   lcd! /tmp
 endfunction
+
+augroup Dbext_CursorPosition
+  autocmd!
+  autocmd BufEnter * if(exists('b:dbext_winview')) | call winrestview(b:dbext_winview) | unlet b:dbext_winview | endif
+augroup END
 
 " Configure result buffer
 function! DBextPostResult(db_type, buf_nr) abort
@@ -116,43 +121,40 @@ function! DBextPostResult(db_type, buf_nr) abort
   lcd! -
 
   " Remove connection info
-  normal ggdd
+  normal! ggdd
 
   " Move connection info to the bottom
-  " normal ggddG
+  " normal! ggddG
   " put='#'
-  " normal pkJgg
+  " normal! pkJgg
 
   " Duplicate separator line at bottom
-  normal 2ggyyGkp
+  normal! 2ggyyGkp
+
+  normal! gg
 
 endfunction
 
-nnoremap <leader>se  :call DbExtBefore('') \| :DBExecSQLUnderCursor<cr>
-nnoremap <leader>slt :call DbExtBefore('tables') \| :DBListTable ""<cr><c-w>
-nnoremap <leader>st  :call DBExecSqlLimit100()<cr>
-nnoremap <leader>sdt :call DbExtBefore('desc') \| :DBDescribeTable<CR>
-nnoremap <leader>sv  :DBListConnections<cr>
+nnoremap <leader>de  :call DbExtBefore('') \| :DBExecSQLUnderCursor<cr>
+nnoremap <leader>dtl :call DbExtBefore('tables') \| :DBListTable ""<cr><c-w>
+nnoremap <leader>dtt  :call DBExecSqlLimit()<cr>
+nnoremap <leader>dtd :call DbExtBefore('desc') \| :DBDescribeTable<CR>
+nnoremap <leader>dv  :DBListConnections<cr>
 
 " DBSelectFromTable does not seem to honour the limit
-function! DBExecSqlLimit100() abort
+function! DBExecSqlLimit() abort
     let l:table = expand("<cword>")
     call DbExtBefore(l:table) 
-    execute ":DBExecSQL select * from " l:table " limit 100"
+    execute ":DBExecSQL SELECT * FROM " l:table " ORDER BY 1 DESC LIMIT 100"
+    normal! gg
 endfunction
 
 if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
 endif
-nnoremap <leader>sp :execute "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim" \| setlocal filetype=dbext-profile<cr>
-
-let $SQL_FILES_DIR = $HOME . '/src/sql/'
-" TODO remove Unite
-nnoremap <leader>sf :Unite
-    \ -buffer-name=sql-files
-    \ -smartcase
-    \ script-file:find-and-limit\ --dir\ $SQL_FILES_DIR\ --abs
-    \ <cr><esc>
+nnoremap <silent> <leader>dp :execute 
+      \ "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
+      \ \| setlocal filetype=dbext-profile<cr>
 
 " let g:ftplugin_sql_omni_key = "<leader>so"
 " let g:ftplugin_sql_omni_key = "<c-p>"

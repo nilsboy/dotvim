@@ -1,3 +1,7 @@
+if ! IsNeoVim()
+  finish
+endif
+
 " Dark powered asynchronous completion framework for neovim 
 NeoBundle 'Shougo/deoplete.nvim'
 

@@ -5,10 +5,6 @@
 " - ingo-library
 
 " Close a buffer writing its content and closing vim if appropriate.
-" Use bwipe instead of bdelete - otherwise the buffer stays open as
-" an unlisted-buffer.
-" Using bwipe prevents the current postion mark from being saved - so the file
-" position can not be restored when loading the file again
 function! BufferClose() abort
 
     if BufferIsCommandLine() == 1
@@ -31,9 +27,38 @@ function! BufferClose() abort
         update
     endif
 
+    " Use bwipe instead of bdelete - otherwise the buffer stays open as
+    " an unlisted-buffer.
+    " Using bwipe prevents the current postion mark from being saved - so the file
+    " position can not be restored when loading the file again
     bdelete!
 
 endfunction
+
+" function! BufferCheckAndDeleteEmpty() abort
+"     if bufname('%') == ''
+"       return
+"     endif
+"     if BufferIsSpecial()
+"       return
+"     endif
+"     " call INFO('BufferIsSpecial(): ', BufferIsSpecial() . bufname('%'))
+"     bufdo :call BufferDeleteEmpty()
+" endfunction
+" function! BufferDeleteEmpty() abort
+"     if BufferIsSpecial()
+"       return
+"     endif
+"     if BufferIsEmpty() == 1 && BufferIsUnnamed() == 1
+"         silent bdelete!
+"     endif
+" endfunction
+" augroup s:BufferDeleteEmpty
+"     " autocmd BufReadPost * :call BufferCheckAndDeleteEmpty()
+"     " autocmd BufReadPost * :call BufferListedCount()
+"     autocmd BufReadPost * :bufdo call INFO('bn: '. bufname('%'))
+"     " autocmd BufReadPost * :call BufferDeleteEmpty()
+" augroup END
 
 " argument: bufspec
 function! CheckTime(...) abort
@@ -48,6 +73,38 @@ function! CheckTime(...) abort
     endif
 
     execute ":checktime " . bufspec
+endfunction
+
+function! BufferListedCount() abort
+    let last_buffer = bufnr('$')
+    let listed = 0
+    let i = 0
+    while i <= last_buffer
+        let i = i + 1
+        if BufferIsSpecial() == 1
+          continue
+        endif
+        if buflisted(i) == 1
+            let listed = listed + 1
+        endif
+    endwhile
+    return listed
+endfunction
+
+" Check if buffer name starts with '[' like quickfix et al
+" TODO: Buffername seems to be empty for special buffers
+" function! BufferIsSpecial() abort
+"   return bufname('%') =~ '\v^\[.*' ? 1 : 0
+" endfunction
+
+function! BufferIsQuickfix() abort
+    " if &filetype == 'qt'
+    "   return 1
+    " endif
+    if bufname('%') == '[Quickfix List]'
+        return 1
+    endif
+    return 0
 endfunction
 
 function! BufferIsCommandLine() abort
@@ -225,7 +282,7 @@ endfunction
 command! -nargs=* Run call Run(<f-args>)
 function! Run(...) abort
     let buffer_name = a:1
-	  let command = join(a:000[1:])
+    let command = join(a:000[1:])
     echom buffer_name
     silent execute ":e " . buffer_name
     setlocal buftype=nowrite
@@ -405,8 +462,7 @@ function! RedirAddUppercaseVersion() abort
         let bufferName = substitute(bufferName , '\v\s*', "", "g")
         let bufferName = substitute(bufferName, '\v\W', "x", "g")
         try
-            execute "command! -nargs=0 " . bufferName. 
-                \ " :call RedirNew(':" . bufferName . "', '" . command . "')"
+            execute "command! -nargs=0 " . bufferName . " :Verbose :" . command
         catch
             echom "error creating command " . bufferName
         endtry
@@ -513,8 +569,10 @@ function! helpers#touch(path) abort
     endif
     let l:path = fnamemodify(a:path, ':p')
     let l:dir = fnamemodify(a:path, ':p:h')
-    call mkdir(l:dir, 'p')
-    call writefile([], l:path, 'a')
+    call Mkdir(l:dir, 'p')
+    if IsNeoVim()
+      call writefile([], l:path, 'a')
+    endif
 endfunction
 
 command! -nargs=* Help call Help(<f-args>)
@@ -562,4 +620,22 @@ endfunction
 command! -nargs=* Copy call Copy(<f-args>)
 function! Copy(dst) abort
   silent execute 'saveas %:p:h/' . a:dst
+endfunction
+
+" Vim's writefile does not support the append (a) flag (2017-02-21)
+" Vim's mkdir complains if directory alread exists (2017-02-21)
+function! IsNeoVim() abort
+    redir => s
+    silent! version
+    redir END
+    return matchstr(s, 'NVIM') == 'NVIM'
+endfunction
+
+" For vim compatibility 
+" Vim complains if the directory already exists (2017-02-20)
+function! Mkdir(dir, ...) abort
+  if glob(a:dir) != ''
+    return
+  endif
+  call mkdir(a:dir, 'p')
 endfunction

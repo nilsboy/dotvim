@@ -1,3 +1,7 @@
+if ! IsNeoVim()
+  finish
+endif
+
 " Asynchronous Lint Engine
 NeoBundle 'w0rp/ale'
 
