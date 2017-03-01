@@ -13,6 +13,10 @@ snippet reqc "require class" b
 const ${2:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require(\`$1\`)$0
 endsnippet
 
+snippet new "new" b
+const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($0)
+endsnippet
+
 snippet ex "module.exports"
 module.exports = $1
 endsnippet
@@ -47,17 +51,17 @@ $0const csv = require(\`ya-csv\`)
 const file = process.argv[2] || \`my.csv\`
 
 const reader = csv.createCsvFileReader(file, {
-  'separator': ',',
-  'quote': '"',
-  'escape': '"',
-  'comment': '',
-  'columnsFromHeader': true,
+	'separator': ',',
+	'quote': '"',
+	'escape': '"',
+	'comment': '',
+	'columnsFromHeader': true,
 })
 
 // reader.setColumnNames([ 'col1', 'col2' ])
 
 reader.addListener('data', function(data) {
-  console.log(data)
+	console.log(data)
 })
 
 // const writer = new csv.CsvWriter(process.stdout)
@@ -104,7 +108,11 @@ console.error(\`### $1:\`, $1)
 endsnippet
 
 snippet cl "console.log" b
-console.log(\`### $1\`)
+console.log(\`#### $1\`)
+endsnippet
+
+snippet cll "console.log" b
+console.log(\`#### $1:\`, $1)
 endsnippet
 
 snippet c "const" w
@@ -121,7 +129,7 @@ endsnippet
 
 snippet dump "dump a var" b
 const util = require(\`util\`)
-console.error(\`### $1\`, util.inspect($1, {depth: 3}))
+console.error(\`### $1:\n\`, util.inspect($1, {depth: 30}))
 endsnippet
 
 snippet xx "here"
@@ -175,8 +183,9 @@ process.exit(${1:1})
 endsnippet
 
 snippet log "logging" b
-import Logger from \`log-dwim\`
-const { TRACE, DEBUG, INFO, WARN, ERROR, EXIT } = new Logger()
+const LogDwim = require(\`log-dwim\`)
+const logDwim = new LogDwim()
+const { TRACE, DEBUG, INFO, WARN, ERROR, EXIT } = logDwim
 endsnippet
 
 snippet pkginfo "add package.json info to module global" b
@@ -225,17 +234,17 @@ snippet mockstdout "mock stdout and stderr" b
 const stdMocks = require(\`std-mocks\`)
 
 afterEach(() => {
-  // make sure std* get restored after failing tests
-  stdMocks.restore()
+	// make sure std* get restored after failing tests
+	stdMocks.restore()
 })
 
 it(\`$1\`, () => {
-  stdMocks.use()
-  ${2:test code}
-  stdMocks.restore()
-  const output = stdMocks.flush()
+	stdMocks.use()
+	${2:test code}
+	stdMocks.restore()
+	const output = stdMocks.flush()
 
-  assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
+	assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
 })
 endsnippet
 
@@ -276,11 +285,11 @@ endsnippet
 
 snippet qw "qw" b
 function qw(strings, ...keys) {
-  return strings
-    .join(\` \`, strings)
-    .replace(/^\s+/, \`\`)
-    .replace(/\s+$/, \`\`)
-    .split(/\s+/)
+	return strings
+		.join(\` \`, strings)
+		.replace(/^\s+/, \`\`)
+		.replace(/\s+$/, \`\`)
+		.split(/\s+/)
 }
 endsnippet
 
@@ -288,8 +297,17 @@ snippet f "anonymous function expression" w
 ($1) => { $0 }
 endsnippet
 
+snippet fn "anonymous node function expression" w
+(error, result) => {
+	if(error) {
+		throw err
+	}
+	$0
+}
+endsnippet
+
 snippet fun "function" b
-function $1($2) {
+function ${1:${VISUAL}}($2) {
 	$0
 }
 endsnippet
@@ -316,4 +334,34 @@ endsnippet
 snippet tilde "expand tilde in filenames" b
 const expandTilde = require(\`expand-tilde\`)
 ${1:file} = expandTilde($1)
+endsnippet
+
+snippet exists "file exists" w
+fs.existsSync($1)
+endsnippet
+
+# mock-fs
+#   - mocks the whole filesystem not just a specific directory etc.
+#   - breaks require
+# level-filesystem
+#   - only supports async
+# fileception:
+#   - may work
+snippet fs-mock "mock filesystem" b
+const LOG_DIRECTORY = require(`unique-temp-dir`)()
+endsnippet
+
+snippet ok "assert.ok" b
+assert.ok($0)
+endsnippet
+
+snippet cleanup "run cleanup on program exit" b
+require(\`node-cleanup\`)((exitCode, signal) => {
+	$0
+})
+endsnippet
+
+snippet wait "keep program running indefinitely" b
+// Keep program running
+process.stdin.resume()
 endsnippet

@@ -14,3 +14,4 @@ let g:ale_linters = {}
 
 " TODO: run formatter first?
 " let g:ale_lint_delay = 1000
+

@@ -1,3 +1,4 @@
+finish
 " Show a diff using Vim its sign column.
 NeoBundle 'mhinz/vim-signify'
 " NOTES: replace with quickfix?

@@ -1,11 +1,11 @@
-setlocal cursorline
+" setlocal cursorline
 setlocal nowrap
-setlocal winheight=20
+let &l:winheight = &lines / 3
 
-nmap <buffer><silent> f :QFilter<space>
+" nmap <buffer><silent> f :QFilter<space>
 
 " TODO previewwindow
-nmap <buffer><silent> p :pedit! <cfile><cr>
+" nmap <buffer><silent> p :pedit! <cfile><cr>
 
 if g:quickfix_mode == 'quickfix'
     nmap <buffer><silent> <tab> :cclose<cr>
@@ -25,4 +25,3 @@ else
 
     nmap <buffer><silent> <cr> :.ll \| :lclose<cr>
 endif
-

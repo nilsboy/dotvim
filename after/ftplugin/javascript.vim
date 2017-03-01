@@ -10,8 +10,12 @@ if exists("b:did_ftplugin_javascript")
 endif
 let b:did_ftplugin_javascript = 1
 
+"### Linter
+
+let g:ale_javascript_eslint_options = ' -c ' . g:vim.etc.dir . '/contrib/eslintrc.yml'
 let g:ale_linters['javascript'] = ['eslint']
-" let g:ale_linters = {'javascript': 'all'}
+
+"### Formatter
 
 " alternative javascript formatters:
 " - https://github.com/prettydiff/prettydiff
@@ -31,15 +35,12 @@ let g:neoformat_javascript_eswraplines = {
       \ 'exe': 'es-wrap-lines'
       \ }
 
-" let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 
-nnoremap <silent> <buffer> <leader>x
-  \ :Neoformat eslint
-  \ <cr>
+" nnoremap <silent> <buffer> <leader>x
+"   \ :Neoformat eslint
+"   \ <cr>
   " \  \| :Neoformat eswraplines
-
-" autocmd InsertLeave * :Neoformat eslint \| :Neoformat eswraplines<cr>
 
 finish
 

@@ -6,7 +6,7 @@ let g:dein_dir = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 execute 'set runtimepath+=' . g:dein_dir
 
 if !isdirectory(g:dein_dir)
-  call Mkdir(g:dein_dir, 'p')
+  call mkdir(g:dein_dir, 'p')
   silent execute printf('!git clone --depth 1 %s %s', 'http://github.com/Shougo/dein.vim', g:dein_dir)
 endif
 
@@ -17,7 +17,7 @@ call dein#add('Shougo/dein.vim')
 " call dein#add('Shougo/vimproc.vim', {'build': 'make'})
 " call dein#add('Shougo/unite.vim')
 	$0
-sall dein#end()
+call dein#end()
 
 if dein#check_install() 
   call dein#install()

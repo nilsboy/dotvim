@@ -169,6 +169,8 @@ set hidden
 " Highlight unknown filetypes as text
 autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 
+set synmaxcol=300
+
 " show count of selected lines / columns
 set showcmd
 
@@ -376,7 +378,8 @@ nnoremap <silent><leader>el :RunCursorLine<cr>
 
 " Don't wait after escape in insert mode
 " Breaks curser keys etc. (apparently not in Neovim)
-set noesckeys
+" removed from Neovim (2017-03-01)
+" set noesckeys
 
 " Close buffer
 "Mapping <esc> in vimrc breaks arrow behaviour"
@@ -391,7 +394,7 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 nnoremap <space><space> q:i
 vnoremap <space><space> q:i
 
-set cmdwinheight=10
+let &cmdwinheight = &lines / 3
 
 " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
 autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>

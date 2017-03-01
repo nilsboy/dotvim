@@ -14,9 +14,13 @@
 " - autoformat
 "   - does not have a lot of preconfigured formatters
 " - neomake-multiprocess
+" see also:
+" - vim-qf
+" detect quickfix:
+" https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
 "
 " TODO include search for related snail-, camel-, etc, case
-" TODO Format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
+" TODO format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
 " TODO checkout quickfixsigns for resetting the signes on :colder etc
 " TODO use winsaveview to prevent window resizing on copen
 " TODO always close buffer of preview window - is there a plugin for that?
@@ -98,6 +102,8 @@ nnoremap <silent> <leader>fB :call <SID>search({
       \ 'matchBasenameOnly': 1})<cr>
 
 nnoremap <silent> <leader>fw yiw:call <SID>search({
+      \ 'term': @" })<cr>
+nnoremap <silent> <leader>fr yiw:call <SID>search({
       \ 'term': '\b' . @" . '\b'})<cr>
 nnoremap <silent> <leader>fW yiW:call <SID>search({
       \ 'term': @"})<cr>
@@ -118,6 +124,9 @@ nnoremap <silent> <leader>fsi :call <SID>search({
       \ 'path': '~/src/'})<cr>
 
 nnoremap <silent> <leader>fd :call <SID>search({
+      \ 'path': <SID>bufferDir()})<cr>
+nnoremap <silent> <leader>fdi :call <SID>search({
+      \ 'term': input('Search: '),
       \ 'path': <SID>bufferDir()})<cr>
 nnoremap <silent> <leader>ft :call <SID>search({
       \ 'term': 'todo'})<cr>
@@ -142,6 +151,9 @@ nnoremap <silent> <leader>fvpw yiw:call <SID>search({
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>fvpi :call <SID>search({
       \ 'term': input('Search: '), 
+      \ 'path': g:vim.bundle.dir})<cr>
+nnoremap <silent> <leader>fvpt :call <SID>search({
+      \ 'term': expand('%:t:r'),
       \ 'path': g:vim.bundle.dir})<cr>
 
 nnoremap <silent> <leader>df :call <SID>search({
@@ -173,6 +185,7 @@ command! -bang -nargs=1 Search call <SID>search({'term': <q-args>})
 function! s:search(options) abort
   let term = get(a:options, 'term', '')
   let find = get(a:options, 'find', '1')
+  let grep = get(a:options, 'grep', '1')
   let matchBasenameOnly = get(a:options, 'matchBasenameOnly', '0')
 
   let findTerm = term
@@ -216,22 +229,25 @@ function! s:search(options) abort
   call nilsboy_quickfix#setNavigationType('quickfix')
   let &l:errorformat="%f:%l:%m,%f:%l%m,%f  %l%m,%f"
 
+  let &l:makeprg = ''
+
   if find
     if s:searchType =~ '\v(files|all)'
-      let &l:makeprg = findprg
-      Neomake!
+      let &l:makeprg .= findprg
     endif
   endif
 
-  if s:searchType =~ '\v(grep|all)'
-    if term != ''
-      let &l:makeprg = grepprg
-      Neomake!
+  if grep
+    if s:searchType =~ '\v(grep|all)'
+      if term != ''
+        let &l:makeprg .= ' ; ' . grepprg
+      endif
     endif
   endif
 
+  Neomake!
   copen
-  " TODO execute 'match Search /' . term . '/'
+  execute 'match Todo /\c\v' . term . '/'
 endfunction
 
 nnoremap <leader>o :call <SID>outline()<cr>
@@ -292,10 +308,10 @@ augroup s:quickfix
     autocmd QuickFixCmdPost    l* botright lopen
 augroup END
 
-augroup my_qf_autoformat
-  autocmd!
-  autocmd InsertLeave *.js :call FFormat()
-augroup END
+" augroup my_qf_autoformat
+"   autocmd!
+"   autocmd InsertLeave *.js :call FFormat()
+" augroup END
 
 " TODO
 nnoremap <silent> <leader>fp :call <SID>findInPath('')<cr>

@@ -5,6 +5,10 @@ nmap <silent> <leader>tf :wall \| TestSuite<CR>
 nmap <silent> <leader>tn :wall \| TestNearest<CR>
 nmap <silent> <leader>tt :wall \| TestLast<CR>
 
+let g:test#javascript#patterns = {
+      \ 'test': ['\v^\s*%(it|test)\s*[( ]\s*%("|''|`)(.*)%("|''|`)'],
+      \ 'namespace': ['\v^\s*%(describe|suite|context)\s*[( ]\s*%("|''|`)(.*)%("|''|`Description)']}
+
 finish
 
 let g:test#preserve_screen = 1
