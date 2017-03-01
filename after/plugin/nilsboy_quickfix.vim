@@ -247,7 +247,9 @@ function! s:search(options) abort
 
   Neomake!
   copen
-  execute 'match Todo /\c\v' . term . '/'
+  if term != ''
+    execute 'match Todo /\c\v' . term . '/'
+  endif
 endfunction
 
 nnoremap <leader>o :call <SID>outline()<cr>
