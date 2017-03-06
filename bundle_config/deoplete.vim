@@ -1,3 +1,4 @@
+finish
 if ! IsNeoVim()
   finish
 endif
@@ -10,15 +11,17 @@ set nowildmenu
 " autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
   
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_refresh_always = 1
-
 let g:deoplete#enable_ignore_case = 1
-
 let g:deoplete#enable_smart_case = 0
 let g:deoplete#enable_camel_case = 1
+let g:deoplete#enable_refresh_always = 1
 
 let g:deoplete#auto_complete_start_length = 1
 " let g:deoplete#max_menu_width = 10
+
+" workaround for: deoplete trigger completing automatically (2017-03-02)
+" https://github.com/Shougo/deoplete.nvim/issues/440
+let g:deoplete#auto_complete_delay = 147
 
 if neobundle#tap('deoplete.nvim') 
   function! neobundle#hooks.on_post_source(bundle) abort
@@ -34,10 +37,10 @@ if neobundle#tap('deoplete.nvim')
           \ deoplete#mappings#manual_complete()
 
     " TODO
-		let g:deoplete#sources = {}
+		let g:deoplete#sources = []
     " let g:deoplete#sources.javascript = ['ultisnips', 'ternjs']
     " let g:deoplete#sources._ = ['ultisnips']
-    let g:deoplete#sources.javascript = []
+    " let g:deoplete#sources.javascript = []
     " let g:deoplete#sources.javascript = ['ultisnips']
     " let g:deoplete#sources.sh = ['buffer', 'tag']
   endfunction
@@ -45,7 +48,6 @@ if neobundle#tap('deoplete.nvim')
 endif
 
 function! DeopleteInfo() abort
-  
 		let g:deoplete#keyword_patterns = {}
 endfunction
 

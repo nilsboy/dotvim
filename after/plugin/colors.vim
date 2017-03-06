@@ -36,7 +36,7 @@ if &t_Co > 1
 endif
 
 " Highlight all occurences of word under cursor
-" autocmd CursorMoved * execute printf('match todo /\V\<%s\>/',
+" autocmd CursorMoved,CursorMovedI * execute printf('match todo /\V\<%s\>/',
 "     \ escape(expand('<cword>'), '/\'))
 
 " Show trailing whitespace as red
@@ -50,12 +50,6 @@ command! ColorsListCurrentHiGroups :so $VIMRUNTIME/syntax/hitest.vim
 nnoremap <leader>gh :echo map(synstack(line('.'), col('.')), 
       \ 'synIDattr(v:val, "name")')<cr>
 
-nnoremap <leader>gh :call Haha(line('.'))<cr>
-
-function! Haha(linenr) abort
-  echo join(map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')) =~? 'comment'
-endfunction
-
 "### Cursor
 
 autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
@@ -64,3 +58,37 @@ autocmd InsertEnter * setlocal nocursorline
 " Disable all blinking
 set guicursor+=a:blinkon0
 
+" TODO
+nnoremap <leader>y :call colors#highlightLine()<cr>
+sign define wholeline linehl=Todo text=ss
+function! colors#highlightLine() abort
+  execute 'sign place 1 name=wholeline line=' . line('.') . ' buffer=' . bufnr('%')
+endfunction
+
+" Make diffs less glaringly ugly...
+highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
+highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
+highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
+highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
+
+" Show when lines extend past column 80
+" highlight ColorColumn ctermfg=208 ctermbg=Black
+
+" function! MarkMargin (on)
+"     if exists('b:MarkMargin')
+"         try
+"             call matchdelete(b:MarkMargin)
+"         catch /./
+"         endtry
+"         unlet b:MarkMargin
+"     endif
+"     if a:on
+"         let b:MarkMargin = matchadd('ColorColumn', '\%81v\s*\S', 100)
+"     endif
+" endfunction
+
+" augroup MarkMargin
+"     autocmd!
+"     autocmd  BufEnter  *       :call MarkMargin(1)
+"     autocmd  BufEnter  *.vp*   :call MarkMargin(0)
+" augroup END

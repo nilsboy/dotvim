@@ -130,10 +130,14 @@ nnoremap <silent> <leader>fdi :call <SID>search({
       \ 'path': <SID>bufferDir()})<cr>
 nnoremap <silent> <leader>ft :call <SID>search({
       \ 'term': 'todo'})<cr>
-nnoremap <silent> <leader>fb yiw:call <SID>search({
-      \ 'term': @", 
-      \ 'path': expand('%:p'),
-      \ 'find': 0})<cr>
+
+" nnoremap <silent> <leader>fb yiw:call <SID>search({
+"       \ 'term': @", 
+"       \ 'path': expand('%:p'),
+"       \ 'find': 0})<cr>
+
+" Search for keyword under cursor
+nmap <silent> <leader>fb [I
 
 nnoremap <silent> <leader>fvf yiw:call <SID>search({
       \ 'path': g:vim.etc.dir})<cr>
@@ -331,6 +335,14 @@ function! s:findInPath(term) abort
 endfunction
 
 finish
+
+" " TODO
+" if len(getqflist()) > 0
+"   " Quickfix error count
+"   set statusline+=%{len(filter(getqflist(),'v:val.valid'))}
+"   set statusline+=%{'/'}
+"   set statusline+=%{len(getqflist())}
+" endif
 
 " if neobundle#tap('vim-operator-user') 
 "   function! neobundle#hooks.on_post_source(bundle) abort

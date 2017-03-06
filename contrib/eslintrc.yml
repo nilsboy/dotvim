@@ -1,7 +1,7 @@
 # use only for js errors and non-fixable rules
 
 ---
-rules:
+# rules:
 # no-unused-vars:
 #   - 1
 # no-undef:

@@ -117,6 +117,7 @@ set nostartofline
 let &tabstop = 2
 let &softtabstop = &tabstop
 let &shiftwidth = &tabstop
+set shiftround
 set smarttab
 set expandtab
 
@@ -203,6 +204,31 @@ set isfname-==
 command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e | :nohlsearch
 command! -nargs=* RemoveNewlineBlocks :%s/\n\n\+/\r\r/e | :nohlsearch
 
+" When autocompleting within an identifier, prevent duplications
+augroup Undouble_Completions
+    autocmd!
+    autocmd CompleteDone *  call Undouble_Completions()
+augroup None
+
+function! Undouble_Completions ()
+    let col  = getpos('.')[2]
+    let line = getline('.')
+    call setline('.', 
+          \ substitute(line, '\(\k\+\)\%'.col.'c\zs\1', '', ''))
+endfunction
+
+" TODO: test - can make the insert leader fast?
+" inoremap <expr><silent> <space> Smartcomma()
+" function! Smartcomma() abort
+"     let [bufnum, lnum, col, off, curswant] = getcurpos()
+"     if getline('.') =~ (' \%' . (col+off) . 'c')
+"         return 'x'
+"         return "\<C-H>=> "
+"     else
+"         return ' '
+"     endif
+" endfunction
+
 "### Searching
 
 " Show matching brackets
@@ -233,6 +259,10 @@ set infercase
 
 " Switch window if it contains wanted buffer
 set switchbuf=useopen
+
+" Extend a previous match
+nnoremap //   /<C-R>/
+" nnoremap ///  [[/<C-R>/\<BAR>]]
 
 "### Undo and swap
 
@@ -265,7 +295,7 @@ set updatetime=1000
 " :h index
 
 " Potentially reassignable keys for normal mode:
-" s, S, Q, Z, <bs>, M, m, r, R, <space>
+" s, S, Q, Z, <bs>, M, m, r, R, <space>, Y
 " <cr> is used in quickfix etc for jumping
 " Maybe use r as secondary leader?
 
@@ -340,8 +370,7 @@ vmap <c-l> <esc><c-l>
 vmap <c-j> <esc><c-j>
 vmap <c-k> <esc><c-k>
 
-nnoremap <silent> <leader>ww :wincmd w<cr>
-nnoremap <silent> <leader>wo :only<cr>
+nnoremap <silent> <leader>go :only<cr>
 
 " Never use formatprg (it's global) and don't fallback to vim default
 set formatprg=false
@@ -357,10 +386,14 @@ nnoremap Y y$
 
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
-" nnoremap <nowait><leader>b :ls!<cr>:b<space>
 
-nnoremap <silent><leader>if :!firefox "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
-nnoremap <silent><leader>is :execute ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
+" Quickly jump to buffers
+" nnoremap <nowait><leader>b :ls<cr>:buffer<space>
+
+nnoremap <silent><leader>if :!firefox
+      \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
+nnoremap <silent><leader>is :execute
+      \ ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
 
 " Run current buffer in the shell
 " nnoremap <silent><leader>ee :silent RunCurrentBuffer<cr>
@@ -382,8 +415,9 @@ nnoremap <silent><leader>el :RunCursorLine<cr>
 " set noesckeys
 
 " Close buffer
-"Mapping <esc> in vimrc breaks arrow behaviour"
-"(http://stackoverflow.com/questions/11940801)
+" Mapping <esc> in vimrc breaks arrow behaviour"
+" (http://stackoverflow.com/questions/11940801)
+" - seems to be no problem with neovim
 nnoremap <silent><esc> :call BufferClose()<cr>
 
 " Causes delay
@@ -394,7 +428,14 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 nnoremap <space><space> q:i
 vnoremap <space><space> q:i
 
-let &cmdwinheight = &lines / 3
+augroup s:FixWindowSizeDependentStuff
+    autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3
+    " TODO: only works when not at the beginning or end of file
+    autocmd VimEnter,VimResized *
+          \ nnoremap <c-f> :execute ':normal ' . (&lines - 3) . 'j'<cr>
+    autocmd VimEnter,VimResized *
+          \ nnoremap <c-b> :execute ':normal ' . (&lines - 3) . 'k'<cr>
+augroup END
 
 " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
 autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
@@ -428,10 +469,10 @@ command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
 
 " Show all <leader> mappings
-nnoremap <leader>vm :Verbose map <leader> \| :only<cr>
+nnoremap <leader>vm :Verbose map <leader><cr> \| :only<cr>
 
 " Show all <leader> search mappings
-nnoremap <leader>/? :Verbose map <leader>/<cr>
+nnoremap <leader>/? :Verbose map <leader>/<cr> \| :only<cr>
 
 " open search history / select last entry
 nnoremap <leader>// q/k
@@ -443,17 +484,8 @@ nnoremap <leader>/i /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 
-" Search for keyword under cursor
-nmap <silent> <leader>/k [I
-
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
-
-" Edit file under cursor even if it does not exist
-" nnoremap <leader>gf :execute ":E " . expand("<cfile>")<cr>
-
-" Quickly jump to buffers
-" nnoremap <leader>b :ls<cr>:b
 
 nnoremap ' `
 nnoremap ` '
@@ -464,15 +496,9 @@ nnoremap V m`V
 nnoremap <C-v> m`<C-v>
 vnoremap <esc> <esc>``
 vnoremap y y``
-
 " TODO: clean up <leader>l namespace
 nnoremap <leader>lr :%s/<C-r><C-w>/
-
 nnoremap MM :Verbose messages<cr> \| :only \| :normal G<cr>
-
-" TODO nicer scrollg
-" nnoremap <C-j> 7j
-" nnoremap <C-k> 7k
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -480,13 +506,10 @@ nnoremap c# #NcgN
 nnoremap cg* g*Ncgn
 nnoremap cg# g#NcgN
 
-" TODO
-nnoremap <leader>* /\<<C-R>=expand('<cword>')<CR>\><CR>
-nnoremap <leader># ?\<<C-R>=expand('<cword>')<CR>\><CR>
-
 nnoremap <leader>hW :execute 'Help ' . expand('<cWORD>')<cr>
 nnoremap <leader>hh :execute 'Help ' . expand('<cword>')<cr>
 vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
+nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 
 " TODO: tune
 map [[ ?{<CR>w99[{
@@ -494,10 +517,15 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
+nnoremap <c-u> <c-i>
+
 "### Statusline
 
 " Avoid 'hit enter prompt'
 set shortmess=atTIW
+
+" don't give ins-completion-menu messages.
+set shortmess+=c
 
 " Increase ruler height
 " set cmdheight=2
@@ -583,14 +611,6 @@ function! Location() abort
     return l:fn
 
 endfunction
-
-" " TODO
-" if len(getqflist()) > 0
-"   " Quickfix error count
-"   set statusline+=%{len(filter(getqflist(),'v:val.valid'))}
-"   set statusline+=%{'/'}
-"   set statusline+=%{len(getqflist())}
-" endif
 
 "### Gui mode
 

@@ -1,7 +1,7 @@
 " Simplified clipboard functionality for Vim
 
 " Avoid error messages
-if ! $DISPLAY
+if $DISPLAY == ''
   finish
 endif
 

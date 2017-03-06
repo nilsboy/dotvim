@@ -4,6 +4,9 @@ endif
 
 " Asynchronous Lint Engine
 NeoBundle 'w0rp/ale'
+" NOTE: For diagnostics run
+" :ALEInfo
+" NOTE: Does not report errors from validators
 
 " Does not update on undo?
 
