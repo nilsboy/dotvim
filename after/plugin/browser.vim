@@ -1,10 +1,11 @@
 " NOTE: checkout surfraw
+" checkout: selenium - use with headless browser?
 
 " nnoremap <silent><leader>ii :call Browser()<CR>
 
 " nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 
-function! Browser()
+function! Browser() abort
     let line = getline(".")
     let url = matchstr(line, "http[^ ]*")
     if url ==""

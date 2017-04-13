@@ -1,10 +1,4 @@
 " Simplified clipboard functionality for Vim
-
-" Avoid error messages
-if $DISPLAY == ''
-  finish
-endif
-
 NeoBundle 'svermeulen/vim-easyclip', {
     \ 'build': 'sudo apt-get install xsel'
     \ }

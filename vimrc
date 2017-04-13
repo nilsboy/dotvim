@@ -1,3 +1,10 @@
+"### Debugging
+
+" set verbosefile=/tmp/vim-debug.log
+" set verbose=15
+" set verbose=9
+" set verbose=1
+
 "### Misc
 
 if empty($XDG_CONFIG_HOME)
@@ -67,14 +74,22 @@ call Mkdir(&undodir, "p")
 " Enable vim enhancements
 set nocompatible
 
+" Only set current directory as &path
+augroup augroup_vimrc
+  autocmd!
+  autocmd VimEnter * set path=,,
+augroup END
+
+" Make helpgrep find vim help files first
+let &runtimepath = '/usr/share/nvim/runtime,'
+      \ . &runtimepath
+
 execute "set runtimepath+=" . g:vim.etc.dir
 execute "set runtimepath+=" . g:vim.after.dir
 
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
 " nnoremap <leader>vr :execute "source " . $MYVIMRC<cr>
-
-" set colorcolumn=81
 
 " Prevent creation of .netrwhist file
 let g:netrw_dirhistmax = 0
@@ -124,8 +139,6 @@ set expandtab
 " automatically indent to match adjacent lines
 set autoindent
 
-" set textwidth=80
-
 " Make backspace more flexible
 set backspace=indent,eol,start
 
@@ -140,7 +153,7 @@ set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
 
 " Stay in the middle of the screen
 set scrolloff=999
-set sidescrolloff=0
+" set sidescrolloff=0
 
 " Scroll by one char at end of line
 " set sidescroll=1
@@ -169,6 +182,18 @@ set hidden
 
 " Highlight unknown filetypes as text
 autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
+
+" Maximize help buffers
+augroup s:BufHelpOnly
+  autocmd!
+  autocmd BufEnter * :if &buftype == 'help' | only | endif
+augroup END
+
+" List all buffers including help
+augroup s:Buflisted
+  autocmd!
+  autocmd BufEnter * :set buflisted
+augroup END
 
 set synmaxcol=300
 
@@ -201,68 +226,13 @@ set nrformats-=octal
 
 set isfname-==
 
-command! -nargs=* RemoveTrailingSpaces :%s/\s\+$//e | :nohlsearch
-command! -nargs=* RemoveNewlineBlocks :%s/\n\n\+/\r\r/e | :nohlsearch
+command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
+command! -nargs=* RemoveNewlineBlocks  :silent %s/\v\n\n+/\r\r/e | :silent %s/\n*\%$//g
 
-" When autocompleting within an identifier, prevent duplications
-augroup Undouble_Completions
-    autocmd!
-    autocmd CompleteDone *  call Undouble_Completions()
-augroup None
+" Speed up gui startup
+set guioptions=M
 
-function! Undouble_Completions ()
-    let col  = getpos('.')[2]
-    let line = getline('.')
-    call setline('.', 
-          \ substitute(line, '\(\k\+\)\%'.col.'c\zs\1', '', ''))
-endfunction
-
-" TODO: test - can make the insert leader fast?
-" inoremap <expr><silent> <space> Smartcomma()
-" function! Smartcomma() abort
-"     let [bufnum, lnum, col, off, curswant] = getcurpos()
-"     if getline('.') =~ (' \%' . (col+off) . 'c')
-"         return 'x'
-"         return "\<C-H>=> "
-"     else
-"         return ' '
-"     endif
-" endfunction
-
-"### Searching
-
-" Show matching brackets
-set showmatch
-
-" Don't blink when matching
-set matchtime=0
-
-" Incremental search
-set incsearch
-
-" Highlight found text
-" set hlsearch
-
-" Stop hightlightin current matches
-nmap <silent><c-c> :nohlsearch<cr>
-
-set ignorecase
-
-" Case insensitive search when all lowercase
-set smartcase
-
-" Case inferred by default
-set infercase
-
-" Do not wrap while searching
-" set nowrapscan
-
-" Switch window if it contains wanted buffer
-set switchbuf=useopen
-
-" Extend a previous match
-nnoremap //   /<C-R>/
-" nnoremap ///  [[/<C-R>/\<BAR>]]
+set cursorline
 
 "### Undo and swap
 
@@ -316,6 +286,10 @@ set updatetime=1000
 nmap <space> <leader>
 vmap <space> <leader>
 
+" Ignore the leader if the following key is not mapped
+nmap <leader> <nop>
+vmap <leader> <nop>
+
 " also use <space> for custom text-objects - i.e. see: vim-textobj-lastpat.vim
 
 nnoremap <leader>vee :call VimEnvironment()<cr><esc>
@@ -332,11 +306,7 @@ inoremap <c-z> <esc>:silent wall<cr><c-z>
 " nnoremap <BS> <C-^>
 
 " Save file as root
-command! -nargs=* WW :silent call WriteSudo()
-function! WriteSudo() abort
-    silent write !env SUDO_EDITOR=tee sudo -e % >/dev/null
-    let &modified = v:shell_error
-endfunction
+command! -nargs=* WW :SudoWrite
 
 " Adding a left shift key does not work like this
 " nnoremap < <shift>
@@ -376,7 +346,9 @@ nnoremap <silent> <leader>go :only<cr>
 set formatprg=false
 
 " Nicer redo
+" tags: undo
 nnoremap U <c-r>
+nnoremap <leader>gu U
 
 " Dont use Q for Ex mode
 nnoremap Q :xa<cr>
@@ -388,23 +360,16 @@ nnoremap Y y$
 xnoremap . :norm.<CR>
 
 " Quickly jump to buffers
-" nnoremap <nowait><leader>b :ls<cr>:buffer<space>
+nnoremap <nowait>gb :ls<cr>:buffer<space>
 
 nnoremap <silent><leader>if :!firefox
       \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
 nnoremap <silent><leader>is :execute
       \ ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
 
-" Run current buffer in the shell
-" nnoremap <silent><leader>ee :silent RunCurrentBuffer<cr>
+" Run current buffer
 nnoremap <silent><leader>ee :call MyRun()<cr>
-function! MyRun() abort
-    wall
-    NeomakeSh! ./%
-    copen
-endfunction
-" TODO
-" autocmd TextChanged,InsertLeave index.js :call MyRun()
+nnoremap <silent><leader>eE :call MyRun(expand('%'))<cr>
 
 " Run current line in the shell
 nnoremap <silent><leader>el :RunCursorLine<cr>
@@ -427,28 +392,33 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 " :h cmdline-window
 nnoremap <space><space> q:i
 vnoremap <space><space> q:i
+nnoremap <leader>k q:i<esc>k
+nnoremap <leader>A q:i<esc>kA
 
-augroup s:FixWindowSizeDependentStuff
-    autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3
-    " TODO: only works when not at the beginning or end of file
-    autocmd VimEnter,VimResized *
-          \ nnoremap <c-f> :execute ':normal ' . (&lines - 3) . 'j'<cr>
-    autocmd VimEnter,VimResized *
-          \ nnoremap <c-b> :execute ':normal ' . (&lines - 3) . 'k'<cr>
+augroup FixWindowSizeDependentStuff
+    autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
 augroup END
 
-" autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
-autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
+augroup augroup_CmdWinEnter
+  autocmd!
+  " Reset <cr> mapping for command-line-window in case <cr> is mapped somewhere
+  autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
 
-autocmd CmdwinEnter * nmap <buffer><silent> <c-h> :quit<cr><c-h>
-autocmd CmdwinEnter * nmap <buffer><silent> <c-j> :quit<cr><c-j>
-autocmd CmdwinEnter * nmap <buffer><silent> <c-k> :quit<cr>
-autocmd CmdwinEnter * nmap <buffer><silent> <c-l> :quit<cr><c-l>
+  " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
+  autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
 
-autocmd CmdwinEnter * imap <buffer><silent> <c-h> <esc>:quit<cr><c-h>
-autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
-autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
-autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
+  autocmd CmdwinEnter * nmap <buffer><silent> <c-h> :quit<cr><c-h>
+  autocmd CmdwinEnter * nmap <buffer><silent> <c-j> :quit<cr><c-j>
+  autocmd CmdwinEnter * nmap <buffer><silent> <c-k> :quit<cr>
+  autocmd CmdwinEnter * nmap <buffer><silent> <c-l> :quit<cr><c-l>
+
+  autocmd CmdwinEnter * nmap <buffer><silent> <leader>k :quit<cr>
+
+  autocmd CmdwinEnter * imap <buffer><silent> <c-h> <esc>:quit<cr><c-h>
+  autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
+  autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
+  autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
+augroup END
 
 " Reselect visual block after indent
 vnoremap <nowait>< <gv
@@ -464,15 +434,17 @@ vnoremap <nowait>> >gv
 nmap <leader>?? <leader>vr
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
 nnoremap <leader>vv :execute "edit " . $MYVIMRC<cr>
+nnoremap <silent> <leader>vt :execute "edit " . g:vim.etc.dir
+      \ . '/after/ftplugin/' . &filetype . '.vim'<cr>
 
 command! -nargs=* EditInBufferDir 
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
 
 " Show all <leader> mappings
-nnoremap <leader>vm :Verbose map <leader><cr> \| :only<cr>
+nnoremap <leader>vm :Verbose map <leader><cr> <bar> :only<cr>
 
 " Show all <leader> search mappings
-nnoremap <leader>/? :Verbose map <leader>/<cr> \| :only<cr>
+nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
 
 " open search history / select last entry
 nnoremap <leader>// q/k
@@ -483,6 +455,7 @@ nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/i /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
+nnoremap <leader>/t gg/TODO<cr>
 
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
@@ -498,7 +471,12 @@ vnoremap <esc> <esc>``
 vnoremap y y``
 " TODO: clean up <leader>l namespace
 nnoremap <leader>lr :%s/<C-r><C-w>/
-nnoremap MM :Verbose messages<cr> \| :only \| :normal G<cr>
+nnoremap <silent><leader>gm :echom '=== Messages until ' . strftime("%H:%M:%S")
+      \ . ' ======================='
+      \ \| :silent Verbose messages<cr> \| :silent only \| :normal G <cr>
+      \ \| :setlocal syntax=txt
+      \ \| echom ''
+      \ <cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -517,108 +495,46 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 map [] k$][%?}<CR>
 
-nnoremap <c-u> <c-i>
+" Go to alternate file
+nnoremap <leader>ga <c-^>
 
-"### Statusline
+nnoremap <silent> <leader>gw :silent wall<cr>
+nnoremap <silent> <leader>m m
 
-" Avoid 'hit enter prompt'
-set shortmess=atTIW
+"### Searching
 
-" don't give ins-completion-menu messages.
-set shortmess+=c
+" Show matching brackets
+set showmatch
 
-" Increase ruler height
-" set cmdheight=2
+" Don't blink when matching
+set matchtime=0
 
-" always show status line
-set laststatus=2
+" Incremental search
+set incsearch
 
-" always show tab page labels
-set showtabline=2
+" Highlight found text
+" set hlsearch
 
-" Prevent mode info messages on the last line to prevent 'hit enter prompt'
-set noshowmode
+" Toggle highlighting current matches
+nmap <silent><c-c> :set hlsearch! hlsearch?<CR>
 
-" Always show ruler (right part of the command line)
-" set ruler
+set ignorecase
 
-" TODO using an echo in statusline removes old messages - maybe a way to
-" suppress stuff?
+" Case insensitive search when all lowercase
+set smartcase
 
-" set statusline+=%#TabLineSel#
-let &statusline .= ' '
-set statusline+=%-39.40{Location()}
-" set statusline+=%#TabLine#
+" Case inferred by default
+set infercase
 
-set statusline+=%=
+" Do not wrap while searching
+" set nowrapscan
 
-let &statusline .= ' | '
+" Switch window if it contains wanted buffer
+set switchbuf=useopen
 
-" Filetype
-set statusline+=%{strlen(&filetype)?&filetype:''}
-
-" Region filetype
-set statusline+=%{exists(\"b:region_filetype\")?'/'.b:region_filetype.'\ ':''}
-
-" File encoding
-set statusline+=%{&enc=='utf-8'?'':&enc.'\ '}
-
-" File format
-set statusline+=%{&ff=='unix'?'':&ff.'\ '}
-
-let &statusline .= ' | %3l,%-02c | %P '
-
-function! Location() abort
-
-    let l:fn = "/home/user/src/dotvim/vimrc"
-    let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-    let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
-    let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
-    let l:fn = "/home/user/bashrc"
-    let l:fn = expand("%:p")
-
-    let l:prefix = ""
-    let l:dirname = ""
-
-    let l:fn = substitute(l:fn, "/home", "", "")
-
-    let l:dirs = split(fnamemodify(l:fn, ":h"), "/")
-    let l:basename = fnamemodify(l:fn,':t:h')
-
-    if len(l:dirs) == 0
-        let l:dirname= "~"
-    elseif len(l:dirs) == 1
-        let l:prefix = dirs[0]
-    elseif len(l:dirs) == 2
-        let l:prefix = dirs[0]
-        let l:dirname = dirs[1]
-    elseif len(l:dirs) > 2
-        let l:prefix = dirs[2]
-        if len(dirs) > 3
-            let l:dirname = dirs[len(dirs) - 1]
-        endif
-    endif
-
-    if l:dirname != ""
-        let l:dirname .= "/"
-    endif
-
-    if l:prefix != ""
-        let l:prefix .= ":"
-    endif
-
-    let l:fn = l:prefix . l:dirname . l:basename
-    return l:fn
-
-endfunction
-
-"### Gui mode
-
-" No menus, scrollbars, or other junk
-set guioptions=
-
-" disables the GUI tab line in favor of the plain text version
-set guioptions-=e
+" Extend a previous match
+nnoremap //   /<C-R>/
+" nnoremap ///  [[/<C-R>/\<BAR>]]
 
 "### Plugin manager
 
@@ -680,14 +596,3 @@ set modelines=0
 if filereadable(g:vim.rc_local)
     execute "source " . g:vim.rc_local
 endif
-
-" has to be done last - it is set somewhere else before already
-" let &viminfo="'50,<1000,s100,:100,n" . g:vim.var.dir . "viminfo"
-
-"### Debugging
-
-" set verbosefile=/tmp/vim-debug.log
-" set verbose=15
-" set verbose=9
-" set verbose=1
-

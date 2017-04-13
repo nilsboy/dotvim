@@ -1,89 +1,79 @@
-priority -100
+priority -300
+
+### global snippets
+
+global !p
+def toggle(t, opt):
+	opts = t.split('|')
+	pos = opts.index(opt)
+	if len(opts) == pos + 1:
+		pos = 0
+	else:
+		pos = pos + 1
+	return opts[pos]
+endglobal
 
 ### Brackets
 
-# parens
-snippet ( "parens" i
-(${1})$0
+snippet '(^|\s+)(\(|r)' "round brackets / parens" r
+`!p snip.rv = match.group(1)`(${VISUAL}$1)$0
 endsnippet
 
-snippet p "parens" w
-(${1})$0
+snippet "(^|\s+)({|c)" "curly brackets / braces" r
+`!p snip.rv = match.group(1)`{${VISUAL}$1}$0
 endsnippet
 
-# braces
-snippet { "curly braces" i
-{${1}}$0
+snippet '(^|\s+)(\[|s)' "square brackets" r
+`!p snip.rv = match.group(1)`[${VISUAL}$1]$0
 endsnippet
 
-snippet b "curly braces" w
-{${1}}$0
+snippet '(^|\s+)(\<|a)' "angle brackets / chevrons" r
+`!p snip.rv = match.group(1)`<${VISUAL}$1>$0
 endsnippet
 
-snippet [ "brackets" i
-[${1}]$0
+snippet " "quote" w
+"${VISUAL}$1"$0
 endsnippet
 
-# [square] brackets
-snippet s "brackets" w
-[${1}]$0
+snippet ' "sigle quote" w
+'${VISUAL}$1'$0
 endsnippet
 
-# angle brackets
-snippet < "angle brackets" w
-<${1}>$0
+snippet ` "backtick" w
+\`${VISUAL}$1\`$0
 endsnippet
 
-snippet a "angle brackets" w
-<${1}>$0
-endsnippet
+# TODO: check if existing quotes are balanced
+# snippet '(^[^"]+)"' "ha" rA
+# `!p snip.rv = match.group(1)`"${VISUAL}$1"$0
+# endsnippet
 
-### Quotes
+priority -200
 
-snippet " "double quotes" i
-"${1}"$0
-endsnippet
-
-snippet ' "single quotes" i
-'${1}'$0
-endsnippet
-
-snippet ` "backticks" i
-\`${1}\`$0
+snippet "(true|false)+" "true|false toggle" r
+`!p snip.rv = toggle('true|false', match.group(1))`
 endsnippet
 
 ### Non-Ascii-characters
 
-snippet "(.*)ae" "umlaut" r
-`!p snip.rv = match.group(1)`ä
+snippet "(u|ü|Ü)+" "u|ü|Ü toggle" r
+`!p snip.rv = toggle('u|Ü|ü', match.group(1))`
 endsnippet
 
-snippet "(.*)Ae" "umlaut" r
-`!p snip.rv = match.group(1)`Ä
+snippet "(a|ä|Ä)+" "a|ä|Ä toggle" r
+`!p snip.rv = toggle('a|ä|Ä', match.group(1))`
 endsnippet
 
-snippet "(.*)oe" "umlaut" r
-`!p snip.rv = match.group(1)`ö
+snippet "(o|ö|Ö)+" "o|ö|Ö toggle" r
+`!p snip.rv = toggle('o|ö|Ö', match.group(1))`
 endsnippet
 
-snippet "(.*)Oe" "umlaut" r
-`!p snip.rv = match.group(1)`Ö
+snippet "(ss|ß)+" "ss|ß toggle" r
+`!p snip.rv = toggle('ss|ß', match.group(1))`
 endsnippet
 
-snippet "(.*)ue" "umlaut" r
-`!p snip.rv = match.group(1)`ü
-endsnippet
-
-snippet "(.*)Ue" "umlaut" r
-`!p snip.rv = match.group(1)`Ü
-endsnippet
-
-snippet "(.*)ss" "umlaut" r
-`!p snip.rv = match.group(1)`ß
-endsnippet
-
-snippet "(.*)eur" "Euro sign" r
-`!p snip.rv = match.group(1)`€
+snippet eur "Euro sign" i
+€
 endsnippet
 
 snippet micro "Micro sign" i
@@ -98,12 +88,17 @@ snippet degree "Degree sign" i
 °
 endsnippet
 
+snippet '(\d+)' "(\d+)" r
+`!p snip.rv = int(match.group(1)) + 1`
+endsnippet
+
+priority -100
+
 ### Misc
 
 # comments
 snippet // "multiline comment" w
-/* ${1} */
-$0
+/* ${VISUAL}$0 */
 endsnippet
 
 snippet	node "node shebang" b
@@ -133,6 +128,8 @@ use strict;
 use warnings;
 no warnings 'uninitialized';
 use Data::Dumper;
+use utf8;
+# binmode('STDOUT', 'utf-8')
 
 $0
 endsnippet
@@ -158,4 +155,36 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
 vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
 no sea takimata sanctus est Lorem ipsum dolor sit amet.
+endsnippet
+
+snippet / "comment" b
+`!v helpers#surroundings()[0]`$0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '.*todo' "TODO" r
+`!v helpers#surroundings()[0]`TODO: $0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '.*note' "NOTE" r
+`!v helpers#surroundings()[0]`Note: $0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '.*tag' "TAGS" r
+`!v helpers#surroundings()[0]`Tags: $0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '.*fix' "FIX" r
+`!v helpers#surroundings()[0]`FIX: $0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet password "generate a secure password" w
+`apg -M SNC -n 1`
+endsnippet
+
+snippet ls "ls" b
+`ls -1`
+endsnippet
+
+snippet path "path" w
+`!v expand('%:p')`
 endsnippet

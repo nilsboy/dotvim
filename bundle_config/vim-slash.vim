@@ -2,7 +2,7 @@
 " NeoBundle 'junegunn/vim-slash'
 " Use pullrequest for now to make slash_immobile work
 NeoBundle 'nilsboy/vim-slash'
-" Note: removes highlight on cursor move
+" Removes highlight on cursor move
 
 let g:slash_immobile = 0
 
@@ -12,16 +12,3 @@ if neobundle#tap('vim-slash')
   endfunction
   call neobundle#untap()
 endif
-
-finish
-
-" TODO: use for search start highlight?
-function! s:flash()
-  set cursorline!
-  redraw
-  sleep 20m
-  set cursorline!
-  return ''
-endfunction
-
-noremap <expr> <plug>(slash-after) <sid>flash()

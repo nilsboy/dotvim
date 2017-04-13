@@ -1,4 +1,4 @@
-snippet vimrc "Boilerplaite vimrc" b
+snippet deinrc "Boilerplaite vimrc" b
 set nocompatible
 
 let g:plugin_dir = expand('~/.vim/dein')
@@ -16,7 +16,7 @@ call dein#begin(g:plugin_dir)
 call dein#add('Shougo/dein.vim')
 " call dein#add('Shougo/vimproc.vim', {'build': 'make'})
 " call dein#add('Shougo/unite.vim')
-	$0
+  $0
 call dein#end()
 
 if dein#check_install() 
@@ -26,13 +26,13 @@ endif
 filetype plugin indent on
 endsnippet
 
-snippet ab "Add bundle" b
+snippet deinadd "Add bundle" b
 call dein#add('$1')
 $0
 endsnippet
 
 snippet fun "Function" b
-function! $1($2) abort
+function! ${1:`!v expand('%:t:r')`#${2:name}}($3) abort
 	$0
 endfunction
 endsnippet
@@ -43,36 +43,16 @@ if $1
 endif
 endsnippet
 
-snippet exists "exists" w
-exists("$1")
-endsnippet
-
-snippet todo "TODO"
-" TODO: $0
-endsnippet
-
-snippet fix "FIX"
-" FIX: $0
-endsnippet
-
-snippet note "NOTE"
-" Note: $0
-endsnippet
-
-snippet tag "TAGS"
-" TAGS: $0
-endsnippet
-
-snippet debug "Debug" 
-call DEBUG('$1')$0
-endsnippet
-
 snippet info "info" 
-call INFO('$1')$0
+call INFO($0)
 endsnippet
 
-snippet infoo "infoo" 
-call INFO('$1: ', $1)$0
+snippet infoo "info with 1 arg" 
+call INFO('$1:', $1)
+endsnippet
+
+snippet debug "debug" 
+call DEBUG($0)
 endsnippet
 
 snippet neobundle "Description" b
@@ -81,7 +61,7 @@ NeoBundle '${2:plugin name or github url}'
 endsnippet
 
 snippet neobundlepost "do something after plugin is loaded" b
-if neobundle#tap('${1:plugin name}') 
+if neobundle#tap('${1:`!v expand('%:t:r')`}') 
   function! neobundle#hooks.on_post_source(bundle) abort
 		$0
   endfunction
@@ -90,14 +70,10 @@ endif
 endsnippet
 
 snippet command "command" b
-command! -nargs=* ${1:name} call $1(<f-args>)}
+command! -nargs=* ${1:name} call $1(<f-args>)
 function! $1(...) abort
 	$0
 endfunction
-endsnippet
-
-snippet / "comment" b
-" 
 endsnippet
 
 snippet ifneo "if is neovim" b
@@ -107,7 +83,194 @@ endif
 endsnippet
 
 snippet autocmd "autocmd" b
-augroup s:$1
-    autocmd $0
+augroup augroup_`!v expand('%:t:r')`
+  autocmd!
+  autocmd $0
 augroup END
+endsnippet
+
+snippet c "concat" w
+'$1:', $1$0
+endsnippet
+
+snippet q "quotes" w
+'${VISUAL}$0'
+endsnippet
+
+snippet for "foreach" b
+for ${1:var} in ${2:list}
+	$0
+endfor
+endsnippet
+
+snippet fori "for i in range" b
+for ${1:i} in range(${2:1,10})
+	$0
+endfor
+endsnippet
+
+snippet whilei "whilei" b
+let i = 0
+while i <= $1
+	let i = i + 1
+	$0
+endwhile
+endsnippet
+
+snippet while "while" b
+while 1
+	$0
+endwhile
+endsnippet
+
+snippet exists "exists" w
+if ! exists('${1:b:var}')
+	let $1 = $0
+endif
+endsnippet
+
+snippet get "let with default" w
+let $1 = get(${1/\:.*/:/}, '${1/^.*\://}', ${2:default})
+endsnippet
+
+snippet s "String" w
+'${1:key}': '${2:value}',$0
+endsnippet
+
+snippet n "Number" w
+'${1:key}': ${0:value},
+endsnippet
+
+snippet a "Array" w
+[
+	\ ${VISUAL}$0
+\ ],
+endsnippet
+
+snippet na "Named array" w
+'${1:key}': [
+	\ ${VISUAL}$0
+\ ],
+endsnippet
+
+snippet o "Object" w
+{
+	\ ${VISUAL}$0
+\ },
+endsnippet
+
+snippet no "Named object" w
+'${1:key}': {
+	\ ${VISUAL}$0
+\ },
+endsnippet
+
+snippet exe "execute" w
+execute $0
+endsnippet
+
+snippet cut "cut a quoted string" w
+' . $0 . '
+endsnippet
+
+snippet cr "<cr>" w
+<cr>
+endsnippet
+
+snippet bar "<bar>" w
+<bar>
+endsnippet
+
+snippet nop "<nop>" w
+<nop>
+endsnippet
+
+snippet xx "here"
+call INFO('### HERE`!v
+	line('.')
+	` `!v
+	expand('%:t') . ':' . line('.')
+	` ' . strftime("%F %T"))
+endsnippet
+
+snippet xxx "here"
+call INFO('### HERE`!v
+	line('.')
+	` `!v
+	expand('%:t') . ':' . line('.')
+(`!v strftime("%F")`)
+	`')
+endsnippet
+
+snippet fileexists "check if a file exists" b
+if filereadable($1)
+  $0
+endif
+endsnippet
+
+snippet push "array push" b
+call add(${1:array}, ${2:item})
+endsnippet
+
+snippet remove_array_entry "array remove at index" w
+call remove(${1:array}, ${2:index})
+endsnippet
+
+snippet lead "<leader>" w
+<leader>
+endsnippet
+
+snippet sil "<silent>" w
+<silent>
+endsnippet
+
+snippet % "current buffer name" w
+`!v expand('%:t')`
+endsnippet
+
+snippet %p "current buffer name" w
+`!v expand('%:p')`
+endsnippet
+
+snippet b: "script specific buffer var" w
+b:`!v expand('%:t:r')`_$0
+endsnippet
+
+snippet g: "script specific global var" w
+g:`!v expand('%:t:r')`_$0
+endsnippet
+
+snippet last "last array element" w
+$1[len($1) - 1]
+endsnippet
+
+snippet arg "argument to normal var" w
+let $1 = a:$1
+endsnippet
+
+snippet len "len" w
+len($1) - 1
+endsnippet
+
+snippet map "map" b
+nnoremap <silent> ${1:<leader>}$0
+endsnippet
+
+snippet "(.*)finish" "finish" r
+finish " #######################################################################
+endsnippet
+
+snippet getcurpos "getcurpos" b
+let [bufnum, lnum, col, off, curswant] = getcurpos('.')
+endsnippet
+
+snippet substr "substr" w
+${1:string}[${2:from} : ${3:to}]
+endsnippet
+
+snippet getchar "ask for a single character" b
+echo 'Specify $1: '
+let ${2:$1} = nr2char(getchar())
+redraw
+execute 'echo "' . $2 . '"'
 endsnippet

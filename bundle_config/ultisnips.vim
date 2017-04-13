@@ -1,32 +1,64 @@
 " The ultimate snippet solution for Vim.
 NeoBundle 'SirVer/ultisnips'
 
-" Example snippet files:
-" https://github.com/honza/vim-snippets/tree/master/UltiSnips
-
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-" let g:UltiSnipsListSnippets = "<c-space>"
-
-nnoremap <silent><leader>se :execute ":e " 
+nnoremap <silent><leader>se :execute ":edit " 
       \ . g:vim.etc.dir . "UltiSnips/" . &filetype
       \ . ".snippets"<cr>
 nnoremap <leader>sE :UltiSnipsEdit!<cr>
-nnoremap <leader>sa :execute ":e " . g:vim.etc.dir . 
+nnoremap <leader>sa :execute ":edit " . g:vim.etc.dir . 
       \ "UltiSnips/all.snippets"<cr>
 nnoremap <leader>sf :execute ":Explore " . g:vim.etc.dir . "UltiSnips/"<cr>
 
-finish
+let g:UltiSnipsEnableSnipMate = 0
 
-" This seems to mess up completion in i.e. the command window
-" https://www.reddit.com/r/vim/comments/2oeqrg
-function! ExpandSnippet() abort
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        return "\<CR>"
+" Map expand trigger to something never used
+let g:UltiSnipsExpandTrigger = "<leader>!s"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" Inside a snippet jump to the next stop. Expand only on expand trigger.
+" Based on: https://github.com/SirVer/ultisnips/issues/784
+let g:ulti_jump_forwards_res = 0
+let g:ulti_expand_res = 0
+function s:jumpOrExpand() abort
+    call UltiSnips#JumpForwards()
+    if g:ulti_jump_forwards_res == 0
+      call UltiSnips#ExpandSnippet()
+      if g:ulti_expand_res == 0
+
+        " Return an actual tab key if current position is preceeded
+        " by nothing or whitespace only
+		    let [bufnum, lnum, col, off, curswant] = getcurpos()
+        let prefix = getline('.')[0 : col - 2]
+        if col == 1 || prefix =~ '\v^\s*$'
+          return "\<tab>"
+        endif
+        return "\<esc>"
+
+      endif
     endif
     return ""
 endfunction
-inoremap <expr> <CR> "\<C-R>=ExpandSnippet()\<CR>"
+
+" Show all snippets when cursor resides on whitespce
+let g:ulti_expand_res = 0
+function s:expandOrAll() abort
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res == 0
+    call cm#sources#ultisnips#trigger_or_popup(
+          \ "\<Plug>(ultisnips_expand)")
+  endif
+  return ""
+endfunction
+
+execute 'inoremap <silent> <expr>'
+      \ . ' <c-space>'
+      \ . ' "\<C-R>=<sid>expandOrAll()\<CR>"'
+
+execute 'inoremap <silent> <expr> '
+      \ . g:UltiSnipsJumpForwardTrigger
+      \ . ' "\<C-R>=<sid>jumpOrExpand()\<CR>"'
+execute 'vmap <silent>'
+      \ . ' ' . g:UltiSnipsJumpForwardTrigger
+      \ . ' ' . g:UltiSnipsExpandTrigger
 

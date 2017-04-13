@@ -3,7 +3,7 @@ priority -50
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
 snippet snip "Snippet definition" b
-`!p snip.rv = "snippet"` ${1:Tab_trigger} "${2:Description}" ${3:b}
+`!p snip.rv = "snippet"` ${1:Tab_trigger} "$1$3" ${4:b}
 $0
 `!p snip.rv = "endsnippet"`
 endsnippet
@@ -16,4 +16,28 @@ endsnippet
 
 snippet vis "${VISUAL}" i
 \$\{VISUAL${1:${2:default}${3:/transform/}}\}
+endsnippet
+
+snippet $ "placeholder" w
+\$\{$1:$2\}$0
+endsnippet
+
+snippet snipr "Regular expression snippet definition" b
+`!p snip.rv = "snippet"` '${1:(^|\s+)$2}' "$1$3" r
+\`!p snip.rv = match.group(${5:1})\`${VISUAL}$0
+`!p snip.rv = "endsnippet"`
+endsnippet
+
+snippet 0 "$0" i
+\$0
+endsnippet
+
+snippet toggle "toggle" b
+`!p snip.rv = "snippet"` "(${1:la|le|lu})+" "$1 toggle" r
+\`!p snip.rv = toggle('$1', match.group(1))\`
+`!p snip.rv = "endsnippet"`
+endsnippet
+
+snippet match "matchgroup" w
+\`!p snip.rv = match.group(1)\`
 endsnippet

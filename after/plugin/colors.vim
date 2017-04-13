@@ -23,7 +23,10 @@ function! ColorschemeCleanup()
     highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
     highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 endfunction
-autocmd ColorScheme * call ColorschemeCleanup()
+augroup s:ColorScheme
+  autocmd!
+  autocmd ColorScheme * call ColorschemeCleanup()
+augroup END
 
 try
     colorscheme lucius
@@ -58,18 +61,13 @@ autocmd InsertEnter * setlocal nocursorline
 " Disable all blinking
 set guicursor+=a:blinkon0
 
-" TODO
-nnoremap <leader>y :call colors#highlightLine()<cr>
-sign define wholeline linehl=Todo text=ss
-function! colors#highlightLine() abort
-  execute 'sign place 1 name=wholeline line=' . line('.') . ' buffer=' . bufnr('%')
-endfunction
-
 " Make diffs less glaringly ugly...
 highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
 highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
 highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
 highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
+
+set colorcolumn=79,80
 
 " Show when lines extend past column 80
 " highlight ColorColumn ctermfg=208 ctermbg=Black

@@ -6,6 +6,8 @@
 " :DBGetOption
 "
 " Alternative: vim-sql-workbench
+" Alternative?: https://news.ycombinator.com/item?id=13780587
+" https://www.reddit.com/r/vim/comments/600t50/vimlike_database_client/
 "
 " Notes:
 " - include other sql files with the 'read ' statement

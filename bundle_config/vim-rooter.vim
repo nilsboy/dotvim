@@ -16,19 +16,8 @@ let g:rooter_use_lcd = 1
 
 " let g:rooter_manual_only = 1
 
-finish
+" augroup augroup_vim-rooter
+"   autocmd!
+"   autocmd User RooterChDir execute 'setlocal path=' . getcwd()
+" augroup END
 
-" Try to work around relative paths in unite
-augroup VimRooterChdir
-  autocmd WinEnter * call VimRooterChdir()
-augroup end
-
-function! VimRooterChdir() abort
-  if &previewwindow
-    return
-  endif
-  if !empty(&buftype)
-    return
-  endif
-  call CdProjectRoot()
-endfunction

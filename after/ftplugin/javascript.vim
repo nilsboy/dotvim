@@ -10,6 +10,11 @@ if exists("b:did_ftplugin_javascript")
 endif
 let b:did_ftplugin_javascript = 1
 
+augroup ftplugin_javascript
+  autocmd!
+  autocmd BufLeave *.js normal! mJ
+augroup END
+
 "### Linter
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.etc.dir . '/contrib/eslintrc.yml'

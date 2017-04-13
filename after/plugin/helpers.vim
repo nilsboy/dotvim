@@ -8,7 +8,7 @@
 function! BufferClose() abort
 
     if BufferIsCommandLine() == 1
-        :q!
+        :silent q!
         return
     endif
 
@@ -17,21 +17,21 @@ function! BufferClose() abort
 
     if BufferIsLast() == 1
         if BufferIsEmpty() == 1
-            :q!
+            :silent q!
         endif
     endif
 
     if BufferIsEmpty() == 1
     elseif BufferIsUnnamed() == 1
     elseif &write
-        update
+        silent update
     endif
 
     " Use bwipe instead of bdelete - otherwise the buffer stays open as
     " an unlisted-buffer.
     " Using bwipe prevents the current postion mark from being saved - so the file
     " position can not be restored when loading the file again
-    bdelete!
+    silent! bdelete!
 
 endfunction
 
@@ -91,11 +91,12 @@ function! BufferListedCount() abort
     return listed
 endfunction
 
-" Check if buffer name starts with '[' like quickfix et al
-" TODO: Buffername seems to be empty for special buffers
-" function! BufferIsSpecial() abort
-"   return bufname('%') =~ '\v^\[.*' ? 1 : 0
-" endfunction
+function! BufferIsSpecial() abort
+  if &previewwindow == 1
+    return 1
+  endif
+  return bufname('%') =~ '\v.*\[.*' ? 1 : 0
+endfunction
 
 function! BufferIsQuickfix() abort
     " if &filetype == 'qt'
@@ -283,8 +284,9 @@ command! -nargs=* Run call Run(<f-args>)
 function! Run(...) abort
     let buffer_name = a:1
     let command = join(a:000[1:])
-    echom buffer_name
-    silent execute ":e " . buffer_name
+    call INFO('Running ' . command)
+    silent! execute ":e " . buffer_name
+    " normal! ggdG
     setlocal buftype=nowrite
     silent execute ":r! " . command
 endfunction
@@ -293,7 +295,7 @@ endfunction
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...) abort
 
-    wall
+    silent wall
 
     let buffer_name = a:1
     let buffer_name = substitute(buffer_name, '[^a-zA-Z0-9_\-/\.]', "", "g")
@@ -582,12 +584,22 @@ function! Help(...) abort
   set buflisted
 endfunction
 
+if $DEBUG
+  silent execute '!echo "==========" > /tmp/vim.log'
+endif
+
 function! DEBUG(...) abort
-  unsilent echom "DEBUG> " . join(a:000, ' ')
+  if $DEBUG
+    silent execute '!echo -e "\nDEBUG> ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+  endif
 endfunction
 
 function! INFO(...) abort
-  unsilent echom "INFO> " . join(a:000, ' ')
+  if $DEBUG
+    silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+  else
+    unsilent echom "INFO > " . join(a:000, ' ')
+  endif
 endfunction
 
 function! DUMP(input) abort
@@ -675,3 +687,86 @@ endfunction
 " Only in visual mode...
 " vmap  q :call Uniq()<CR>
 " vmap Q :call Uniq('ignore whitespace')<CR>
+
+function! MyRun(...) abort
+  let command = ''
+  if exists("a:1")
+    let command = a:1
+  endif
+  if command == ''
+    let command = get(g:, 'last_command', expand('%'))
+  endif
+  let g:last_command = command
+  silent wall
+  execute 'NeomakeSh!' . command
+  copen
+endfunction
+
+function! helpers#createUniqueSignId() abort
+  let id = localtime()
+  return id
+endfunction
+
+sign define BlinkLine linehl=Todo
+function! helpers#blinkLine() abort
+  let l:cursorline = &cursorline
+  let l:count = 1
+  let l:signId = helpers#createUniqueSignId()
+  let i = 0
+  while i <= l:count
+    let i = i + 1
+    set nocursorline
+    execute 'sign place ' . l:signId . ' name=BlinkLine line='
+          \ . line('.') . ' buffer=' . bufnr('%')
+    set cursorline
+    sleep 60m
+    execute 'sign unplace ' . l:signId
+    set nocursorline
+    sleep 60m
+  endwhile
+  let &cursorline = l:cursorline
+endfunction
+
+" " OR ELSE just highlight the match in red...
+" function! HLNext (blinktime)
+"     let [bufnum, lnum, col, off] = getpos('.')
+"     let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+"     let target_pat = '\c\%#\%('.@/.'\)'
+"     let ring = matchadd('Todo', target_pat, 101)
+"     redraw
+"     exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+"     call matchdelete(ring)
+"     redraw
+" endfunction
+
+let s:rnd = localtime() % 0x10000
+function! helpers#random(n) abort
+  let s:rnd = (s:rnd * 31421 + 6927) % 0x10000
+  return s:rnd * a:n / 0x10000
+endfunction
+
+" Reduce a range of lines to only the unique ones, preserving order...
+" function! Uniq (...) range
+"     let seen = {}
+"     let uniq_lines = []
+
+"     " Walk through the lines, remembering only the hitherto unseen ones...
+"     for line in getline(a:firstline, a:lastline)
+"         let normalized_line = '>' . (ignore_ws_diffs ? TrimWS(line) : line)
+"         if !get(seen,normalized_line)
+"             call add(uniq_lines, line)
+"             let seen[normalized_line] = 1
+"         endif
+"     endfor
+
+"     " Replace the range of original lines with just the unique lines...
+"     exec a:firstline . ',' . a:lastline . 'delete'
+"     call append(a:firstline-1, uniq_lines)
+" endfunction
+
+function! helpers#surroundings() abort
+  return split(get(b:, 'commentary_format', substitute(substitute(
+        \ &commentstring, '\S\zs%s',' %s','') ,'%s\ze\S', '%s ', '')), '%s', 1)
+endfunction
+
+

@@ -1,0 +1,126 @@
+extends all
+
+global !p
+def enum(t, opts):
+	if t:
+		opts = [m[len(t):] for m in opts if m.startswith(t)]
+	if len(opts) == 1:
+		return opts[0]
+	return '|'.join(opts)
+endglobal
+
+snippet init "init" b
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "$1",
+    "description": "$2",
+    "version": "1.0.0"
+  },
+  "paths": {
+    path$0
+  },
+  "definitions": {
+  }
+}
+endsnippet
+
+snippet path "path" b
+"/${1:resources}/${2:{${3:id}}}": {
+  verb$0
+}
+endsnippet
+
+snippet verb "verb" b
+"$1`!p snip.rv=enum(t[1], ['get', 'post', 'put', 'delete', 'patch'])`": {
+  "parameters": [
+    $0
+  ],
+  "responses": {
+  }
+}
+endsnippet
+
+snippet p "parameter" b
+{
+  "name": "${1:name}",${2:
+  "description": "$3",}
+  "in": "$4`!p snip.rv=enum(t[4], ['path', 'body'])`",
+  "required": $5`!p snip.rv=enum(t[5], ['true', 'false'])`,
+  "type": "string"
+}
+endsnippet
+
+snippet pi "integer parameter" b
+{
+  "name": "${1:name}",${2:
+  "description": "$3",}
+  "in": "$4`!p snip.rv=enum(t[4], ['path', 'body'])`",
+  "required": $5`!p snip.rv=enum(t[5], ['true', 'false'])`",
+  "type": "integer",
+  "format": "int64"
+}
+endsnippet
+
+
+snippet response "response" b
+"${1:200}": {
+  "description": "${2:Success}"${3:,
+  "schema": {
+    "$ref": "#/definitions/${4:object name}"
+  }}
+}
+endsnippet
+
+snippet o "object" b
+"${1:name}": {${2:
+  "description": "$3",}
+  "type": "object",${2:
+  "required": [
+    "$3"
+  ],}
+  "properties": {
+    $0
+  }
+}
+endsnippet
+
+snippet s "string" b
+"${1:name}": {${2:
+  "description": "$3",}
+  "type": "string"${4:,
+  "example": "$5"}
+}$0
+endsnippet
+
+snippet d "date field" b
+"${1:name}": {${2:
+  "description": "$3",}
+  "type": "string",
+  "format": "date-time"
+}
+endsnippet
+
+snippet a "array" b
+"${1:name}": {${2:
+  "description": "$3",}
+  "type": "array",
+  "items": {
+    $0
+  }
+}
+endsnippet
+
+snippet schema "schema" b
+"schema": {
+  "$ref": "#/definitions/${1:object name}"
+}$0
+endsnippet
+
+snippet int "integer" b
+"${1:name}": {${2:
+  "description": "$3",}
+  "type": "integer",
+  "format": "int64"
+},
+endsnippet

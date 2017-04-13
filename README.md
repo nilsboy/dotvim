@@ -47,6 +47,8 @@ This setting makes Vim echo the autocommands as it executes them.
 - get global var or default: get(g:,'deoplete#omni#input_patterns',{})
 
 ## TODO
+- checkout g@
+- checkout Titlecase plugin
 - checkout https://github.com/skywind3000/asyncrun.vim/wiki/Cooperate-with-famous-plugins
 - see `:h runtime` for directory structure
 - Backup to git before write?: BufWritePre

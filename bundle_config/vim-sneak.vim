@@ -1,9 +1,10 @@
 " The missing motion for Vim
 NeoBundle 'justinmk/vim-sneak'
-" TAGS: motion
+" TAGS: motion search
 
-let g:sneak#absolute_dir = 0
 let g:sneak#prompt = 'sneak> '
+
+" let g:sneak#absolute_dir = 0
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 
@@ -29,3 +30,9 @@ omap T <Plug>Sneak_T
 
 " Don't hightlight sneak targets
 autocmd ColorScheme * hi! link Sneak Normal
+autocmd ColorScheme * hi! link SneakLabel TabLineSel
+
+let g:sneak#label = 1
+nmap s <Plug>SneakLabel_s
+nmap S <Plug>SneakLabel_S
+

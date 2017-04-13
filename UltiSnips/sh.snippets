@@ -1,7 +1,3 @@
-snippet / "Comment" b
-# $0
-endsnippet
-
 snippet info "INFO" b
 INFO "$1"
 endsnippet
@@ -26,6 +22,10 @@ function $1() {
 }
 endsnippet
 
-snippet todo "TODO" b
-# TODO: $0
+snippet ask "ask for missing option" w
+$1=\$\{1:?Specify $1\}
+endsnippet
+
+snippet default "default to" w
+$1=\$\{1:-${2:default}\}
 endsnippet

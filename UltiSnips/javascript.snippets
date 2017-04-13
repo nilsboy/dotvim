@@ -146,30 +146,15 @@ endsnippet
 
 snippet	if "if"
 if($1) {
-	$0
+	${VISUAL}$0
 }
 endsnippet
 
+####################
 snippet else "else"
 else {
 	$0
 }
-endsnippet
-
-snippet todo "TODO"
-// TODO: $0
-endsnippet
-
-snippet note "NOTE"
-// NOTE: $0
-endsnippet
-
-snippet tag "TAGS"
-// TAGS: $0
-endsnippet
-
-snippet / "comment" b
-// $0
 endsnippet
 
 snippet fore "for each object" b
@@ -193,13 +178,13 @@ require('pkginfo')(module)
 endsnippet
 
 snippet class "class" b
-class {
+class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
 	$0
 }
 endsnippet
 
-snippet cs "constructor" b
-constructor(${1:options = {${2:key: defaultValue}}}) {
+snippet con "constructor" b
+constructor(${1:options = {${2:key: defaultValue }}}) {
 	$0
 }
 endsnippet
@@ -309,6 +294,12 @@ endsnippet
 snippet fun "function" b
 function ${1:${VISUAL}}($2) {
 	$0
+}
+endsnippet
+
+snippet m "method" b
+${1:method name}(${2:arguments}) {
+  $0
 }
 endsnippet
 

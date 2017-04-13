@@ -23,7 +23,7 @@ function! Man(cmd) abort
     normal ggdG
     silent execute 'r!SHORT=1 man-multi-lookup' cmd
     normal ggdd/^---
-    write
+    update
 
     syntax case  ignore
     syntax match manReference      display '[^()[:space:]]\+([0-9nx][a-z]*)'

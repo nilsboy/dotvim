@@ -1,3 +1,5 @@
+finish
+" TODO: clobbers <leader>k
 " highlight and navigate through (multiple) different words in a buffer 
 NeoBundle 'lfv89/vim-interestingwords' 
 " TAGS: search highlight

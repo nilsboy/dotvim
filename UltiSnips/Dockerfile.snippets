@@ -1,0 +1,66 @@
+snippet init "init" b
+FROM ubuntu:16.04
+
+MAINTAINER ${2:`!v $USER`}
+
+RUN apt-get update
+
+endsnippet
+
+snippet install "apt-get install" b
+RUN apt-get install -y $0
+endsnippet
+
+snippet run "RUN shell command" b
+RUN $0
+endsnippet
+
+snippet git "git clone" b
+RUN git clone --depth 1 https://${1:gitlab.com/mailman/mailman-bundler.git}
+endsnippet
+
+snippet workdir "WORKDIR" b
+WORKDIR /$0
+endsnippet
+
+snippet cp "COPY" b
+COPY ${1:assets/run} ${2:bin/}
+endsnippet
+
+snippet expose "expose a port to the outside" b
+EXPOSE ${1:8000}
+endsnippet
+
+snippet cmd "CMD - start command" b
+# CMD ["/usr/bin/supervisord"]
+# CMD [ "./bin/mailman-web-django-admin", "runserver", "0.0.0.0:8000" ]
+CMD [ "bin/run" ]
+endsnippet
+
+snippet volume "VOLUME" b
+VOLUME /${1:var}
+endsnippet
+
+snippet env "ENV" b
+ENV ${1:key} ${2:value}
+endsnippet
+
+snippet add "ADD" b
+ADD ${1:src} ${2:dst}
+endsnippet
+
+snippet entrypoint "ENTRYPOINT" b
+ENTRYPOINT ${1:command}
+endsnippet
+
+snippet user "USER" b
+USER ${1:name}
+endsnippet
+
+snippet onbuild "ONBUILD" b
+ONBUILD ${1}
+endsnippet
+
+snippet label "LABEL" b
+LABEL ${1:label}="${2:value}"
+endsnippet

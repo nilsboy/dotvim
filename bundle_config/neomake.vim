@@ -1,5 +1,6 @@
 " A plugin for asynchronous :make using Neovim's job-control functionality
 NeoBundle 'neomake/neomake'
+" TODO: checkout neomake-vim-autoformat.vim
 
 " let g:neomake_verbose = 3
 " Does not have stdin support:
@@ -14,9 +15,9 @@ let g:neomake_error_sign = {
 
 " neomake#statusline#LoclistCounts
 
-augroup my_neomake
-    au!
-    autocmd User NeomakeFinished call OnNeomakeFinished()
+augroup augroup_neomake
+  autocmd!
+  autocmd User NeomakeFinished call OnNeomakeFinished()
 augroup END
 
 function! OnNeomakeFinished() abort

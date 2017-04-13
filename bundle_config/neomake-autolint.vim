@@ -1,3 +1,3 @@
 finish " #######################################################################
-" Run commands quickly.
-NeoBundle 'thinca/vim-quickrun'
+" Lint as you type using Neomake
+NeoBundle 'dojoteef/neomake-autolint'

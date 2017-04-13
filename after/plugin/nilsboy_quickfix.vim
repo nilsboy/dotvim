@@ -49,9 +49,12 @@
 " Clear quickfix: :cex[]
 
 " Always show signs column
-autocmd BufEnter * execute 'sign define nilsboy_quickfixEmpty'
-autocmd BufEnter * execute 'execute ":sign place 9999 line=1
-     \ name=nilsboy_quickfixEmpty buffer=".bufnr("")'
+augroup augroup_nilsboy_quickfix
+  autocmd!
+  autocmd BufEnter * execute 'sign define nilsboy_quickfixEmpty'
+  autocmd BufEnter * execute 'execute ":sign place 9999 line=1
+      \ name=nilsboy_quickfixEmpty buffer=".bufnr("")'
+augroup END
 
 let g:quickfix_mode = ''
 function! s:toggleNavigationType() abort
@@ -68,19 +71,19 @@ endfunction
 function! nilsboy_quickfix#setNavigationType(type) abort
     if a:type == 'quickfix'
       let g:quickfix_mode = 'quickfix'
-      nnoremap <tab> :copen<cr>
+      nnoremap <silent> <tab> :copen<cr>
       nnoremap <silent> <c-n> :silent! cnext<cr>
       nnoremap <silent> <c-p> :silent! cprevious<cr>
     else
       let g:quickfix_mode = 'locationlist'
-      nnoremap <tab> :lopen<cr>
+      nnoremap <silent> <tab> :lopen<cr>
       nnoremap <silent> <c-n> :silent! lnext<cr>
       nnoremap <silent> <c-p> :silent! lprevious<cr>
     endif
 endfunction
 
 call nilsboy_quickfix#setNavigationType('quickfix')
-nnoremap <leader>ll :call <SID>toggleNavigationType()<cr>
+nnoremap <leader>gl :call <SID>toggleNavigationType()<cr>
 
 function! s:bufferDir() abort
   return expand("%:p:h")
@@ -94,6 +97,7 @@ if executable('ag')
         \ . ' -p ' . s:ignore_file
 endif
 
+nnoremap <silent> <leader>f <nop>
 nnoremap <silent> <leader>ff :call <SID>search({})<cr>
 vnoremap <silent> <leader>ff y:call <SID>search({
       \ 'term': @"})<cr>
@@ -156,9 +160,10 @@ nnoremap <silent> <leader>fvpw yiw:call <SID>search({
 nnoremap <silent> <leader>fvpi :call <SID>search({
       \ 'term': input('Search: '), 
       \ 'path': g:vim.bundle.dir})<cr>
-nnoremap <silent> <leader>fvpt :call <SID>search({
+nnoremap <silent> <leader>vpf :call <SID>search({
       \ 'term': expand('%:t:r'),
       \ 'path': g:vim.bundle.dir})<cr>
+nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
 
 nnoremap <silent> <leader>df :call <SID>search({
       \ 'path': $HOME . '/src/sql/'})<cr>
@@ -205,7 +210,7 @@ function! s:search(options) abort
   let path = fnamemodify(path, ':p')
 
   if term != ''
-    call INFO('Searching for ' . term . ' in ' . path)
+    " call INFO('Searching for ' . term . ' in ' . path)
   endif
 
   let grepprg = s:grep_command
@@ -263,15 +268,14 @@ function! s:outline() abort
     let l:filetype = b:filetype
   endif
   setlocal errorformat=%f:%l:%c:%m
-  wall
+  silent wall
   let &l:makeprg='outline --filename ' . expand('%:p') 
         \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
   :Neomake!
   copen
 endfunction
 
-" TODO
-" Populate qf with open buffers:
+" TODO: Populate qf with open buffers:
 " from https://vi.stackexchange.com/questions/2121/how-do-i-have-buffers-listed-in-a-quickfix-window-in-vim
 nnoremap <silent><leader>vb :call <SID>buffers('')<cr>
 nnoremap <silent><leader>vB :call <SID>buffers('!')<cr>
@@ -292,10 +296,10 @@ command! -bang -nargs=1 -complete=file QFilter call s:FilterQuickfixList(<bang>0
 
 " TODO nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 function! s:help(term) abort
-    call nilsboy_quickfix#setNavigationType('locationlist')
-    help
-    silent! execute 'ltag /' . a:term
-    silent! lopen
+    call nilsboy_quickfix#setNavigationType('quickfix')
+    silent! execute 'helpgrep ' . a:term
+    " silent! execute 'tag /' . a:term
+    silent! copen
 endfunction
 command! -bang -nargs=1 -complete=file H call s:help(<q-args>)
 
@@ -303,7 +307,7 @@ function! nilsboy_quickfix#removeInvalid() abort
     call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
 endfunction
 
-finish
+finish " #######################################################################
 
 augroup s:quickfix
     " QuickFixCmd* Does not match :ltag
@@ -313,11 +317,6 @@ augroup s:quickfix
     autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
     autocmd QuickFixCmdPost    l* botright lopen
 augroup END
-
-" augroup my_qf_autoformat
-"   autocmd!
-"   autocmd InsertLeave *.js :call FFormat()
-" augroup END
 
 " TODO
 nnoremap <silent> <leader>fp :call <SID>findInPath('')<cr>
@@ -333,8 +332,6 @@ function! s:findInPath(term) abort
     copen
     let b:quickfix_action = ':echo "haha"'
 endfunction
-
-finish
 
 " " TODO
 " if len(getqflist()) > 0
@@ -389,7 +386,7 @@ function! FFormat() abort
     if ! exists('b:formatprg')
         return
     endif
-    write
+    silent wall
     call neomake#Sh(b:formatprg, 'AfterFormat')
 endfunction
 
