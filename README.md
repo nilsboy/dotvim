@@ -18,13 +18,12 @@ Grep through the source to find more notes.
 ## Inline Help
 - Help help :h help-summary
 - Default mappings and commands
-:help index
+  :help index
 - :h reference_toc
 
 ## Online Help
 - https://www.reddit.com/r/vim/
 - https://github.com/mhinz/vim-galore
-- A list of text objects (textobj): https://github.com/kana/vim-textobj-user/wiki
 
 ## Debugging
 This setting makes Vim echo the autocommands as it executes them.
@@ -32,6 +31,7 @@ This setting makes Vim echo the autocommands as it executes them.
 
 ## Plugins to checkout
 - https://github.com/mattboehm/vim-unstack
+  (for the parsing code see: https://github.com/mattboehm/vim-unstack/blob/master/autoload/unstack/extractors.vim)
 - vim-es6
 - vimagit
 - diffchar.vim
@@ -43,14 +43,12 @@ This setting makes Vim echo the autocommands as it executes them.
 - A lot of interesting stuff: https://github.com/kana
 - https://github.com/idbrii/vim-renamer
 
-## Vim script
-- get global var or default: get(g:,'deoplete#omni#input_patterns',{})
-
 ## TODO
+- give tags another try?: https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
 - checkout g@
 - checkout Titlecase plugin
-- checkout https://github.com/skywind3000/asyncrun.vim/wiki/Cooperate-with-famous-plugins
 - see `:h runtime` for directory structure
 - Backup to git before write?: BufWritePre
-- input() history nnoremap q@ :echo input('')<CR><C-F>" (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
+- input() history nnoremap q@ :echo input('')<CR><C-F>"
+  (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
 - spell inside of comments and txt files - camel case / snail case

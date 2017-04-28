@@ -18,8 +18,9 @@
 " - vim-qf
 " detect quickfix:
 " https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
-"
+
 " TODO include search for related snail-, camel-, etc, case
+" TODO: highlight lines with errors: https://github.com/mh21/errormarker.vim
 " TODO format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
 " TODO checkout quickfixsigns for resetting the signes on :colder etc
 " TODO use winsaveview to prevent window resizing on copen
@@ -89,7 +90,7 @@ function! s:bufferDir() abort
   return expand("%:p:h")
 endfunction
 
-let s:ignore_file = g:vim.contrib.dir . 'ignore-files'
+let s:ignore_file = g:vim.contrib.etc.dir . 'ignore-files'
 let s:grep_command = 'grep -inHR --exclude-from ' . s:ignore_file
 if executable('ag')
   let s:grep_command = 'ag --nogroup --nocolor --column '
@@ -240,10 +241,19 @@ function! s:search(options) abort
 
   let &l:makeprg = ''
 
+  " if find && grep
+  "   let &l:makeprg .= 'echo "### Find results ###" ; '
+  " endif
+
   if find
     if s:searchType =~ '\v(files|all)'
       let &l:makeprg .= findprg
     endif
+  endif
+
+  if find && grep
+    " let &l:makeprg .= ' ; echo "=== Grep ===================================================================="'
+    let &l:makeprg .= ' ; echo'
   endif
 
   if grep
@@ -259,6 +269,12 @@ function! s:search(options) abort
   if term != ''
     execute 'match Todo /\c\v' . term . '/'
   endif
+  normal! j
+endfunction
+
+" TODO: replace internal function
+function! nilsboy_quickfix#search(options) abort
+  call <sid>search(a:options)
 endfunction
 
 nnoremap <leader>o :call <SID>outline()<cr>

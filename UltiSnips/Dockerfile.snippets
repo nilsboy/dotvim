@@ -8,7 +8,7 @@ RUN apt-get update
 endsnippet
 
 snippet install "apt-get install" b
-RUN apt-get install -y $0
+RUN apt-get install -y --no-install-recommends $0
 endsnippet
 
 snippet run "RUN shell command" b
@@ -63,4 +63,12 @@ endsnippet
 
 snippet label "LABEL" b
 LABEL ${1:label}="${2:value}"
+endsnippet
+
+snippet node_onbuild "node_onbuild" b
+MAINTAINER $USER
+
+FROM node:onbuild
+
+EXPOSE 80
 endsnippet

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# test
+
+source bash-helpers
+
+out=`mktemp`
+
+INFO "Tempfile: $out"
+
+# # set -x
+# es-wrap-lines "$@" > $out
+# cp $out "$@"
+# es-strip-semicolons "$@" > $out
+# cp $out "$@"
+
+# prettier-eslint "$@" 2>/dev/null
+
+prettier "$@" > $out
+
+eslint --fix --quiet \
+  -c /home/nilsb/.vim/etc/contrib/etc/eslintrc-format.json "$out" 1>&2
+
+# eslint --fix --debug -c ~/eslintrc-format.yml "$@" 1>&2
+# eslint --fix --no-color -c ~/.eslintrc-format.yml "$@" 1>&2
+
+cat "$out"

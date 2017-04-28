@@ -1,5 +1,6 @@
-setlocal formatoptions+=jan
-setlocal formatoptions-=c
+" TODO:
+" setlocal formatoptions+=jan
+" setlocal formatoptions-=c
 
 setlocal textwidth=80
 

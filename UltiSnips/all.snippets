@@ -54,6 +54,10 @@ snippet "(true|false)+" "true|false toggle" r
 `!p snip.rv = toggle('true|false', match.group(1))`
 endsnippet
 
+snippet "(always|never)+" "always|never toggle" r
+`!p snip.rv = toggle('always|never', match.group(1))`
+endsnippet
+
 ### Non-Ascii-characters
 
 snippet "(u|ü|Ü)+" "u|ü|Ü toggle" r
@@ -72,8 +76,8 @@ snippet "(ss|ß)+" "ss|ß toggle" r
 `!p snip.rv = toggle('ss|ß', match.group(1))`
 endsnippet
 
-snippet eur "Euro sign" i
-€
+snippet "(eur|EUR|€)+" "eur|EUR|€ toggle" r
+`!p snip.rv = toggle('eur|EUR|€', match.group(1))`
 endsnippet
 
 snippet micro "Micro sign" i
@@ -88,9 +92,9 @@ snippet degree "Degree sign" i
 °
 endsnippet
 
-snippet '(\d+)' "(\d+)" r
-`!p snip.rv = int(match.group(1)) + 1`
-endsnippet
+# snippet '(\d+)' "(\d+)" r
+# `!p snip.rv = int(match.group(1)) + 1`
+# endsnippet
 
 priority -100
 
@@ -187,4 +191,19 @@ endsnippet
 
 snippet path "path" w
 `!v expand('%:p')`
+endsnippet
+
+snippet "(DEBUG|INFO)+" "DEBUG|INFO toggle" r
+`!p snip.rv = toggle('DEBUG|INFO', match.group(1))`
+endsnippet
+
+snippet uuid "uuid" w
+`uuidgen`
+endsnippet
+
+snippet javascript_skeleton "javascript_skeleton" b
+README.md
+package.json
+pm2.json
+Dockerfile
 endsnippet

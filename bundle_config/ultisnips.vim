@@ -11,8 +11,8 @@ nnoremap <leader>sf :execute ":Explore " . g:vim.etc.dir . "UltiSnips/"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0
 
-" Map expand trigger to something never used
-let g:UltiSnipsExpandTrigger = "<leader>!s"
+" The expand trigger has to be mapped for $VISUAL to work
+let g:UltiSnipsExpandTrigger = "<c-b>!s"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
@@ -61,4 +61,3 @@ execute 'inoremap <silent> <expr> '
 execute 'vmap <silent>'
       \ . ' ' . g:UltiSnipsJumpForwardTrigger
       \ . ' ' . g:UltiSnipsExpandTrigger
-

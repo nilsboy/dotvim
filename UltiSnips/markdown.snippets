@@ -6,3 +6,19 @@ ${1:description}
 ${0:usage}
 ```
 endsnippet
+
+# [${2:$1}](${1:${VISUAL:filename}})$0
+snippet file "file" w
+[](${1:${VISUAL:filename}})$0
+endsnippet
+
+snippet code "code" b
+\`\`\`${1:language}
+${VISUAL}$0
+\`\`\`
+endsnippet
+
+snippet toc "toc" b
+# Table of Contents
+
+endsnippet

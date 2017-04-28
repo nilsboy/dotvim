@@ -11,7 +11,7 @@ let b:did_ftplugin_css = 1
 let g:neoformat_enabled_css = [ 'csscomb' ]
 let g:neoformat_css_csscomb = {
       \ 'exe': 'csscomb',
-      \ 'args': ['-c ' . g:vim.etc.dir . 'contrib/csscombrc'],
+      \ 'args': ['-c ' . g:vim.contrib.etc.dir . 'csscombrc'],
       \ 'replace': 1
       \ }
 

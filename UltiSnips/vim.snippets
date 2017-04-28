@@ -1,3 +1,11 @@
+
+global !p
+def toCamelCase(v):
+	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+	v = re.sub(r'[\.\/]*', r'', v)
+	return re.sub(r'(\W)', r'', v.title())
+endglobal
+
 snippet deinrc "Boilerplaite vimrc" b
 set nocompatible
 
@@ -37,9 +45,17 @@ function! ${1:`!v expand('%:t:r')`#${2:name}}($3) abort
 endfunction
 endsnippet
 
+# a function name that works for configs of plugins - some of them have a
+# dash which s not allowed for a function name
+snippet func "Function" b
+function! ${3:My}${1:`!p snip.rv = toCamelCase(snip.basename)`}_${2:name}($4) abort
+	$0
+endfunction
+endsnippet
+
 snippet if "if" b
 if $1
-	$0
+	${VISUAL}$0
 endif
 endsnippet
 
@@ -83,7 +99,7 @@ endif
 endsnippet
 
 snippet autocmd "autocmd" b
-augroup augroup_`!v expand('%:t:r')`
+augroup augroup_${3:My}${1:`!p snip.rv = toCamelCase(snip.basename)`}_${2:name}
   autocmd!
   autocmd $0
 augroup END
@@ -261,7 +277,7 @@ finish " #######################################################################
 endsnippet
 
 snippet getcurpos "getcurpos" b
-let [bufnum, lnum, col, off, curswant] = getcurpos('.')
+let [bufnum, lnum, col, off, curswant] = getcurpos()
 endsnippet
 
 snippet substr "substr" w
@@ -273,4 +289,13 @@ echo 'Specify $1: '
 let ${2:$1} = nr2char(getchar())
 redraw
 execute 'echo "' . $2 . '"'
+endsnippet
+
+
+snippet put "put" b
+:put =${1:a:term . ':'}
+endsnippet
+
+snippet buf "buf" w
+<buffer>
 endsnippet

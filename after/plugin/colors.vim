@@ -67,7 +67,7 @@ highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
 highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
 highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
 
-set colorcolumn=79,80
+" set colorcolumn=79,80
 
 " Show when lines extend past column 80
 " highlight ColorColumn ctermfg=208 ctermbg=Black

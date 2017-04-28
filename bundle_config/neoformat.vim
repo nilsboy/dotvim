@@ -22,9 +22,9 @@ let g:neoformat_only_msg_on_error = 1
 "
 " autocmd InsertLeave * :Neoformat eslint \| :Neoformat eswraplines<cr>
 
-nnoremap <leader>x :Neoformat<cr>
+nnoremap <silent> <leader>x :Neoformat<cr>
 
-finish
+finish " #######################################################################
 
 function! AutoCmdNeoFormat() abort
   let ha = 'neoformat#formatters#' . &filetype . '#'

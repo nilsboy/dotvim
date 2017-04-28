@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "no-unused-vars": [
+      0
+    ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module"
+  }
+}

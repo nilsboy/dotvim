@@ -29,7 +29,10 @@ let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
 let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim/' }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
 let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR }
+
 let g:vim['contrib']  = { 'dir' : g:vim.etc.dir . '/contrib/' }
+let g:vim.contrib['etc']  = { 'dir' : g:vim.contrib.dir . '/etc/' }
+let g:vim.contrib['bin']  = { 'dir' : g:vim.contrib.dir . '/bin/' }
 
 let $MYVIMRC = g:vim.rc
 
@@ -259,6 +262,8 @@ set noswapfile
 " used for the CursorHold autocommand event
 set updatetime=1000
 
+set suffixesadd=.txt,.md
+
 "### Mappings
 
 " For a list of vim's internal mappings see:
@@ -450,7 +455,7 @@ nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
 nnoremap <leader>// q/k
 vnoremap <leader>// q/k
 
-nnoremap <leader>/c /\v^["#=-]{2,}<cr>
+nnoremap <leader>/c /\v^\s*[/"#]+<cr>
 nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/i /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
@@ -489,19 +494,19 @@ nnoremap <leader>hh :execute 'Help ' . expand('<cword>')<cr>
 vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
 nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 
-" TODO: tune
-map [[ ?{<CR>w99[{
-map ][ /}<CR>b99]}
-map ]] j0[[%/{<CR>
-map [] k$][%?}<CR>
+" " TODO: tune
+" " TODO: already included in vim-unimpaired?
+" map [[ ?{<CR>w99[{
+" map ][ /}<CR>b99]}
+" map ]] j0[[%/{<CR>
+" map [] k$][%?}<CR>
 
 " Go to alternate file
 nnoremap <leader>ga <c-^>
 
 nnoremap <silent> <leader>gw :silent wall<cr>
-nnoremap <silent> <leader>m m
 
-"### Searching
+" ### Searching
 
 " Show matching brackets
 set showmatch

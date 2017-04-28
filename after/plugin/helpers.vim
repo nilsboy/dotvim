@@ -5,6 +5,7 @@
 " - ingo-library
 
 " Close a buffer writing its content and closing vim if appropriate.
+" TODO: when emptying a file (i.e. normal! die) save changes on exit
 function! BufferClose() abort
 
     if BufferIsCommandLine() == 1
@@ -698,7 +699,8 @@ function! MyRun(...) abort
   endif
   let g:last_command = command
   silent wall
-  execute 'NeomakeSh!' . command
+  set errorformat=%m
+  execute 'NeomakeSh! ' . command
   copen
 endfunction
 

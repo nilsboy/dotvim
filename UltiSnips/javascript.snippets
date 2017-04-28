@@ -5,12 +5,24 @@ extends json
 # npm install --save babel-cli babel-preset-es2015
 # then run babel-node ....js
 
+global !p
+def toCamelCase(v):
+	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+	v = re.sub(r'[\.\/]*', r'', v)
+	return re.sub(r'(\W)', r'', v.title())
+
+def toMethodCase(v):
+	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+	v = re.sub(r'[\.\/]*', r'', v)
+	return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+endglobal
+
 snippet req "require" b
-const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = require(\`$1\`)$0
+const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)$0
 endsnippet
 
 snippet reqc "require class" b
-const ${2:${1/(.+\/)*(\w+)(-|\b|$)(\..+$)?/\u$2/g}} = require(\`$1\`)$0
+const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)$0
 endsnippet
 
 snippet new "new" b
@@ -34,7 +46,7 @@ process.stderr
 endsnippet
 
 snippet	lodash "require lodash" b
-const _ = require(\`lodash\`)
+const _ = require(\`lodash/fp\`)
 endsnippet
 
 snippet	util "require util" b
@@ -355,4 +367,40 @@ endsnippet
 snippet wait "keep program running indefinitely" b
 // Keep program running
 process.stdin.resume()
+endsnippet
+
+snippet main "main" b
+async function main() {
+	$0
+}
+
+main()
+endsnippet
+
+snippet n "\n in quotes" w
+\`\n\`
+endsnippet
+
+snippet formatter_ignore "exclude the next node in the abstract syntax tree from formatting" b
+// prettier-ignore
+endsnippet
+
+snippet request "request" b
+const bluebird = require(\`bluebird\`)
+const superagent = require(\`superagent\`)
+const request = require(\`superagent-bluebird-promise\`)
+
+let response = await request
+	.get(\`https://$1\`)
+	.query({${2:q: term, count: 3}})
+
+if (response.status >= 400) {
+	throw new Error(\`Bad response from server\`)
+}
+
+let results = await response.body
+endsnippet
+
+snippet _.findIndex "_.findIndex" b
+const $1Index = _.findIndex(o => ${2:o.user == 'barney'})(${1:users})
 endsnippet

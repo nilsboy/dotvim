@@ -1,6 +1,7 @@
 " A plugin for asynchronous :make using Neovim's job-control functionality
 NeoBundle 'neomake/neomake'
 " TODO: checkout neomake-vim-autoformat.vim
+" Note: focus problem - does not exist in neomake commit 69e080b
 
 " let g:neomake_verbose = 3
 " Does not have stdin support:

@@ -11,4 +11,4 @@ function! YamlToJson() abort
 endfunction
 
 " TODO: testing
-setlocal ft=swagger
+" setlocal ft=swagger

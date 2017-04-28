@@ -16,3 +16,8 @@ let g:cm_refresh_default_min_word_len = [[1,1]]
 let g:cm_sources_override = {
     \ 'cm-bufkeyword': {'priority': 9}
     \ }
+
+" the popup-menu prevents the first <cr> to work:
+" not sure what <c-g>u is - but it seems to work:
+" https://stackoverflow.com/questions/16804859/vim-how-to-make-autocomplpop-snipmate-supertab-work-together
+inoremap <expr> <cr> pumvisible() ? "\<c-g>u\<cr>" : "\<cr>"

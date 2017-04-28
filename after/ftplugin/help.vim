@@ -5,3 +5,8 @@ only
 
 setlocal keywordprg=:Help
 
+augroup augroup_help
+  autocmd!
+  autocmd BufLeave <buffer> normal! mH
+augroup END
+
