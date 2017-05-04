@@ -29,7 +29,17 @@ Grep through the source to find more notes.
 This setting makes Vim echo the autocommands as it executes them.
   `:set verbose=9`
 
-## Plugins to checkout
+## TODO
+- give tags another try?: https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
+- checkout g@
+- checkout Titlecase plugin
+- see `:h runtime` for directory structure
+- Backup to git before write?: BufWritePre
+- input() history nnoremap q@ :echo input('')<CR><C-F>"
+  (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
+- spell inside of comments and txt files - camel case / snail case
+
+### Plugins to checkout
 - https://github.com/mattboehm/vim-unstack
   (for the parsing code see: https://github.com/mattboehm/vim-unstack/blob/master/autoload/unstack/extractors.vim)
 - vim-es6
@@ -43,12 +53,3 @@ This setting makes Vim echo the autocommands as it executes them.
 - A lot of interesting stuff: https://github.com/kana
 - https://github.com/idbrii/vim-renamer
 
-## TODO
-- give tags another try?: https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
-- checkout g@
-- checkout Titlecase plugin
-- see `:h runtime` for directory structure
-- Backup to git before write?: BufWritePre
-- input() history nnoremap q@ :echo input('')<CR><C-F>"
-  (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
-- spell inside of comments and txt files - camel case / snail case

@@ -13,19 +13,14 @@ function! BufferClose() abort
         return
     endif
 
-    " :lclose
-    " :cclose
-
-    if BufferIsLast() == 1
-        if BufferIsEmpty() == 1
-            :silent q!
-        endif
-    endif
-
-    if BufferIsEmpty() == 1
-    elseif BufferIsUnnamed() == 1
+    " if BufferIsEmpty() == 1
+    if BufferIsUnnamed() == 1
     elseif &write
         silent update
+    endif
+    
+    if BufferIsLast() == 1
+        :silent q!
     endif
 
     " Use bwipe instead of bdelete - otherwise the buffer stays open as

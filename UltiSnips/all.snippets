@@ -60,17 +60,31 @@ endsnippet
 
 ### Non-Ascii-characters
 
-snippet "(u|ü|Ü)+" "u|ü|Ü toggle" r
-`!p snip.rv = toggle('u|Ü|ü', match.group(1))`
+snippet "(u|ü)+" "u|ü toggle" r
+`!p snip.rv = toggle('u|ü', match.group(1))`
 endsnippet
 
-snippet "(a|ä|Ä)+" "a|ä|Ä toggle" r
-`!p snip.rv = toggle('a|ä|Ä', match.group(1))`
+snippet "(U|Ü)+" "U|Ü toggle" r
+`!p snip.rv = toggle('U|ü', match.group(1))`
 endsnippet
 
-snippet "(o|ö|Ö)+" "o|ö|Ö toggle" r
-`!p snip.rv = toggle('o|ö|Ö', match.group(1))`
+
+snippet "(a|ä)+" "a|ä toggle" r
+`!p snip.rv = toggle('a|ä', match.group(1))`
 endsnippet
+
+snippet "(A|Ä)+" "A|Ä toggle" r
+`!p snip.rv = toggle('A|Ä', match.group(1))`
+endsnippet
+
+snippet "(o|ö)+" "o|ö toggle" r
+`!p snip.rv = toggle('o|ö', match.group(1))`
+endsnippet
+
+snippet "(O|Ö)+" "O|Ö toggle" r
+`!p snip.rv = toggle('O|Ö', match.group(1))`
+endsnippet
+
 
 snippet "(ss|ß)+" "ss|ß toggle" r
 `!p snip.rv = toggle('ss|ß', match.group(1))`
@@ -193,6 +207,18 @@ snippet path "path" w
 `!v expand('%:p')`
 endsnippet
 
+snippet dir "dir" w
+`!v expand('%:p:h:t')`
+endsnippet
+
+snippet file "file" w
+`!v expand('%')`
+endsnippet
+
+snippet home "home" w
+`!v $HOME`
+endsnippet
+
 snippet "(DEBUG|INFO)+" "DEBUG|INFO toggle" r
 `!p snip.rv = toggle('DEBUG|INFO', match.group(1))`
 endsnippet
@@ -207,3 +233,4 @@ package.json
 pm2.json
 Dockerfile
 endsnippet
+

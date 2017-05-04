@@ -1,11 +1,11 @@
 priority -50
 
 snippet s "String" b
-\`${1:key}\`: \`${0:value}\`,
+"${1:key}": "${0:value}",
 endsnippet
 
 snippet n "Number" b
-\`${1:key}\`: ${0:value},
+"${1:key}": ${0:value},
 endsnippet
 
 snippet a "Array" b
@@ -15,7 +15,7 @@ snippet a "Array" b
 endsnippet
 
 snippet na "Named array" b
-\`${1:key}\`: [
+"${1:key}": [
 	${VISUAL}$0
 ],
 endsnippet
@@ -27,13 +27,13 @@ snippet o "Object" b
 endsnippet
 
 snippet no "Named object" b
-\`${1:key}\`: {
+"${1:key}": {
 	${VISUAL}$0
 },
 endsnippet
 
 snippet null "Null" b
-\`${0:key}\`: null,
+"${0:key}": null,
 endsnippet
 
 global !p
@@ -46,7 +46,7 @@ def compB(t, opts):
 endglobal
 
 snippet b "Bool" b
-\`${1:key}\`: $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
+"${1:key}": $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
 endsnippet
 
 snippet pm2_config "pm2_config" b

@@ -19,6 +19,8 @@
 " detect quickfix:
 " https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
 
+" TODO: word with boundaries search
+" TODO: and search
 " TODO include search for related snail-, camel-, etc, case
 " TODO: highlight lines with errors: https://github.com/mh21/errormarker.vim
 " TODO format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
@@ -374,19 +376,6 @@ endfunction
 
 " map <leader>g  <Plug>(operator-grep)
 " map <leader>gs  <Plug>(operator-grep)
-
-" function! s:find(term, directory) abort
-"     call nilsboy_quickfix#setNavigationType('quickfix')
-
-"     " Make sure the quickfix cwd isn't used as starting directory
-"     cclose
-
-"     call s:Cd(a:directory)
-"     let &l:makeprg="find-and-limit\ " . shellescape(a:term)
-"     setlocal errorformat=%f
-"     Neomake!
-"     copen
-" endfunction
 
 " TODO: does not work?
 "       nnoremap <silent> <c-;> :silent! lnext<cr>

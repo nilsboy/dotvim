@@ -13,6 +13,7 @@ call helpers#touch(s:jumps_file)
 augroup augroup_jumper
   autocmd!
   autocmd BufEnter * :call jumper#loadBufferMarks()
+  autocmd BufEnter * :call jumper#add('read')
   autocmd CursorHold * :call jumper#add('read')
   autocmd InsertLeave * :call jumper#add('write')
   " For debugging
