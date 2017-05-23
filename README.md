@@ -47,14 +47,14 @@ Sometimes it might even be nice for a user to be able to use a non-offical funct
 
 ### Result
 
-- prefix own files with my_
+- prefix own files with my_ - this distinguishes own configs and vars from the plugins vars
 - plugin config file names: my_{{plugin_name}}_config.vim
 - own plugin file names: my_{{plugin_name}}.vim
 - only one my_-prefix for own plugin configs
-- replace "-" in script names with "_"
+- replace "-" in script names with "_" for vars etc
 
-- function names: Scriptfile_function (= global)
-- var names: g:Scriptfile_varname (= global)
+- function names: Scriptfile_name_functionName (= global)
+- var names: g:Scriptfile_name_varName (= global)
 
 - TODO: normalize plugin config file names to exclude vim and '-' etc?
 

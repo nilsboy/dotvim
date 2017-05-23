@@ -15,7 +15,7 @@ vnoremap <silent> <leader>nv y:execute 'edit ' . g:notes_dir . fnameescape(@") .
 nnoremap <silent> <leader>ne :execute "edit " 
       \ . g:notes_dir . fnameescape(input('Topic: ')) . ".txt"<cr>
 
-nnoremap <silent> <leader>ni :call nilsboy_quickfix#search({
+nnoremap <silent> <leader>ni :call My_quickfix_search({
       \ 'term': input('Search: '),
       \ 'path': g:notes_dir })<cr>
 
@@ -24,9 +24,6 @@ function! notes#editLastNote() abort
     let g:notes_last_note = notes#newFileName()
   endif
   execute 'edit ' . g:notes_last_note
-  " call nilsboy_quickfix#search({
-  "     \ 'term': '\/note_',
-  "     \ 'path': g:notes_dir })
 endfunction
 
 " Hack until the old notes are converted from zim to markdown
@@ -60,7 +57,7 @@ if neobundle#tap('vim-operator-user')
     function! OpNoteFind(motion_wise) abort
       let v = operator#user#visual_command_from_wise_name(a:motion_wise)
 	    execute 'normal!' '`[' . v . '`]"xy'
-      call nilsboy_quickfix#search({
+      call My_quickfix_search({
             \ 'term': @x,
             \ 'path': g:notes_dir })
     endfunction

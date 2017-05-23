@@ -24,8 +24,10 @@ augroup ftplugin_javascript
   " autocmd TextChanged,InsertLeave <buffer> :Neoformat
 augroup END
 
-let g:neomake_javascript_run_maker = {
+" let g:neomake_javascript_run_maker = {
+let g:neomake_run_maker = {
     \ 'exe': 'node',
+    \ 'args': ['%:p'],
     \ 'errorformat': '%AError: %m,%AEvalError: %m,%ARangeError: %m,%AReferenceError: %m,%ASyntaxError: %m,%ATypeError: %m,%Z%*[\ ]at\ %f:%l:%c,%Z%*[\ ]%m (%f:%l:%c),%*[\ ]%m (%f:%l:%c),%*[\ ]at\ %f:%l:%c,%Z%p^,%A%f:%l,%C%m,%-G%.%#'
     \ }
 

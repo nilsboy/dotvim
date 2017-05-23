@@ -64,7 +64,7 @@
 " TODO always close buffer of preview window - is there a plugin for that?
 " TODO checkout https://github.com/stefandtw/quickfix-reflector.vim
 " TODO add description to quickfix window title
-" TODO: add error count to statusline
+" TODO: add error count to statusline (see neomake)
 
 " Always show signs column
 augroup My_quickfix_augroup_signs_column
@@ -75,24 +75,17 @@ augroup My_quickfix_augroup_signs_column
 augroup END
 
 let g:My_quickfix_mode = ''
-function! My_quickfix_toggleNavigationType() abort
-    if g:My_quickfix_mode == 'quickfix'
-      silent call My_quickfix_setNavigationType('locationlist')
-      call INFO("Locationlist navigation activated")
-    else
-      silent call My_quickfix_setNavigationType('quickfix')
-      call INFO("Quickfix navigation activated")
-    endif
-endfunction
 
 " TODO make mappings move through lists by history
 function! My_quickfix_setNavigationType(type) abort
     if a:type == 'quickfix'
+      call INFO("Quickfix navigation activated")
       let g:My_quickfix_mode = 'quickfix'
       nnoremap <silent> <tab> :copen<cr>
       nnoremap <silent> <c-n> :silent! cnext<cr>
       nnoremap <silent> <c-p> :silent! cprevious<cr>
     else
+      call INFO("Locationlist navigation activated")
       let g:My_quickfix_mode = 'locationlist'
       nnoremap <silent> <tab> :lopen<cr>
       nnoremap <silent> <c-n> :silent! lnext<cr>
@@ -100,7 +93,17 @@ function! My_quickfix_setNavigationType(type) abort
     endif
 endfunction
 
-call My_quickfix_setNavigationType('quickfix')
+function! My_quickfix_toggleNavigationType() abort
+    if g:My_quickfix_mode != 'quickfix'
+      silent! lclose
+      silent call My_quickfix_setNavigationType('quickfix')
+    else
+      silent! cclose
+      silent call My_quickfix_setNavigationType('locationlist')
+    endif
+endfunction
+
+" TODO: call My_quickfix_setNavigationType('quickfix')
 nnoremap <leader>gl :call My_quickfix_toggleNavigationType()<cr>
 
 function! My_quickfix_bufferDir() abort
@@ -162,13 +165,13 @@ function! My_quickfix_search(options) abort
         \ . ' | head-warn ' . limit
 
   call My_quickfix_setNavigationType('quickfix')
-  let my_errorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
 
   let makers = 'find'
   if term != ''
     let makers .= ' delimiter grep'
   endif
 
+  let my_errorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
   let g:neomake_delimiter_maker = My_quickfix_toMaker('echo',
         \ my_errorformat)
   let g:neomake_find_maker = My_quickfix_toMaker(findprg,
@@ -177,7 +180,7 @@ function! My_quickfix_search(options) abort
         \ my_errorformat)
 
   execute 'Neomake! ' . makers
-  copen
+  " copen
 
   return
   if term != ''
@@ -186,6 +189,17 @@ function! My_quickfix_search(options) abort
   normal! j
 endfunction
 
+" TODO: use this to create a maker?:
+" function! s:Rg(file_mode, args)
+"   let cmd = "rg --vimgrep ".a:args
+"   let custom_maker = neomake#utils#MakerFromCommand(cmd)
+"   let custom_maker.name = cmd
+"   let custom_maker.remove_invalid_entries = 0
+"   let custom_maker.errorformat = "%f:%l:%c:%m"
+"   let enabled_makers =  [custom_maker]
+"   call neomake#Make(a:file_mode, enabled_makers) | echo "running: " . cmd
+" endfunction
+" command! -bang -nargs=* -complete=file G call s:Rg(<bang>0, <q-args>)
 function! My_quickfix_toMaker(cmd, errorformat) abort
   let cmd = a:cmd
   let exe = substitute(cmd, '\s.*', '', 'g')
@@ -197,7 +211,7 @@ function! My_quickfix_toMaker(cmd, errorformat) abort
       \ }
 endfunction
 
-nnoremap <leader>o :call My_quickfix_outline()<cr>
+nnoremap <silent><leader>o :call My_quickfix_outline()<cr>
 function! My_quickfix_outline() abort
   let l:filetype = &filetype
   if exists("b:filetype")
