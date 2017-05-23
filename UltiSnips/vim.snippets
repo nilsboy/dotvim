@@ -13,6 +13,9 @@ def toSnakeCase(v):
   v = toCamelCase(v)
   v = re.sub(r'\W', r'_\1', v).lower()
   return v
+
+def ucfirst(s):
+    return s[0].upper() + s[1:]
 endglobal
 
 snippet deinrc "Boilerplaite vimrc" b
@@ -48,30 +51,25 @@ call dein#add('$1')
 $0
 endsnippet
 
-# function name containing file name
-snippet funf "Function" b
-function! ${1:`!v expand('%:t:r')`#${2:name}}($3) abort
-  $0
-endfunction
+snippet n "name something" w
+`!p snip.rv = ucfirst(snip.basename)`_$0
+endsnippet
+
+snippet augroup "augroup" b
+augroup `!p snip.rv = ucfirst(snip.basename)`_augroup_$0
+endsnippet
+
+# let g:my_${1:`!p snip.rv = toSnakeCase(snip.basename)`}_${2:name} = $0
+snippet g "global variable name" w
+g:`!p snip.rv = ucfirst(snip.basename)`_${VISUAL}$0
 endsnippet
 
 # a function name that works for configs of plugins - some of them have a
 # dash which s not allowed for a function name
-# function! My_`!p snip.rv = toCamelCase(snip.basename)`_${1:name}($2) abort
-# function! `!p snip.rv = toCamelCase(snip.basename)`_${1:name}($2) abort
 snippet fun "Function" b
-function! `!p snip.rv = snip.basename`#${1:name}($2) abort
+function! `!p snip.rv = ucfirst(snip.basename)`_${1:name}($2) abort
   $0
 endfunction
-endsnippet
-
-snippet name "name" w
-`!p snip.rv = snip.basename`#${0:name}
-endsnippet
-
-# let g:my_${1:`!p snip.rv = toSnakeCase(snip.basename)`}_${2:name} = $0
-snippet let "let with generated variable name" w
-g:`!p snip.rv = snip.basename`_${VISUAL}$0
 endsnippet
 
 snippet if "if" b
@@ -86,6 +84,10 @@ endsnippet
 
 snippet infoo "info with 1 arg" 
 call INFO('$1:', $1)
+endsnippet
+
+snippet echo "echo with 1 arg"
+echo '$1:' . $1
 endsnippet
 
 snippet debug "debug" 
@@ -174,9 +176,9 @@ snippet s "String" w
 '${1:key}': '${2:value}',$0
 endsnippet
 
-snippet n "Number" w
-'${1:key}': ${0:value},
-endsnippet
+# snippet n "Number" w
+# '${1:key}': ${0:value},
+# endsnippet
 
 snippet a "Array" w
 [
@@ -271,10 +273,6 @@ endsnippet
 
 snippet b: "script specific buffer var" w
 b:`!v expand('%:t:r')`_$0
-endsnippet
-
-snippet g: "script specific global var" w
-g:`!v expand('%:t:r')`_$0
 endsnippet
 
 snippet last "last array element" w

@@ -31,6 +31,33 @@ Grep through the source to find more notes.
 This setting makes Vim echo the autocommands as it executes them.
   `:set verbose=9`
 
+## Naming conventions (WIP)
+
+Use one consistent style for everything.
+
+Using non-global functions and vars is harder to debug and has no real benefit.
+Sometimes it might even be nice for a user to be able to use a non-offical function as a workaround.
+
+### Vim restrictions
+
+- vars can not include a # like functions - so not using this for functions ether
+- functions must not contain "-" and other characters - so using the script filename directly is not always possible
+- functions must start with a upper case letter - so using this for vars too
+- TODO: commands / autocmds?
+
+### Result
+
+- prefix own files with my_
+- plugin config file names: my_{{plugin_name}}_config.vim
+- own plugin file names: my_{{plugin_name}}.vim
+- only one my_-prefix for own plugin configs
+- replace "-" in script names with "_"
+
+- function names: Scriptfile_function (= global)
+- var names: g:Scriptfile_varname (= global)
+
+- TODO: normalize plugin config file names to exclude vim and '-' etc?
+
 ## TODO
 - give tags another try?: https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
 - checkout g@

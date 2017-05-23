@@ -264,6 +264,9 @@ set updatetime=1000
 
 set suffixesadd=.txt,.md
 
+" don't echo make output to screen
+let &shellpipe = '&>'
+
 "### Mappings
 
 " For a list of vim's internal mappings see:

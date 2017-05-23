@@ -18,8 +18,8 @@ let g:neomake_serialize = 1
 let g:neomake_open_list = 1
 
 " TODO: highlight lines differently than columns
-" *g:neomake_highlight_columns*
-let g:neomake_highlight_lines = 1
+let g:neomake_highlight_columns = 1
+" let g:neomake_highlight_lines = 1
 
     " augroup my_neomake_highlights
     "     au!
@@ -51,3 +51,17 @@ let g:neomake_highlight_lines = 1
 "         call nilsboy_quickfix#setNavigationType('quickfix')
 "     endif
 " endfunction
+
+nnoremap <silent><leader>ee :Neomake run<cr>
+nnoremap <silent><leader>el :Neomake lint<cr>
+nnoremap <silent><leader>ef :Neomake format<cr>
+
+nnoremap <silent><leader>ed :edit /tmp/neomake.log <cr>
+
+nnoremap <silent><leader>eh :Verbose call Neomake_make_infos()<cr>
+function! Neomake_make_infos() abort
+  echo '&makeprg: ' . &makeprg
+  echo '&errorformat: ' . &errorformat
+  echo 'g:neomake_' . &filetype . '_run_maker: '
+  execute 'echo g:neomake_' . &filetype . '_run_maker'
+endfunction
