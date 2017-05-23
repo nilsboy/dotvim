@@ -4,27 +4,50 @@ NeoBundle 'neomake/neomake'
 " Note: focus problem - does not exist in neomake commit 69e080b
 
 " let g:neomake_verbose = 3
+call delete('/tmp/neomake.log')
+let g:neomake_logfile = '/tmp/neomake.log'
+
+let g:neomake_serialize = 1
+
+" let g:neomake_echo_current_error = 0
+
 " Does not have stdin support:
 " https://github.com/neomake/neomake/issues/190
 
-let g:neomake_open_list = 2
+" TODO: disable for linting?
+let g:neomake_open_list = 1
 
-let g:neomake_error_sign = {
-    \ 'text': '=>',
-    \ 'texthl': 'ErrorMsg',
-    \ }
+" TODO: highlight lines differently than columns
+" *g:neomake_highlight_columns*
+let g:neomake_highlight_lines = 1
+
+    " augroup my_neomake_highlights
+    "     au!
+    "     autocmd ColorScheme *
+    "       \ hi link NeomakeError SpellBad
+    "       \ hi link NeomakeWarning SpellCap
+    " augroup END
+
+" TODO: statusline
+" set statusline+=\ %#ErrorMsg#%{neomake#statusline#QflistStatus('qf:\ ',\ 0)}
+" *neomake#statusline#LoclistStatus*
+
+" let g:neomake_error_sign = {
+"     \ 'text': '=>',
+"     \ 'texthl': 'ErrorMsg',
+"     \ }
 
 " neomake#statusline#LoclistCounts
 
-augroup augroup_neomake
-  autocmd!
-  autocmd User NeomakeFinished call OnNeomakeFinished()
-augroup END
+" augroup augroup_neomake
+"   autocmd!
+"   autocmd User NeomakeFinished call OnNeomakeFinished()
+" augroup END
 
-function! OnNeomakeFinished() abort
-    if g:neomake_hook_context.file_mode == 1
-        call nilsboy_quickfix#setNavigationType('locationlist')
-      else
-        call nilsboy_quickfix#setNavigationType('quickfix')
-    endif
-endfunction
+" function! OnNeomakeFinished() abort
+"     if g:neomake_hook_context.file_mode == 1
+"         call nilsboy_quickfix#setNavigationType('locationlist')
+"       else
+"         call nilsboy_quickfix#setNavigationType('quickfix')
+"     endif
+" endfunction

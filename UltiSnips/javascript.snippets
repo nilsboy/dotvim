@@ -1,4 +1,14 @@
-extends json
+global !p
+def toCamelCase(v):
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'[\.\/]*', r'', v)
+  return re.sub(r'(\W)', r'', v.title())
+
+def toMethodCase(v):
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'[\.\/]*', r'', v)
+  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+endglobal
 
 snippet s "String" b
 \`${1:key}\`: \`${0:value}\`,
@@ -10,25 +20,25 @@ endsnippet
 
 snippet a "Array" b
 [
-	${VISUAL}$0
+  ${VISUAL}$0
 ],
 endsnippet
 
 snippet na "Named array" b
 \`${1:key}\`: [
-	${VISUAL}$0
+  ${VISUAL}$0
 ],
 endsnippet
 
 snippet o "Object" b
 {
-	${VISUAL}$0
+  ${VISUAL}$0
 },
 endsnippet
 
 snippet no "Named object" b
 \`${1:key}\`: {
-	${VISUAL}$0
+  ${VISUAL}$0
 },
 endsnippet
 
@@ -40,18 +50,6 @@ endsnippet
 # checkout: babel-preset-es2015
 # npm install --save babel-cli babel-preset-es2015
 # then run babel-node ....js
-
-global !p
-def toCamelCase(v):
-	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-	v = re.sub(r'[\.\/]*', r'', v)
-	return re.sub(r'(\W)', r'', v.title())
-
-def toMethodCase(v):
-	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-	v = re.sub(r'[\.\/]*', r'', v)
-	return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
-endglobal
 
 snippet req "require" b
 const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)$0
@@ -81,15 +79,15 @@ snippet stderr "stderr"
 process.stderr
 endsnippet
 
-snippet	lodash "require lodash" b
+snippet lodash "require lodash" b
 const _ = require(\`lodash/fp\`)
 endsnippet
 
-snippet	util "require util" b
+snippet util "require util" b
 const util = require(\`util\`)
 endsnippet
 
-snippet	fs "require fs" b
+snippet fs "require fs" b
 const fs = require(\`fs-extra\`)
 endsnippet
 
@@ -99,17 +97,17 @@ $0const csv = require(\`ya-csv\`)
 const file = process.argv[2] || \`my.csv\`
 
 const reader = csv.createCsvFileReader(file, {
-	'separator': ',',
-	'quote': '"',
-	'escape': '"',
-	'comment': '',
-	'columnsFromHeader': true,
+  'separator': ',',
+  'quote': '"',
+  'escape': '"',
+  'comment': '',
+  'columnsFromHeader': true,
 })
 
 // reader.setColumnNames([ 'col1', 'col2' ])
 
 reader.addListener('data', function(data) {
-	console.log(data)
+  console.log(data)
 })
 
 // const writer = new csv.CsvWriter(process.stdout)
@@ -148,7 +146,11 @@ snippet d "Interpolated var" w
 endsnippet
 
 snippet ce "console.error" b
-console.error(\`### $1\`)
+console.error(\`### $1\`)$0
+endsnippet
+
+snippet cc "console.error" b
+console.error(\`### \` + ${VISUAL})$0
 endsnippet
 
 snippet cee "console.error" b
@@ -182,43 +184,43 @@ endsnippet
 
 snippet xx "here"
 console.error(\`### HERE`!v
-	line('.')
-	` `!v
-	expand('%:t') . ':' . line('.')
-	`\`)
+  line('.')
+  ` `!v
+  expand('%:t') . ':' . line('.')
+  `\`)
 endsnippet
 
 snippet e "equals" w
 = \`$1\`
 endsnippet
 
-snippet	if "if"
+snippet if "if"
 if($1) {
-	${VISUAL}$0
+  ${VISUAL}$0
 }
 endsnippet
 
 ####################
 snippet else "else"
 else {
-	$0
+  ${VISUAL}$0
 }
 endsnippet
 
 snippet fore "for each object" b
 for(const ${2:variable} in ${1:iterable}) {
-	$0
+  $0
 }
 endsnippet
 
 snippet exit "process.exit" b
-process.exit(${1:1})
+process.exit(${1:1})$0
 endsnippet
 
 snippet log "logging" b
 const LogDwim = require(\`log-dwim\`)
 const logDwim = new LogDwim()
-const { TRACE, DEBUG, INFO, WARN, ERROR, EXIT } = logDwim
+const { TRACE, DEBUG, INFO, WARN, ERROR, DIE } = logDwim
 endsnippet
 
 snippet pkginfo "add package.json info to module global" b
@@ -227,19 +229,19 @@ endsnippet
 
 snippet class "class" b
 class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
-	$0
+  $0
 }
 endsnippet
 
 snippet con "constructor" b
 constructor(${1:options = {${2:key: defaultValue }}}) {
-	$0
+  $0
 }
 endsnippet
 
 snippet it "it" b
 it(\`$1\`, () => {
-	$0
+  $0
 })
 endsnippet
 
@@ -253,13 +255,13 @@ endsnippet
 
 snippet beforeeach "before each test" b
 beforeEach(() => {
-	$0
+  $0
 })
 endsnippet
 
 snippet aftereach "before each" b
 afterEach(() => {
-	$0
+  $0
 })
 endsnippet
 
@@ -267,17 +269,17 @@ snippet mockstdout "mock stdout and stderr" b
 const stdMocks = require(\`std-mocks\`)
 
 afterEach(() => {
-	// make sure std* get restored after failing tests
-	stdMocks.restore()
+  // make sure std* get restored after failing tests
+  stdMocks.restore()
 })
 
 it(\`$1\`, () => {
-	stdMocks.use()
-	${2:test code}
-	stdMocks.restore()
-	const output = stdMocks.flush()
+  stdMocks.use()
+  ${2:test code}
+  stdMocks.restore()
+  const output = stdMocks.flush()
 
-	assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
+  assert.ok(/^${3:regex}\n$/.test(output.std${4:err}.toString()))
 })
 endsnippet
 
@@ -289,14 +291,16 @@ lockFile.unlockSync(\`/var/lock/$1.lock\`)
 endsnippet
 
 snippet promise "promise" b
+// use export BLUEBIRD_DEBUG=1 or NODE_ENV=development to see long stacktraces
 const Promise = require(\`bluebird\`)
+
 // const mv = Promise.promisify(fs.move)
 endsnippet
 
 snippet walk "file walk" b
 const fileWalker = require(\`klaw-sync\`)
 const paths = fileWalker($1).map((entry) => {
-	${0:entry = entry.path}
+  ${0:entry = entry.path}
 })
 endsnippet
 
@@ -306,23 +310,23 @@ endsnippet
 
 snippet globfor "loop through all globbed files" b
 for (const entry of glob(path.join($1))) {
-	${0:const basename = path.basename(entry)}
+  ${0:const basename = path.basename(entry)}
 }
 endsnippet
 
 snippet globcheck "glob check for files" b
 if(glob(path.join($1)).length !== 0) {
-	$0
+  $0
 }
 endsnippet
 
 snippet qw "qw" b
 function qw(strings, ...keys) {
-	return strings
-		.join(\` \`, strings)
-		.replace(/^\s+/, \`\`)
-		.replace(/\s+$/, \`\`)
-		.split(/\s+/)
+  return strings
+    .join(\` \`, strings)
+    .replace(/^\s+/, \`\`)
+    .replace(/\s+$/, \`\`)
+    .split(/\s+/)
 }
 endsnippet
 
@@ -332,16 +336,22 @@ endsnippet
 
 snippet fn "anonymous node function expression" w
 (error, result) => {
-	if(error) {
-		throw err
-	}
-	$0
+  if(error) {
+    throw err
+  }
+  $0
+}
+endsnippet
+
+snippet func "function" b
+function ${1:${VISUAL}}($2) {
+  $0
 }
 endsnippet
 
 snippet fun "function" b
-function ${1:${VISUAL}}($2) {
-	$0
+async function ${1:${VISUAL}}($2) {
+  $0
 }
 endsnippet
 
@@ -353,8 +363,8 @@ endsnippet
 
 snippet readdir "readdir" b
 for(let entry of fs.readdirSync(${1:directory})) {
-	entry = path.join($1, entry)
-	$0
+  entry = path.join($1, entry)
+  $0
 }
 endsnippet
 
@@ -396,7 +406,7 @@ endsnippet
 
 snippet cleanup "run cleanup on program exit" b
 require(\`node-cleanup\`)((exitCode, signal) => {
-	$0
+  $0
 })
 endsnippet
 
@@ -407,7 +417,7 @@ endsnippet
 
 snippet main "main" b
 async function main() {
-	$0
+  $0
 }
 
 main()
@@ -427,11 +437,11 @@ const superagent = require(\`superagent\`)
 const request = require(\`superagent-bluebird-promise\`)
 
 let response = await request
-	.get(\`https://$1\`)
-	.query({${2:q: term, count: 3}})
+  .get(\`https://$1\`)
+  .query({${2:q: term, count: 3}})
 
 if (response.status >= 400) {
-	throw new Error(\`Bad response from server\`)
+  throw new Error(\`Bad response from server\`)
 }
 
 let results = await response.body
@@ -439,4 +449,43 @@ endsnippet
 
 snippet _.findIndex "_.findIndex" b
 const $1Index = _.findIndex(o => ${2:o.user == 'barney'})(${1:users})
+endsnippet
+
+# xml needs viewer characters escaped but may escape as much as html:
+# https://www.w3.org/International/questions/qa-escapes#use
+# escape for xml instead of html
+# https://github.com/wycats/handlebars.js/issues/1301
+# Handlebars.Utils.escapeExpression = function(input) {
+#   return xmlEscape(input)
+# }
+snippet handlebars "handlebars" b
+const handlebars = require(\`handlebars\`)
+handlebars.registerHelper(\`dateFormat\`, require(\`handlebars-dateformat\`))
+
+function fillTemplate(data) {
+  const templateRaw = fs
+    .readFileSync(\`${1:filename}\`)
+    .toString()
+  const template = handlebars.compile(templateRaw)
+  const result = template({
+    products: data
+  })
+  console.error(\`### result:\`, result)
+}
+endsnippet
+
+snippet q "q" w
+\`$1\`$0
+endsnippet
+
+snippet match "match" w
+let [ , ${3:capture groups} ] = ${1:value}.match(\`${2:regex}\`)$0
+endsnippet
+
+snippet argv "argv" b
+const [ , , $1 ] = process.argv$0
+endsnippet
+
+snippet argvv "argv with path and executable" b
+const [ execPath, executable, $1 ] = process.argv$0
 endsnippet

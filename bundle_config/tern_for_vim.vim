@@ -13,4 +13,4 @@ let g:tern_show_signature_in_pum = 1
 
 autocmd FileType javascript nmap <buffer> gd :TernDef<cr>
 autocmd FileType javascript nmap <buffer> <leader>lr  :TernRefs<cr>
-autocmd FileType javascript nmap <buffer> <leader>lrr :TernRename<cr>
+autocmd FileType javascript nmap <buffer> <leader>lR :TernRename<cr>

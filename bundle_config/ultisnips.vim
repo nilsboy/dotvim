@@ -28,7 +28,7 @@ function s:jumpOrExpand() abort
 
         " Return an actual tab key if current position is preceeded
         " by nothing or whitespace only
-		    let [bufnum, lnum, col, off, curswant] = getcurpos()
+		    let [bufnum, lnum, col, off] = getpos('.')
         let prefix = getline('.')[0 : col - 2]
         if col == 1 || prefix =~ '\v^\s*$'
           return "\<tab>"

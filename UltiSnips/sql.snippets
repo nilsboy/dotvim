@@ -1,29 +1,105 @@
+global !p
+def toggle(t, opt):
+  opts = t.split('|')
+  pos = opts.index(opt)
+  if len(opts) == pos + 1:
+    pos = 0
+  else:
+    pos = pos + 1
+  return opts[pos]
+endglobal
+
 snippet profile "Set dbext profile name" b
 // vimex: DBSetOption profile=$1
 endsnippet
 
 snippet sel "select" b
 SELECT
-	${1:*}
+  ${1:*}
 FROM
-	$0
+  ${VISUAL}$2
+WHERE 1$0
 LIMIT 10
 
 endsnippet
 
 snippet wh "Description" b
 WHERE 1
-	AND $1
 endsnippet
 
 snippet count "count" b
 SELECT
-	COUNT(*)
+  COUNT(*)
 FROM
-	$0
+  $0
 
 endsnippet
 
 snippet e "equals" w
-\`$1\` = \`$2\`
+\`$1\` = \`$2\`$0
+endsnippet
+
+snippet and "and" w
+AND $1 = $0
+endsnippet
+
+snippet order "order" w
+ORDER BY
+  
+endsnippet
+
+snippet "(LEFT|INNER)+" "LEFT|INNER toggle" r
+`!p snip.rv = toggle('LEFT|INNER', match.group(1))`
+endsnippet
+
+snippet gr "group by" w
+GROUP BY
+  $0
+endsnippet
+
+snippet us "us" w
+USING ($1)$0
+endsnippet
+
+snippet on "on" w
+ON (1
+  AND $0
+)
+endsnippet
+
+snippet in "in" w
+IN ($1)$0
+endsnippet
+
+snippet q "q" w
+'$1'$0
+endsnippet
+
+snippet ',\s*' "(^|\s+)" r
+`!p snip.rv = match.group(0)`'$1'$0
+endsnippet
+
+# TODO
+snippet if "if" b
+select if((select 1) = '1', 'yes', 'no');
+endsnippet
+
+snippet "(USING|ON)+" "USING|ON toggle" r
+`!p snip.rv = toggle('USING|ON', match.group(1))`
+endsnippet
+
+snippet j "join" w
+INNER JOIN 
+endsnippet
+
+snippet lj "left join" w
+LEFT JOIN 
+endsnippet
+
+snippet "(=|IN)+" "=|IN toggle" r
+`!p snip.rv = toggle('=|IN', match.group(1))`
+endsnippet
+
+snippet li "limit" w
+LIMIT 100
 endsnippet

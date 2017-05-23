@@ -1,4 +1,5 @@
 " Errorformat for node
 NeoBundle 'felixge/vim-nodejs-errorformat'
-" NOTE: vim-node.vim can do this
 " TAGS: javascript node
+" Note: using this in addition to vim-node because it has a better errorformat
+" definition

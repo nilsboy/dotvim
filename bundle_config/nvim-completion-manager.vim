@@ -1,6 +1,8 @@
 " Fast! Extensible! Async! Completion Framework for Neovim
 NeoBundle 'roxma/nvim-completion-manager'
 
+" Note: alternatives: https://www.reddit.com/r/vim/comments/4ufblz/alternatives_to_youcompleteme/
+
 NeoBundle 'roxma/nvim-cm-tern', {
       \ 'build': { 'unix': 'npm install' }}
 

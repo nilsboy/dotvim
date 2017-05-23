@@ -1,13 +1,18 @@
 global !p
 def toCamelCase(v):
-	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-	v = re.sub(r'[\.\/]*', r'', v)
-	return re.sub(r'(\W)', r'', v.title())
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'[\.\/]*', r'', v)
+  return re.sub(r'(\W)', r'', v.title())
 
 def toMethodCase(v):
-	v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-	v = re.sub(r'[\.\/]*', r'', v)
-	return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'[\.\/]*', r'', v)
+  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+
+def toSnakeCase(v):
+  v = toCamelCase(v)
+  v = re.sub(r'\W', r'_\1', v).lower()
+  return v
 endglobal
 
 snippet deinrc "Boilerplaite vimrc" b
@@ -43,28 +48,40 @@ call dein#add('$1')
 $0
 endsnippet
 
-snippet fun "Function" b
+# function name containing file name
+snippet funf "Function" b
 function! ${1:`!v expand('%:t:r')`#${2:name}}($3) abort
-	$0
+  $0
 endfunction
 endsnippet
 
 # a function name that works for configs of plugins - some of them have a
 # dash which s not allowed for a function name
-snippet func "Function" b
-function! ${3:My}${1:`!p snip.rv = toCamelCase(snip.basename)`}_${2:name}($4) abort
-	$0
+# function! My_`!p snip.rv = toCamelCase(snip.basename)`_${1:name}($2) abort
+# function! `!p snip.rv = toCamelCase(snip.basename)`_${1:name}($2) abort
+snippet fun "Function" b
+function! `!p snip.rv = snip.basename`#${1:name}($2) abort
+  $0
 endfunction
+endsnippet
+
+snippet name "name" w
+`!p snip.rv = snip.basename`#${0:name}
+endsnippet
+
+# let g:my_${1:`!p snip.rv = toSnakeCase(snip.basename)`}_${2:name} = $0
+snippet let "let with generated variable name" w
+g:`!p snip.rv = snip.basename`_${VISUAL}$0
 endsnippet
 
 snippet if "if" b
 if $1
-	${VISUAL}$0
+  ${VISUAL}$0
 endif
 endsnippet
 
 snippet info "info" 
-call INFO($0)
+call INFO($1)$0
 endsnippet
 
 snippet infoo "info with 1 arg" 
@@ -83,7 +100,7 @@ endsnippet
 snippet neobundlepost "do something after plugin is loaded" b
 if neobundle#tap('${1:`!v expand('%:t:r')`}') 
   function! neobundle#hooks.on_post_source(bundle) abort
-		$0
+    $0
   endfunction
   call neobundle#untap()
 endif
@@ -92,13 +109,13 @@ endsnippet
 snippet command "command" b
 command! -nargs=* ${1:name} call $1(<f-args>)
 function! $1(...) abort
-	$0
+  $0
 endfunction
 endsnippet
 
 snippet ifneo "if is neovim" b
 if IsNeoVim()
-  $0
+  ${VISUAL}$0
 endif
 endsnippet
 
@@ -119,33 +136,33 @@ endsnippet
 
 snippet for "foreach" b
 for ${1:var} in ${2:list}
-	$0
+  $0
 endfor
 endsnippet
 
 snippet fori "for i in range" b
 for ${1:i} in range(${2:1,10})
-	$0
+  $0
 endfor
 endsnippet
 
 snippet whilei "whilei" b
 let i = 0
 while i <= $1
-	let i = i + 1
-	$0
+  let i = i + 1
+  $0
 endwhile
 endsnippet
 
 snippet while "while" b
 while 1
-	$0
+  $0
 endwhile
 endsnippet
 
 snippet exists "exists" w
 if ! exists('${1:b:var}')
-	let $1 = $0
+  let $1 = $0
 endif
 endsnippet
 
@@ -163,25 +180,25 @@ endsnippet
 
 snippet a "Array" w
 [
-	\ ${VISUAL}$0
+  \ ${VISUAL}$0
 \ ],
 endsnippet
 
 snippet na "Named array" w
 '${1:key}': [
-	\ ${VISUAL}$0
+  \ ${VISUAL}$0
 \ ],
 endsnippet
 
 snippet o "Object" w
 {
-	\ ${VISUAL}$0
+  \ ${VISUAL}$0
 \ },
 endsnippet
 
 snippet no "Named object" w
 '${1:key}': {
-	\ ${VISUAL}$0
+  \ ${VISUAL}$0
 \ },
 endsnippet
 
@@ -207,19 +224,19 @@ endsnippet
 
 snippet xx "here"
 call INFO('### HERE`!v
-	line('.')
-	` `!v
-	expand('%:t') . ':' . line('.')
-	` ' . strftime("%F %T"))
+  line('.')
+  ` `!v
+  expand('%:t') . ':' . line('.')
+  ` ' . strftime("%F %T"))
 endsnippet
 
 snippet xxx "here"
 call INFO('### HERE`!v
-	line('.')
-	` `!v
-	expand('%:t') . ':' . line('.')
+  line('.')
+  ` `!v
+  expand('%:t') . ':' . line('.')
 (`!v strftime("%F")`)
-	`')
+  `')
 endsnippet
 
 snippet fileexists "check if a file exists" b
@@ -280,8 +297,9 @@ snippet "(.*)finish" "finish" r
 finish " #######################################################################
 endsnippet
 
+# getcurpos() is Neovim only
 snippet getcurpos "getcurpos" b
-let [bufnum, lnum, col, off, curswant] = getcurpos()
+let [bufnum, lnum, col, off] = getpos('.')
 endsnippet
 
 snippet substr "substr" w
@@ -310,12 +328,24 @@ if neobundle#tap('vim-operator-user')
   function! neobundle#hooks.on_post_source(bundle) abort
     call operator#user#define('${1:name}', '${3:Op`!p snip.rv = toCamelCase(t[1])`$2}')
     function! $3(motion_wise) abort
-	    let v = operator#user#visual_command_from_wise_name(a:motion_wise)
-	    execute 'normal!' '\`[' . v . '\`]"xy'
+      let v = operator#user#visual_command_from_wise_name(a:motion_wise)
+      execute 'normal!' '\`[' . v . '\`]"xy'
       ${6:execute "echo '" . @x . "'"}$0
     endfunction
   endfunction
   call neobundle#untap()
 endif
 map <leader>${5:mapping} <Plug>(operator-$1)
+endsnippet
+
+snippet setl "set local" b
+let &l:$1 = $0
+endsnippet
+
+snippet set "set" b
+let &$1 = $0
+endsnippet
+
+snippet replace "replace" w
+substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
 endsnippet

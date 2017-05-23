@@ -1,12 +1,11 @@
-" Restore defaults UltiSnips overides these
-let &tabstop = 2
-let &softtabstop = &tabstop
-let &shiftwidth = &tabstop
-set shiftround
-set smarttab
-set expandtab
+" This also prevents the ftplugin from UltiSnips to run and mess with
+" expandtab
+if exists('b:did_ftplugin')
+    finish
+endif
+let b:did_ftplugin = 1
 
-augroup s:SyntaxFix
+augroup My_Snippets_augroup_SyntaxFix
   autocmd!
   autocmd Syntax snippets highlight snipLeadingSpaces NONE
 augroup END

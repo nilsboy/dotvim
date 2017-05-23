@@ -6,7 +6,7 @@ source bash-helpers
 
 out=`mktemp`
 
-INFO "Tempfile: $out"
+# INFO "Tempfile: $out"
 
 # # set -x
 # es-wrap-lines "$@" > $out

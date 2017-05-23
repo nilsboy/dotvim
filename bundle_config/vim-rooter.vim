@@ -1,7 +1,7 @@
 " Changes Vim working directory to project root
 NeoBundle 'airblade/vim-rooter'
 
-" To prevent vim-rooter from creating a mapping, do this:
+" No default mappings
 let g:rooter_disable_map = 1
 
 " Don't echo the project directory
@@ -16,22 +16,22 @@ let g:rooter_use_lcd = 1
 
 " let g:rooter_manual_only = 1
 
-" augroup augroup_vim-rooter
-"   autocmd!
-"   autocmd User RooterChDir execute 'setlocal path=' . getcwd()
-" augroup END
-
 " default version of vim-rooter:
-" augroup augroup_vim-rooter
+" augroup rooter
 "   autocmd!
 "   autocmd VimEnter,BufEnter * :Rooter
 " augroup END
 
+" augroup my_rooter
+"   autocmd!
+"   autocmd VimEnter,BufEnter * :call MyVimRooter_chdir()
+" augroup END
+
 " function! MyVimRooter_chdir() abort
-"   let dir = expand('%:h')
-"   call INFO('dir:', dir)
-"   if dir =~ "notes/"
+"   let dir = expand('%:p:h')
+"   if dir =~ "/tmp"
 "     return
 "   endif
+"   call INFO('rooting to ' . dir)
 "   Rooter
 " endfunction

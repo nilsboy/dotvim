@@ -573,12 +573,12 @@ function! helpers#touch(path) abort
     endif
 endfunction
 
-command! -nargs=* Help call Help(<f-args>)
-function! Help(...) abort
-  execute "help " a:1
-  silent only
-  set buflisted
-endfunction
+" command! -nargs=* Help call Help(<f-args>)
+" function! Help(...) abort
+"   execute "help " a:1
+"   silent only
+"   set buflisted
+" endfunction
 
 if $DEBUG
   silent execute '!echo "==========" > /tmp/vim.log'
@@ -683,6 +683,7 @@ endfunction
 " Only in visual mode...
 " vmap  q :call Uniq()<CR>
 " vmap Q :call Uniq('ignore whitespace')<CR>
+" TODO: save and restore makeprg and errorformat
 
 function! MyRun(...) abort
   let command = ''
@@ -694,8 +695,13 @@ function! MyRun(...) abort
   endif
   let g:last_command = command
   silent wall
-  set errorformat=%m
-  execute 'NeomakeSh! ' . command
+  setlocal errorformat=%m
+  " execute 'NeomakeSh! ' . command
+  let &l:makeprg = command . ' 2>&1'
+  call INFO('command:', command)
+  Neomake!
+  " needs to wait - otherwise copen does not work
+  sleep 600m
   copen
 endfunction
 

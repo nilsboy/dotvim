@@ -1,6 +1,9 @@
 " tbone.vim: tmux basics
 NeoBundle 'tpope/vim-tbone'
 
+" Note: Similar plugins:
+" Note: https://github.com/idanarye/vim-terminalogy
+
 " Note: can only send via range not via motion
 
 " Note: To send one line plus additional enter to pane 3:

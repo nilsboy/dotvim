@@ -3,6 +3,9 @@
 " TODO: checkout husky:
 " (see https://github.com/prettier/prettier)
 " TODO: checkout formatter: https://www.npmjs.com/package/prettier-in-html
+" TODO: errorformat
+
+let &l:makeprg = 'node %'
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <leader>li yi`:execute ':terminal npm install --save '

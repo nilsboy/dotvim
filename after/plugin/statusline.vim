@@ -1,8 +1,10 @@
 " Avoid 'hit enter prompt'
 set shortmess=atTIW
 
-" don't give ins-completion-menu messages.
-set shortmess+=c
+if IsNeoVim()
+  " don't give ins-completion-menu messages.
+  set shortmess+=c
+endif
 
 " Increase ruler height
 " set cmdheight=2

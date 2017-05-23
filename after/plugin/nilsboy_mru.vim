@@ -50,7 +50,7 @@ endfunction
 
 nnoremap <silent> <leader>rr :call 
       \ nilsboy_mru#list_files(nilsboy_mru#mru_files_written())<cr>
-nnoremap <silent> <leader>rR :silent! execute 'silent! edit ' . 
+nnoremap <silent> <leader>re :silent! execute 'silent! edit ' . 
       \ nilsboy_mru#mru_files_written()<cr>
 
 nnoremap <silent> <leader>ro :call 

@@ -369,12 +369,10 @@ nnoremap <nowait>gb :ls<cr>:buffer<space>
 
 nnoremap <silent><leader>if :!firefox
       \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
+vnoremap <silent><leader>if y:execute '!firefox '
+      \ . 'https://duckduckgo.com/?q=' . @"<cr>
 nnoremap <silent><leader>is :execute
       \ ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
-
-" Run current buffer
-nnoremap <silent><leader>ee :call MyRun()<cr>
-nnoremap <silent><leader>eE :call MyRun(expand('%'))<cr>
 
 " Run current line in the shell
 nnoremap <silent><leader>el :RunCursorLine<cr>
@@ -402,6 +400,10 @@ nnoremap <leader>A q:i<esc>kA
 
 augroup FixWindowSizeDependentStuff
     autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
+    autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
+    autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
+    autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
+    autocmd VimEnter,VimResized * :execute 'nnoremap rk ' . (&lines / 2 - 3) . 'k'
 augroup END
 
 augroup augroup_CmdWinEnter
@@ -456,11 +458,15 @@ nnoremap <leader>// q/k
 vnoremap <leader>// q/k
 
 nnoremap <leader>/c /\v^\s*[/"#]+<cr>
-nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
+" nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
+nnoremap <leader>/b /^.*{.*$<cr>
 nnoremap <leader>/i /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
+
+nnoremap <leader>vt :execute ':edit ' 
+      \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>

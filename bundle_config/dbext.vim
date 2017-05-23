@@ -1,4 +1,5 @@
 " Provides database access to many dbms
+" Note: Does not work in neovim because it needs if_perl
 " :h dbext
 " :h sql
 "
@@ -12,10 +13,30 @@
 " Notes:
 " - include other sql files with the 'read ' statement
 "
-" TODO 
+" TODO
 " :h dbext-integration
 " take a look at the OMNI SQLComplete plugin
 "
+" TODO: allow to run sql snippets from markdown files
+" TODO: checkout SQLUtilities plugin
+" (https://github.com/vim-scripts/SQLUtilities)
+" TODO: for table formatting checkout https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/
+" TODO: use special mapping for altering commands
+" TODO: alert when more rows are found than requested
+" TODO: fix encoding
+" TODO: add submode for navigating screenwise in result
+" TODO: keep header visible - using scrollbind?
+" TODO: default limit
+" TODO: sql formatter
+" TODO: completion
+" TODO: interruptable queries
+" TODO: prepend table name in result if field is not a uniquely named result field
+" TODO: allow to kill a query
+" TODO: shorten long field values
+" TODO: csv output
+" TODO: persistent connection / display of running queries / killing of
+" queries
+
 " To control the size of the Result window
 let g:dbext_default_buffer_lines = 20
 
@@ -50,7 +71,7 @@ let g:dbext_default_use_sep_result_buffer = 1
 
 " DBI limit
 " Needs reload of sql file
-let g:dbext_default_DBI_max_rows = 300
+let g:dbext_default_DBI_max_rows = 1000
 " Set DBI limit of current buffer - 0 disables it
 " :DBSetOption DBI_max_rows=0
 
@@ -69,50 +90,46 @@ let g:dbext_default_usermaps = 0
 " TODO: deactivate sql complete
 " :h omni-complete
 
-let g:dbext#resultBufferId = 0
+let g:my_dbext_result_count = 0
 
-function! DbExtBefore(bufferDescription) abort
+nnoremap <leader>d <nop>
 
-  " Prevent error last window can not be closed
-  " function! dbext#DB_windowClose(buf_name)
-  " endfunction
+nnoremap <leader>dv  :DBListConnections<cr>
+nnoremap <leader>de  :call My_Dbext_run('DBExecSQLUnderCursor', '')<cr>
 
-  let g:dbext#currentProfile = DB_listOption('profile')
-  let g:dbext#sourceBufferName = expand('%:t')
-  let g:dbext#bufferDescription = a:bufferDescription
+nnoremap <leader>dtl :call My_Dbext_run('DBListTable ""', 'tables')<cr>
+nnoremap <leader>dtt yaw:call My_Dbext_run('call DBExecSqlLimit("' . @" . '")', @")<cr>
+nnoremap <leader>dtd :call My_Dbext_run('DBDescribeTable', 'desc')<cr>
+nnoremap <leader>dtc yiw:call My_Dbext_run(
+      \ 'call My_Dbext_TableCount("' . @" . '")', @" . '_count')<cr>
 
-  let b:dbext_winview = winsaveview()
-
-  lcd! /tmp
+function! My_Dbext_run(command, name) abort
+  execute a:command
+  call My_Dbext_after(a:name)
 endfunction
 
-augroup Dbext_CursorPosition
-  autocmd!
-  autocmd BufEnter * if(exists('b:dbext_winview')) | call winrestview(b:dbext_winview) | unlet b:dbext_winview | endif
-augroup END
-
-" Configure result buffer
+" Callback called by dbext
 function! DBextPostResult(db_type, buf_nr) abort
+  " memorize new buffer nr
+  let g:my_dbext_new_buffer_nr = a:buf_nr
+endfunction
 
-  let g:dbext#resultBufferId = g:dbext#resultBufferId + 1
-
+" Move result file to /tmp set filetype
+function! My_Dbext_after(name) abort
+  let name = a:name
+  let g:my_dbext_result_count = g:my_dbext_result_count + 1
+  if name == ''
+    let name = expand('%:t') . '.' . g:my_dbext_result_count
+  endif
+  let name = '/tmp/' . name . '.sqlresult'
+  execute 'buffer ' . g:my_dbext_new_buffer_nr
+  " TODO: test if vim-rooter works with write
+  " needed otherwise the file might not exist jet!?!
+  write
+  execute ':Move! ' . fnameescape(name)
   " Needed to avoid remaps of dd etc by dbext
   mapclear <buffer>
-
-  if g:dbext#bufferDescription == ''
-    let g:dbext#bufferDescription = 'result.' . g:dbext#resultBufferId
-  endif
-
-  let l:file='/tmp/' . g:dbext#sourceBufferName . '.' . g:dbext#bufferDescription
-  silent! execute '!rm ' l:file '&>/dev/null'
-
-  " Move  file
-  silent! execute 'file!' l:file
-
-  set ft=dbext-result
-
-  " Slows down large datasets
-  " setlocal syntax=txt
+  let b:my_sqlresult_first_load = 1
 
   only
   redraw!
@@ -120,41 +137,27 @@ function! DBextPostResult(db_type, buf_nr) abort
   " Does not work
   " execute 'DBSetOption profile=' . g:dbext#currentProfile
 
-  lcd! -
-
   " Remove connection info
   normal! ggdd
-
-  " Move connection info to the bottom
-  " normal! ggddG
-  " put='#'
-  " normal! pkJgg
-
   " Duplicate separator line at bottom
   normal! 2ggyyGkp
-
-  normal! gg
-
+  " does not work cursor is set by dbext after this
+  normal! gggm2j
 endfunction
 
-nnoremap <leader>de  :call DbExtBefore('') \| :DBExecSQLUnderCursor<cr>
-nnoremap <leader>dtl :call DbExtBefore('tables') \| :DBListTable ""<cr><c-w>
-nnoremap <leader>dtt  :call DBExecSqlLimit()<cr>
-nnoremap <leader>dtd :call DbExtBefore('desc') \| :DBDescribeTable<CR>
-nnoremap <leader>dv  :DBListConnections<cr>
-
 " DBSelectFromTable does not seem to honour the limit
-function! DBExecSqlLimit() abort
-    let l:table = expand("<cword>")
-    call DbExtBefore(l:table) 
-    execute ":DBExecSQL SELECT * FROM " l:table " ORDER BY 1 DESC LIMIT 100"
-    normal! gg
+function! DBExecSqlLimit(table) abort
+  execute ":DBExecSQL SELECT * FROM " a:table " ORDER BY 1 DESC LIMIT 1000"
+endfunction
+
+function! My_Dbext_TableCount(table) abort
+  execute ":DBExecSQL SELECT COUNT(*) FROM " . a:table
 endfunction
 
 if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
 endif
-nnoremap <silent> <leader>dp :execute 
+nnoremap <silent> <leader>dp :execute
       \ "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
       \ \| setlocal filetype=dbext-profile<cr>
 
@@ -168,7 +171,7 @@ nnoremap <silent> <leader>dp :execute
 " necessary to clear the plugins cache.  The default map for this is: >
 "     imap <buffer> <C-C>R <C-\><C-O>:call sqlcomplete#Map('ResetCache')<CR><C-X><C-O>
 
-finish
+finish " #######################################################################
 
 " dbext Default mappings
 " n  ,sE           <Plug>DBExecSQLUnderTopXCursor

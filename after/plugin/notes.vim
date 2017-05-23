@@ -1,4 +1,5 @@
 " Handle notes from vim
+" TODO: checkout vimwiki - it works with markdown files too
 
 let g:notes_dir = "~/stuff/notes/"
 let g:notes_last_note = ''
@@ -8,6 +9,8 @@ nnoremap <silent> <leader>nS :execute 'edit ' . notes#newFileName()<cr>
 
 nnoremap <silent> <leader>nh :execute 'edit ' . g:notes_dir . "Home.txt"<cr>
 nnoremap <silent> <leader>nt :execute 'edit ' . g:notes_dir . "todo.txt"<cr>
+
+vnoremap <silent> <leader>nv y:execute 'edit ' . g:notes_dir . fnameescape(@") . '.txt'<cr>
 
 nnoremap <silent> <leader>ne :execute "edit " 
       \ . g:notes_dir . fnameescape(input('Topic: ')) . ".txt"<cr>

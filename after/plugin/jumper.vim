@@ -312,6 +312,6 @@ nnoremap <silent> <cr> :call jumper#jump(1, 'change')<cr>
 " inoremap <silent> <c-u> <esc>:call jumper#jump(-1, 'change')<cr>
 " inoremap <silent> <c-o> <esc>:call jumper#jump(1, 'change')<cr>
 
-nnoremap <silent> H :call jumper#jump(-1, 'file')<cr>
-nnoremap <silent> L :call jumper#jump(1, 'file')<cr>
+" nnoremap <silent> H :call jumper#jump(-1, 'file')<cr>
+" nnoremap <silent> L :call jumper#jump(1, 'file')<cr>
 

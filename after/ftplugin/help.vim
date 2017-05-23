@@ -3,7 +3,7 @@
 setlocal buflisted
 only
 
-setlocal keywordprg=:Help
+setlocal keywordprg=:help
 
 augroup augroup_help
   autocmd!
