@@ -18,17 +18,17 @@ let g:neomake_open_list = 0
 let g:neomake_highlight_columns = 1
 " let g:neomake_highlight_lines = 1
 
-augroup My_neomake_config_augroup_onNeomakeFinished
+augroup MyNeomakeConfigAugroupOnNeomakeFinished
   autocmd!
-  autocmd User NeomakeFinished call My_neomake_config_onNeomakeFinished()
+  autocmd User NeomakeFinished call MyNeomakeConfigOnNeomakeFinished()
 augroup END
 
-function! My_neomake_config_onNeomakeFinished() abort
+function! MyNeomakeConfigOnNeomakeFinished() abort
   if g:neomake_hook_context.jobinfo.file_mode == 1
-    call My_quickfix_setNavigationType('locationlist')
+    call MyQuickfixSetNavigationType('locationlist')
     lopen
   else
-    call My_quickfix_setNavigationType('quickfix')
+    call MyQuickfixSetNavigationType('quickfix')
     copen
   endif
 endfunction
@@ -39,8 +39,8 @@ nnoremap <silent><leader>ef :Neomake format<cr>
 
 nnoremap <silent><leader>ed :edit /tmp/neomake.log <cr>
 
-nnoremap <silent><leader>eh :Verbose call My_neomake_config_make_infos()<cr>
-function! My_neomake_config_make_infos() abort
+nnoremap <silent><leader>eh :Verbose call MyNeomakeConfigInfos()<cr>
+function! MyNeomakeConfigInfos() abort
   echo '&makeprg: ' . &makeprg
   echo '&errorformat: ' . &errorformat
   echo 'g:neomake_' . &filetype . '_run_maker: '

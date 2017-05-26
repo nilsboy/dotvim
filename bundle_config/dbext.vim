@@ -36,6 +36,8 @@
 " TODO: csv output
 " TODO: persistent connection / display of running queries / killing of
 " queries
+" TODO: How to work with columns of text : vim
+" (https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/)
 
 " To control the size of the Result window
 let g:dbext_default_buffer_lines = 20

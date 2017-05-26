@@ -1,6 +1,6 @@
 " See twice as much of the same file using a horizontal split
 " https://www.reddit.com/r/vim/comments/4a4b1j/vim_porn_2_post_your_vim_screenshots/d0xam5d?st=itfuckf9&sh=ab73b30b
-function! s:scroll()
+function! MyScroll()
     let l:save = &scrolloff
 
     set scrolloff=0 noscrollbind nowrap nofoldenable
@@ -16,4 +16,4 @@ function! s:scroll()
 
     let &scrolloff = l:save
 endfun
-command! Scroll call s:scroll()
+command! Scroll call MyScroll()

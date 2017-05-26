@@ -1,8 +1,11 @@
 global !p
+
 def toCamelCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
   v = re.sub(r'[\.\/]*', r'', v)
-  return re.sub(r'(\W)', r'', v.title())
+  v = v.title()
+  v = re.sub(r'[\W\-_]*', '', v)
+  return v
 
 def toMethodCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
@@ -10,13 +13,31 @@ def toMethodCase(v):
   return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
 
 def toSnakeCase(v):
-  v = toCamelCase(v)
-  v = re.sub(r'\W', r'_\1', v).lower()
-  return v
+  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', v)
+  return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
-def ucfirst(s):
-    return s[0].upper() + s[1:]
+def ucfirst(v):
+  return v[0].upper() + v[1:]
+
+# clean file name to produce a name for vim var usage
+def cfname(v):
+  v = re.sub(r'\W', r'_', v).lower()
+  v = re.sub(r'^my_', '', v)
+  v = re.sub(r'vim_', '', v)
+  v = re.sub(r'_vim', '', v)
+  return 'My_' + v
+
+def fncc(v):
+  return toCamelCase(cfname(v))
+
 endglobal
+
+snippet command "command" b
+command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`$2} call $1 (<f-args>)
+function! $1(...) abort
+  $0
+endfunction
+endsnippet
 
 snippet deinrc "Boilerplaite vimrc" b
 set nocompatible
@@ -52,22 +73,15 @@ $0
 endsnippet
 
 snippet n "name something" w
-`!p snip.rv = ucfirst(snip.basename)`_$0
+`!p snip.rv = fncc(snip.basename)`$0
 endsnippet
 
-snippet augroup "augroup" b
-augroup `!p snip.rv = ucfirst(snip.basename)`_augroup_$0
-endsnippet
-
-# let g:my_${1:`!p snip.rv = toSnakeCase(snip.basename)`}_${2:name} = $0
 snippet g "global variable name" w
-g:`!p snip.rv = ucfirst(snip.basename)`_${VISUAL}$0
+g:`!p snip.rv = fncc(snip.basename)`${VISUAL}$0
 endsnippet
 
-# a function name that works for configs of plugins - some of them have a
-# dash which s not allowed for a function name
 snippet fun "Function" b
-function! `!p snip.rv = ucfirst(snip.basename)`_${1:name}($2) abort
+function! `!p snip.rv = fncc(snip.basename)`${1:name}($2) abort
   $0
 endfunction
 endsnippet
@@ -108,13 +122,6 @@ if neobundle#tap('${1:`!v expand('%:t:r')`}')
 endif
 endsnippet
 
-snippet command "command" b
-command! -nargs=* ${1:name} call $1(<f-args>)
-function! $1(...) abort
-  $0
-endfunction
-endsnippet
-
 snippet ifneo "if is neovim" b
 if IsNeoVim()
   ${VISUAL}$0
@@ -122,11 +129,16 @@ endif
 endsnippet
 
 snippet autocmd "autocmd" b
-augroup augroup_${3:My}${1:`!p snip.rv = toCamelCase(snip.basename)`}_${2:name}
+augroup `!p snip.rv = fncc(snip.basename)`Augroup$1
   autocmd!
   autocmd $0
 augroup END
 endsnippet
+
+snippet augroup "augroup" b
+augroup `!p snip.rv = fncc(snip.basename)`Augroup$0
+endsnippet
+
 
 snippet c "concat" w
 '$1:', $1$0

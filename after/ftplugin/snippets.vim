@@ -1,9 +1,10 @@
-" This also prevents the ftplugin from UltiSnips to run and mess with
-" expandtab
+" This also prevents the ftplugin from UltiSnips to run and mess with expandtab
 if exists('b:did_ftplugin')
     finish
 endif
 let b:did_ftplugin = 1
+
+let &l:commentstring = '# %s'
 
 augroup My_Snippets_augroup_SyntaxFix
   autocmd!

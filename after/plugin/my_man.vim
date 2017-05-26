@@ -44,5 +44,4 @@ function! Man(cmd) abort
     " keywordprg only works for external apps
     nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>
 endfunction
-
 command! -nargs=1 Man call Man("<args>")

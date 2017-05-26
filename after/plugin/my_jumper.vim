@@ -1,27 +1,24 @@
 " - only jump to changes if they are far enough away from each other
 " - save one entry for files opened but not edited
 
-" " TODO: : There are a lot more signs than marks - use them?
-" TODO: 
-" TODO: todo
+" TODO: There are a lot more signs than marks - use them?
 
-let s:jumper_dir = $XDG_DATA_HOME . '/jumper'
-let s:jumps_file = s:jumper_dir . '/jumps'
+let g:MyJumperDir = $XDG_DATA_HOME . '/jumper'
+let g:MyJumperFile = g:MyJumperDir . '/jumps'
 
-call helpers#touch(s:jumps_file)
+call helpers#touch(g:MyJumperFile)
 
-augroup augroup_jumper
+augroup MyJumperAugroup
   autocmd!
-  autocmd BufEnter * :call jumper#loadBufferMarks()
-  autocmd BufEnter * :call jumper#add('read')
-  autocmd CursorHold * :call jumper#add('read')
-  autocmd InsertLeave * :call jumper#add('write')
+  autocmd BufEnter * :call MyJumperLoadBufferMarks()
+  autocmd BufEnter * :call MyJumperAdd('read')
+  autocmd CursorHold * :call MyJumperAdd('read')
+  autocmd InsertLeave * :call MyJumperAdd('write')
   " For debugging
-  autocmd CursorHold * :if $DEBUG | call jumper#list() | endif
+  autocmd CursorHold * :if $DEBUG | call MyJumperList() | endif
 augroup END
 
-function! jumper#loadBufferMarks() abort
-
+function! MyJumperLoadBufferMarks() abort
   if ! exists('b:jumper_marks_loaded')
     let b:jumper_marks_loaded = 0
   endif
@@ -31,9 +28,9 @@ function! jumper#loadBufferMarks() abort
   "   return
   " endif
 
-  :delmarks!
+  delmarks!
 
-  let new = jumper#getcurpos()
+  let new = MyJumperGetcurpos()
 
   for old in g:jumper_positions
     if old.filename != new.filename
@@ -46,20 +43,20 @@ function! jumper#loadBufferMarks() abort
   
 endfunction
 
-let s:MARKS = 'abcdefghijklmnopqrstuvwxyz'
+let g:MyJumperMarks = 'abcdefghijklmnopqrstuvwxyz'
 
 if ! exists('g:jumper_positions')
   let g:jumper_positions = []
 endif
-let s:curposindex = 0
+let g:MyJumperCurposIndex = 0
 
-function! jumper#add(action) abort
+function! MyJumperAdd(action) abort
 
   if BufferIsSpecial()
     return
   endif
 
-  let new = jumper#getcurpos()
+  let new = MyJumperGetcurpos()
   let new.action = a:action
 
   call DEBUG('================== add\n'
@@ -102,31 +99,31 @@ function! jumper#add(action) abort
 
   let g:jumper_positions = new_positions
 
-  let new_mark = jumper#findFreeMark()
+  let new_mark = MyJumperFindFreeMark()
   call setpos("'" . new_mark, getpos("'^"))
   let new.mark = new_mark
 
-  let new.text = 'index: ' . s:curposindex
+  let new.text = 'index: ' . g:MyJumperCurposIndex
         \ . ' mark: ' . new.mark
         \ . ' action: ' . new.action
         \ . ' at: ' .  strftime("%H:%M:%S")
 
   call add(g:jumper_positions, new)
-  let s:curposindex = len(g:jumper_positions) - 1
+  let g:MyJumperCurposIndex = len(g:jumper_positions) - 1
 endfunction
 
-function! jumper#findFreeMark() abort
-  for mark_index in range(0, len(s:MARKS) - 1)
-    let mark = s:MARKS[mark_index]
+function! MyJumperFindFreeMark() abort
+  for mark_index in range(0, len(g:MyJumperMarks) - 1)
+    let mark = g:MyJumperMarks[mark_index]
     let mark_pos = getpos("'". mark)
     if mark_pos == [0, 0, 0, 0]
       return mark
     endif
   endfor
-  return jumper#freeAMark()
+  return MyJumperFreeAMark()
 endfunction
 
-function! jumper#freeAMark() abort
+function! MyJumperFreeAMark() abort
   let filename = expand('%:p')
   let index_to_remove = -1
   let pos_to_remove = {}
@@ -146,19 +143,19 @@ function! jumper#freeAMark() abort
   throw 'Should not happen: No free mark found'
 endfunction
 
-function! jumper#store() abort
+function! MyJumperStore() abort
   let lines = []
   for pos in g:jumper_positions
     call add(lines, pos.filename . ':' . pos.lnum . ':' . pos.col)
   endfor
-  call writefile(lines, s:jumps_file)
+  call writefile(lines, g:MyJumperFile)
 endfunction
 
-function! jumper#file() abort
-    return s:jumps_file
+function! MyJumperFile() abort
+    return g:MyJumperFile
 endfunction
 
-function! jumper#list() abort
+function! MyJumperList() abort
 
   " Does not create a new list:
   " call setqflist(g:jumper_positions, 'r', {'title': 'Jumper list '})
@@ -168,18 +165,18 @@ function! jumper#list() abort
   copen
 
   " For debugging
-  if s:curposindex == 0
+  if g:MyJumperCurposIndex == 0
     normal! gg
   else
-    execute "normal! " . s:curposindex . "j"
-    " execute s:curposindex . 'cc!'
+    execute "normal! " . g:MyJumperCurposIndex . "j"
+    " execute g:MyJumperCurposIndex . 'cc!'
   endif
 
   wincmd w
 
 endfunction
 
-function! jumper#jump(direction, movement_type) abort
+function! MyJumperJump(direction, movement_type) abort
   let direction = a:direction
 
   if len(g:jumper_positions) == 0
@@ -189,16 +186,16 @@ function! jumper#jump(direction, movement_type) abort
 
   let movement_type = a:movement_type
   let max_index = len(g:jumper_positions) - 1
-  let curpos = jumper#getcurpos()
+  let curpos = MyJumperGetcurpos()
 
-  let pos = g:jumper_positions[s:curposindex]
-  if ! jumper#isSameLine(curpos, pos)
-    if jumper#jumpTo(pos)
+  let pos = g:jumper_positions[g:MyJumperCurposIndex]
+  if ! MyJumperIsSameLine(curpos, pos)
+    if MyJumperJumpTo(pos)
       return
     endif
   endif
 
-  let pos_index = s:curposindex
+  let pos_index = g:MyJumperCurposIndex
 
   let candidates = []
 
@@ -239,18 +236,18 @@ function! jumper#jump(direction, movement_type) abort
 
   let new_pos = candidates[0]
   
-  let result = jumper#jumpTo(new_pos)
+  let result = MyJumperJumpTo(new_pos)
   if ! result
     call INFO('Mark does not exist anymore')
     return
   endif
 
-  let s:curposindex = new_pos.index
+  let g:MyJumperCurposIndex = new_pos.index
 endfunction
 
-function! jumper#jumpTo(pos) abort
+function! MyJumperJumpTo(pos) abort
   let pos = a:pos
-  let curpos = jumper#getcurpos()
+  let curpos = MyJumperGetcurpos()
 
   let bufnum = bufnr(pos.filename)
   if bufnum != -1
@@ -275,7 +272,7 @@ function! jumper#jumpTo(pos) abort
   return 1
 endfunction
 
-function! jumper#isSameLine(pos1, pos2) abort
+function! MyJumperIsSameLine(pos1, pos2) abort
   let pos1 = a:pos1
   let pos2 = a:pos2
   if pos1.filename != pos2.filename
@@ -287,7 +284,7 @@ function! jumper#isSameLine(pos1, pos2) abort
   return 1
 endfunction
 
-function! jumper#getcurpos() abort
+function! MyJumperGetcurpos() abort
   let pos = {}
   let [bufnum2, lnum, col, off] = getpos(".")
   let pos.lnum = lnum
@@ -299,19 +296,19 @@ function! jumper#getcurpos() abort
 endfunction
 
 nnoremap <silent> r <nop>
-nnoremap <silent> ra :call jumper#add()<cr>
-nnoremap <silent> rr :call jumper#list() \| :wincmd w<cr>
-nnoremap <silent> re :execute 'silent edit ' . jumper#file()<cr>
+nnoremap <silent> ra :call MyJumperAdd()<cr>
+nnoremap <silent> rr :call MyJumperList() \| :wincmd w<cr>
+nnoremap <silent> re :execute 'silent edit ' . MyJumperFile()<cr>
 
-nnoremap <silent> rn :call jumper#jump(1)<cr>
-nnoremap <silent> rp :call jumper#jump(-1)<cr>
+nnoremap <silent> rn :call MyJumperJump(1)<cr>
+nnoremap <silent> rp :call MyJumperJump(-1)<cr>
 
-nnoremap <silent> <bs> :call jumper#jump(-1, 'change')<cr>
-nnoremap <silent> <cr> :call jumper#jump(1, 'change')<cr>
+nnoremap <silent> <bs> :call MyJumperJump(-1, 'change')<cr>
+nnoremap <silent> <cr> :call MyJumperJump(1, 'change')<cr>
 
-" inoremap <silent> <c-u> <esc>:call jumper#jump(-1, 'change')<cr>
-" inoremap <silent> <c-o> <esc>:call jumper#jump(1, 'change')<cr>
+" inoremap <silent> <c-u> <esc>:call MyJumperJump(-1, 'change')<cr>
+" inoremap <silent> <c-o> <esc>:call MyJumperJump(1, 'change')<cr>
 
-" nnoremap <silent> H :call jumper#jump(-1, 'file')<cr>
-" nnoremap <silent> L :call jumper#jump(1, 'file')<cr>
+" nnoremap <silent> H :call MyJumperJump(-1, 'file')<cr>
+" nnoremap <silent> L :call MyJumperJump(1, 'file')<cr>
 

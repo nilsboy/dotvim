@@ -1,6 +1,6 @@
 " Shrink and unshrink part of a buffer to edit fenced code with a different
 " filetype.
-function! shrink#shrink(options) abort
+function! MyShrinkShrink(options) abort
   if exists("b:shrink_before")
     call INFO('Already shrunk - please unshrink first.')
     return
@@ -40,15 +40,14 @@ function! shrink#shrink(options) abort
 
   setlocal filetype=
   execute 'setlocal filetype=' . b:shrink_options.filetype
-  nnoremap <buffer><silent> <esc> :silent call shrink#restore()<cr>
+  nnoremap <buffer><silent> <esc> :silent call MyShrinkRestore()<cr>
 
   if exists("b:shrink_options.afterShrink")
     call b:shrink_options.afterShrink()
   endif
 endfunction
 
-function! shrink#restore() abort
-
+function! MyShrinkRestore() abort
   let l:indent = repeat(' ', b:shrink_indent)
   execute '%s/^/' . l:indent . '/'
 

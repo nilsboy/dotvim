@@ -10,7 +10,7 @@ set background=light
 " highlight the whole file not just the window - slower but more accurate.
 autocmd BufEnter * :syntax sync fromstart
 
-function! ColorschemeCleanup()
+function! MyColorsColorschemeCleanup()
     highlight Normal ctermbg=NONE
     highlight SignColumn ctermbg=254
 
@@ -23,9 +23,10 @@ function! ColorschemeCleanup()
     highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
     highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 endfunction
-augroup s:ColorScheme
+
+augroup MyColorsAugroupColorschemeCleanup
   autocmd!
-  autocmd ColorScheme * call ColorschemeCleanup()
+  autocmd ColorScheme * call MyColorsColorschemeCleanup()
 augroup END
 
 try
@@ -47,16 +48,22 @@ endif
 " autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 " autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
  
-command! ColorsListCurrentHiGroups :so $VIMRUNTIME/syntax/hitest.vim
+command! MyColorsShowCurrentColors :so $VIMRUNTIME/syntax/hitest.vim
 
-" Show syntax groups
-nnoremap <leader>gh :echo map(synstack(line('.'), col('.')), 
-      \ 'synIDattr(v:val, "name")')<cr>
+command! -nargs=* MyColorsSyntaxGroups 
+      \ call MyColorsSyntaxGroups (<f-args>)
 
-"### Cursor
+function! MyColorsSyntaxGroups(...) abort
+  echo map(synstack(line('.'), col('.')), 
+    \ 'synIDattr(v:val, "name")')
+endfunction
+nnoremap <leader>gh :call MyColorsSyntaxGroups()<cr>
 
-autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-autocmd InsertEnter * setlocal nocursorline
+augroup MyColorsAugroupCursorline
+  autocmd!
+  autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
+  autocmd InsertEnter * setlocal nocursorline
+augroup END
 
 " Disable all blinking
 set guicursor+=a:blinkon0
@@ -72,7 +79,7 @@ highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
 " Show when lines extend past column 80
 " highlight ColorColumn ctermfg=208 ctermbg=Black
 
-" function! MarkMargin (on)
+" function! MyColorsMarkMargin (on)
 "     if exists('b:MarkMargin')
 "         try
 "             call matchdelete(b:MarkMargin)
@@ -85,8 +92,8 @@ highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
 "     endif
 " endfunction
 
-" augroup MarkMargin
+" augroup MyColorsMarkMargin
 "     autocmd!
-"     autocmd  BufEnter  *       :call MarkMargin(1)
-"     autocmd  BufEnter  *.vp*   :call MarkMargin(0)
+"     autocmd  BufEnter  *       :call MyColorsMarkMargin(1)
+"     autocmd  BufEnter  *.vp*   :call MyColorsMarkMargin(0)
 " augroup END

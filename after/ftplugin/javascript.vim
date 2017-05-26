@@ -30,6 +30,20 @@ let g:neomake_run_maker = {
     \ 'args': ['%:p'],
     \ 'errorformat': '%AError: %m,%AEvalError: %m,%ARangeError: %m,%AReferenceError: %m,%ASyntaxError: %m,%ATypeError: %m,%Z%*[\ ]at\ %f:%l:%c,%Z%*[\ ]%m (%f:%l:%c),%*[\ ]%m (%f:%l:%c),%*[\ ]at\ %f:%l:%c,%Z%p^,%A%f:%l,%C%m,%-G%.%#'
     \ }
+        " \ 'postprocess':
+        " function('My_ft_javascript_fixCoreFileLocationInQuickfix')
+
+function! My_ft_javascript_fixCoreFileLocationInQuickfix(entry) abort
+  let filename = bufname(i.bufnr)
+  " Non-existing file in the quickfix list, assume a core file
+  if filereadable(filename)
+    return
+  endif
+  " Load the node.js core file (thanks @izs for pointing this out!)
+  silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
+  " Delete the first line, always empty for some reason
+  execute ':1d'
+endfunction
 
 "### Linter
 

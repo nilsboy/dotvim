@@ -43,19 +43,23 @@ Sometimes it might even be nice for a user to be able to use a non-offical funct
 - vars can not include a # like functions - so not using this for functions ether
 - functions must not contain "-" and other characters - so using the script filename directly is not always possible
 - functions must start with a upper case letter - so using this for vars too
-- TODO: commands / autocmds?
+- commands must start with an uppercase letter. Rest can be uppercase letters, lowercase letters or digits.
+- TODO: autocmds?
 
 ### Result
 
-- prefix own files with my_ - this distinguishes own configs and vars from the plugins vars
+- prefix own files with my_ - this distinguishes own configs from the plugins vars
 - plugin config file names: my_{{plugin_name}}_config.vim
 - own plugin file names: my_{{plugin_name}}.vim
 - only one my_-prefix for own plugin configs
-- replace "-" in script names with "_" for vars etc
+- use "My"-prefix and camelcase for all identifiers
 
+#### Deprecated
+- replace "-" in script names with "_" for vars etc
 - function names: Scriptfile_name_functionName (= global)
 - var names: g:Scriptfile_name_varName (= global)
-
+- commands: My{{Scriptfile_name}}CommandName
+- forece my prefix in snippets even if file has none (jet)?
 - TODO: normalize plugin config file names to exclude vim and '-' etc?
 
 ## TODO

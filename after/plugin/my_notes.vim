@@ -1,41 +1,41 @@
 " Handle notes from vim
 " TODO: checkout vimwiki - it works with markdown files too
 
-let g:notes_dir = "~/stuff/notes/"
-let g:notes_last_note = ''
+let g:MyNotesDir = "~/stuff/notes/"
+let g:MyNotesLastNote = ''
 
-nnoremap <silent> <leader>ns :call notes#editLastNote()<cr>
-nnoremap <silent> <leader>nS :execute 'edit ' . notes#newFileName()<cr>
+nnoremap <silent> <leader>ns :call MyNotesEditLastNote()<cr>
+nnoremap <silent> <leader>nS :execute 'edit ' . MyNotesNewFileName()<cr>
 
-nnoremap <silent> <leader>nh :execute 'edit ' . g:notes_dir . "Home.txt"<cr>
-nnoremap <silent> <leader>nt :execute 'edit ' . g:notes_dir . "todo.txt"<cr>
+nnoremap <silent> <leader>nh :execute 'edit ' . g:MyNotesDir . "Home.txt"<cr>
+nnoremap <silent> <leader>nt :execute 'edit ' . g:MyNotesDir . "todo.txt"<cr>
 
-vnoremap <silent> <leader>nv y:execute 'edit ' . g:notes_dir . fnameescape(@") . '.txt'<cr>
+vnoremap <silent> <leader>nv y:execute 'edit ' . g:MyNotesDir . fnameescape(@") . '.txt'<cr>
 
 nnoremap <silent> <leader>ne :execute "edit " 
-      \ . g:notes_dir . fnameescape(input('Topic: ')) . ".txt"<cr>
+      \ . g:MyNotesDir . fnameescape(input('Topic: ')) . ".txt"<cr>
 
-nnoremap <silent> <leader>ni :call My_quickfix_search({
+nnoremap <silent> <leader>ni :call MyQuickfixSearch({
       \ 'term': input('Search: '),
-      \ 'path': g:notes_dir })<cr>
+      \ 'path': g:MyNotesDir })<cr>
 
-function! notes#editLastNote() abort
-  if g:notes_last_note == ''
-    let g:notes_last_note = notes#newFileName()
+function! MyNotesEditLastNote() abort
+  if g:MyNotesLastNote == ''
+    let g:MyNotesLastNote = MyNotesNewFileName()
   endif
-  execute 'edit ' . g:notes_last_note
+  execute 'edit ' . g:MyNotesLastNote
 endfunction
 
 " Hack until the old notes are converted from zim to markdown
-augroup augroup_notes
+augroup MyNotesAugroup
   autocmd!
   autocmd BufReadPost */notes/*.txt setlocal filetype=markdown
 augroup END
 
-function! notes#newFileName() abort
-  let g:notes_last_note = g:notes_dir . "/note_" 
+function! MyNotesNewFileName() abort
+  let g:MyNotesLastNote = g:MyNotesDir . "/note_" 
         \ . strftime("%Y%m%d_%H%M") . ".txt"
-  return g:notes_last_note
+  return g:MyNotesLastNote
 endfunction
 
 if neobundle#tap('vim-operator-user') 
@@ -44,7 +44,7 @@ if neobundle#tap('vim-operator-user')
     function! OpOpenNote(motion_wise) abort
 	    let v = operator#user#visual_command_from_wise_name(a:motion_wise)
 	    execute 'normal!' '`[' . v . '`]"xy'
-      execute "edit " . g:notes_dir . fnameescape(@x) . ".txt"
+      execute "edit " . g:MyNotesDir . fnameescape(@x) . ".txt"
     endfunction
   endfunction
   call neobundle#untap()
@@ -57,9 +57,9 @@ if neobundle#tap('vim-operator-user')
     function! OpNoteFind(motion_wise) abort
       let v = operator#user#visual_command_from_wise_name(a:motion_wise)
 	    execute 'normal!' '`[' . v . '`]"xy'
-      call My_quickfix_search({
+      call MyQuickfixSearch({
             \ 'term': @x,
-            \ 'path': g:notes_dir })
+            \ 'path': g:MyNotesDir })
     endfunction
   endfunction
   call neobundle#untap()

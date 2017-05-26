@@ -1,12 +1,13 @@
-finish
+finish " #######################################################################
 " When autocompleting within an identifier, prevent duplications
 " Note: gets in the way - often removes unwanted stuff
-augroup Undouble_Completions
+
+augroup MyUndoubleCompletions
     autocmd!
-    autocmd CompleteDone *  call Undouble_Completions()
+    autocmd CompleteDone *  call MyUndoubleCompletions()
 augroup None
 
-function! Undouble_Completions ()
+function! MyUndoubleCompletions()
     let col  = getpos('.')[2]
     let line = getline('.')
     call setline('.', 

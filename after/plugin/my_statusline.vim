@@ -26,7 +26,7 @@ set noshowmode
 
 " set statusline+=%#TabLineSel#
 let &statusline .= ' '
-set statusline+=%-39.40{Location()}
+set statusline+=%-39.40{MyStatuslineLocation()}
 " set statusline+=%#TabLine#
 
 set statusline+=%=
@@ -47,7 +47,7 @@ set statusline+=%{&ff=='unix'?'':&ff.'\ '}
 
 let &statusline .= ' | %3l,%-02c | %P '
 
-function! Location() abort
+function! MyStatuslineLocation() abort
 
     let l:fn = "/home/user/src/dotvim/vimrc"
     let l:fn = "/usr/share/vim/vim74/doc/change.txt"

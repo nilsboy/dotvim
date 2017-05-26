@@ -7,7 +7,7 @@ let &l:winheight = &lines / 3
 " TODO previewwindow
 " nmap <buffer><silent> p :pedit! <cfile><cr>
 
-if g:My_quickfix_mode == 'quickfix'
+if g:MyQuickfixMode == 'quickfix'
     nmap <buffer><silent> <tab> :cclose<cr>
     nmap <buffer><silent> L :silent! cnewer<cr>
     nmap <buffer><silent> H :silent! colder<cr>

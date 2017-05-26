@@ -184,16 +184,19 @@ set hidden
 " set previewheight=99
 
 " Highlight unknown filetypes as text
-autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
+augroup MyVimrcAugroupFallbackToTexthighlight
+  autocmd!
+  autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
+augroup END
 
 " Maximize help buffers
-augroup s:BufHelpOnly
+augroup MyVimrcAugroupMaximizeHelp
   autocmd!
   autocmd BufEnter * :if &buftype == 'help' | only | endif
 augroup END
 
 " List all buffers including help
-augroup s:Buflisted
+augroup MyVimrcAugroupListAllBuffers
   autocmd!
   autocmd BufEnter * :set buflisted
 augroup END
@@ -485,6 +488,7 @@ vnoremap <esc> <esc>``
 vnoremap y y``
 " TODO: clean up <leader>l namespace
 nnoremap <leader>lr :%s/<C-r><C-w>/
+nnoremap <leader>lR :%s/<C-r><C-w>/<c-r><c-w>
 nnoremap <silent><leader>gm :echom '=== Messages until ' . strftime("%H:%M:%S")
       \ . ' ======================='
       \ \| :silent Verbose messages<cr> \| :silent only \| :normal G <cr>

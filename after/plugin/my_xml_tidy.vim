@@ -1,5 +1,6 @@
-finish
-function! XMLTidy()
+finish " #######################################################################
+
+function! MyXmlTidy()
     let _view=winsaveview()
 
     %!tidy 

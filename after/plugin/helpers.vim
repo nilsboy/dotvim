@@ -600,7 +600,7 @@ endfunction
 
 function! DUMP(input) abort
   Verbose echo _DUMP(a:input)
-  only
+  silent! only
   normal ggdd
   setlocal filetype=json
   Neoformat

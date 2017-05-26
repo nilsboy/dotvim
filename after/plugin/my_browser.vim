@@ -5,7 +5,7 @@
 
 " nnoremap <leader>ii :silent !xdg-open <C-R>=escape("<C-R><C-F>", "#?&;\|%")<CR><CR>
 
-function! Browser() abort
+function! MyBrowser() abort
     let line = getline(".")
     let url = matchstr(line, "http[^ ]*")
     if url ==""
