@@ -3,8 +3,8 @@
 
 " npm install -g js-yaml
 
-nnoremap <buffer> <silent> <leader>gc :silent call YamlToJson()<cr>
-function! YamlToJson() abort
+nnoremap <buffer> <silent> <leader>gc :silent call MyYamlToJson()<cr>
+function! MyYamlToJson() abort
   silent wall
   silent !js-yaml % > %:r.json
   silent edit %:r.json

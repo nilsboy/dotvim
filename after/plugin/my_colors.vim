@@ -1,99 +1,97 @@
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 
-" Force 256 colors for terminals that call themselfs TERM=xterm
-" set t_Co=256
+" syntax has to be enabled before using it
+if &t_Co > 1
+    syntax enable
+endif
+
+" Show when lines extend past column 80
+" set colorcolumn=81
+" highlight ColorColumn ctermfg=red ctermbg=NONE
+
+" Disable all blinking
+" set guicursor+=a:blinkon0
 
 " Prefer light version of a colorscheme
 set background=light
 
-" highlight the whole file not just the window - slower but more accurate.
-autocmd BufEnter * :syntax sync fromstart
+set cursorline
 
-function! MyColorsColorschemeCleanup()
-    highlight Normal ctermbg=NONE
-    highlight SignColumn ctermbg=254
+function! MyColorsColorschemeCleanup() abort
+  highlight Normal ctermbg=NONE
+  highlight SignColumn ctermbg=254
 
-    highlight TabLine      ctermbg=249 ctermfg=240 cterm=NONE
-    highlight TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
-    highlight TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
+  highlight TabLine      ctermbg=249 ctermfg=240 cterm=NONE
+  highlight TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
+  highlight TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
 
-    highlight CursorLine   ctermbg=254 ctermfg=NONE
+  highlight CursorLine   ctermbg=254 ctermfg=NONE
 
-    highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
-    highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
+  highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
+  highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
+
+  " Make diffs less glaringly ugly...
+  highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
+  highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
+  highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
+  highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
+
+  highlight MyExtraWhitespace ctermbg=darkred
+  syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
+
+  " TODO: makes vim help look awful
+  " highlight MyTabstops ctermbg=darkred
+  " syntax match MyTabstops /\t/
+
+  highlight MyLongLines ctermfg=darkred
+  " TODO: messes with vimdoc
+  " execute 'syntax match MyLongLines /\%>' . &textwidth . 'v.\+/ containedin=ALL'
 endfunction
-
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!
-  autocmd ColorScheme * call MyColorsColorschemeCleanup()
+  autocmd ColorScheme,Syntax * call MyColorsColorschemeCleanup()
 augroup END
 
+" " Highlight all occurences of word under cursor
+" augroup MyColorsAugroupHighlightWordUnderCursor
+"   autocmd!
+"   autocmd CursorMoved,CursorMovedI * execute printf('match todo /\V\<%s\>/',
+"     \ escape(expand('<cword>'), '/\'))
+" augroup END
+
+    augroup MyColorsAugroupCursorline
+      autocmd!
+      autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
+      autocmd InsertEnter * setlocal nocursorline
+    augroup END
+
+" " highlight the whole file not just the window - slower but more accurate.
+" no augroup MyColorsAugroupHighlightWholeBuffer
+"   autocmd!
+"   autocmd BufEnter * :syntax sync fromstart
+" augroup END
+
+function! MyColorsShowSyntaxGroups(...) abort
+  echo map(synstack(line('.'), col('.')),
+    \ 'synIDattr(v:val, "name")')
+endfunction
+nnoremap <leader>gs :call MyColorsShowSyntaxGroups()<cr>
+command! -nargs=* MyColorsShowSyntaxGroups
+      \ call MyColorsShowSyntaxGroups (<f-args>)
+
+command! MyColorsShowCurrentColors :so $VIMRUNTIME/syntax/hitest.vim
+
+augroup MyVimrcAugroupFallbackToTexthighlight
+  autocmd!
+  autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
+augroup END
+
+" ### LAST ####################################################################
+
+" load colorscheme last to ensure own settings have priority
 try
     colorscheme lucius
 catch /find/
     " nothing
 endtry
-
-if &t_Co > 1
-    syntax enable
-endif
-
-" Highlight all occurences of word under cursor
-" autocmd CursorMoved,CursorMovedI * execute printf('match todo /\V\<%s\>/',
-"     \ escape(expand('<cword>'), '/\'))
-
-" Show trailing whitespace as red
-" highlight ExtraWhitespace ctermbg=darkred guibg=#382424
-" autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
- 
-command! MyColorsShowCurrentColors :so $VIMRUNTIME/syntax/hitest.vim
-
-command! -nargs=* MyColorsSyntaxGroups 
-      \ call MyColorsSyntaxGroups (<f-args>)
-
-function! MyColorsSyntaxGroups(...) abort
-  echo map(synstack(line('.'), col('.')), 
-    \ 'synIDattr(v:val, "name")')
-endfunction
-nnoremap <leader>gh :call MyColorsSyntaxGroups()<cr>
-
-augroup MyColorsAugroupCursorline
-  autocmd!
-  autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-  autocmd InsertEnter * setlocal nocursorline
-augroup END
-
-" Disable all blinking
-set guicursor+=a:blinkon0
-
-" Make diffs less glaringly ugly...
-highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
-highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
-highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
-highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
-
-" set colorcolumn=79,80
-
-" Show when lines extend past column 80
-" highlight ColorColumn ctermfg=208 ctermbg=Black
-
-" function! MyColorsMarkMargin (on)
-"     if exists('b:MarkMargin')
-"         try
-"             call matchdelete(b:MarkMargin)
-"         catch /./
-"         endtry
-"         unlet b:MarkMargin
-"     endif
-"     if a:on
-"         let b:MarkMargin = matchadd('ColorColumn', '\%81v\s*\S', 100)
-"     endif
-" endfunction
-
-" augroup MyColorsMarkMargin
-"     autocmd!
-"     autocmd  BufEnter  *       :call MyColorsMarkMargin(1)
-"     autocmd  BufEnter  *.vp*   :call MyColorsMarkMargin(0)
-" augroup END

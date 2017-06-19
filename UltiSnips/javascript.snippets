@@ -91,6 +91,10 @@ snippet fs "require fs" b
 const fs = require(\`fs-extra\`)
 endsnippet
 
+snippet readfile "readfile" b
+const ${2:data} = fs.readFileSync(\`${1:file}\`).toString()$0
+endsnippet
+
 snippet csvParserCli "CSV parser CLI" b
 $0const csv = require(\`ya-csv\`)
 
@@ -145,23 +149,23 @@ snippet d "Interpolated var" w
 \$\{${1:var}\}
 endsnippet
 
-snippet ce "console.error" b
+snippet ce "console.error" w
 console.error(\`### $1\`)$0
 endsnippet
 
-snippet cc "console.error" b
+snippet cc "console.error" w
 console.error(\`### \` + ${VISUAL})$0
 endsnippet
 
-snippet cee "console.error" b
+snippet cee "console.error" w
 console.error(\`### $1:\`, $1)
 endsnippet
 
-snippet cl "console.log" b
+snippet cl "console.log" w
 console.log(\`#### $1\`)
 endsnippet
 
-snippet cll "console.log" b
+snippet cll "console.log" w
 console.log(\`#### $1:\`, $1)
 endsnippet
 
@@ -220,8 +224,17 @@ endsnippet
 snippet log "logging" b
 const LogDwim = require(\`log-dwim\`)
 const logDwim = new LogDwim()
-const { TRACE, DEBUG, INFO, WARN, ERROR, DIE } = logDwim
+const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logDwim
 endsnippet
+
+snippet die "die" w
+DIE(\`$1\`)$0
+endsnippet
+
+snippet diee "die with var" w
+DIE(\`$1:\`, $1)$0
+endsnippet
+
 
 snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
@@ -460,7 +473,7 @@ endsnippet
 # }
 snippet handlebars "handlebars" b
 const handlebars = require(\`handlebars\`)
-handlebars.registerHelper(\`dateFormat\`, require(\`handlebars-dateformat\`))
+require(\`swag\`).registerHelpers(handlebars)
 
 function fillTemplate(data) {
   const templateRaw = fs

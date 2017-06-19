@@ -23,7 +23,7 @@ function! ExecuteOnInsertEnter(...) abort
 endfunction
 
 function! tbone#executeOnInsertEnter(line) abort
-  call tbone#write_command2(a:line) 
+  call tbone#write_command2(a:line)
   normal! o
   startinsert!
 endfunction

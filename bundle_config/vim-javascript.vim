@@ -1,5 +1,6 @@
 " Vastly improved Javascript indentation and syntax support in Vim
-NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+NeoBundleLazy 'pangloss/vim-javascript', 
+      \ {'autoload':{'filetypes':['javascript']}}
 
 " let g:javascript_enable_domhtmlcss=1
 

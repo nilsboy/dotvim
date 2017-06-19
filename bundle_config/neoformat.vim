@@ -3,7 +3,7 @@ NeoBundle 'sbdchd/neoformat'
 
 " TODO: use formatprg?: https://github.com/sbdchd/neoformat/issues/36
 
-" let g:neoformat_verbose = 1
+let g:neoformat_verbose = 1
 let g:neoformat_only_msg_on_error = 1
 
 " " Enable alignment
@@ -24,13 +24,11 @@ let g:neoformat_only_msg_on_error = 1
 
 nnoremap <silent> <leader>x :Neoformat<cr>
 
-finish " #######################################################################
-
-function! AutoCmdNeoFormat() abort
-  let ha = 'neoformat#formatters#' . &filetype . '#'
-  if !exists('neoformat#formatters#' . &filetype . '#')
-    echo "No formatter found for filetype: " . ha
-    return
-  endif
-  Neoformat
-endfunction
+" function! AutoCmdNeoFormat() abort
+"   let ha = 'neoformat#formatters#' . &filetype . '#'
+"   if !exists('neoformat#formatters#' . &filetype . '#')
+"     echo "No formatter found for filetype: " . ha
+"     return
+"   endif
+"   Neoformat
+" endfunction

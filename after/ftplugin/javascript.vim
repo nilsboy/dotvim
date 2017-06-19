@@ -3,37 +3,58 @@
 " TODO: checkout husky:
 " (see https://github.com/prettier/prettier)
 " TODO: checkout formatter: https://www.npmjs.com/package/prettier-in-html
-" TODO: errorformat
+" TODO: checkout jsctags generator using tern
+" (https://github.com/ramitos/jsctags)
 
-let &l:makeprg = 'node %'
+if exists("b:MyJavascriptFtpluginLoaded")
+    finish
+endif
+let b:MyJavascriptFtpluginLoaded = 1
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <leader>li yi`:execute ':terminal npm install --save '
       \ . @"<cr>
 
-if exists("b:did_ftplugin_javascript")
-    finish
-endif
-let b:did_ftplugin_javascript = 1
-
-augroup ftplugin_javascript
+augroup MyJavascriptAugroupAddTypeMarker
   autocmd!
   autocmd BufLeave <buffer> normal! mJ
-  " autocmd InsertLeave <buffer> :Neoformat
-  " autocmd CursorHold <buffer> :Neoformat
-  " autocmd TextChanged,InsertLeave <buffer> :Neoformat
 augroup END
 
-" let g:neomake_javascript_run_maker = {
+" from vim-nodejs-errorformat: Error: bar at Object.foo [as _onTimeout]
+" (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
+let g:MyJavascriptErrorformat  = '%AError: %m' . ','
+let g:MyJavascriptErrorformat .= '%AEvalError: %m' . ','
+let g:MyJavascriptErrorformat .= '%ARangeError: %m' . ','
+let g:MyJavascriptErrorformat .= '%AReferenceError: %m' . ','
+let g:MyJavascriptErrorformat .= '%ASyntaxError: %m' . ','
+let g:MyJavascriptErrorformat .= '%ATypeError: %m' . ','
+let g:MyJavascriptErrorformat .= '%Z%*[\ ]at\ %f:%l:%c' . ','
+let g:MyJavascriptErrorformat .= '%Z%*[\ ]%m (%f:%l:%c)' . ','
+
+"     at Object.foo [as _onTimeout] (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
+let g:MyJavascriptErrorformat .= '%*[\ ]%m (%f:%l:%c)' . ','
+
+"     at node.js:903:3
+let g:MyJavascriptErrorformat .= '%*[\ ]at\ %f:%l:%c' . ','
+
+" /Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2
+"   throw new Error('bar');
+"         ^
+let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
+
+" Ignore everything else
+" let g:MyJavascriptErrorformat .= '%-G%.%#'
+
 let g:neomake_run_maker = {
     \ 'exe': 'node',
     \ 'args': ['%:p'],
-    \ 'errorformat': '%AError: %m,%AEvalError: %m,%ARangeError: %m,%AReferenceError: %m,%ASyntaxError: %m,%ATypeError: %m,%Z%*[\ ]at\ %f:%l:%c,%Z%*[\ ]%m (%f:%l:%c),%*[\ ]%m (%f:%l:%c),%*[\ ]at\ %f:%l:%c,%Z%p^,%A%f:%l,%C%m,%-G%.%#'
+    \ 'errorformat': g:MyJavascriptErrorformat,
     \ }
-        " \ 'postprocess':
-        " function('My_ft_javascript_fixCoreFileLocationInQuickfix')
+    " \ 'postprocess':
+    " function('MyJavascriptFixCoreFileLocationInQuickfix')
 
-function! My_ft_javascript_fixCoreFileLocationInQuickfix(entry) abort
+" TODO
+function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
   let filename = bufname(i.bufnr)
   " Non-existing file in the quickfix list, assume a core file
   if filereadable(filename)
@@ -52,6 +73,13 @@ let g:ale_linters['javascript'] = ['eslint']
 
 "### Formatter
 
+" augroup MyJavascriptAugroupAutoformat
+"   autocmd!
+"   " autocmd InsertLeave <buffer> :Neoformat
+"   " autocmd CursorHold <buffer> :Neoformat
+"   " autocmd TextChanged,InsertLeave <buffer> :Neoformat
+" augroup END
+
 " alternative javascript formatters:
 " - https://github.com/prettydiff/prettydiff
 
@@ -61,14 +89,14 @@ let g:ale_linters['javascript'] = ['eslint']
 " The result can not be send to stdout - the file is changed in place.
 let g:neoformat_javascript_eslint = {
       \ 'exe': 'eslint'
-      \ ,'args': ['--fix', '--quiet', '-c',
-      \ g:vim.contrib.etc.dir . 'eslintrc-format.yml']
+      \ ,'args': ['--fix', '--quiet', '-c'
+      \ , g:vim.contrib.etc.dir . 'eslintrc-format.yml']
       \ , 'replace': 1
       \ }
 
-let g:neoformat_javascript_eswraplines = {
-      \ 'exe': 'es-wrap-lines'
-      \ }
+" let g:neoformat_javascript_eswraplines = {
+"       \ 'exe': 'es-wrap-lines'
+"       \ }
 
 " let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 
@@ -96,13 +124,11 @@ setlocal suffixesadd+=.js
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
 setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"]\\{-\\}
 
-finish " #######################################################################
+" let g:syntastic_javascript_checkers = ['eslint']
 
-let g:syntastic_javascript_checkers = ['eslint']
+" " http://eslint.org/docs/rules/
+" " stdin currently does not work with --fix
+" let g:formatters_javascript = ['eslint']
+" let g:formatdef_eslint = '"pipe-wrapper eslint --fix -c ~/.eslintrc-format.yml"'
 
-" http://eslint.org/docs/rules/
-" stdin currently does not work with --fix
-let g:formatters_javascript = ['eslint']
-let g:formatdef_eslint = '"pipe-wrapper eslint --fix -c ~/.eslintrc-format.yml"'
-
-let g:neomake_javascript_enabled_makers = ['eslint']
+" let g:neomake_javascript_enabled_makers = ['eslint']

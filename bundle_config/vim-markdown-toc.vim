@@ -1,13 +1,12 @@
 " Generate table of contents for Markdown files
 NeoBundle 'mzlogin/vim-markdown-toc'
 
+" TODO: replace with remark formatter?
+
 let g:vmt_dont_insert_fence = 1
 
-command! -nargs=* AddToc call MyVimMarkdownToc_addToc(<f-args>)
-
-" replace toc using header instead of boundaries
-" also add a missing toc
-function! MyVimMarkdownToc_addToc() abort
+" replace toc using header instead of boundaries also add a missing toc
+function! MyMarkdownTocAddToc() abort
   let startpos = getcurpos()
 
   let line = search('# Table of Contents')
@@ -29,3 +28,10 @@ function! MyVimMarkdownToc_addToc() abort
 
   call setpos('.', startpos)
 endfunction
+command! -nargs=* MyMarkdownTocAddToc call MyMarkdownTocAddToc(<f-args>)
+
+augroup MyMarkdownAugroupCreateToc
+  autocmd!
+  autocmd BufWritePre *.md silent call MyMarkdownTocAddToc()
+augroup END
+

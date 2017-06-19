@@ -45,10 +45,6 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-" Log autocmds etc to file
-" let &verbosefile = g:vim.var.dir . "/verbose.log"
-" let &verbose = 15
-
 execute "source " . g:vim.after.dir . '/plugin/helpers.vim'
 
 call Mkdir(g:vim.dir, "p")
@@ -77,13 +73,12 @@ call Mkdir(&undodir, "p")
 " Enable vim enhancements
 set nocompatible
 
-" Only set current directory as &path
-augroup augroup_vimrc
+augroup MyVimrcAugroupOnlySetCurrentDirAsPath
   autocmd!
   autocmd VimEnter * set path=,,
 augroup END
 
-" Make helpgrep find vim help files first
+" Make helpgrep find vim's own help files before plugin help files
 let &runtimepath = '/usr/share/nvim/runtime,'
       \ . &runtimepath
 
@@ -107,10 +102,6 @@ set clipboard=unnamed
 " Chdir to the dir of the current buffer
 " set autochdir
 " autocmd BufEnter * silent! execute "lcd %:p:h:gs/ /\\ /
-
-" Expand current dir
-cabbrev <expr> ./ expand('%:p:h')
-cabbrev <expr> fn expand('%:p')
 
 " A history of ":" commands, and a history of previous search patterns
 set history=1000
@@ -141,6 +132,38 @@ set expandtab
 
 " automatically indent to match adjacent lines
 set autoindent
+
+" textformattting
+set textwidth=80
+
+" Note: if the listpat fits in the previous row the listpat is wrapped into the
+" previous row
+
+" TODO: needs work
+" " These seem to get overwritten by too many plugins
+" function! MyVimrcForceFormattingSettings() abort
+"   set formatoptions=roqanj1c
+"   let &formatlistpat = '\c\v^\s*[-\+\*]\s+'
+"   let &formatlistpat .= '|\c\v^\s*(todo|note|tags|see also|fix)\s+'
+"   set noautoindent
+" endfunction
+" augroup MyVimrcAugroupForceFormattingSettings
+"   autocmd!
+"   autocmd BufWinEnter * call MyVimrcForceFormattingSettings()
+" augroup END
+
+" see also:
+" :h auto-format
+function! MyVimrcShowFormatSettings() abort
+  call INFO('&comments:', &comments)
+  call INFO('&commentstring:', &commentstring)
+  call INFO('&formatoptions:', &formatoptions)
+  call INFO('&formatlistpat:', &formatlistpat)
+  call INFO('&autoindent:', &autoindent)
+  call INFO('&smartindent:', &smartindent)
+  call INFO('&cindent:', &cindent)
+  " call INFO('g:MyMarkdownFormatoptions:', g:MyMarkdownFormatoptions)
+endfunction
 
 " Make backspace more flexible
 set backspace=indent,eol,start
@@ -178,24 +201,14 @@ set hidden
 " only show 1 line for minimized windows
 " set winminheight=0
 
-" autocmd BufAdd * setlocal buflisted
-
 " Set preview window height
 " set previewheight=99
 
-" Highlight unknown filetypes as text
-augroup MyVimrcAugroupFallbackToTexthighlight
-  autocmd!
-  autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
-augroup END
-
-" Maximize help buffers
 augroup MyVimrcAugroupMaximizeHelp
   autocmd!
   autocmd BufEnter * :if &buftype == 'help' | only | endif
 augroup END
 
-" List all buffers including help
 augroup MyVimrcAugroupListAllBuffers
   autocmd!
   autocmd BufEnter * :set buflisted
@@ -211,13 +224,16 @@ set showcmd
 
 set display=lastline,uhex
 
-" Vim will wrap long lines at a character in 'breakat'
+" Vim will wrap long lines at any character in 'breakat'
 set nolist
 set linebreak
 set breakat&vim
-let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
 if IsNeoVim()
   set breakindent
+  let &showbreak="  ↪ "
+  " let &showbreak="  "
+else
+  let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
 endif
 
 set mousehide
@@ -234,11 +250,6 @@ set isfname-==
 
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks  :silent %s/\v\n\n+/\r\r/e | :silent %s/\n*\%$//g
-
-" Speed up gui startup
-set guioptions=M
-
-set cursorline
 
 "### Undo and swap
 
@@ -269,6 +280,9 @@ set suffixesadd=.txt,.md
 
 " don't echo make output to screen
 let &shellpipe = '&>'
+
+" turn off folding
+set nofoldenable
 
 "### Mappings
 
@@ -353,7 +367,7 @@ vmap <c-k> <esc><c-k>
 
 nnoremap <silent> <leader>go :only<cr>
 
-" Never use formatprg (it's global) and don't fallback to vim default
+" Never use formatprg (it's global) and doesn't fallback to vim's default
 set formatprg=false
 
 " Nicer redo
@@ -404,7 +418,7 @@ vnoremap <space><space> q:i
 nnoremap <leader>k q:i<esc>k
 nnoremap <leader>A q:i<esc>kA
 
-augroup FixWindowSizeDependentStuff
+augroup MyVimrcAugroupAdjustWindowSizes
     autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
     autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
     autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
@@ -412,7 +426,7 @@ augroup FixWindowSizeDependentStuff
     autocmd VimEnter,VimResized * :execute 'nnoremap rk ' . (&lines / 2 - 3) . 'k'
 augroup END
 
-augroup augroup_CmdWinEnter
+augroup MyVimrcAugroupCmdwinSetup
   autocmd!
   " Reset <cr> mapping for command-line-window in case <cr> is mapped somewhere
   autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
@@ -450,7 +464,7 @@ nnoremap <leader>vv :execute "edit " . $MYVIMRC<cr>
 nnoremap <silent> <leader>vt :execute "edit " . g:vim.etc.dir
       \ . '/after/ftplugin/' . &filetype . '.vim'<cr>
 
-command! -nargs=* EditInBufferDir 
+command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
 
 " Show all <leader> mappings
@@ -471,7 +485,16 @@ nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
 
-nnoremap <leader>vt :execute ':edit ' 
+" nnoremap <silent> r[ :call search('(', 'bz')<cr>
+" nnoremap <silent> r] :call search(')', 'z')<cr>
+" nnoremap <silent> r[ ?\v[(\}\[]<cr>
+" nnoremap <silent> r] /\v[)\}\]]<cr>
+" nnoremap <c-space>h <esc>?\v[(\}\[]<cr>
+" inoremap <c-space>h <esc>?\v[(\}\[]<cr>
+" nnoremap <c-space>l <esc>/\v[)\}\]]<cr>
+" inoremap <c-space>l <esc>/\v[)\}\]]<cr>
+
+nnoremap <leader>vt :execute ':edit '
       \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
 " Make gf work with relative file names and non existent files

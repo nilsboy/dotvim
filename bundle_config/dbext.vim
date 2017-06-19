@@ -17,6 +17,7 @@
 " :h dbext-integration
 " take a look at the OMNI SQLComplete plugin
 "
+" TODO: checkout https://github.com/knq/usql
 " TODO: allow to run sql snippets from markdown files
 " TODO: checkout SQLUtilities plugin
 " (https://github.com/vim-scripts/SQLUtilities)
@@ -73,7 +74,7 @@ let g:dbext_default_use_sep_result_buffer = 1
 
 " DBI limit
 " Needs reload of sql file
-let g:dbext_default_DBI_max_rows = 1000
+let g:dbext_default_DBI_max_rows = 1100
 " Set DBI limit of current buffer - 0 disables it
 " :DBSetOption DBI_max_rows=0
 
@@ -92,46 +93,48 @@ let g:dbext_default_usermaps = 0
 " TODO: deactivate sql complete
 " :h omni-complete
 
-let g:my_dbext_result_count = 0
+let g:MyDbextResultCount = 0
+let g:MyDbextNewBufferNr = 0
 
 nnoremap <leader>d <nop>
 
 nnoremap <leader>dv  :DBListConnections<cr>
-nnoremap <leader>de  :call My_Dbext_run('DBExecSQLUnderCursor', '')<cr>
+nnoremap <leader>de  :call MyDbextRun('DBExecSQLUnderCursor', '')<cr>
 
-nnoremap <leader>dtl :call My_Dbext_run('DBListTable ""', 'tables')<cr>
-nnoremap <leader>dtt yaw:call My_Dbext_run('call DBExecSqlLimit("' . @" . '")', @")<cr>
-nnoremap <leader>dtd :call My_Dbext_run('DBDescribeTable', 'desc')<cr>
-nnoremap <leader>dtc yiw:call My_Dbext_run(
-      \ 'call My_Dbext_TableCount("' . @" . '")', @" . '_count')<cr>
+nnoremap <leader>dtl :call MyDbextRun('DBListTable ""', 'tables')<cr>
+nnoremap <leader>dtt yaw:call MyDbextRun('call DBExecSqlLimit("' . @" . '")', @")<cr>
+nnoremap <leader>dtd :call MyDbextRun('DBDescribeTable', 'desc')<cr>
+nnoremap <leader>dtc yiw:call MyDbextRun(
+      \ 'call MyDbextTableCount("' . @" . '")', @" . '_count')<cr>
 
-function! My_Dbext_run(command, name) abort
+function! MyDbextRun(command, name) abort
   execute a:command
-  call My_Dbext_after(a:name)
+  call MyDbextAfter(a:name)
 endfunction
 
 " Callback called by dbext
 function! DBextPostResult(db_type, buf_nr) abort
-  " memorize new buffer nr
-  let g:my_dbext_new_buffer_nr = a:buf_nr
+  " save new buffer nr
+  let g:MyDbextNewBufferNr = a:buf_nr
 endfunction
 
+
 " Move result file to /tmp set filetype
-function! My_Dbext_after(name) abort
+function! MyDbextAfter(name) abort
   let name = a:name
-  let g:my_dbext_result_count = g:my_dbext_result_count + 1
+  let g:MyDbextResultCount = g:MyDbextResultCount + 1
   if name == ''
-    let name = expand('%:t') . '.' . g:my_dbext_result_count
+    let name = expand('%:t') . '.' . g:MyDbextResultCount
   endif
   let name = '/tmp/' . name . '.sqlresult'
-  execute 'buffer ' . g:my_dbext_new_buffer_nr
+  execute 'buffer ' . g:MyDbextNewBufferNr
   " TODO: test if vim-rooter works with write
   " needed otherwise the file might not exist jet!?!
   write
   execute ':Move! ' . fnameescape(name)
   " Needed to avoid remaps of dd etc by dbext
   mapclear <buffer>
-  let b:my_sqlresult_first_load = 1
+  " let b:MySqlresultFirstLoad = 1
 
   only
   redraw!
@@ -149,10 +152,10 @@ endfunction
 
 " DBSelectFromTable does not seem to honour the limit
 function! DBExecSqlLimit(table) abort
-  execute ":DBExecSQL SELECT * FROM " a:table " ORDER BY 1 DESC LIMIT 1000"
+  execute ":DBExecSQL SELECT * FROM " a:table " ORDER BY 1 DESC LIMIT 1100"
 endfunction
 
-function! My_Dbext_TableCount(table) abort
+function! MyDbextTableCount(table) abort
   execute ":DBExecSQL SELECT COUNT(*) FROM " . a:table
 endfunction
 

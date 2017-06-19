@@ -1,0 +1,18 @@
+snippet init "init" b
+# defaults
+http://localhost:$1
+--
+--
+# test
+GET /$0
+endsnippet
+
+snippet post "post" b
+--
+# ${1:description}
+POST /
+{
+  $0
+}
+
+endsnippet

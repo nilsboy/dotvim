@@ -9,6 +9,11 @@ NeoBundle 'neomake/neomake'
 call delete('/tmp/neomake.log')
 let g:neomake_logfile = '/tmp/neomake.log'
 
+" %-G suppresses non-matching entries
+let g:neomake_ft_maker_remove_invalid_entries = 0
+
+" TODO: change for speedup? / screws with separator between file search and
+" grep
 let g:neomake_serialize = 1
 let g:neomake_echo_current_error = 0
 
@@ -33,9 +38,9 @@ function! MyNeomakeConfigOnNeomakeFinished() abort
   endif
 endfunction
 
-nnoremap <silent><leader>ee :Neomake! run<cr>
-nnoremap <silent><leader>el :Neomake lint<cr>
-nnoremap <silent><leader>ef :Neomake format<cr>
+nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
+nnoremap <silent><leader>el :silent wall \| Neomake lint<cr>
+nnoremap <silent><leader>ef :silent wall \| Neomake format<cr>
 
 nnoremap <silent><leader>ed :edit /tmp/neomake.log <cr>
 

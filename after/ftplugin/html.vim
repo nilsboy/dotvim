@@ -1,14 +1,16 @@
-nnoremap <silent> <buffer> <leader>es :silent call shrink#shrink({
+" see also: https://github.com/wooorm/rehype
+
+nnoremap <silent> <buffer> <leader>es :silent call MyShrinkShrink({
       \ 'start': '\<style',
       \ 'end': '<\/style',
       \ 'filetype': 'css',
-      \ 'beforeRestore': function("ShrinkBeforeRestore"),
+      \ 'beforeRestore': function("MyHtmlShrinkBeforeRestore"),
       \ })<cr>
-nnoremap <silent> <buffer> <leader>ej :silent call shrink#shrink({
+nnoremap <silent> <buffer> <leader>ej :silent call MyShrinkShrink({
       \ 'start': '<script>',
       \ 'end': '<\/script>',
       \ 'filetype': 'javascript',
-      \ 'beforeRestore': function("ShrinkBeforeRestore"),
+      \ 'beforeRestore': function("MyHtmlShrinkBeforeRestore"),
       \ })<cr>
 
 if exists("b:did_ftplugin_html")
@@ -19,7 +21,7 @@ let b:did_ftplugin_html = 1
 " tidy breaks indentation of script and style tags if their content is not wrapped
 " in newlines
 " https://github.com/htacg/tidy-html5/issues/56
-function! ShrinkBeforeRestore() abort
+function! MyHtmlShrinkBeforeRestore() abort
   return
   normal ggO
   normal Go

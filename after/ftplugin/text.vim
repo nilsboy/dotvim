@@ -1,14 +1,11 @@
-" TODO:
-" setlocal formatoptions+=jan
-" setlocal formatoptions-=c
-" :h fo-table
+" See also: https://alols.github.io/2012/11/07/writing-prose-with-vim/
 
-setlocal textwidth=80
+setlocal syntax=txt
 
-" Leading dash starts a list item
-setlocal formatlistpat+="|^\s*-\s+"
+setlocal formatoptions+=t
 
-finish
+" :help format-comments
+let &l:comments = 'nb:>,fb:-'
 
-" Note: use par for email formatting / cleanup?
-"  - let &l:formatprg = 'par -w10'
+" Use comment string for quoting
+let &l:commentstring = '> %s'

@@ -27,7 +27,7 @@ function! MyNotesEditLastNote() abort
 endfunction
 
 " Hack until the old notes are converted from zim to markdown
-augroup MyNotesAugroup
+augroup MyNotesAugroupForceMarkdown
   autocmd!
   autocmd BufReadPost */notes/*.txt setlocal filetype=markdown
 augroup END

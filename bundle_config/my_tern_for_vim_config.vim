@@ -6,6 +6,8 @@ NeoBundleLazy 'marijnh/tern_for_vim', {
   \ },
 \ }
 
+" see also file: ~/.tern-project
+
 " For deoplete?
 let g:tern_request_timeout = 1
 

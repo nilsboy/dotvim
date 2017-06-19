@@ -9,25 +9,21 @@ let g:rooter_silent_chdir = 1
 
 let g:rooter_patterns = ['package.json', '.git', '.git/']
 
-let g:rooter_change_directory_for_non_project_files = 'current'
+" let g:rooter_change_directory_for_non_project_files = 'current'
 
 " Needed otherwise the preview window changes the pwd of the current buffer
 let g:rooter_use_lcd = 1
 
 " let g:rooter_manual_only = 1
 
-" default version of vim-rooter:
-" augroup rooter
+" augroup MyRooterAugroupChdir
 "   autocmd!
-"   autocmd VimEnter,BufEnter * :Rooter
+"   autocmd User RooterChDir call MyRooterChdir()
 " augroup END
 
-" augroup my_rooter
-"   autocmd!
-"   autocmd VimEnter,BufEnter * :call MyVimRooter_chdir()
-" augroup END
-
-" function! MyVimRooter_chdir() abort
+" function! MyRooterChdir() abort
+"   call INFO('getcwd():', getcwd())
+"   return
 "   let dir = expand('%:p:h')
 "   if dir =~ "/tmp"
 "     return

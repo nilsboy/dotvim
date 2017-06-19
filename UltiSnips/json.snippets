@@ -1,34 +1,32 @@
-priority -50
-
-snippet s "String" b
-"${1:key}": "${0:value}",
+snippet s "String" w
+"${1:key}": "${2:value}",$0
 endsnippet
 
 snippet n "Number" b
-"${1:key}": ${0:value},
+"${1:key}": ${1:value},$0
 endsnippet
 
 snippet a "Array" b
 [
-	${VISUAL}$0
+  ${VISUAL}$0
 ],
 endsnippet
 
 snippet na "Named array" b
 "${1:key}": [
-	${VISUAL}$0
+  ${VISUAL}$0
 ],
 endsnippet
 
 snippet o "Object" b
 {
-	${VISUAL}$0
+  ${VISUAL}$0
 },
 endsnippet
 
 snippet no "Named object" b
 "${1:key}": {
-	${VISUAL}$0
+  ${VISUAL}$0
 },
 endsnippet
 
@@ -38,11 +36,11 @@ endsnippet
 
 global !p
 def compB(t, opts):
-	if t:
-		opts = [m[len(t):] for m in opts if m.startswith(t)]
-	if len(opts) == 1:
-		return opts[0]
-	return "(" + '|'.join(opts) + ')'
+  if t:
+    opts = [m[len(t):] for m in opts if m.startswith(t)]
+  if len(opts) == 1:
+    return opts[0]
+  return "(" + '|'.join(opts) + ')'
 endglobal
 
 snippet b "Bool" b
@@ -66,13 +64,32 @@ endsnippet
 
 snippet pm2_package_json "pm2_package_json" b
 "scripts": {
-	"setup": "npm install -g bower && bower install",
-	"start": "pm2 start pm2.json",
-	"stop": "pm2 stop pm2.json",
-	"restart": "pm2 restart pm2.json",
-	"status": "pm2 ls pm2.json",
-	"logs": "pm2 logs --lines 100 pm2.json",
-	"monitor": "pm2 monit pm2.json",
-	"dev": "bash bin/app.sh -d"
+  "setup": "npm install -g bower && bower install",
+  "start": "pm2 start pm2.json",
+  "stop": "pm2 stop pm2.json",
+  "restart": "pm2 restart pm2.json",
+  "status": "pm2 ls pm2.json",
+  "logs": "pm2 logs --lines 100 pm2.json",
+  "monitor": "pm2 monit pm2.json",
+  "dev": "bash bin/app.sh -d"
 },
+endsnippet
+
+snippet tern_config "tern_config" b
+{
+  "ecmaVersion": 6,
+  "libs": [
+    "browser",
+    "jquery",
+    "requirejs",
+    "commonjs"
+  ],
+  "plugins": {
+    "node": {},
+    "doc_comment": {
+      "fullDocs": true,
+      "strong": true
+    }
+  }
+}
 endsnippet

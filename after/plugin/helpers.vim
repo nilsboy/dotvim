@@ -18,7 +18,7 @@ function! BufferClose() abort
     elseif &write
         silent update
     endif
-    
+
     if BufferIsLast() == 1
         :silent q!
     endif
@@ -359,7 +359,6 @@ let g:ack_default_options = '--ignore-file "^\.*"'
 
 command! -nargs=1 Tree call Tree("<args>")
 function! Tree(path) abort
-
     new tree
     setlocal buftype=nowrite
 
@@ -367,7 +366,6 @@ function! Tree(path) abort
     nnoremap <buffer> <CR> gf
     execute ":r! root=$(git-root) && cd $root && tree --no-colors --exclude '\class$' " . a:path
     normal gg
-
 endfunction
 
 let g:commands = []

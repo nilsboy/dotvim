@@ -1,15 +1,15 @@
 
 " npm install -g json2yaml
 
-nnoremap <buffer> <silent> <leader>gc :silent call JsonToYaml()<cr>
-function! JsonToYaml() abort
+" nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
+function! MyJsonToYaml() abort
   silent wall
   silent !cat % | json2yaml > %:r.yaml
   silent edit %:r.yaml
 
   " Fix broken output
-  :RemoveTrailingSpaces
-  :RemoveNewlineBlocks
+  RemoveTrailingSpaces
+  RemoveNewlineBlocks
 
   " Sometimes returns with a root indentation
   if search('\v^---\n  \w+\:') != 0

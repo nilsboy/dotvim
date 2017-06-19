@@ -4,11 +4,12 @@
 " exec 'DBSetOption custom_title=' . s:new_title
 
 setlocal syntax=txt
+" let &l:commentstring = '# %s'
 
-if exists("b:did_ftplugin_sql")
+if exists("b:MySqlFtpluginLoaded")
     finish
 endif
-let b:did_ftplugin_sql = 1
+let b:MySqlFtpluginLoaded = 1
 
 let g:formatters_sql = ['sqlformatter']
 let g:formatdef_sqlformatter = '"sql-format"'

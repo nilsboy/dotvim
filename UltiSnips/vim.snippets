@@ -145,7 +145,7 @@ snippet c "concat" w
 endsnippet
 
 snippet q "quotes" w
-'${VISUAL}$0'
+'${VISUAL}$1'$0
 endsnippet
 
 snippet for "foreach" b
@@ -358,4 +358,12 @@ endsnippet
 
 snippet replace "replace" w
 substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
+endsnippet
+
+snippet ftplugin_done "ftplugin_done" b
+if exists("b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded")
+    finish
+endif
+let b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded = 1
+$0
 endsnippet

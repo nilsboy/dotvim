@@ -1,0 +1,9 @@
+{
+  "settings": {
+  },
+  "plugins": {
+    "remark-lint-maximum-line-length": {
+      "number": "80"
+    }
+  }
+}

@@ -27,7 +27,7 @@
 " - async.vim:
 "   https://github.com/prabirshrestha/async.vim
 
-" See also: 
+" See also:
 " :Man scanf
 " :h quickfix
 " :h errorformat
@@ -37,7 +37,7 @@
 " To send to stdin see:
 " :h jobsend()
 
-" Note: :compiler is only meant to be used for one tool/buffer at a time - 
+" Note: :compiler is only meant to be used for one tool/buffer at a time -
 " is not possible to have several commands e.g. linter, finder, formatter
 " see also: https://github.com/LucHermitte/vim-build-tools-wrapper/blob/master/doc/filter.md
 " Note: makeprg and errorformat are ether local or global but if you want to
@@ -65,6 +65,9 @@
 " TODO checkout https://github.com/stefandtw/quickfix-reflector.vim
 " TODO add description to quickfix window title
 " TODO: add error count to statusline (see neomake)
+" TODO: refactoring from &makeprg to neomake makers made search() slower
+
+" TODO: allow to search for line and dash separated words?
 
 " Always show signs column
 augroup MyQuickfixAugroupPersistentSignsColumn
@@ -132,7 +135,6 @@ function! MyQuickfixSearch(options) abort
   " fuzzy search for most case variants
   let term = substitute(term, '\v[-_ ]+', '.*', 'g')
   let term = substitute(term, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.*\l\2', 'g')
-  " call INFO('term:', term)
 
   let filenameTerm = term
 
@@ -160,7 +162,7 @@ function! MyQuickfixSearch(options) abort
   " /dev/null forces absolute paths if greping a single file
   let findprg = grepprg
         \ . ' -g ' . shellescape(filenameTerm)
-        \ . ' ' . fnameescape(path) 
+        \ . ' ' . fnameescape(path)
         \ . ' /dev/null'
         \ . ' | head-warn ' . limit
         \ . ' | sort-by-path-depth'
@@ -212,7 +214,7 @@ function! MyQuickfixToMaker(cmd, errorformat) abort
   return {
       \ 'exe' : exe,
       \ 'args': args,
-      \ 'errorformat': a:errorformat 
+      \ 'errorformat': a:errorformat
       \ }
 endfunction
 
@@ -223,7 +225,7 @@ function! MyQuickfixOutline() abort
     let l:filetype = b:filetype
   endif
   let MyErrorformat = '%f:%l:%c:%m'
-  let cmd = 'outline --filename ' . expand('%:p') 
+  let cmd = 'outline --filename ' . expand('%:p')
         \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
   let g:neomake_outline_maker = MyQuickfixToMaker(cmd, MyErrorformat)
   silent wall
@@ -295,13 +297,13 @@ nnoremap <silent> <leader>fsf yiw:call MyQuickfixSearch({
       \ 'term': @",
       \ 'path': '~/src/'})<cr>
 vnoremap <silent> <leader>fsf y:call MyQuickfixSearch({
-      \ 'term': @", 
+      \ 'term': @",
       \ 'path': '~/src/'})<cr>
 nnoremap <silent> <leader>fsW yiW:call MyQuickfixSearch({
-      \ 'term': @", 
+      \ 'term': @",
       \ 'path': '~/src/'})<cr>
 nnoremap <silent> <leader>fsi :call MyQuickfixSearch({
-      \ 'term': input('Search: '), 
+      \ 'term': input('Search: '),
       \ 'path': '~/src/'})<cr>
 
 nnoremap <silent> <leader>fd :call MyQuickfixSearch({
@@ -318,19 +320,19 @@ nmap <silent> <leader>fb [I
 nnoremap <silent> <leader>fvf yiw:call MyQuickfixSearch({
       \ 'path': g:vim.etc.dir})<cr>
 nnoremap <silent> <leader>fvw yiw:call MyQuickfixSearch({
-      \ 'term': @", 
+      \ 'term': @",
       \ 'path': g:vim.etc.dir})<cr>
 nnoremap <silent> <leader>fvi :call MyQuickfixSearch({
-      \ 'term': input('Search: '), 
+      \ 'term': input('Search: '),
       \ 'path': g:vim.etc.dir})<cr>
 
 nnoremap <silent> <leader>fvpf yiw:call MyQuickfixSearch({
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>fvpw yiw:call MyQuickfixSearch({
-      \ 'term': @", 
+      \ 'term': @",
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>fvpi :call MyQuickfixSearch({
-      \ 'term': input('Search: '), 
+      \ 'term': input('Search: '),
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>vpf :call MyQuickfixSearch({
       \ 'term': expand('%:t:r'),
@@ -340,20 +342,19 @@ nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
 nnoremap <silent> <leader>df :call MyQuickfixSearch({
       \ 'path': $HOME . '/src/sql/'})<cr>
 
-	" map _  <Plug>(operator-adjust)
-	" call operator#user#define('adjust', 'Op_adjust_window_height')
-	" function! Op_adjust_window_height(motion_wiseness)
-	"   execute (line("']") - line("'[") + 1) 'wincmd' '_'
-	"   normal! `[zt
-	" endfunction
+  " map _  <Plug>(operator-adjust)
+  " call operator#user#define('adjust', 'Op_adjust_window_height')
+  " function! Op_adjust_window_height(motion_wiseness)
+  "   execute (line("']") - line("'[") + 1) 'wincmd' '_'
+  "   normal! `[zt
+  " endfunction
 
-" if neobundle#tap('vim-operator-user') 
+" if neobundle#tap('vim-operator-user')
 "   function! neobundle#hooks.on_post_source(bundle) abort
 "     call operator#user#define('grep', 'MyQuickfixOpGrep')
 "     function! MyQuickfixOpGrep(motion_wise)
-"       call INFO('ooooooooooooooooooooooooo')
-" 	    let v = operator#user#visual_command_from_wise_name(a:motion_wise)
-" 	    execute 'normal!' '`[' . v . '`]"xy'
+"       let v = operator#user#visual_command_from_wise_name(a:motion_wise)
+"       execute 'normal!' '`[' . v . '`]"xy'
 "       " call INFO('X: ', getreg(operator#user#register()))
 "       call MyQuickfixSearch({'term': @x})
 "     endfunction
@@ -362,14 +363,12 @@ nnoremap <silent> <leader>df :call MyQuickfixSearch({
 " endif
 " map x  <Plug>(operator-grep)
 
-finish " #######################################################################
-
-augroup MyQuickfixAugroupTodo
-    " QuickFixCmd* Does not match :ltag
-    autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
-    autocmd QuickFixCmdPost [^l]* botright copen
-    autocmd QuickFixCmdPost [^l]* let b:isQuickfix = 1
-    autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
-    autocmd QuickFixCmdPost    l* botright lopen
-augroup END
+" augroup MyQuickfixAugroupTodo
+"     " QuickFixCmd* Does not match :ltag
+"     autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
+"     autocmd QuickFixCmdPost [^l]* botright copen
+"     autocmd QuickFixCmdPost [^l]* let b:isQuickfix = 1
+"     autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
+"     autocmd QuickFixCmdPost    l* botright lopen
+" augroup END
 
