@@ -251,6 +251,10 @@ set isfname-==
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks  :silent %s/\v\n\n+/\r\r/e | :silent %s/\n*\%$//g
 
+" Deactivate gui cursor to fix nvim regression
+" (https://github.com/neovim/neovim/issues/7049)
+set guicursor=
+
 "### Undo and swap
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
