@@ -51,10 +51,10 @@ endfunction
 
 nnoremap <silent> <leader>rr :call 
       \ MyMruListFiles(MyMruFilesWritten())<cr>
-nnoremap <silent> <leader>re :silent! execute 'silent! edit ' . 
+nnoremap <silent> <leader>rer :silent! execute 'silent! edit ' . 
       \ MyMruFilesWritten()<cr>
 
 nnoremap <silent> <leader>ro :call 
       \ MyMruListFiles(MyMruFiles())<cr>
-nnoremap <silent> <leader>rO :silent! execute 'silent! edit ' . 
+nnoremap <silent> <leader>reo :silent! execute 'silent! edit ' . 
       \ MyMruFiles()<cr>

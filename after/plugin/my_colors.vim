@@ -37,8 +37,9 @@ function! MyColorsColorschemeCleanup() abort
   highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
   highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
 
-  highlight MyExtraWhitespace ctermbg=darkred
-  syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
+  " see also: :help lcs-trail
+  " highlight MyExtraWhitespace ctermbg=darkred
+  " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
 
   " TODO: makes vim help look awful
   " highlight MyTabstops ctermbg=darkred

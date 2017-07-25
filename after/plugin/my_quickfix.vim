@@ -66,6 +66,7 @@
 " TODO add description to quickfix window title
 " TODO: add error count to statusline (see neomake)
 " TODO: refactoring from &makeprg to neomake makers made search() slower
+" TODO: checkout https://github.com/jceb/vim-hier
 
 " TODO: allow to search for line and dash separated words?
 
@@ -315,26 +316,29 @@ nnoremap <silent> <leader>ft :call MyQuickfixSearch({
       \ 'term': 'todo'})<cr>
 
 " Search for keyword under cursor
-nmap <silent> <leader>fb [I
+nmap <silent> <leader>fbw [I
+nnoremap <silent> <leader>fbb yiw:call MyQuickfixSearch({
+      \ 'term': @",
+      \ 'path': expand('%')})<cr>
 
-nnoremap <silent> <leader>fvf yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vff yiw:call MyQuickfixSearch({
       \ 'path': g:vim.etc.dir})<cr>
-nnoremap <silent> <leader>fvw yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vfw yiw:call MyQuickfixSearch({
       \ 'term': @",
       \ 'path': g:vim.etc.dir})<cr>
-nnoremap <silent> <leader>fvi :call MyQuickfixSearch({
+nnoremap <silent> <leader>vfi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'path': g:vim.etc.dir})<cr>
 
-nnoremap <silent> <leader>fvpf yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vpff yiw:call MyQuickfixSearch({
       \ 'path': g:vim.bundle.dir})<cr>
-nnoremap <silent> <leader>fvpw yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vpfw yiw:call MyQuickfixSearch({
       \ 'term': @",
       \ 'path': g:vim.bundle.dir})<cr>
-nnoremap <silent> <leader>fvpi :call MyQuickfixSearch({
+nnoremap <silent> <leader>vpfi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'path': g:vim.bundle.dir})<cr>
-nnoremap <silent> <leader>vpf :call MyQuickfixSearch({
+nnoremap <silent> <leader>vpfF :call MyQuickfixSearch({
       \ 'term': expand('%:t:r'),
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
@@ -342,12 +346,12 @@ nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
 nnoremap <silent> <leader>df :call MyQuickfixSearch({
       \ 'path': $HOME . '/src/sql/'})<cr>
 
-  " map _  <Plug>(operator-adjust)
-  " call operator#user#define('adjust', 'Op_adjust_window_height')
-  " function! Op_adjust_window_height(motion_wiseness)
-  "   execute (line("']") - line("'[") + 1) 'wincmd' '_'
-  "   normal! `[zt
-  " endfunction
+" map _  <Plug>(operator-adjust)
+" call operator#user#define('adjust', 'Op_adjust_window_height')
+" function! Op_adjust_window_height(motion_wiseness)
+"   execute (line("']") - line("'[") + 1) 'wincmd' '_'
+"   normal! `[zt
+" endfunction
 
 " if neobundle#tap('vim-operator-user')
 "   function! neobundle#hooks.on_post_source(bundle) abort

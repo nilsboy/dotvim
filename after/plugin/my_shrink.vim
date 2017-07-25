@@ -1,5 +1,6 @@
 " Shrink and unshrink part of a buffer to edit fenced code with a different
 " filetype.
+" see also: fenced code in markdown
 function! MyShrinkShrink(options) abort
   if exists("b:shrink_before")
     call INFO('Already shrunk - please unshrink first.')

@@ -4,8 +4,8 @@
 let g:MyNotesDir = "~/stuff/notes/"
 let g:MyNotesLastNote = ''
 
-nnoremap <silent> <leader>ns :call MyNotesEditLastNote()<cr>
-nnoremap <silent> <leader>nS :execute 'edit ' . MyNotesNewFileName()<cr>
+nnoremap <silent> <leader>nS :call MyNotesEditLastNote()<cr>
+nnoremap <silent> <leader>ns :execute 'edit ' . MyNotesNewFileName()<cr>
 
 nnoremap <silent> <leader>nh :execute 'edit ' . g:MyNotesDir . "Home.txt"<cr>
 nnoremap <silent> <leader>nt :execute 'edit ' . g:MyNotesDir . "todo.txt"<cr>

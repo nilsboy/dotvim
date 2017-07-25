@@ -3,7 +3,7 @@ NeoBundle 'sbdchd/neoformat'
 
 " TODO: use formatprg?: https://github.com/sbdchd/neoformat/issues/36
 
-let g:neoformat_verbose = 1
+" let g:neoformat_verbose = 1
 let g:neoformat_only_msg_on_error = 1
 
 " " Enable alignment

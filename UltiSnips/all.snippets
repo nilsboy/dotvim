@@ -176,8 +176,8 @@ snippet / "comment" b
 `!v helpers#surroundings()[0]`${VISUAL}$0`!v  helpers#surroundings()[1]`
 endsnippet
 
-# snippet '(^\s*).*todo' "TODO" r
-snippet todo "TODO" w
+# snippet todo "TODO" w
+snippet '(^\s*).*todo' "TODO" r
 `!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
@@ -191,6 +191,14 @@ endsnippet
 
 snippet '.*fix' "FIX" r
 `!v helpers#surroundings()[0]`FIX:$0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '(^\s*).*check' "check out" r
+`!v helpers#surroundings()[0]`TODO: check out: $0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '(^\s*).*see' "see also" r
+`!v helpers#surroundings()[0]`see also: $0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet password "generate a secure password" w
@@ -246,9 +254,13 @@ snippet ho "handlebars opening tag" w
 endsnippet
 
 snippet hc "handlebars closing tag" w
-{{/$1 ${VISUAL}$1}}$0
+{{/$1${VISUAL}}}$0
 endsnippet
 
 snippet hC "handlebars comment" w
 {{! ${VISUAL}$1}}$0
+endsnippet
+
+snippet par "parameter" w
+parameter
 endsnippet

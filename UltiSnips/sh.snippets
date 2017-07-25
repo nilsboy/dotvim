@@ -29,3 +29,17 @@ endsnippet
 snippet default "default to" w
 $1=\$\{1:-${2:default}\}
 endsnippet
+
+snippet case "case" b
+case $$1 in$0
+  *)
+    DIE 'Unknown value for $1'
+  ;;
+esac
+endsnippet
+
+snippet casei "case item" b
+$1)
+  $2
+;;
+endsnippet

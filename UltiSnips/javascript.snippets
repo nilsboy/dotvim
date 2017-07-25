@@ -1,4 +1,14 @@
 global !p
+
+def toggle(t, opt):
+  opts = t.split('|')
+  pos = opts.index(opt)
+  if len(opts) == pos + 1:
+    pos = 0
+  else:
+    pos = pos + 1
+  return opts[pos]
+
 def toCamelCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
   v = re.sub(r'[\.\/]*', r'', v)
@@ -71,6 +81,10 @@ snippet stdout "stdout"
 process.stdout
 endsnippet
 
+snippet exec "exec" b
+const exec = require(\`child_process\`).execFileSync
+endsnippet
+
 snippet stdin "stdin"
 process.stdin
 endsnippet
@@ -134,7 +148,7 @@ INFO(\`$1\`)
 endsnippet
 
 snippet infoo "Info object" w
-INFO(\`$1: ${$1}\`)
+INFO(\`$1: \`, $1)
 endsnippet
 
 snippet warn "Warn" w
@@ -150,23 +164,19 @@ snippet d "Interpolated var" w
 endsnippet
 
 snippet ce "console.error" w
-console.error(\`### $1\`)$0
-endsnippet
-
-snippet cc "console.error" w
-console.error(\`### \` + ${VISUAL})$0
+console.error(\`### \` + ${VISUAL}$1)$0
 endsnippet
 
 snippet cee "console.error" w
-console.error(\`### $1:\`, $1)
+console.error(\`### ${VISUAL}$1:\`, $1)
 endsnippet
 
 snippet cl "console.log" w
-console.log(\`#### $1\`)
+console.log(\`#### ${VISUAL}$1\`)
 endsnippet
 
 snippet cll "console.log" w
-console.log(\`#### $1:\`, $1)
+console.log(\`#### ${VISUAL}$1:\`, $1)
 endsnippet
 
 snippet c "const" w
@@ -180,6 +190,10 @@ endsnippet
 # TODO
 # let dump = require(`circular-json`).stringify
 # console.error(`### node: \n`, dump(node, null, '  '))
+
+snippet tojson "tojson" w
+JSON.stringify(${VISUAL}$0, ' ', 2)
+endsnippet
 
 snippet dump "dump a var" b
 const util = require(\`util\`)
@@ -211,10 +225,22 @@ else {
 }
 endsnippet
 
-snippet fore "for each object" b
+snippet foreachkey "for each in object" b
 for(const ${2:variable} in ${1:iterable}) {
   $0
 }
+endsnippet
+
+snippet foreach "for each in collection" b
+for(const ${2:variable} of ${1:iterable}) {
+  $0
+}
+endsnippet
+
+snippet foreachpairs "forpairs" b
+const parametersArray = _.toPairs(${1:object}).map((${2:pair}) => {
+  $0
+})
 endsnippet
 
 snippet exit "process.exit" b
@@ -223,8 +249,8 @@ endsnippet
 
 snippet log "logging" b
 const LogDwim = require(\`log-dwim\`)
-const logDwim = new LogDwim()
-const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logDwim
+const logger = new LogDwim()
+const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logger
 endsnippet
 
 snippet die "die" w
@@ -246,11 +272,11 @@ class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basen
 }
 endsnippet
 
-snippet con "constructor" b
-constructor(${1:options = {${2:key: defaultValue }}}) {
-  $0
-}
-endsnippet
+# snippet con "constructor" b
+# constructor(${1:options = {${2:key: defaultValue }}}) {
+#   $0
+# }
+# endsnippet
 
 snippet it "it" b
 it(\`$1\`, () => {
@@ -363,8 +389,8 @@ function ${1:${VISUAL}}($2) {
 endsnippet
 
 snippet fun "function" b
-async function ${1:${VISUAL}}($2) {
-  $0
+async function $1 ($2) {
+  ${VISUAL}$0
 }
 endsnippet
 
@@ -436,8 +462,8 @@ async function main() {
 main()
 endsnippet
 
-snippet n "\n in quotes" w
-\`\n\`
+snippet nn "\n in quotes" w
+\n
 endsnippet
 
 snippet formatter_ignore "exclude the next node in the abstract syntax tree from formatting" b
@@ -492,7 +518,22 @@ snippet q "q" w
 endsnippet
 
 snippet match "match" w
-let [ , ${3:capture groups} ] = ${1:value}.match(\`${2:regex}\`)$0
+let [ , ${3:capture groups} ] = ${1:value}.match(\`${2:regex}\`) || []$0
+endsnippet
+
+snippet matches "matches" w
+${1:value}.match(/${2:regex}/)) {
+endsnippet
+
+snippet regex "regex" w
+new RegExp(\`${1:regex}\`, \`${2:i}\`)
+endsnippet
+
+snippet stdin-loop "stdin" b
+process.stdin.pipe(require(\`split\`)()).on(\`data\`, processLine)
+
+function processLine(line) {
+}
 endsnippet
 
 snippet argv "argv" b
@@ -501,4 +542,53 @@ endsnippet
 
 snippet argvv "argv with path and executable" b
 const [ execPath, executable, $1 ] = process.argv$0
+endsnippet
+
+snippet pm2_config "pm2_config" b
+# surrounded by extra parens to apease javascript linter
+# NOTE: process.env vars don't seem to be set when this is loaded
+# to setup pm2 run pm2-setup
+({
+
+  apps: [
+    {
+      name: \`$1\`
+      , script: \`./index.js\`
+      , watch: true
+      , ignore_watch: [\`\./test\.*\`, \`\./\..*\`]
+      , restart_delay: 500
+      , max_restarts: 1
+      , min_uptime: 5000
+      , max_memory_restart: \`200M\`
+      , next_gen_js: true
+      , log_date_format: \`YYYY-MM-DD HH:mm\`
+      , error_file: \`~/log/$1.log\`
+      , out_file: \`~/log/$1.log\`
+      , env: {
+        NODE_ENV: `development`
+      }
+    }
+  ]
+})
+endsnippet
+
+
+snippet reverse-proxy "reverse-proxy" b
+#!/usr/bin/env node
+
+// reverse proxy
+
+const proxy = require(\`redbird\`)({
+  port: 6000
+})
+
+proxy.register(\`fqdn\`, \`http://127.0.0.1:3001/path\`)
+endsnippet
+
+snippet packageJson "packageJson" b
+const packageJson = path.join(require(\`packpath\`).self(), \`package.json\`)
+endsnippet
+
+snippet "(const|let)+" "const|let toggle" r
+`!p snip.rv = toggle('const|let', match.group(1))`
 endsnippet

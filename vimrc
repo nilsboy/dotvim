@@ -384,6 +384,9 @@ nnoremap Y y$
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
+" Remap set mark because m is used by easyclip
+nnoremap <leader>m m
+
 " Quickly jump to buffers
 nnoremap <nowait>gb :ls<cr>:buffer<space>
 

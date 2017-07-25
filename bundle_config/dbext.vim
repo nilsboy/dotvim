@@ -93,23 +93,52 @@ let g:dbext_default_usermaps = 0
 " TODO: deactivate sql complete
 " :h omni-complete
 
-let g:MyDbextResultCount = 0
+let g:MyDbextResultsCount = 0
 let g:MyDbextNewBufferNr = 0
 
 nnoremap <leader>d <nop>
+nnoremap <silent> <leader>di :silent! call MyDbextInfos()<cr>
+nnoremap <silent> <leader>dc :DBListConnections<cr>
+nnoremap <silent> <leader>dp :call MyDbextExecSql('SHOW PROCESSLIST', 'processlist')<cr>
 
-nnoremap <leader>dv  :DBListConnections<cr>
-nnoremap <leader>de  :call MyDbextRun('DBExecSQLUnderCursor', '')<cr>
+nnoremap <silent> <leader>dd  yip:call MyDbextExecSql(@", 'query')<cr>
+nnoremap <silent> <leader>dtc yiw:call MyDbextExecSql('SELECT COUNT(*) FROM ' . @", @" . '_count')<cr>
 
-nnoremap <leader>dtl :call MyDbextRun('DBListTable ""', 'tables')<cr>
-nnoremap <leader>dtt yaw:call MyDbextRun('call DBExecSqlLimit("' . @" . '")', @")<cr>
+nnoremap <leader>dtt :call MyDbextRun('DBListTable ""', 'tables')<cr>
 nnoremap <leader>dtd :call MyDbextRun('DBDescribeTable', 'desc')<cr>
-nnoremap <leader>dtc yiw:call MyDbextRun(
-      \ 'call MyDbextTableCount("' . @" . '")', @" . '_count')<cr>
+nnoremap <leader>dts yiw:call MyDbextExecSql('SELECT * FROM ' . @", @" . '.contents')<cr>
+nnoremap <leader>dtc yiw:call MyDbextExecSql('SHOW CREATE TABLE ' . @", @" . '.create_table')<cr>
+
+function! MyDbextInfos() abort
+  edit /tmp/database_infos.txt
+  normal die
+  silent! only
+  normal! i### Database profiles
+  execute 'normal! o' . $REMOTE_HOME . '/etc/db_profiles_dbext.vim'
+  normal! o
+  normal! o### SQLs
+  r! ls -t *.sql
+  normal! 5gg
+endfunction
+
+function! MyDbextExecSql(sql, name) abort
+  let sql = a:sql
+  if sql =~ '^\s*select'
+    if sql !~ 'limit '
+      if sql =~ ';'
+        throw 'Semicolons not allowed without limit'
+      endif
+      let sql .= ' LIMIT 100'
+    endif
+  endif
+  " call INFO('sql:', sql)
+  call dbext#DB_execSql(sql)
+  silent! call MyDbextAfter(a:name)
+endfunction
 
 function! MyDbextRun(command, name) abort
   execute a:command
-  call MyDbextAfter(a:name)
+  silent! call MyDbextAfter(a:name)
 endfunction
 
 " Callback called by dbext
@@ -118,14 +147,14 @@ function! DBextPostResult(db_type, buf_nr) abort
   let g:MyDbextNewBufferNr = a:buf_nr
 endfunction
 
-
 " Move result file to /tmp set filetype
 function! MyDbextAfter(name) abort
   let name = a:name
-  let g:MyDbextResultCount = g:MyDbextResultCount + 1
+  let g:MyDbextResultsCount = g:MyDbextResultsCount + 1
   if name == ''
-    let name = expand('%:t') . '.' . g:MyDbextResultCount
+    let name = expand('%:t')
   endif
+  let name = name . '.' . g:MyDbextResultsCount
   let name = '/tmp/' . name . '.sqlresult'
   execute 'buffer ' . g:MyDbextNewBufferNr
   " TODO: test if vim-rooter works with write
@@ -136,35 +165,24 @@ function! MyDbextAfter(name) abort
   mapclear <buffer>
   " let b:MySqlresultFirstLoad = 1
 
-  only
-  redraw!
+  silent! only
+  " redraw!
 
   " Does not work
   " execute 'DBSetOption profile=' . g:dbext#currentProfile
 
-  " Remove connection info
-  normal! ggdd
+  " Remove connection info and wrapped time
+  normal! gg2dd
   " Duplicate separator line at bottom
   normal! 2ggyyGkp
   " does not work cursor is set by dbext after this
-  normal! gggm2j
-endfunction
-
-" DBSelectFromTable does not seem to honour the limit
-function! DBExecSqlLimit(table) abort
-  execute ":DBExecSQL SELECT * FROM " a:table " ORDER BY 1 DESC LIMIT 1100"
-endfunction
-
-function! MyDbextTableCount(table) abort
-  execute ":DBExecSQL SELECT COUNT(*) FROM " . a:table
+  " normal! gggm2j
+  normal! GddggP
 endfunction
 
 if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
     execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
 endif
-nnoremap <silent> <leader>dp :execute
-      \ "edit " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
-      \ \| setlocal filetype=dbext-profile<cr>
 
 " let g:ftplugin_sql_omni_key = "<leader>so"
 " let g:ftplugin_sql_omni_key = "<c-p>"

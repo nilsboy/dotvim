@@ -1,7 +1,5 @@
 setlocal syntax=yaml
 
-" call SwaggerLint()
-
 nnoremap <buffer> <leader>bl :silent! call SwaggerLint()<cr>
 
 if exists("b:did_ftplugin_swagger")
@@ -16,7 +14,7 @@ if exists("g:did_ftplugin_swagger")
 endif
 let g:did_ftplugin_swagger = 1
 
-function! SwaggerLint() abort
+function! MySwaggerLint() abort
   silent wall
   setlocal errorformat=%m
   let &l:makeprg="swagger-tools validate " . expand('%:p')
@@ -27,11 +25,11 @@ function! SwaggerLint() abort
   silent! wincmd w
 endfunction
 
-augroup s:SwaggerLint
+augroup MySwaggerAugroupLint
   autocmd!
   " TODO: TextChanged stops UltiSnips snippet expansion
   " autocmd TextChanged,InsertLeave * :call SwaggerLint()
-  autocmd BufWritePost * :silent! call SwaggerLint()
+  autocmd BufWritePost *.swagger.* :silent! call SwaggerLint()
 augroup END
 
 finish

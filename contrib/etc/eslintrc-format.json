@@ -1,5 +1,4 @@
 {
-  "plugins": null,
   "rules": {
     "no-console": [
       0
@@ -184,10 +183,10 @@
       1
     ],
     "arrow-body-style": [
-      1
+      1, "always"
     ],
     "arrow-parens": [
-      2, "as-needed", {
+      2, "always", {
         "requireForBlockBody": true
       }
     ],

@@ -19,8 +19,8 @@ SELECT
 FROM
   ${VISUAL}$2
 WHERE 1$0
-
-LIMIT 10
+ORDER BY
+  1 desc
 
 endsnippet
 
@@ -101,7 +101,7 @@ snippet "(=|IN)+" "=|IN toggle" r
 `!p snip.rv = toggle('=|IN', match.group(1))`
 endsnippet
 
-snippet li "limit" w
+snippet l "limit" w
 LIMIT 100
 endsnippet
 
@@ -115,4 +115,8 @@ endsnippet
 
 snippet using "using" w
 USING ($1)$0
+endsnippet
+
+snippet dist "dist" w
+DISTINCT
 endsnippet

@@ -47,24 +47,9 @@ snippet b "Bool" b
 "${1:key}": $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
 endsnippet
 
-snippet pm2_config "pm2_config" b
-{
-  "apps": [{
-    "name": process.env.npm_package_name,
-    "script": "./bin/app.sh",
-    "watch": true,
-    "ignore_watch" : ["./test/test.rest"],
-    "restart_delay": 500,
-    "max_restarts": 1,
-    "min_uptime": 5000,
-    "max_memory_restart": "200M"
-  }]
-}
-endsnippet
-
 snippet pm2_package_json "pm2_package_json" b
 "scripts": {
-  "setup": "npm install -g bower && bower install",
+  "setup": "npm install",
   "start": "pm2 start pm2.json",
   "stop": "pm2 stop pm2.json",
   "restart": "pm2 restart pm2.json",
