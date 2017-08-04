@@ -69,6 +69,10 @@ snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)$0
 endsnippet
 
+snippet import "import class" b
+import `!p snip.rv = toCamelCase(t[1])` from "$1"$0
+endsnippet
+
 snippet new "new" b
 const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($0)
 endsnippet

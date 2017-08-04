@@ -95,9 +95,11 @@ let g:netrw_dirhistmax = 0
 " Use gx to open any file under cursor in appropriate app
 let g:netrw_browsex_viewer="xdg-open"
 
-" Make the clipboard register the same as the default register
-" this allows easy copy to other x11 apps
-set clipboard=unnamed
+if $DISPLAY
+  " Make the clipboard register the same as the default register
+  " this allows easy copy to other x11 apps
+  set clipboard=unnamed
+endif
 
 " Chdir to the dir of the current buffer
 " set autochdir
@@ -251,7 +253,7 @@ set isfname-==
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks  :silent %s/\v\n\n+/\r\r/e | :silent %s/\n*\%$//g
 
-" Deactivate gui cursor to fix nvim regression
+" Deactivate gui cursor to fix nvim regression (2017-07-25)
 " (https://github.com/neovim/neovim/issues/7049)
 set guicursor=
 

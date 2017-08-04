@@ -20,6 +20,7 @@
 " - autoformat
 "   - does not have a lot of preconfigured formatters
 " - neomake-multiprocess
+" - vimmake https://github.com/skywind3000/vimmake
 " see also:
 " - vim-qf
 " - detect quickfix:
@@ -307,9 +308,9 @@ nnoremap <silent> <leader>fsi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'path': '~/src/'})<cr>
 
-nnoremap <silent> <leader>fd :call MyQuickfixSearch({
+nnoremap <silent> <leader>fbff :call MyQuickfixSearch({
       \ 'path': MyQuickfixBufferDir()})<cr>
-nnoremap <silent> <leader>fdi :call MyQuickfixSearch({
+nnoremap <silent> <leader>fbfi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'path': MyQuickfixBufferDir()})<cr>
 nnoremap <silent> <leader>ft :call MyQuickfixSearch({
