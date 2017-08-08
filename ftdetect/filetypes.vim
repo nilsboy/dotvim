@@ -10,7 +10,8 @@ autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
 autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
 
 autocmd BufRead,BufNewFile *.docopt setlocal filetype=docopt
-autocmd BufRead,BufNewFile .babelrc setlocal filetype=babelrc
+" autocmd BufRead,BufNewFile .babelrc setlocal filetype=babelrc
+autocmd BufRead,BufNewFile .babelrc setlocal filetype=json
 autocmd BufRead,BufNewFile *.sqlresult setlocal filetype=sqlresult
 
 autocmd BufRead,BufNewFile *handlebars* setlocal filetype=handlebars

@@ -11,9 +11,6 @@ out2=`mktemp`
 
 prettier "$@" > $out
 
-# eslint --fix --quiet \
-#   -c /home/nilsb/.vim/etc/contrib/etc/eslintrc-format.json "$out" 1>&2
-
 eslint \
   # suppress warnings and errors
   # --quiet \
@@ -21,8 +18,7 @@ eslint \
   --no-color \
   --fix \
   -c $HOME/.vim/etc/contrib/etc/eslintrc-format.json \
-  # -o $out2 \
   $out \
-  1>/dev/null \
+  2>/dev/null
 
 cat "$out"

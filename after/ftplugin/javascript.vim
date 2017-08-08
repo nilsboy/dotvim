@@ -101,14 +101,14 @@ let g:neoformat_javascript_eslint = {
 " let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 
 " npm install -g prettier
-let g:neoformat_enabled_javascript = [ 'prettier' ]
+" let g:neoformat_enabled_javascript = [ 'prettier' ]
 let g:neoformat_javascript_prettier = {
       \ 'exe': 'prettier'
       \ ,'args': ['--no-semi', '--single-quote']
       \ }
 
 " npm install -g prettier-eslint-cli
-let g:neoformat_enabled_javascript = [ 'prettier_eslint' ]
+" let g:neoformat_enabled_javascript = [ 'prettier_eslint' ]
 let g:neoformat_javascript_prettier_eslint = {
       \ 'exe': 'prettier-eslint'
       \ }
@@ -132,3 +132,14 @@ setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|e
 " let g:formatdef_eslint = '"pipe-wrapper eslint --fix -c ~/.eslintrc-format.yml"'
 
 " let g:neomake_javascript_enabled_makers = ['eslint']
+
+nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>
+function! MyJavascriptConvertFromPerl() abort
+  %s/sub //g
+  %s/my /let /g
+  %s/\$//g
+  %s/method //g
+  %s/self/this/g
+  %s/->/./g
+  %s/die /throw(/g
+endfunction

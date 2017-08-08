@@ -10,13 +10,17 @@ def toggle(t, opt):
   return opts[pos]
 
 def toCamelCase(v):
-  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-  v = re.sub(r'[\.\/]*', r'', v)
+  v = re.sub(r'.*/', r'', v)
+  return re.sub(r'(\W)', r'', v.title())
+  return v
+  v = re.sub(r'^[\/\.]+', r'', v)
+  return v
+  return v.title()
   return re.sub(r'(\W)', r'', v.title())
 
 def toMethodCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-  v = re.sub(r'[\.\/]*', r'', v)
+  v = re.sub(r'^[\.\/]*', r'', v)
   return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
 endglobal
 
@@ -69,7 +73,7 @@ snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)$0
 endsnippet
 
-snippet import "import class" b
+snippet i "import class" b
 import `!p snip.rv = toCamelCase(t[1])` from "$1"$0
 endsnippet
 
@@ -276,11 +280,11 @@ class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basen
 }
 endsnippet
 
-# snippet con "constructor" b
-# constructor(${1:options = {${2:key: defaultValue }}}) {
-#   $0
-# }
-# endsnippet
+snippet con "constructor" w
+constructor(${1:options = {${2:key: defaultValue }}}) {
+  $0
+}
+endsnippet
 
 snippet it "it" b
 it(\`$1\`, () => {
@@ -288,12 +292,16 @@ it(\`$1\`, () => {
 })
 endsnippet
 
-snippet asserteq "assert" b
+snippet aeq "assert" b
 assert.equal($1, \`$0\`)
 endsnippet
 
-snippet asok "assert.ok" b
-assert.ok($1)
+snippet aok "assert.ok" b
+assert.ok($0)
+endsnippet
+
+snippet athrows "assert.throws" b
+assert.throws(${VISUAL}$0)
 endsnippet
 
 snippet beforeeach "before each test" b
@@ -374,7 +382,7 @@ function qw(strings, ...keys) {
 endsnippet
 
 snippet f "anonymous function expression" w
-($1) => { $0 }
+($1) => { ${VISUAL}$0 }
 endsnippet
 
 snippet fn "anonymous node function expression" w
@@ -393,7 +401,13 @@ function ${1:${VISUAL}}($2) {
 endsnippet
 
 snippet fun "function" b
-async function $1 ($2) {
+$1 ($2) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet afun "function" b
+async $1 ($2) {
   ${VISUAL}$0
 }
 endsnippet
@@ -441,10 +455,6 @@ endsnippet
 #   - may work
 snippet fs-mock "mock filesystem" b
 const LOG_DIRECTORY = require(`unique-temp-dir`)()
-endsnippet
-
-snippet ok "assert.ok" b
-assert.ok($0)
 endsnippet
 
 snippet cleanup "run cleanup on program exit" b
@@ -595,4 +605,8 @@ endsnippet
 
 snippet "(const|let)+" "const|let toggle" r
 `!p snip.rv = toggle('const|let', match.group(1))`
+endsnippet
+
+snippet throw "throw" w
+throw new Error(\`${VISUAL}$0\`)
 endsnippet

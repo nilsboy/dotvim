@@ -177,8 +177,11 @@ snippet / "comment" b
 endsnippet
 
 # snippet todo "TODO" w
+# `!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
+# endsnippet
+
 snippet '(^\s*).*todo' "TODO" r
-`!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
+`!p snip.rv = match.group(1)``!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet note "NOTE" w
