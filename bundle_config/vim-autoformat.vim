@@ -22,9 +22,3 @@ finish
 
 let g:formatdef_my_custom_cs = '"astyle --mode=cs --style=ansi -pcHs4"'
 let g:formatters_cs = ['my_custom_cs']
-
-" :Verbose echo g:formatdef_eslint
-"
-" :NeomakeSh! eslint --no-eslintrc /home/nilsb/src/md-frameworx-resource-service/test/express.test.js
-" :NeomakeSh! eslint --no-eslintrc /home/nilsb/src/md-frameworx-resource-service/test/express.test.js
-

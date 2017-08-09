@@ -28,14 +28,14 @@ let g:MyJavascriptErrorformat .= '%ARangeError: %m' . ','
 let g:MyJavascriptErrorformat .= '%AReferenceError: %m' . ','
 let g:MyJavascriptErrorformat .= '%ASyntaxError: %m' . ','
 let g:MyJavascriptErrorformat .= '%ATypeError: %m' . ','
-let g:MyJavascriptErrorformat .= '%Z%*[\ ]at\ %f:%l:%c' . ','
-let g:MyJavascriptErrorformat .= '%Z%*[\ ]%m (%f:%l:%c)' . ','
+let g:MyJavascriptErrorformat .= '%Z%*[ ]at %f:%l:%c' . ','
+let g:MyJavascriptErrorformat .= '%Z%*[ ]%m (%f:%l:%c)' . ','
 
 "     at Object.foo [as _onTimeout] (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
-let g:MyJavascriptErrorformat .= '%*[\ ]%m (%f:%l:%c)' . ','
+let g:MyJavascriptErrorformat .= '%*[ ]%m (%f:%l:%c)' . ','
 
 "     at node.js:903:3
-let g:MyJavascriptErrorformat .= '%*[\ ]at\ %f:%l:%c' . ','
+let g:MyJavascriptErrorformat .= '%*[ ]at %f:%l:%c' . ','
 
 " /Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2
 "   throw new Error('bar');
@@ -43,7 +43,7 @@ let g:MyJavascriptErrorformat .= '%*[\ ]at\ %f:%l:%c' . ','
 let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
 
 " at Child.<anonymous> (/file/name/test.js:75:20)
-let g:MyJavascriptErrorformat .= '%*[\ ]at\ %*\ (%f:%l:%c)' . ','
+let g:MyJavascriptErrorformat .= '%*[ ]at %m (%f:%l:%c)'
 
 " Ignore everything else
 " let g:MyJavascriptErrorformat .= '%-G%.%#'
