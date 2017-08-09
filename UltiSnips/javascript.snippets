@@ -176,7 +176,7 @@ console.error(\`### \` + ${VISUAL}$1)$0
 endsnippet
 
 snippet cee "console.error" w
-console.error(\`### ${VISUAL}$1:\`, $1)
+console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$0)
 endsnippet
 
 snippet cl "console.log" w
@@ -622,3 +622,9 @@ snippet "(\.\w+)$" ".+" r
 endsnippet
 
 priority 0
+
+snippet inst "inst" b
+if($1 instanceof ${VISUAL}$2) {
+  $0
+}
+endsnippet
