@@ -42,6 +42,9 @@ let g:MyJavascriptErrorformat .= '%*[\ ]at\ %f:%l:%c' . ','
 "         ^
 let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
 
+" at Child.<anonymous> (/file/name/test.js:75:20)
+let g:MyJavascriptErrorformat .= '%*[\ ]at\ %*\ (%f:%l:%c)' . ','
+
 " Ignore everything else
 " let g:MyJavascriptErrorformat .= '%-G%.%#'
 

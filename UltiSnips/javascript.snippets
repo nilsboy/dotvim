@@ -275,7 +275,7 @@ require('pkginfo')(module)
 endsnippet
 
 snippet class "class" b
-class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
+export default class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
   $0
 }
 endsnippet
@@ -292,15 +292,15 @@ it(\`$1\`, () => {
 })
 endsnippet
 
-snippet aeq "assert" b
+snippet aeq "assert" w
 assert.equal($1, \`$0\`)
 endsnippet
 
-snippet aok "assert.ok" b
+snippet aok "assert.ok" w
 assert.ok($0)
 endsnippet
 
-snippet athrows "assert.throws" b
+snippet athrows "assert.throws" w
 assert.throws(${VISUAL}$0)
 endsnippet
 
@@ -610,3 +610,15 @@ endsnippet
 snippet throw "throw" w
 throw new Error(\`${VISUAL}$0\`)
 endsnippet
+
+snippet "\.then$" ".then" r
+.then(($1) => { $0 })
+endsnippet
+
+priority -1
+
+snippet "(\.\w+)$" ".+" r
+`!p snip.rv = match.group(1)`($0)
+endsnippet
+
+priority 0
