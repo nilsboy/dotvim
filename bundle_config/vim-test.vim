@@ -12,8 +12,7 @@ let g:test#javascript#patterns = {
       \ 'namespace': ['\v^\s*%(describe|suite|context)\s*[( ]\s*%("|''|`)(.*)%("|''|`Description)']}
 
 let test#javascript#mocha#options = 
-      \ ' --no-colors --compilers js:babel-core/register test/'
-      " \ ' --full-trace --no-colors --compilers js:babel-core/register test/'
+      \ ' --full-trace --no-colors --compilers js:babel-core/register test/'
 
 let test#strategy = "neomake"
 
