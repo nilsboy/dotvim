@@ -73,8 +73,16 @@ snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)$0
 endsnippet
 
-snippet i "import class" b
+snippet i "import" b
+import `!p snip.rv = toMethodCase(t[1])` from "$1"$0
+endsnippet
+
+snippet ic "import class" b
 import `!p snip.rv = toCamelCase(t[1])` from "$1"$0
+endsnippet
+
+snippet ilo "import" b
+import _ from "lodash"
 endsnippet
 
 snippet new "new" b
@@ -115,6 +123,10 @@ endsnippet
 
 snippet readfile "readfile" b
 const ${2:data} = fs.readFileSync(\`${1:file}\`).toString()$0
+endsnippet
+
+snippet writefile "writefile" w
+fs.writeFileSync(\`${1:file}\`, ${2:data})
 endsnippet
 
 snippet csvParserCli "CSV parser CLI" b
@@ -172,11 +184,11 @@ snippet d "Interpolated var" w
 endsnippet
 
 snippet ce "console.error" w
-console.error(\`### \` + ${VISUAL}$1)$0
+console.error(\`### \` + ${VISUAL}$1$0)
 endsnippet
 
 snippet cee "console.error" w
-console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$0)
+console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
 endsnippet
 
 snippet cl "console.log" w
@@ -246,7 +258,7 @@ for(const ${2:variable} of ${1:iterable}) {
 endsnippet
 
 snippet foreachpairs "forpairs" b
-const parametersArray = _.toPairs(${1:object}).map((${2:pair}) => {
+  _.toPairs(${1:object}).map(([${2:key}, ${3:value}]) => {
   $0
 })
 endsnippet
@@ -612,7 +624,15 @@ throw new Error(\`${VISUAL}$0\`)
 endsnippet
 
 snippet "\.then$" ".then" r
-.then(($1) => { $0 })
+.then(($1) => {
+  $0
+})
+endsnippet
+
+snippet "\.done$" "done()" r
+.then(() => {
+  done()
+})$0
 endsnippet
 
 priority -1
