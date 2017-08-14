@@ -22,6 +22,12 @@ def toMethodCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
   v = re.sub(r'^[\.\/]*', r'', v)
   return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+
+def className():
+  v = snip.basename[0:1].upper()
+  v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
+  return v
+
 endglobal
 
 snippet s "String" b
@@ -60,11 +66,6 @@ snippet null "Null" b
 \`${0:key}\`: null,
 endsnippet
 
-# babel:
-# checkout: babel-preset-es2015
-# npm install --save babel-cli babel-preset-es2015
-# then run babel-node ....js
-
 snippet req "require" b
 const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)$0
 endsnippet
@@ -98,7 +99,8 @@ process.stdout
 endsnippet
 
 snippet exec "exec" b
-const exec = require(\`child_process\`).execFileSync
+const exec = require(\`child_process\`).execSync
+const stdout = exec(\`${1:cmd}\`)
 endsnippet
 
 snippet stdin "stdin"
@@ -184,7 +186,7 @@ snippet d "Interpolated var" w
 endsnippet
 
 snippet ce "console.error" w
-console.error(\`### \` + ${VISUAL}$1$0)
+console.error(\`### ${VISUAL}$0\`)
 endsnippet
 
 snippet cee "console.error" w
@@ -197,10 +199,6 @@ endsnippet
 
 snippet cll "console.log" w
 console.log(\`#### ${VISUAL}$1:\`, $1)
-endsnippet
-
-snippet c "const" w
-const $1 = $2
 endsnippet
 
 snippet l "let" w
@@ -257,7 +255,7 @@ for(const ${2:variable} of ${1:iterable}) {
 }
 endsnippet
 
-snippet foreachpairs "forpairs" b
+snippet forp "forpairs" b
   _.toPairs(${1:object}).map(([${2:key}, ${3:value}]) => {
   $0
 })
@@ -286,8 +284,9 @@ snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
 
+# export default class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
 snippet class "class" b
-export default class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
+export default class `!p snip.rv = className()` {
   $0
 }
 endsnippet
@@ -298,22 +297,34 @@ constructor(${1:options = {${2:key: defaultValue }}}) {
 }
 endsnippet
 
+snippet describe "describe" b
+describe(\`$1\`, () => {
+  ${VISUAL}$0
+})
+endsnippet
+
 snippet it "it" b
 it(\`$1\`, () => {
-  $0
+  ${VISUAL}$0
 })
 endsnippet
 
 snippet aeq "assert" w
-assert.equal($1, \`$0\`)
+assert.equal($1, ${2:\`$0\`})
 endsnippet
 
 snippet aok "assert.ok" w
-assert.ok($0)
+assert.ok(${VISUAL}$0)
+endsnippet
+
+snippet adeep "adeep" w
+assert.deepStrictEqual($0)
 endsnippet
 
 snippet athrows "assert.throws" w
-assert.throws(${VISUAL}$0)
+assert.throws(() => {
+  $0
+}, ${1:${VISUAL}})
 endsnippet
 
 snippet beforeeach "before each test" b
@@ -540,7 +551,7 @@ function fillTemplate(data) {
 endsnippet
 
 snippet q "q" w
-\`$1\`$0
+\`${VISUAL}$1\`$0
 endsnippet
 
 snippet match "match" w
@@ -648,3 +659,8 @@ if($1 instanceof ${VISUAL}$2) {
   $0
 }
 endsnippet
+
+snippet errord "error definition" b
+`!p snip.rv = className()`.$1 = class $1 extends $0.Error {}
+endsnippet
+

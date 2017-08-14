@@ -56,20 +56,20 @@
 " Clear quickfix: :cex[]
 
 " TODO: word with boundaries search
-" TODO: and search
-" TODO include search for related snail-, camel-, etc, case
+" TODO: and search ignoring order of search words
+" TODO: include search for related snail-, camel-, etc, case
+" TODO: allow to search for line and dash separated words?
 " TODO: highlight lines with errors: https://github.com/mh21/errormarker.vim
-" TODO format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
-" TODO checkout quickfixsigns for resetting the signes on :colder etc
-" TODO use winsaveview to prevent window resizing on copen
-" TODO always close buffer of preview window - is there a plugin for that?
-" TODO checkout https://github.com/stefandtw/quickfix-reflector.vim
-" TODO add description to quickfix window title
+" TODO: Highlight quickfix errors https://github.com/jceb/vim-hier
+" TODO: format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
+" TODO: checkout quickfixsigns for resetting the signes on :colder etc
+" TODO: use winsaveview to prevent window resizing on copen
+" TODO: always close buffer of preview window - is there a plugin for that?
+" TODO: checkout fix code in quickfix window https://github.com/stefandtw/quickfix-reflector.vim
+" TODO: add description to quickfix window title
 " TODO: add error count to statusline (see neomake)
 " TODO: refactoring from &makeprg to neomake makers made search() slower
-" TODO: checkout https://github.com/jceb/vim-hier
-
-" TODO: allow to search for line and dash separated words?
+" TODO: don't jump if the current quickfix entry is invalid
 
 " Always show signs column
 augroup MyQuickfixAugroupPersistentSignsColumn
@@ -97,6 +97,7 @@ function! MyQuickfixSetNavigationType(type) abort
       nnoremap <silent> <c-p> :silent! lprevious<cr>
     endif
 endfunction
+silent call MyQuickfixSetNavigationType('quickfix')
 
 function! MyQuickfixToggleNavigationType() abort
     if g:MyQuickfixMode != 'quickfix'
@@ -116,7 +117,8 @@ function! MyQuickfixBufferDir() abort
 endfunction
 
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
-let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' . g:MyQuickfixIgnoreFile
+let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
+      \  g:MyQuickfixIgnoreFile
 if executable('ag')
   let g:MyQuickfixGrepCommand = 'ag --nogroup --nocolor --column '
         \ . ' --ignore-case --all-text'
@@ -256,15 +258,6 @@ function! MyQuickfixBuffers(hidden) abort
     copen
 endfunction
 
-" http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list
-function! MyQuickfixFilterQuickfixList(bang, pattern)
-  let cmp = a:bang ? '!~?' : '=~?'
-  call setqflist(filter(getqflist(), "bufname(v:val['bufnr']) "
-        \ . cmp . " a:pattern"))
-endfunction
-command! -bang -nargs=1 -complete=file QFilter call
-      \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
-
 " TODO nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 function! MyQuickfixHelp(term) abort
     call MyQuickfixSetNavigationType('quickfix')
@@ -274,9 +267,72 @@ function! MyQuickfixHelp(term) abort
 endfunction
 command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
 
+" TODO:
+augroup MyQuickfixAugroupTodo
+    autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
+augroup END
+
+function! MyQuickfixCleanQickfixlist() abort
+    " call MyQuickfixRemoveInvalidFiles()<cr>
+    " call MyQuickfixRemoveInvalid()
+    " call DUMP(getqflist())
+endfunction
+
+" function! MyQuickfixTest() abort
+"     let qflist = getqflist()
+"     let newlist = []
+"     let firstRealError = 0
+"     let index = -1
+"     for i in qflist
+"       if i.text =~ '^\v\s*$'
+"         continue
+"       endif
+"       let path = fnamemodify(bufname(i.bufnr), ':p')
+"       if ! filereadable(path)
+"         if i.text =~ '\v\s*at\s*'
+"           continue
+"         elseif i.bufnr != 0
+"           continue
+"         endif
+"       endif
+"       call add(newlist, i)
+"       let index = index + 1
+"       if i.bufnr != 0
+"         if firstRealError == 0
+"           let firstRealError = index
+"         endif
+"       endif
+"       " let i.text =  path . ' ' . i.text
+"     endfor
+"     call setqflist(newlist)
+"     execute ':cc ' . i
+" endfunction
+
+function! MyQuickfixRemoveInvalidFiles() abort
+  let qflist = getqflist()
+  let newlist = []
+  for i in qflist
+    let path = fnamemodify(bufname(i.bufnr), ':p')
+    if ! filereadable(path)
+      continue
+    endif
+    call add(newlist, i)
+  endfor
+  call setqflist(newlist)
+endfunction
+
 function! MyQuickfixRemoveInvalid() abort
     call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
 endfunction
+
+" http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list
+function! MyQuickfixFilterQuickfixList(bang, pattern)
+  let cmp = a:bang ? '!~?' : '=~?'
+  call setqflist(filter(getqflist(), "bufname(v:val['bufnr']) "
+        \ . cmp . " a:pattern"))
+endfunction
+command! -bang -nargs=1 -complete=file QFilter call
+      \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
 
 nnoremap <silent> <leader>f <nop>
 nnoremap <silent> <leader>ff :call MyQuickfixSearch({})<cr>

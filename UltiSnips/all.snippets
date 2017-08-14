@@ -19,8 +19,8 @@ snippet '(^|\s+)(\(|r)' "round brackets / parens" r
 `!p snip.rv = match.group(1)`(${VISUAL}$1)$0
 endsnippet
 
-snippet "(^|\s+)({|c)" "curly brackets / braces" r
-`!p snip.rv = match.group(1)`{${VISUAL}$1}$0
+snippet "(^|\s*)({|c)" "curly brackets / braces" r
+`!p snip.rv = match.group(1)`{${VISUAL}$0}
 endsnippet
 
 snippet '(^|\s+)(\[|s)' "square brackets" r
@@ -56,9 +56,9 @@ snippet "(always|never)+" "always|never toggle" r
 `!p snip.rv = toggle('always|never', match.group(1))`
 endsnippet
 
-snippet "(0|1)+" "0|1 toggle" r
-`!p snip.rv = toggle('0|1', match.group(1))`
-endsnippet
+# snippet "(0|1)+" "0|1 toggle" r
+# `!p snip.rv = toggle('0|1', match.group(1))`
+# endsnippet
 
 ### Non-Ascii-characters
 

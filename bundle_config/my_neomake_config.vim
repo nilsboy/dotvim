@@ -6,16 +6,14 @@ NeoBundle 'neomake/neomake'
 " https://github.com/neomake/neomake/issues/190
 
 " let g:neomake_verbose = 3
-call delete('/tmp/neomake.log')
-let g:neomake_logfile = '/tmp/neomake.log'
+" call delete('/tmp/neomake.log')
+" let g:neomake_logfile = '/tmp/neomake.log'
 
-" %-G suppresses non-matching entries
 let g:neomake_ft_maker_remove_invalid_entries = 0
 
 " TODO: change for speedup? / screws with separator between file search and
-" grep
-let g:neomake_serialize = 1
-let g:neomake_echo_current_error = 0
+" let g:neomake_serialize = 1
+let g:neomake_echo_current_error = 1
 
 " TODO: disable for linting?
 let g:neomake_open_list = 0

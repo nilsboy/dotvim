@@ -1,8 +1,3 @@
- let &errorformat = '%*[ ]at %m (%f:%l:%c)'
+let &errorformat = g:MyJavascriptErrorformat 
 
-" let &makeprg = 'mocha'
-
-" TODO: this seems to run even when commented?!?
-" CompilerSet makeprg=mocha
-
-" call INFO('&errorformat:', &errorformat)
+let &makeprg = 'mocha --full-trace --no-colors --compilers js:babel-core/register'

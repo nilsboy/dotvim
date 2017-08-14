@@ -12,7 +12,7 @@ endif
 let b:MyJavascriptFtpluginLoaded = 1
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
-nnoremap <buffer> <leader>li yi`:execute ':terminal npm install --save '
+nnoremap <buffer> <leader>li yi":execute ':terminal npm install --save '
       \ . @"<cr>
 
 augroup MyJavascriptAugroupAddTypeMarker
@@ -42,14 +42,11 @@ let g:MyJavascriptErrorformat .= '%*[ ]at %f:%l:%c' . ','
 "         ^
 let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
 
-" at Child.<anonymous> (/file/name/test.js:75:20)
-let g:MyJavascriptErrorformat .= '%*[ ]at %m (%f:%l:%c)'
-
 " Ignore everything else
-" let g:MyJavascriptErrorformat .= '%-G%.%#'
+" let g:MyJavascriptErrorformat .= '%-G%.%#,'
 
 let g:neomake_run_maker = {
-    \ 'exe': 'node',
+    \ 'exe': 'babel-node',
     \ 'args': ['%:p'],
     \ 'errorformat': g:MyJavascriptErrorformat,
     \ }
@@ -137,12 +134,15 @@ setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|e
 " let g:neomake_javascript_enabled_makers = ['eslint']
 
 nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>
-function! MyJavascriptConvertFromPerl() abort
+function! MyJavascriptConvertFromPerl()
   %s/sub //g
   %s/my /let /g
   %s/\$//g
   %s/method //g
   %s/self/this/g
   %s/->/./g
+  %s/=>/:/g
   %s/die /throw(/g
+  %s/\:\://g
+  %s/^\s*#/\/\//g
 endfunction
