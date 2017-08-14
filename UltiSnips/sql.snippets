@@ -53,7 +53,7 @@ snippet "(LEFT|INNER)+" "LEFT|INNER toggle" r
 `!p snip.rv = toggle('LEFT|INNER', match.group(1))`
 endsnippet
 
-snippet gr "group by" w
+snippet g "group by" w
 GROUP BY
   $0
 endsnippet
@@ -119,4 +119,16 @@ endsnippet
 
 snippet dist "dist" w
 DISTINCT
+endsnippet
+
+snippet p "p" w
+product
+endsnippet
+
+snippet pv "pv" w
+product_variant
+endsnippet
+
+snippet pid "pid" w
+product_variant_id
 endsnippet
