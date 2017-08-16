@@ -400,8 +400,10 @@ nnoremap <silent> <leader>vpfF :call MyQuickfixSearch({
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
 
-nnoremap <silent> <leader>df :call MyQuickfixSearch({
-      \ 'path': $HOME . '/src/sql/'})<cr>
+nnoremap <silent> <leader>fnn yiw:call MyQuickfixSearch({
+      \ 'path':  FindRootDirectory() . '/node_modules/',
+      \ 'term': @"
+      \ })<cr>
 
 " map _  <Plug>(operator-adjust)
 " call operator#user#define('adjust', 'Op_adjust_window_height')

@@ -82,6 +82,11 @@ snippet ic "import class" b
 import `!p snip.rv = toCamelCase(t[1])` from "$1"$0
 endsnippet
 
+snippet inew "import class" b
+import `!p snip.rv = toCamelCase(t[1])` from "$1"
+`!p snip.rv = toMethodCase(t[1])` = new `!p snip.rv = toCamelCase(t[1])`($0)
+endsnippet
+
 snippet ilo "import" b
 import _ from "lodash"
 endsnippet
