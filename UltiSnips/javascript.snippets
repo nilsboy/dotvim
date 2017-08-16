@@ -297,8 +297,14 @@ export default class `!p snip.rv = className()` {
 endsnippet
 
 snippet con "constructor" w
-constructor(${1:options = {${2:key: defaultValue }}}) {
-  $0
+constructor(properties = {}) {
+  Object.assign(
+    this,
+    _.defaults(properties, {
+      ${0:defaults}
+    })
+  )
+}
 }
 endsnippet
 
@@ -666,6 +672,6 @@ if($1 instanceof ${VISUAL}$2) {
 endsnippet
 
 snippet errord "error definition" b
-`!p snip.rv = className()`.$1 = class $1 extends $0.Error {}
+`!p snip.rv = className()`.$1 = class $1 extends $2.Error {}$0
 endsnippet
 
