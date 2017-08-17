@@ -350,10 +350,10 @@ nmap <silent>H :bprev<cr>
 
 " use <leader>! as prefix to remap stuff
 " Remap <C-i> as it's the same as Tab
-nnoremap <leader>!a <C-o>
-nnoremap <leader>!b <C-i>
-" nmap <silent><C-j> <leader>!a
-" nmap <silent><C-k> <leader>!b
+" nnoremap <leader>!a <C-o>
+" nnoremap <leader>!b <C-i>
+
+nnoremap <c-u> <C-i>
 
 " Write all when leaving a tmux pane
 nmap <silent><c-j> :silent wall<cr><c-j>
@@ -392,6 +392,7 @@ xnoremap . :norm.<CR>
 
 " Remap set mark because m is used by easyclip
 nnoremap <leader>m m
+nnoremap M '
 
 " Quickly jump to buffers
 nnoremap <nowait>gb :ls<cr>:buffer<space>
@@ -503,8 +504,7 @@ nnoremap <leader>/t gg/TODO<cr>
 " nnoremap <c-space>l <esc>/\v[)\}\]]<cr>
 " inoremap <c-space>l <esc>/\v[)\}\]]<cr>
 
-nnoremap <leader>vt :execute ':edit '
-      \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
+nnoremap <silent> <leader>vt :execute ':edit ' \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
