@@ -267,10 +267,10 @@ function! MyQuickfixHelp(term) abort
 endfunction
 command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
 
-" TODO:
-augroup MyQuickfixAugroupTodo
-    autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
-augroup END
+" " TODO:
+" augroup MyQuickfixAugroupTodo
+"     autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
+" augroup END
 
 function! MyQuickfixCleanQickfixlist() abort
     " call MyQuickfixRemoveInvalidFiles()<cr>

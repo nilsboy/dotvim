@@ -10,7 +10,7 @@ function! BufferClose() abort
 
     " netrw leaves its buffers in a weired state
     if BufferIsNetrw() == 1
-      bwipeout
+      bwipeout!
       return
     endif
 
@@ -29,10 +29,8 @@ function! BufferClose() abort
         silent q!
     endif
 
-    " Use bwipe instead of bdelete - otherwise the buffer stays open as
-    " an unlisted-buffer.
-    " Using bwipe prevents the current postion mark from being saved - so the file
-    " position can not be restored when loading the file again
+    " Using bwipe prevents the current postion mark from being saved - so
+    " the file position can not be restored when loading the file again.
     silent! bdelete!
 
 endfunction

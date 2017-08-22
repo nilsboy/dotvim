@@ -2,6 +2,7 @@
 " - save one entry for files opened but not edited
 
 " TODO: There are a lot more signs than marks - use them?
+" TODO: checkout vim-projectionist cycles
 
 let g:MyJumperDir = $XDG_DATA_HOME . '/jumper'
 let g:MyJumperFile = g:MyJumperDir . '/jumps'
