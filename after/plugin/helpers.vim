@@ -8,8 +8,14 @@
 " TODO: when emptying a file (i.e. normal! die) save changes on exit
 function! BufferClose() abort
 
+    " netrw leaves its buffers in a weired state
+    if BufferIsNetrw() == 1
+      bwipeout
+      return
+    endif
+
     if BufferIsCommandLine() == 1
-        :silent q!
+        silent q!
         return
     endif
 
@@ -20,7 +26,7 @@ function! BufferClose() abort
     endif
 
     if BufferIsLast() == 1
-        :silent q!
+        silent q!
     endif
 
     " Use bwipe instead of bdelete - otherwise the buffer stays open as
@@ -110,6 +116,14 @@ function! BufferIsCommandLine() abort
     endif
     return 0
 endfunction
+
+function! BufferIsNetrw() abort
+    if &filetype == 'netrw'
+        return 1
+    endif
+    return 0
+endfunction
+
 
 function! BufferIsUnnamed() abort
     if empty(bufname("%"))
