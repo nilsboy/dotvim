@@ -262,7 +262,9 @@ set nrformats-=octal
 set isfname-==
 
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
-command! -nargs=* RemoveNewlineBlocks  :silent %s/\v\n\n+/\r\r/e | :silent %s/\n*\%$//g
+command! -nargs=* RemoveNewlineBlocks
+      \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g
+      \ | :silent %s/\n*\%$//g
 
 " Deactivate gui cursor to fix nvim regression (2017-07-25)
 " (https://github.com/neovim/neovim/issues/7049)
@@ -364,7 +366,8 @@ nmap <silent>H :bprev<cr>
 " nnoremap <leader>!a <C-o>
 " nnoremap <leader>!b <C-i>
 
-nnoremap <c-u> <C-i>
+nnoremap <c-o> <c-i>
+nnoremap <c-u> <c-o>
 
 " Write all when leaving a tmux pane
 nmap <silent><c-j> :silent wall<cr><c-j>
