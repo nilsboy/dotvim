@@ -1,4 +1,3 @@
-finish
 " This is a provider for an the clipboard, with support for X and tmux
 NeoBundle 'cazador481/fakeclip.neovim'
 

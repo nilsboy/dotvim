@@ -1,16 +1,18 @@
 " Run your tests at the speed of thought
-" NeoBundle 'janko-m/vim-test'
-NeoBundle 'nilsboy/vim-test'
+NeoBundle 'janko-m/vim-test'
 
-nmap <silent> <leader>tf :silent wall \| TestFile<CR>
-nmap <silent> <leader>ta :silent wall \| TestSuite<CR>
-nmap <silent> <leader>tn :silent wall \| TestNearest<CR>
-nmap <silent> <leader>tt :silent wall \| TestLast<CR>
-nmap <silent> <leader>tv :TestVisit<CR>
-
-" TODO: <leader>to - open corresponding test file
-
+" Directory from which the first test was run
+" Workaround for rerunning tests from outside of project dir
+let g:MyTestCwd = ''
+let g:MyTestLast = ''
 function! MyTestStrategy(cmd)
+  silent! wall
+  if g:MyTestLast != 1
+    let g:MyTestCwd = getcwd()
+  endif
+  let g:MyTestLast = 0
+  let cwd = getcwd()
+  execute 'cd ' . g:MyTestCwd
   " call INFO('got cmd: ' . a:cmd)
   let cmds = split(a:cmd)
   let path = cmds[0]
@@ -19,6 +21,7 @@ function! MyTestStrategy(cmd)
   " call INFO('Using compiler: ' . compiler)
   execute 'compiler! ' . compiler
   execute 'silent! make ' . arguments
+  execute 'cd ' . cwd
   " call INFO('Running make ' . arguments)
   silent call MyQuickfixSetNavigationType('quickfix')
   copen
@@ -32,3 +35,12 @@ let g:test#strategy = 'MyTestStrategy'
 
 " let g:test#preserve_screen = 1
 " let test#filename_modifier = ':.'
+
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tt :let g:MyTestLast = 1 \| TestLast<CR>
+nmap <silent> <leader>tv :execute 'cd ' . g:MyTestCwd \| TestVisit<CR>
+
+" TODO: <leader>to - open corresponding test file
+
