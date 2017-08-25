@@ -28,7 +28,7 @@ let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
 let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim/' }
 let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
-let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR }
+let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR . '/vim/' }
 
 let g:vim['contrib']  = { 'dir' : g:vim.etc.dir . '/contrib/' }
 let g:vim.contrib['etc']  = { 'dir' : g:vim.contrib.dir . '/etc/' }
