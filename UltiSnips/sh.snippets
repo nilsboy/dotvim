@@ -47,3 +47,10 @@ endsnippet
 snippet null "null" w
 /dev/null
 endsnippet
+
+snippet ifnotempty "if var not empty" b
+if [[ ! -z \$$1 ]] ; then
+	$0
+fi
+endsnippet
+

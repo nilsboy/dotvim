@@ -23,6 +23,6 @@ eslint \
   -c $HOME/.vim/etc/contrib/etc/eslintrc-format.json \
   # -o $out2 \
   $out \
-  1>/dev/null \
+1>&2
 
 cat "$out"

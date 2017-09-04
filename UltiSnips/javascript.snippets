@@ -87,10 +87,6 @@ import `!p snip.rv = toCamelCase(t[1])` from "$1"
 `!p snip.rv = toMethodCase(t[1])` = new `!p snip.rv = toCamelCase(t[1])`($0)
 endsnippet
 
-snippet ilo "import" b
-import _ from "lodash"
-endsnippet
-
 snippet new "new" b
 const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($0)
 endsnippet
@@ -117,7 +113,7 @@ process.stderr
 endsnippet
 
 snippet lodash "require lodash" b
-const _ = require(\`lodash/fp\`)
+const _ = require(\`lodash\`)
 endsnippet
 
 snippet util "require util" b
@@ -171,11 +167,11 @@ DEBUG(\`$1\`)
 endsnippet
 
 snippet info "Info" w
-INFO(\`$1\`)
+INFO(\`${VISUAL}$0\`)
 endsnippet
 
 snippet infoo "Info object" w
-INFO(\`$1: \`, $1)
+INFO(\`${VISUAL}$1:\`, ${VISUAL}$1)
 endsnippet
 
 snippet warn "Warn" w
@@ -187,7 +183,7 @@ ERROR(\`$1\`)
 endsnippet
 
 snippet d "Interpolated var" w
-\$\{${1:var}\}
+\$\{${VISUAL}${0:var}\}
 endsnippet
 
 snippet ce "console.error" w
@@ -289,10 +285,11 @@ snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
 
-# export default class `!p snip.rv = snip.basename[0:1].upper() + re.sub(r'(\W)', r'', snip.basename.title()[1:])` {
 snippet class "class" b
-export default class `!p snip.rv = className()` {
-  $0
+import Initializer from "../initializer"
+
+export default class `!p snip.rv = className()` extends Initializer {
+  ${VISUAL}$0
 }
 endsnippet
 
@@ -393,8 +390,8 @@ snippet glob "glob" b
 const glob = require(\`glob\`).sync
 endsnippet
 
-snippet globfor "loop through all globbed files" b
-for (const entry of glob(path.join($1))) {
+snippet ls "loop through all globbed files" b
+for (const entry of glob(path.join($1, \`*\`))) {
   ${0:const basename = path.basename(entry)}
 }
 endsnippet
@@ -675,3 +672,10 @@ snippet errord "error definition" b
 `!p snip.rv = className()`.$1 = class $1 extends $2.Error {}$0
 endsnippet
 
+snippet cp "copy" w
+fs.copySync($1, $0)
+endsnippet
+
+snippet isdir "is directory" w
+fs.lstatSync($0).isDirectory()
+endsnippet

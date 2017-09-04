@@ -49,6 +49,7 @@ let g:neomake_run_maker = {
     \ 'exe': 'babel-node',
     \ 'args': ['%:p'],
     \ 'errorformat': g:MyJavascriptErrorformat,
+    \ 'output_stream': 'both',
     \ }
     " \ 'postprocess':
     " function('MyJavascriptFixCoreFileLocationInQuickfix')
@@ -70,6 +71,8 @@ endfunction
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
 let g:ale_linters['javascript'] = ['eslint']
+" let g:ale_javascript_eslint_executable = 'babel-eslint'
+" let g:ale_javascript_eslint_use_global = 1
 
 "### Formatter
 
