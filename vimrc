@@ -106,7 +106,7 @@ let g:netrw_dirhistmax = 0
 let g:netrw_browsex_viewer="xdg-open"
 nnoremap <leader>E :Explore<cr>
 
-if $DISPLAY
+if $DISPLAY != ''
   " Make the clipboard register the same as the default register
   " this allows easy copy to other x11 apps
   set clipboard=unnamed
