@@ -679,3 +679,13 @@ endsnippet
 snippet isdir "is directory" w
 fs.lstatSync($0).isDirectory()
 endsnippet
+
+snippet should "should" b
+const chai = require(\`chai\`)
+chai.use(require(\`chai-as-promised\`))
+chai.should()
+endsnippet
+
+snippet now "now" w
+new Date().toISOString()
+endsnippet

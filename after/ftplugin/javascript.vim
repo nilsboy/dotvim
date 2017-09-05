@@ -12,13 +12,29 @@ endif
 let b:MyJavascriptFtpluginLoaded = 1
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
-nnoremap <buffer> <leader>li yi":execute ':terminal npm install --save '
-      \ . @"<cr>
+nnoremap <buffer> <silent><leader>li :call MyJavascriptInstallModule()<cr>
 
-augroup MyJavascriptAugroupAddTypeMarker
-  autocmd!
-  autocmd BufLeave <buffer> normal! mJ
-augroup END
+function! MyJavascriptInstallModule() abort
+  let a = @a
+  if search('\v`.+`', '', line('.')) != 0
+    normal! l
+    normal! "ayt`
+  else
+    if search('\v".+"', '', line('.')) != 0
+      normal! l
+      normal! "ayt"
+    else
+      return
+    endif
+  endif
+  execute ':terminal npm install ' @a
+  let @a = a
+endfunction
+
+" augroup MyJavascriptAugroupAddTypeMarker
+"   autocmd!
+"   autocmd BufLeave <buffer> normal! mJ
+" augroup END
 
 " from vim-nodejs-errorformat: Error: bar at Object.foo [as _onTimeout]
 " (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
