@@ -238,6 +238,11 @@
       1, {
         "allowMultiplePropertiesPerLine": false
       }
+    ],
+    "newline-per-chained-call": [
+      1, {
+        "ignoreChainWithDepth": 1
+      }
     ]
   },
   "parserOptions": {

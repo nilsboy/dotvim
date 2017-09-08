@@ -305,7 +305,7 @@ constructor(properties = {}) {
 }
 endsnippet
 
-snippet describe "describe" b
+snippet mocha "describe" b
 describe(\`$1\`, () => {
   ${VISUAL}$0
 })
@@ -688,4 +688,10 @@ endsnippet
 
 snippet now "now" w
 new Date().toISOString()
+endsnippet
+
+# NOTE: uses special space character (utf8 2001) to prevent vim from
+# filtering it in the quickfix window
+snippet json "json" b
+console.error(\`### $1:\n\`, JSON.stringify($1, undefined, \`  \`))$0
 endsnippet

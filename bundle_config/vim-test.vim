@@ -20,7 +20,7 @@ function! MyTestStrategy(cmd)
   let compiler = fnamemodify(path, ':t')
   " call INFO('Using compiler: ' . compiler)
   execute 'compiler! ' . compiler
-  execute 'silent! make ' . arguments
+  execute 'silent! make! ' . arguments
   execute 'cd ' . cwd
   " call INFO('Running make ' . arguments)
   silent call MyQuickfixSetNavigationType('quickfix')
