@@ -32,24 +32,25 @@ This setting makes Vim echo the autocommands as it executes them.
   `:set verbose=9`
 
 ## Naming conventions (WIP)
-Use one consistent style for everything.
+Goal: Use one consistent style for all identifiers.
 
-Using non-global functions and vars is harder to debug and has no real benefit.
+Using non-global functions and variables is harder to debug and has no real benefit.
 Sometimes it might even be nice for a user to be able to use a non-offical function as a workaround.
 
 ### Vim restrictions
-- vars can not include a # like functions - so not using this for functions ether
-- functions must not contain "-" and other characters - so using the script filename directly is not always possible
-- functions must start with a upper case letter - so using this for vars too
+- variable names must not include a # (like functions can)
+- function names must not include "-" (so using the plugin filename directly is not always possible)
+- function names must start with an upper case letter
 - commands must start with an uppercase letter. Rest can be uppercase letters, lowercase letters or digits.
-- TODO: autocmds?
+- augroup names must not contain space
 
 ### Result
-- prefix own files with my_ - this distinguishes local from external configs/files
-- plugin config file names: my_{{plugin_name}}_config.vim
-- own plugin file names: my_{{plugin_name}}.vim
-- only one my_-prefix for own plugin configs
-- use "My"-prefix and camelcase for all identifiers
+- use camelcase for all identifiers
+- make all identifiers global
+- use "My"-prefix on all identifiers
+- local plugin file names: my_{{plugin_name}}.vim
+- local and public plugin config file names: my_{{plugin_name}}_config.vim
+- remove "My"-prefix when converting to a public plugin
 
 #### Deprecated
 - replace "-" in script names with "_" for vars etc

@@ -5,6 +5,8 @@
 " set verbose=9
 " set verbose=1
 
+set nocompatible
+
 "### Misc
 
 if empty($XDG_CONFIG_HOME)
@@ -69,9 +71,6 @@ call Mkdir(&undodir, "p")
 " nomodeline can not be revered by plugins
 " but modeline is needed by dbext even though it uses its own parser.
 " set nomodeline
-
-" Enable vim enhancements
-set nocompatible
 
 augroup MyVimrcAugroupOnlySetCurrentDirAsPath
   autocmd!
@@ -358,6 +357,7 @@ command! -nargs=* WW :SudoWrite
 " Does not work on terminal vim
 " nnoremap <s-space> <C-b>
 
+" TODO: exclude :explore buffers
 nmap <silent>L :bnext<cr>
 nmap <silent>H :bprev<cr>
 

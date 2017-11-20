@@ -183,7 +183,7 @@ ERROR(\`$1\`)
 endsnippet
 
 snippet d "Interpolated var" w
-\$\{${VISUAL}${0:var}\}
+\$\{${VISUAL}$1\}$0
 endsnippet
 
 snippet ce "console.error" w
@@ -210,8 +210,8 @@ endsnippet
 # let dump = require(`circular-json`).stringify
 # console.error(`### node: \n`, dump(node, null, '  '))
 
-snippet tojson "tojson" w
-JSON.stringify(${VISUAL}$0, ' ', 2)
+snippet stringify "stringify JSON" w
+JSON.stringify(${VISUAL}$0, \` \`, 2)
 endsnippet
 
 snippet dump "dump a var" b
@@ -256,14 +256,21 @@ for(const ${2:variable} of ${1:iterable}) {
 }
 endsnippet
 
-snippet forp "forpairs" b
+snippet forpairs "forpairs" b
   _.toPairs(${1:object}).map(([${2:key}, ${3:value}]) => {
   $0
 })
 endsnippet
 
+snippet fori "fori" b
+for(let i = 0; i < $1.length; i++)
+{
+  $0
+}
+endsnippet
+
 snippet exit "process.exit" b
-process.exit(${1:1})$0
+process.exit(1$0)
 endsnippet
 
 snippet log "logging" b
@@ -326,13 +333,13 @@ assert.ok(${VISUAL}$0)
 endsnippet
 
 snippet adeep "adeep" w
-assert.deepStrictEqual($0)
+assert.deepStrictEqual(${VISUAL}$0)
 endsnippet
 
 snippet athrows "assert.throws" w
 assert.throws(() => {
-  $0
-}, ${1:${VISUAL}})
+  ${VISUAL}$0
+}, ${2:/$1/})
 endsnippet
 
 snippet beforeeach "before each test" b
@@ -376,7 +383,9 @@ snippet promise "promise" b
 // use export BLUEBIRD_DEBUG=1 or NODE_ENV=development to see long stacktraces
 const Promise = require(\`bluebird\`)
 
-// const mv = Promise.promisify(fs.move)
+// const mv = Promise.promisify(fs.move, {
+//   context: fs
+//})
 endsnippet
 
 snippet walk "file walk" b
@@ -562,12 +571,12 @@ snippet q "q" w
 \`${VISUAL}$1\`$0
 endsnippet
 
-snippet match "match" w
-let [ , ${3:capture groups} ] = ${1:value}.match(\`${2:regex}\`) || []$0
+snippet match "match" b
+let [ , ${3:capture groups} ] = ${1:value}.match(/${2:regex}/) || []$0
 endsnippet
 
 snippet matches "matches" w
-${1:value}.match(/${2:regex}/)) {
+match(/${1:regex}/$0)
 endsnippet
 
 snippet regex "regex" w
@@ -692,6 +701,26 @@ endsnippet
 
 # NOTE: uses special space character (utf8 2001) to prevent vim from
 # filtering it in the quickfix window
-snippet json "json" b
-console.error(\`### $1:\n\`, JSON.stringify($1, undefined, \`  \`))$0
+snippet jsonn "json" b
+console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
+endsnippet
+
+snippet json "json" w
+JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
+endsnippet
+
+snippet config "config" b
+// fixed values
+./config/default.json
+
+// environment variable resolution only
+./config/custom-environment-variables.json
+endsnippet
+
+snippet r "r" w
+return $0
+endsnippet
+
+snippet replace "replace" w
+replace(/$1/, \`$0\`)
 endsnippet

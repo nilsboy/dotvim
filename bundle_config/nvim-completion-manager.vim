@@ -23,3 +23,6 @@ let g:cm_sources_override = {
 " not sure what <c-g>u is - but it seems to work:
 " https://stackoverflow.com/questions/16804859/vim-how-to-make-autocomplpop-snipmate-supertab-work-together
 inoremap <expr> <cr> pumvisible() ? "\<c-g>u\<cr>" : "\<cr>"
+
+let g:cm_smart_enable = 1
+let g:cm_sources_enable	= 1

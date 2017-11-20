@@ -108,9 +108,9 @@ snippet debug "debug"
 call DEBUG($0)
 endsnippet
 
-snippet neobundle "Description" b
+snippet plugin "Description" b
 " ${1:description}
-NeoBundle '${2:plugin name or github url}'
+NeoBundle '${0:plugin name or github url}'
 endsnippet
 
 snippet neobundlepost "do something after plugin is loaded" b

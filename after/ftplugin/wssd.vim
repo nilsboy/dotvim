@@ -1,1 +1,1 @@
-nnoremap <silent><buffer> <leader>x :call MyXMLTidy()<CR>
+nnoremap <silent><buffer> <leader>x :call MyXmlTidy()<CR>

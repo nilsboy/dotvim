@@ -184,16 +184,16 @@ snippet '(^\s*).*todo' "TODO" r
 `!p snip.rv = match.group(1)``!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
-snippet note "NOTE" w
-`!v helpers#surroundings()[0]`NOTE:$0`!v  helpers#surroundings()[1]`
+snippet '(.*\s*).*note' "NOTE" r
+`!v helpers#surroundings()[0]`NOTE: $0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '.*tag' "TAGS" r
-`!v helpers#surroundings()[0]`TAGS:$0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`TAGS: $0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '.*fix' "FIX" r
-`!v helpers#surroundings()[0]`FIX:$0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`FIX: $0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '(^\s*).*check' "check out" r

@@ -1,10 +1,15 @@
 " - RNB, a Vim colorscheme template
 "   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
 
+" NOTE: https://github.com/atelierbram/syntax-highlighting
+
 " syntax has to be enabled before using it
 if &t_Co > 1
-    syntax enable
+  if !exists('g:syntax_on')
+      syntax enable
+  endif
 endif
+
 
 " Show when lines extend past column 80
 " set colorcolumn=81

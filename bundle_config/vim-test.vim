@@ -23,7 +23,8 @@ function! MyTestStrategy(cmd)
   execute 'silent! make! ' . arguments
   execute 'cd ' . cwd
   " call INFO('Running make ' . arguments)
-  silent call MyQuickfixSetNavigationType('quickfix')
+  " silent call MyQuickfixSetNavigationType('quickfix')
+  call MyQuickfixRemoveWhitspace()
   copen
 endfunction
 

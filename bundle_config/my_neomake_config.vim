@@ -28,10 +28,10 @@ augroup END
 
 function! MyNeomakeConfigOnNeomakeFinished() abort
   if g:neomake_hook_context.jobinfo.file_mode == 1
-    call MyQuickfixSetNavigationType('locationlist')
+    " call MyQuickfixSetNavigationType('locationlist')
     lopen
   else
-    call MyQuickfixSetNavigationType('quickfix')
+    " call MyQuickfixSetNavigationType('quickfix')
     copen
   endif
 endfunction

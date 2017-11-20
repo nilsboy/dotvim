@@ -62,7 +62,7 @@ let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
 " let g:MyJavascriptErrorformat .= '%-G%.%#,'
 
 let g:neomake_run_maker = {
-    \ 'exe': 'babel-node',
+    \ 'exe': 'node',
     \ 'args': ['%:p'],
     \ 'errorformat': g:MyJavascriptErrorformat,
     \ 'output_stream': 'both',
@@ -82,6 +82,10 @@ function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
   " Delete the first line, always empty for some reason
   execute ':1d'
 endfunction
+
+" mocha first
+let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
+      \ "Karma", "Lab", "Jasmine", "Jest"] }
 
 "### Linter
 

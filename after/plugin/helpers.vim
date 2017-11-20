@@ -98,16 +98,6 @@ function! BufferIsSpecial() abort
   return bufname('%') =~ '\v.*\[.*' ? 1 : 0
 endfunction
 
-function! BufferIsQuickfix() abort
-    " if &filetype == 'qt'
-    "   return 1
-    " endif
-    if bufname('%') == '[Quickfix List]'
-        return 1
-    endif
-    return 0
-endfunction
-
 function! BufferIsCommandLine() abort
     if bufname("%") == '[Command Line]'
         return 1
@@ -782,4 +772,12 @@ function! helpers#surroundings() abort
         \ &commentstring, '\S\zs%s',' %s','') ,'%s\ze\S', '%s ', '')), '%s', 1)
 endfunction
 
+function! BufferIsQuickfix() abort
+  return getwininfo(win_getid())[0].quickfix &&
+        \ ! BufferIsLocList()
+endfunction
+
+function! BufferIsLocList() abort
+  return getwininfo(win_getid())[0].loclist
+endfunction
 

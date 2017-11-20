@@ -1,5 +1,8 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
+" makeprg and errorformat together are also flawed
+" (https://github.com/vim-syntastic/syntastic/issues/699#issuecomment-248517315)
+
 " Related plugins:
 " - make (builtin)
 "   - synchronous
@@ -81,36 +84,40 @@ augroup END
 
 let g:MyQuickfixMode = ''
 
-" TODO make mappings move through lists by history
-function! MyQuickfixSetNavigationType(type) abort
-    if a:type == 'quickfix'
-      " call INFO("Quickfix navigation activated")
-      let g:MyQuickfixMode = 'quickfix'
-      nnoremap <silent> <tab> :copen<cr>
-      nnoremap <silent> <c-n> :silent! cnext<cr>
-      nnoremap <silent> <c-p> :silent! cprevious<cr>
-    else
-      " call INFO("Locationlist navigation activated")
-      let g:MyQuickfixMode = 'locationlist'
-      nnoremap <silent> <tab> :lopen<cr>
-      nnoremap <silent> <c-n> :silent! lnext<cr>
-      nnoremap <silent> <c-p> :silent! lprevious<cr>
-    endif
-endfunction
-silent call MyQuickfixSetNavigationType('quickfix')
+nnoremap <silent> <tab> :copen<cr>
+nnoremap <silent> <s-tab> :lopen<cr>
 
-function! MyQuickfixToggleNavigationType() abort
-    if g:MyQuickfixMode != 'quickfix'
-      silent! lclose
-      silent call MyQuickfixSetNavigationType('quickfix')
-    else
-      silent! cclose
-      silent call MyQuickfixSetNavigationType('locationlist')
-    endif
-endfunction
+" " TODO make mappings move through lists by history
+" function! MyQuickfixSetNavigationType(type) abort
+"     if a:type == 'quickfix'
+"       " call INFO("Quickfix navigation activated")
+"       let g:MyQuickfixMode = 'quickfix'
+"       nnoremap <silent> <tab> :copen<cr>
+"       nnoremap <silent> <s-tab> :lopen<cr>
+"       nnoremap <silent> <c-n> :silent! cnext<cr>
+"       nnoremap <silent> <c-p> :silent! cprevious<cr>
+"     else
+"       " call INFO("Locationlist navigation activated")
+"       let g:MyQuickfixMode = 'locationlist'
+"       nnoremap <silent> <tab> :lopen<cr>
+"       nnoremap <silent> <c-n> :silent! lnext<cr>
+"       nnoremap <silent> <c-p> :silent! lprevious<cr>
+"     endif
+" endfunction
+" silent call MyQuickfixSetNavigationType('quickfix')
 
-" TODO: call MyQuickfixSetNavigationType('quickfix')
-nnoremap <leader>gl :call MyQuickfixToggleNavigationType()<cr>
+" function! MyQuickfixToggleNavigationType() abort
+"     if g:MyQuickfixMode != 'quickfix'
+"       silent! lclose
+"       silent call MyQuickfixSetNavigationType('quickfix')
+"     else
+"       silent! cclose
+"       silent call MyQuickfixSetNavigationType('locationlist')
+"     endif
+" endfunction
+
+" " TODO: call MyQuickfixSetNavigationType('quickfix')
+" nnoremap <leader>gl :call MyQuickfixToggleNavigationType()<cr>
 
 function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
@@ -125,6 +132,7 @@ if executable('ag')
         \ . ' -p ' . g:MyQuickfixIgnoreFile
   " TODO: add --smart-case option?
   " TODO: --word-regexp:
+  " TODO: checkout --vimgrep
 endif
 
 let g:MyQuickfixSearchLimit = '500'
@@ -149,6 +157,9 @@ function! MyQuickfixSearch(options) abort
   let path = get(a:options, 'path', project_dir)
   let path = fnamemodify(path, ':p')
 
+  " force path to be ralative in quickfix display
+  execute 'lcd' path
+
   if matchBasenameOnly
     let filenameTerm = '\/.*' . term . '[^/]*$'
   else
@@ -169,17 +180,19 @@ function! MyQuickfixSearch(options) abort
         \ . ' ' . fnameescape(path)
         \ . ' /dev/null'
         \ . ' | head-warn ' . limit
+        \ . ' | sort '
         \ . ' | sort-by-path-depth'
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' /dev/null'
         \ . ' | head-warn ' . limit
 
-  call MyQuickfixSetNavigationType('quickfix')
+  " call MyQuickfixSetNavigationType('quickfix')
 
   let makers = 'find'
   if term != ''
-    let makers .= ' delimiter grep'
+    " let makers .= ' delimiter grep'
+    let makers .= ' grep'
   endif
 
   let MyErrorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
@@ -252,7 +265,7 @@ endfunction
 nnoremap <silent><leader>vb :call MyQuickfixBuffers('')<cr>
 nnoremap <silent><leader>vB :call MyQuickfixBuffers('!')<cr>
 function! MyQuickfixBuffers(hidden) abort
-    call MyQuickfixSetNavigationType('quickfix')
+    " call MyQuickfixSetNavigationType('quickfix')
     let MyErrorformat  = '%s"%f"%s'
     cexpr execute(':buffers' . a:hidden)
     copen
@@ -260,7 +273,7 @@ endfunction
 
 " TODO nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 function! MyQuickfixHelp(term) abort
-    call MyQuickfixSetNavigationType('quickfix')
+    " call MyQuickfixSetNavigationType('quickfix')
     silent! execute 'helpgrep ' . a:term
     " silent! execute 'tag /' . a:term
     silent! copen
@@ -272,53 +285,62 @@ command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
 "     autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
 " augroup END
 
-function! MyQuickfixCleanQickfixlist() abort
-    " call MyQuickfixRemoveInvalidFiles()<cr>
-    " call MyQuickfixRemoveInvalid()
-    " call DUMP(getqflist())
-endfunction
-
-" function! MyQuickfixTest() abort
-"     let qflist = getqflist()
-"     let newlist = []
-"     let firstRealError = 0
-"     let index = -1
-"     for i in qflist
-"       if i.text =~ '^\v\s*$'
-"         continue
-"       endif
-"       let path = fnamemodify(bufname(i.bufnr), ':p')
-"       if ! filereadable(path)
-"         if i.text =~ '\v\s*at\s*'
-"           continue
-"         elseif i.bufnr != 0
-"           continue
-"         endif
-"       endif
-"       call add(newlist, i)
-"       let index = index + 1
-"       if i.bufnr != 0
-"         if firstRealError == 0
-"           let firstRealError = index
-"         endif
-"       endif
-"       " let i.text =  path . ' ' . i.text
-"     endfor
-"     call setqflist(newlist)
-"     execute ':cc ' . i
+" " TODO: has to be specific to quickfix content
+" function! MyQuickfixCleanQickfixlist() abort
+"   call MyQuickfixRemoveWhitspace()
+"   " call MyQuickfixRemoveInvalidFiles()
+"   " call MyQuickfixRemoveInvalid()
+"   " call DUMP(getqflist())
 " endfunction
+
+function! MyQuickfixRemoveWhitspace() abort
+  let qflist = getqflist()
+  let newlist = []
+  for i in qflist
+    let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
+    if i.text =~ '\v^\s*$'
+      continue
+    endif
+    call add(newlist, i)
+  endfor
+  call setqflist(newlist)
+endfunction
 
 function! MyQuickfixRemoveInvalidFiles() abort
   let qflist = getqflist()
   let newlist = []
   for i in qflist
     let path = fnamemodify(bufname(i.bufnr), ':p')
-    if ! filereadable(path)
+    if i.valid == 1
+      if ! filereadable(path)
+        continue
+      endif
+    endif
+    if i.text =~ '\v^\s*$'
       continue
     endif
+    " let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
+    " if path =~ 'mocha'
+    "   continue
+    " endif
     call add(newlist, i)
   endfor
   call setqflist(newlist)
+endfunction
+
+" auto filetype qf call MyQuickfixFormat()
+" TODO:
+function! MyQuickfixFormat() abort
+  let qflist = getqflist()
+  setlocal modifiable
+  %delete
+  let i = -1
+  for entry in qflist
+    let i = i + 1
+    call append(i, entry.text)
+  endfor
+  setlocal nomodifiable
+  setlocal nomodified
 endfunction
 
 function! MyQuickfixRemoveInvalid() abort

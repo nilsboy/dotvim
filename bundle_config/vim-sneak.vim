@@ -28,9 +28,9 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
-" Don't hightlight sneak targets
-autocmd ColorScheme * hi! link Sneak Normal
-autocmd ColorScheme * hi! link SneakLabel TabLineSel
+" " Don't hightlight sneak targets
+" autocmd ColorScheme * hi! link Sneak Normal
+" autocmd ColorScheme * hi! link SneakLabel TabLineSel
 
 let g:sneak#label = 1
 nmap s <Plug>SneakLabel_s

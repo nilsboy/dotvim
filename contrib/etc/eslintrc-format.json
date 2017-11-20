@@ -102,11 +102,6 @@
     "keyword-spacing": [
       1
     ],
-    "lines-around-comment": [
-      1, {
-        "beforeLineComment": true
-      }
-    ],
     "lines-around-directive": [
       1
     ],

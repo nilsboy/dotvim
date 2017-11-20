@@ -1,8 +1,5 @@
-finish " #######################################################################
-
 function! MyXmlTidy()
     let _view=winsaveview()
-
     %!tidy 
         \ --indent-spaces 2
         \ --vertical-space 1
@@ -15,6 +12,5 @@ function! MyXmlTidy()
         \ --wrap-attributes 1
         \ --quiet 1
         \ --input-xml 1
-
     call winrestview(_view)
 endfunction
