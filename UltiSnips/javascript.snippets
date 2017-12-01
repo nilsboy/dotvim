@@ -434,19 +434,19 @@ snippet fn "anonymous node function expression" w
 }
 endsnippet
 
-snippet func "function" b
+snippet fun "function" b
 function ${1:${VISUAL}}($2) {
   $0
 }
 endsnippet
 
-snippet fun "function" b
+snippet func "function" b
 $1 ($2) {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet afun "function" b
+snippet afun "async function" b
 async $1 ($2) {
   ${VISUAL}$0
 }
@@ -701,12 +701,14 @@ endsnippet
 
 # NOTE: uses special space character (utf8 2001) to prevent vim from
 # filtering it in the quickfix window
+# console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
 snippet jsonn "json" b
-console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
+console.error(\`### ${VISUAL}$1:\n\`, console.dir(${VISUAL}$1))$0
 endsnippet
 
+# JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
 snippet json "json" w
-JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
+console.error(\`### ${VISUAL}$1:\n\`) ; console.dir(${VISUAL}$1)$0
 endsnippet
 
 snippet config "config" b

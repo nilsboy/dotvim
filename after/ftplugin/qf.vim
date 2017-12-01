@@ -17,6 +17,7 @@ if BufferIsQuickfix()
 else
   nnoremap <silent> <c-n> :silent! lnext<cr>
   nnoremap <silent> <c-p> :silent! lprevious<cr>
+  nmap <buffer><silent> <s-tab> :lclose<cr>
   nmap <buffer><silent> <tab> :lclose<cr>
   nmap <buffer><silent> L :silent! lnewer<cr>
   nmap <buffer><silent> H :silent! lolder<cr>

@@ -1,4 +1,5 @@
 " See also: https://alols.github.io/2012/11/07/writing-prose-with-vim/
+" see also: https://github.com/reedes/vim-pencil
 
 setlocal syntax=txt
 

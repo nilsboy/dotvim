@@ -24,6 +24,7 @@
 "   - does not have a lot of preconfigured formatters
 " - neomake-multiprocess
 " - vimmake https://github.com/skywind3000/vimmake
+" - https://github.com/idanarye/vim-erroneous
 " see also:
 " - vim-qf
 " - detect quickfix:

@@ -3,6 +3,8 @@ NeoBundle 'tpope/vim-tbone'
 
 " Note: Similar plugins:
 " Note: https://github.com/idanarye/vim-terminalogy
+" see also: https://github.com/kassio/neoterm
+" see also: https://github.com/hkupty/nvimux
 
 " Note: can only send via range not via motion
 

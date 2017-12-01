@@ -19,7 +19,7 @@ function! MyMarkdownTocAddToc() abort
     normal! dip
   endif
 
-  put! ='# Table of Contents'
+  put! ='## Table of Contents'
   GenTocGF
 
   if line != 0
