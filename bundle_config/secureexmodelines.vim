@@ -2,5 +2,5 @@
 NeoBundle 'nilsboy/vim-secureexmodelines'
 
 " let g:secure_exmodelines_verbose = 1
-let g:secure_exmodelines_allowed_items = [ "DBSetOption" ]
+let g:secure_exmodelines_allowed_items = [ "DBSetOption", "MyDbConfigSetProfile" ]
 

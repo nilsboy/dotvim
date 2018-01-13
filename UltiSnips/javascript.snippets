@@ -67,28 +67,28 @@ snippet null "Null" b
 endsnippet
 
 snippet req "require" b
-const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)$0
+const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)
 endsnippet
 
 snippet reqc "require class" b
-const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)$0
+const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)
 endsnippet
 
 snippet i "import" b
-import `!p snip.rv = toMethodCase(t[1])` from "$1"$0
+import `!p snip.rv = toMethodCase(t[1])` hahahaha from "$1"
 endsnippet
 
 snippet ic "import class" b
-import `!p snip.rv = toCamelCase(t[1])` from "$1"$0
+import `!p snip.rv = toCamelCase(t[1])` from "$1"
 endsnippet
 
 snippet inew "import class" b
 import `!p snip.rv = toCamelCase(t[1])` from "$1"
-`!p snip.rv = toMethodCase(t[1])` = new `!p snip.rv = toCamelCase(t[1])`($0)
+`!p snip.rv = toMethodCase(t[1])` = new `!p snip.rv = toCamelCase(t[1])`($1)
 endsnippet
 
 snippet new "new" b
-const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($0)
+const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($1)
 endsnippet
 
 snippet ex "module.exports"
@@ -104,14 +104,6 @@ const exec = require(\`child_process\`).execSync
 const stdout = exec(\`${1:cmd}\`)
 endsnippet
 
-snippet stdin "stdin"
-process.stdin
-endsnippet
-
-snippet stderr "stderr"
-process.stderr
-endsnippet
-
 snippet lodash "require lodash" b
 const _ = require(\`lodash\`)
 endsnippet
@@ -124,8 +116,8 @@ snippet fs "require fs" b
 const fs = require(\`fs-extra\`)
 endsnippet
 
-snippet readfile "readfile" b
-const ${2:data} = fs.readFileSync(\`${1:file}\`).toString()$0
+snippet readfile "readfile" w
+const ${2:data} = fs.readFileSync(\`${0:file}\`).toString()
 endsnippet
 
 snippet writefile "writefile" w
@@ -186,48 +178,15 @@ snippet d "Interpolated var" w
 \$\{${VISUAL}$1\}$0
 endsnippet
 
-snippet ce "console.error" w
-console.error(\`### ${VISUAL}$0\`)
-endsnippet
-
-snippet cee "console.error" w
-console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
-endsnippet
-
-snippet cl "console.log" w
-console.log(\`#### ${VISUAL}$1\`)
-endsnippet
-
-snippet cll "console.log" w
-console.log(\`#### ${VISUAL}$1:\`, $1)
-endsnippet
-
 snippet l "let" w
 let $1 = ${2:\`$3\`}
 endsnippet
-
-# TODO
-# let dump = require(`circular-json`).stringify
-# console.error(`### node: \n`, dump(node, null, '  '))
 
 snippet stringify "stringify JSON" w
 JSON.stringify(${VISUAL}$0, \` \`, 2)
 endsnippet
 
-snippet dump "dump a var" b
-const util = require(\`util\`)
-console.error(\`### $1:\n\`, util.inspect($1, {depth: 30}))
-endsnippet
-
-snippet xx "here"
-console.error(\`### HERE`!v
-  line('.')
-  ` `!v
-  expand('%:t') . ':' . line('.')
-  `\`)
-endsnippet
-
-snippet e "equals" w
+snippet eq "equals" w
 = \`$1\`
 endsnippet
 
@@ -237,7 +196,6 @@ if($1) {
 }
 endsnippet
 
-####################
 snippet else "else"
 else {
   ${VISUAL}$0
@@ -280,13 +238,12 @@ const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logger
 endsnippet
 
 snippet die "die" w
-DIE(\`$1\`)$0
+DIE(\`$0\`)
 endsnippet
 
 snippet diee "die with var" w
-DIE(\`$1:\`, $1)$0
+DIE(\`$0:\`, $0)
 endsnippet
-
 
 snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
@@ -421,39 +378,33 @@ function qw(strings, ...keys) {
 }
 endsnippet
 
-snippet f "anonymous function expression" w
-($1) => { ${VISUAL}$0 }
-endsnippet
-
-snippet fn "anonymous node function expression" w
-(error, result) => {
-  if(error) {
-    throw err
-  }
-  $0
-}
-endsnippet
-
 snippet fun "function" b
 function ${1:${VISUAL}}($2) {
   $0
 }
 endsnippet
 
-snippet func "function" b
+snippet m "method" b
 $1 ($2) {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet afun "async function" b
+snippet f "anonymous function expression" w
+($1) => { ${VISUAL}$0 }
+endsnippet
+
+snippet af "async function" b
 async $1 ($2) {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet m "method" b
-${1:method name}(${2:arguments}) {
+snippet callback "anonymous node function expression" w
+(error, result) => {
+  if(error) {
+    throw err
+  }
   $0
 }
 endsnippet
@@ -471,6 +422,10 @@ endsnippet
 
 snippet mkdir "mkdir from fs-extra" b
 fs.mkdirsSync($1)
+endsnippet
+
+snippet rmdir "remove complete directory" b
+fs.removeSync($1)
 endsnippet
 
 snippet paths "xdg default paths" b
@@ -563,7 +518,7 @@ function fillTemplate(data) {
   const result = template({
     products: data
   })
-  console.error(\`### result:\`, result)
+  console.trace(\`### result:\`, result)
 }
 endsnippet
 
@@ -695,20 +650,12 @@ chai.use(require(\`chai-as-promised\`))
 chai.should()
 endsnippet
 
-snippet now "now" w
+snippet dateNow "now" w
 new Date().toISOString()
 endsnippet
 
-# NOTE: uses special space character (utf8 2001) to prevent vim from
-# filtering it in the quickfix window
-# console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
-snippet jsonn "json" b
-console.error(\`### ${VISUAL}$1:\n\`, console.dir(${VISUAL}$1))$0
-endsnippet
-
-# JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
-snippet json "json" w
-console.error(\`### ${VISUAL}$1:\n\`) ; console.dir(${VISUAL}$1)$0
+snippet dateFileStamp "dateFileStamp" w
+moment().format(\`YYYYMMDD-HHmmss\`)
 endsnippet
 
 snippet config "config" b
@@ -725,4 +672,95 @@ endsnippet
 
 snippet replace "replace" w
 replace(/$1/, \`$0\`)
+endsnippet
+
+snippet n "\\n" w
+\`\n\`
+endsnippet
+
+snippet yaml "yaml import" b
+const yaml = require(\`js-yaml\`)
+endsnippet
+
+snippet toyaml "toYaml" w
+yaml.safeDump($0)
+endsnippet
+
+snippet stdin "get stdin" w
+$0 = await require(\`get-stdin\`)()
+endsnippet
+
+snippet docopt "docopt" b
+const DOCOPT = \`
+usage: `!v expand('%:t:r')`$0
+options:
+\`
+const neodoc = require(\`neodoc\`)
+const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
+endsnippet
+ 
+# Debugging
+
+# snippet xxx "here"
+# console.trace(\`### HERE`!v
+#   line('.')
+#   ` `!v
+#   expand('%:t') . ':' . line('.')
+#   `\`)
+# endsnippet
+
+snippet e "print to stderr" w
+console.error(\`### ${VISUAL}$0\`)
+endsnippet
+
+snippet ee "print to stderr with variable" w
+console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+endsnippet
+
+snippet eee "print to stderr with variable and trace" w
+console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+endsnippet
+
+snippet ex "print to stderr with variable and exit" w
+console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0) ; process.exit(1)
+endsnippet
+
+snippet cl "console.log" w
+console.log(\`#### ${VISUAL}$1\`)
+endsnippet
+
+snippet cll "console.log" w
+console.log(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+endsnippet
+
+# TODO
+# let dump = require(`circular-json`).stringify
+# console.error(`### node: \n`, dump(node, null, '  '))
+
+snippet dump "dump a var" b
+# TODO: snippet
+const util = require(\`util\`)
+console.error(\`### $1:\n\`, util.inspect($1, {depth: 30}))
+endsnippet
+
+# NOTE: uses special space character (utf8 2001) to prevent vim from
+# filtering it in the quickfix window
+# console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
+snippet jsonn "json" b
+# TODO: snippet
+console.error(\`### ${VISUAL}$1:\`) ; console.dir(${VISUAL}$1)$0
+endsnippet
+
+# JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
+snippet json "json" w
+# TODO: snippet
+console.error(\`### ${VISUAL}$1:\n\`) ; console.dir(${VISUAL}$1)$0
+endsnippet
+
+snippet tempFileName "tempFileName" b
+const fileName = require('tmp').fileSync().name
+endsnippet
+
+snippet s "s" w
+[\s\S]*
 endsnippet

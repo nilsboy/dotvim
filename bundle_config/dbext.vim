@@ -1,3 +1,6 @@
+finish
+" NOTE: using my_db_config.vim now
+" 
 " Provides database access to many dbms
 " Note: Does not work in neovim because it needs if_perl
 " :h dbext
@@ -111,13 +114,13 @@ nnoremap <leader>dtc yiw:call MyDbextExecSql('SHOW CREATE TABLE ' . @", @" . '.c
 
 function! MyDbextInfos() abort
   edit /tmp/database_infos.txt
-  normal die
+  1,$d
   silent! only
   normal! i### Database profiles
   execute 'normal! o' . $REMOTE_HOME . '/etc/db_profiles_dbext.vim'
   normal! o
   normal! o### SQLs
-  r! ls -t *.sql
+  execute 'r! ls -t ' . $REMOTE_HOME . '/src/sql/*.sql'
   normal! 5gg
 endfunction
 
@@ -194,7 +197,7 @@ endif
 " necessary to clear the plugins cache.  The default map for this is: >
 "     imap <buffer> <C-C>R <C-\><C-O>:call sqlcomplete#Map('ResetCache')<CR><C-X><C-O>
 
-finish " #######################################################################
+finish
 
 " dbext Default mappings
 " n  ,sE           <Plug>DBExecSQLUnderTopXCursor

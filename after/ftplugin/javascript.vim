@@ -11,25 +11,42 @@ if exists("b:MyJavascriptFtpluginLoaded")
 endif
 let b:MyJavascriptFtpluginLoaded = 1
 
-nnoremap <buffer> <leader>lI :terminal npm install<cr>
-nnoremap <buffer> <silent><leader>li :call MyJavascriptInstallModule()<cr>
+" support module filenames
+setlocal iskeyword+=-
 
-function! MyJavascriptInstallModule() abort
-  let a = @a
-  if search('\v`.+`', '', line('.')) != 0
-    normal! l
-    normal! "ayt`
-  else
-    if search('\v".+"', '', line('.')) != 0
-      normal! l
-      normal! "ayt"
-    else
-      return
-    endif
-  endif
-  execute ':terminal npm install ' @a
-  let @a = a
-endfunction
+nnoremap <buffer> <leader>lI :terminal npm install<cr>
+nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
+
+" edit module documention
+nnoremap <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>
+nnoremap <silent> <leader>lmi :call MyQuickfixSearch({
+      \ 'path':  FindRootDirectory() . '/node_modules/',
+      \ 'term': input('Module name: '),
+      \ 'grep': 0,
+      \ })<cr>
+nnoremap <silent> <leader>lmw yi`:call MyQuickfixSearch({
+      \ 'path':  FindRootDirectory() . '/node_modules/',
+      \ 'term': @",
+      \ 'grep': 0,
+      \ })<cr>
+
+" nnoremap <buffer> <silent><leader>li :call MyJavascriptInstallModule()<cr>
+" function! MyJavascriptInstallModule() abort
+"   let a = @a
+"   if search('\v`.+`', '', line('.')) != 0
+"     normal! l
+"     normal! "ayt`
+"   else
+"     if search('\v".+"', '', line('.')) != 0
+"       normal! l
+"       normal! "ayt"
+"     else
+"       return
+"     endif
+"   endif
+"   execute ':terminal npm install ' @a
+"   let @a = a
+" endfunction
 
 " augroup MyJavascriptAugroupAddTypeMarker
 "   autocmd!
@@ -64,24 +81,25 @@ let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
 let g:neomake_run_maker = {
     \ 'exe': 'node',
     \ 'args': ['%:p'],
-    \ 'errorformat': g:MyJavascriptErrorformat,
+    \ 'errorformat': '%m',
     \ 'output_stream': 'both',
     \ }
+    " \ 'errorformat': g:MyJavascriptErrorformat,
     " \ 'postprocess':
     " function('MyJavascriptFixCoreFileLocationInQuickfix')
 
-" TODO
-function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
-  let filename = bufname(i.bufnr)
-  " Non-existing file in the quickfix list, assume a core file
-  if filereadable(filename)
-    return
-  endif
-  " Load the node.js core file (thanks @izs for pointing this out!)
-  silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
-  " Delete the first line, always empty for some reason
-  execute ':1d'
-endfunction
+" " TODO
+" function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
+"   let filename = bufname(i.bufnr)
+"   " Non-existing file in the quickfix list, assume a core file
+"   if filereadable(filename)
+"     return
+"   endif
+"   " Load the node.js core file (thanks @izs for pointing this out!)
+"   silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
+"   " Delete the first line, always empty for some reason
+"   execute ':1d'
+" endfunction
 
 " mocha first
 let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
@@ -91,8 +109,8 @@ let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
 let g:ale_linters['javascript'] = ['eslint']
-" let g:ale_javascript_eslint_executable = 'babel-eslint'
-" let g:ale_javascript_eslint_use_global = 1
+" " let g:ale_javascript_eslint_executable = 'babel-eslint'
+" " let g:ale_javascript_eslint_use_global = 1
 
 "### Formatter
 
@@ -169,3 +187,7 @@ function! MyJavascriptConvertFromPerl()
   %s/\:\://g
   %s/^\s*#/\/\//g
 endfunction
+
+
+let b:fswitchdst = 'js'
+let b:fswitchlocs = 'reg:/src/test/'

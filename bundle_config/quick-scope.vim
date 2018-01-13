@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " highlights 
 " TODO try again - does not seem to do anything"
 " Lightning fast left-right movement in Vim 

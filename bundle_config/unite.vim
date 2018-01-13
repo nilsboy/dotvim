@@ -429,9 +429,3 @@ endif
 "         \ | :call MyUniteMru()
 "         \ | endif
 " augroup END
-
-" augroup insertLeave_ChangeKeymap
-"     autocmd!
-"     autocmd InsertLeave * :set keymap=us
-" augroup END
-

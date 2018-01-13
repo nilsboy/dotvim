@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " When autocompleting within an identifier, prevent duplications
 " Note: gets in the way - often removes unwanted stuff
 

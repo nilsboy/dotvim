@@ -4,6 +4,11 @@
 
 finish
 
+" augroup insertLeave_ChangeKeymap
+"     autocmd!
+"     autocmd InsertLeave * :set keymap=us
+" augroup END
+
 " Use insert abbreviations to insert german keyboard special characters
 function! EatWhitespace(pat) abort
   let c = nr2char(getchar(0))

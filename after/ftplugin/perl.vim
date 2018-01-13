@@ -26,11 +26,3 @@ let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
 "     autocmd InsertLeave <buffer>
 "                 \ call PerlTidy()
 " augroup END
-
-function! PerlTidy()
-    let _view=winsaveview()
-    "%!perltidy -q
-    %!perltidier -q
-    " %!tidyall --conf-name ~/.tidyallrc -p ~/.tidyallrc
-    call winrestview(_view)
-endfunction

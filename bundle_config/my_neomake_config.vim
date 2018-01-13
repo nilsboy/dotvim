@@ -25,7 +25,6 @@ augroup MyNeomakeConfigAugroupOnNeomakeFinished
   autocmd!
   autocmd User NeomakeFinished call MyNeomakeConfigOnNeomakeFinished()
 augroup END
-
 function! MyNeomakeConfigOnNeomakeFinished() abort
   if g:neomake_hook_context.jobinfo.file_mode == 1
     " call MyQuickfixSetNavigationType('locationlist')
@@ -36,9 +35,19 @@ function! MyNeomakeConfigOnNeomakeFinished() abort
   endif
 endfunction
 
-nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
+" nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
+nnoremap <silent><leader>ee :call MyNeomakeConfigRun()<cr>
 nnoremap <silent><leader>el :silent wall \| Neomake lint<cr>
 nnoremap <silent><leader>ef :silent wall \| Neomake format<cr>
+
+function! MyNeomakeConfigRun() abort
+  let logLevel = $LOG_LEVEL
+  " for log-dwim
+  let $LOG_LEVEL = 'TRACE'
+  silent wall
+  Neomake! run
+  let $LOG_LEVEL = logLevel
+endfunction
 
 nnoremap <silent><leader>ed :edit /tmp/neomake.log <cr>
 

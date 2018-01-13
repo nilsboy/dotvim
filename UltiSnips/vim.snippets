@@ -33,7 +33,7 @@ def fncc(v):
 endglobal
 
 snippet command "command" b
-command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`$2} call $1 (<f-args>)
+command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1 (<f-args>)
 function! $1(...) abort
   $0
 endfunction
@@ -216,7 +216,7 @@ snippet no "Named object" w
 \ },
 endsnippet
 
-snippet exe "execute" b
+snippet exe "execute" w
 execute '${VISUAL}$0'
 endsnippet
 
@@ -304,7 +304,7 @@ nnoremap <silent> ${1:<leader>}$0
 endsnippet
 
 snippet "(.*)finish" "finish" r
-finish " #######################################################################
+finish
 endsnippet
 
 # getcurpos() is Neovim only

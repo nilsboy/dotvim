@@ -48,7 +48,9 @@
 " Note: makeprg and errorformat are ether local or global but if you want to
 " run something different than the default with make those vars have to be
 " saved and restored
-" Notes
+" Note: Pro CompilerSet:
+" https://www.reddit.com/r/vim/comments/7nln66/
+" Note:
 " - every line of output from makeprg is listed as an error
 " - lines that match errorformat get a valid = 1 in the getqflist()
 " - get count of actual errors: len(filter(getqflist(), 'v:val.valid'))
@@ -124,6 +126,7 @@ function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
 endfunction
 
+" NOTE: to ignore files but not .gitignore use a .agignore file
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
 let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
       \  g:MyQuickfixIgnoreFile
@@ -144,6 +147,10 @@ function! MyQuickfixSearch(options) abort
   let find = get(a:options, 'find', '1')
   let grep = get(a:options, 'grep', '1')
   let matchBasenameOnly = get(a:options, 'matchBasenameOnly', '0')
+  let orderBy = get(a:options, 'orderBy', '')
+
+  " TODO: use some other mark
+  silent! normal `a
 
   " fuzzy search for most case variants
   let term = substitute(term, '\v[-_ ]+', '.*', 'g')
@@ -180,9 +187,15 @@ function! MyQuickfixSearch(options) abort
         \ . ' -g ' . shellescape(filenameTerm)
         \ . ' ' . fnameescape(path)
         \ . ' /dev/null'
-        \ . ' | head-warn ' . limit
+
+  if orderBy == 'recent'
+    let findprg .= ' | sort-by-file-modification | tac '
+  else
+    let findprg .= ''
         \ . ' | sort '
-        \ . ' | sort-by-path-depth'
+        \ . ' | sort-by-path-depth '
+        \ . ' | head-warn ' . limit
+  endif
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' /dev/null'
@@ -192,8 +205,10 @@ function! MyQuickfixSearch(options) abort
 
   let makers = 'find'
   if term != ''
-    " let makers .= ' delimiter grep'
-    let makers .= ' grep'
+    if grep != '0'
+      " let makers .= ' delimiter grep'
+      let makers .= ' grep'
+    endif
   endif
 
   let MyErrorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
@@ -358,21 +373,24 @@ command! -bang -nargs=1 -complete=file QFilter call
       \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
 
 nnoremap <silent> <leader>f <nop>
+nnoremap <silent> <leader>fr :call MyQuickfixSearch({'orderBy': 'recent'})<cr>
 nnoremap <silent> <leader>ff :call MyQuickfixSearch({})<cr>
 vnoremap <silent> <leader>ff y:call MyQuickfixSearch({
       \ 'term': @"})<cr>
 nnoremap <silent> <leader>fB :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'matchBasenameOnly': 1})<cr>
-
-nnoremap <silent> <leader>fw yiw:call MyQuickfixSearch({
-      \ 'term': @" })<cr>
-nnoremap <silent> <leader>fr yiw:call MyQuickfixSearch({
-      \ 'term': '\b' . @" . '\b'})<cr>
-nnoremap <silent> <leader>fW yiW:call MyQuickfixSearch({
-      \ 'term': @"})<cr>
 nnoremap <silent> <leader>fi :call MyQuickfixSearch({
       \ 'term': input('Search: ')})<cr>
+
+nnoremap <silent> <leader>fw mayiw:call MyQuickfixSearch({
+      \ 'term': @" })<cr>
+nnoremap <silent> <leader>fW yiW:call MyQuickfixSearch({
+      \ 'term': @"})<cr>
+nnoremap <silent> <leader>fR yiw:call MyQuickfixSearch({
+      \ 'term': '\b' . @" . '\b'})<cr>
+nnoremap <silent> <leader>fRi yiw:call MyQuickfixSearch({
+      \ 'term': '\b' . input('Word to search for: ') . '\b'})<cr>
 
 nnoremap <silent> <leader>fsf yiw:call MyQuickfixSearch({
       \ 'term': @",
@@ -422,11 +440,6 @@ nnoremap <silent> <leader>vpfF :call MyQuickfixSearch({
       \ 'term': expand('%:t:r'),
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
-
-nnoremap <silent> <leader>fnn yiw:call MyQuickfixSearch({
-      \ 'path':  FindRootDirectory() . '/node_modules/',
-      \ 'term': @"
-      \ })<cr>
 
 " map _  <Plug>(operator-adjust)
 " call operator#user#define('adjust', 'Op_adjust_window_height')

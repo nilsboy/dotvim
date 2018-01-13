@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Errorformat for node
 NeoBundle 'felixge/vim-nodejs-errorformat'
 " TAGS: javascript node

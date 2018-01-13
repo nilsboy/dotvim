@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Interactive command execution in Vim
 NeoBundle 'Shougo/vimproc.vim', {
   \ 'build': {

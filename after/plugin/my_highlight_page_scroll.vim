@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Idea: create growing/shrinking top and bottom windows when start or end of file is
 " reached to keep the cursor in the middle of the screen - checkout: LimitWindowSize
 

@@ -1,6 +1,7 @@
 finish
-" Using secureexmodelines now.
 " A secure alternative to modelines
+"
+" NOTE: Using secureexmodelines now.
 
 " Needed for dbext.vim
 " let g:secure_modelines_leave_modeline = 1

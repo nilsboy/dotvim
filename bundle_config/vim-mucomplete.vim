@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Chained completion that works the way you want!
 NeoBundle 'lifepillar/vim-mucomplete'
 

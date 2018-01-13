@@ -1,7 +1,9 @@
+" A jumping experiment
+"
 " - only jump to changes if they are far enough away from each other
-" - save one entry for files opened but not edited
+" - save only one entry for files opened but not edited
 
-" TODO: There are a lot more signs than marks - use them?
+" TODO: There are a lot more signs than marks - use them instead?
 " TODO: checkout vim-projectionist cycles
 
 let g:MyJumperDir = $XDG_DATA_HOME . '/jumper'
@@ -44,7 +46,7 @@ function! MyJumperLoadBufferMarks() abort
   
 endfunction
 
-let g:MyJumperMarks = 'abcdefghijklmnopqrstuvwxyz'
+let g:MyJumperMarks = 'bcdefghijklmnopqrstuvwxyz'
 
 if ! exists('g:jumper_positions')
   let g:jumper_positions = []

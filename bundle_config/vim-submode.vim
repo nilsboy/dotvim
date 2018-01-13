@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Create your own submodes
 NeoBundle 'kana/vim-submode'
 

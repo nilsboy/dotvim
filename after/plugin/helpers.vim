@@ -31,7 +31,7 @@ function! BufferClose() abort
 
     " Using bwipe prevents the current postion mark from being saved - so
     " the file position can not be restored when loading the file again.
-    silent! bdelete!
+    silent bdelete!
 
 endfunction
 
@@ -577,7 +577,7 @@ endfunction
 " function! Help(...) abort
 "   execute "help " a:1
 "   silent only
-"   set buflisted
+"   setlocal buflisted
 " endfunction
 
 if $DEBUG

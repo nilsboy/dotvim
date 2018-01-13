@@ -14,7 +14,7 @@ function! Man(cmd) abort
     " Avoid .man extension to not trigger the filetype
     let file_name = s:cache_dir . "/" . cmd . ".man.txt"
 
-    " Cannot set filetype=man because it messes with the filename
+    " Cannot setlocal filetype=man because it messes with the filename
     " Needs ! to supress error from /usr/share/nvim/runtime/syntax/man.vim
     silent! execute 'edit ' . file_name
     setlocal noreadonly

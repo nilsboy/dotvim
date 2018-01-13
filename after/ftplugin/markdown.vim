@@ -9,7 +9,7 @@ let b:MyMarkdownFtpluginLoaded = 1
 " Don't auto-format in code blocks
 call OnSyntaxChange#Install('MarkdownPre', 'mkdSnippet.*', 1, 'a')
 autocmd User SyntaxMarkdownPreEnterA unsilent echo 'entered ' . &formatoptions
-autocmd User SyntaxMarkdownPreEnterA let g:MyMarkdownFormatoptions = &formatoptions | set formatoptions=
+autocmd User SyntaxMarkdownPreEnterA let g:MyMarkdownFormatoptions = &formatoptions | setlocal formatoptions=
 autocmd User SyntaxMarkdownPreLeaveA let &formatoptions = g:MyMarkdownFormatoptions
 autocmd User SyntaxMarkdownPreLeaveA unsilent echo 'left ' . &formatoptions
 
@@ -29,8 +29,8 @@ let g:neoformat_enabled_markdown = [ 'myremark' ]
 " " vim-markdown defines b:* which breaks list auto-formatting of &formatoptions
 " function! MyMarkdownForceSettings() abort
 "   let &comments = 'nb:>'
-"   " set formatoptions+=t
-"   " set formatoptions-=c
+"   " setlocal formatoptions+=t
+"   " setlocal formatoptions-=c
 " endfunction
 " augroup MyMarkdownAugroupForceComments
 "   autocmd!

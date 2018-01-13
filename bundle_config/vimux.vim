@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " vim plugin to interact with tmux
 NeoBundle 'benmills/vimux'
 

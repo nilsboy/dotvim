@@ -62,6 +62,8 @@ endsnippet
 
 ### Non-Ascii-characters
 
+# possible alternative :h langmap
+
 snippet "(u|ü)+" "u|ü toggle" r
 `!p snip.rv = toggle('u|ü', match.group(1))`
 endsnippet
@@ -184,6 +186,10 @@ snippet '(^\s*).*todo' "TODO" r
 `!p snip.rv = match.group(1)``!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
+snippet "(TODO|DONE)+" "TODO|DONE toggle" r
+`!p snip.rv = toggle('TODO|DONE', match.group(1))`
+endsnippet
+
 snippet '(.*\s*).*note' "NOTE" r
 `!v helpers#surroundings()[0]`NOTE: $0`!v  helpers#surroundings()[1]`
 endsnippet
@@ -201,7 +207,7 @@ snippet '(^\s*).*check' "check out" r
 endsnippet
 
 snippet '(^\s*).*see' "see also" r
-`!v helpers#surroundings()[0]`see also: $0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`SEE ALSO:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet password "generate a secure password" w

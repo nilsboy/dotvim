@@ -66,11 +66,11 @@ augroup END
 "     \ escape(expand('<cword>'), '/\'))
 " augroup END
 
-    augroup MyColorsAugroupCursorline
-      autocmd!
-      autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-      autocmd InsertEnter * setlocal nocursorline
-    augroup END
+augroup MyColorsAugroupCursorline
+  autocmd!
+  autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
+  autocmd InsertEnter * setlocal nocursorline
+augroup END
 
 " " highlight the whole file not just the window - slower but more accurate.
 " no augroup MyColorsAugroupHighlightWholeBuffer
@@ -92,8 +92,6 @@ augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd!
   autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
-
-" ### LAST ####################################################################
 
 " load colorscheme last to ensure own settings have priority
 try

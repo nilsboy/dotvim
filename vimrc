@@ -1,13 +1,4 @@
-"### Debugging
-
-" set verbosefile=/tmp/vim-debug.log
-" set verbose=15
-" set verbose=9
-" set verbose=1
-
 set nocompatible
-
-"### Misc
 
 if empty($XDG_CONFIG_HOME)
     let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
@@ -70,7 +61,7 @@ call Mkdir(&undodir, "p")
 
 " nomodeline can not be revered by plugins
 " but modeline is needed by dbext even though it uses its own parser.
-" set nomodeline
+set nomodeline
 
 augroup MyVimrcAugroupOnlySetCurrentDirAsPath
   autocmd!
@@ -121,10 +112,10 @@ set history=1000
 " Show line numbers
 " set number
 " Relative line numbers
-" set rnu
+" set relativenumber
 
 " allow the cursor to pass the last character
-" set virtualedit=onemore
+" set virtualedit=all
 
 " Set reload a file when it is changed from the outside
 set autoread
@@ -154,10 +145,10 @@ set textwidth=80
 " TODO: needs work
 " " These seem to get overwritten by too many plugins
 " function! MyVimrcForceFormattingSettings() abort
-"   set formatoptions=roqanj1c
+"   setlocal formatoptions=roqanj1c
 "   let &formatlistpat = '\c\v^\s*[-\+\*]\s+'
 "   let &formatlistpat .= '|\c\v^\s*(todo|note|tags|see also|fix)\s+'
-"   set noautoindent
+"   setlocal noautoindent
 " endfunction
 " augroup MyVimrcAugroupForceFormattingSettings
 "   autocmd!
@@ -177,11 +168,9 @@ function! MyVimrcShowFormatSettings() abort
   " call INFO('g:MyMarkdownFormatoptions:', g:MyMarkdownFormatoptions)
 endfunction
 
-" Make backspace more flexible
-set backspace=indent,eol,start
+set backspace=indent,start
 
 set splitbelow
-set splitright
 
 " Line wrapping
 set wrap
@@ -223,10 +212,8 @@ augroup END
 
 augroup MyVimrcAugroupListAllBuffers
   autocmd!
-  autocmd BufEnter * :set buflisted
+  autocmd BufEnter * :setlocal buflisted
 augroup END
-
-set synmaxcol=300
 
 " show count of selected lines / columns
 set showcmd
@@ -274,15 +261,12 @@ set guicursor=
 " Maximum amount of memory in Kbyte to use for all buffers together.
 set maxmemtot=2048
 
-" Default 1000
-" set undolevels=
-
 " Never create backup files
 set nobackup
 set nowritebackup
 
 " Never create swapfiles
-set noswapfile
+" set noswapfile
 
 "### Timeouts
 
@@ -443,11 +427,11 @@ nnoremap <leader>k q:i<esc>k
 nnoremap <leader>A q:i<esc>kA
 
 augroup MyVimrcAugroupAdjustWindowSizes
-    autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
-    autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
-    autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
-    autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
-    autocmd VimEnter,VimResized * :execute 'nnoremap rk ' . (&lines / 2 - 3) . 'k'
+  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
+  autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
+  autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
+  autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
+  autocmd VimEnter,VimResized * :execute 'nnoremap rk ' . (&lines / 2 - 3) . 'k'
 augroup END
 
 augroup MyVimrcAugroupCmdwinSetup
@@ -497,17 +481,21 @@ nnoremap <leader>vm :Verbose map <leader><cr> <bar> :only<cr>
 " Show all <leader> search mappings
 nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
 
-" open search history / select last entry
+" open search history and select last entry
 nnoremap <leader>// q/k
-vnoremap <leader>// q/k
 
-nnoremap <leader>/c /\v^\s*[/"#]+<cr>
+" search for selection
+" vnoremap <leader>// y:execute '/' . @"<cr>
+vnoremap <leader>// y:/\V<c-r>"<cr>
+nnoremap <leader>/C /\v^\s*[/"#]+<cr>
 " nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/b /^.*{.*$<cr>
-nnoremap <leader>/i /^\S\+<cr>
+nnoremap <leader>/S /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
+nnoremap <leader>/o /[\[({<]<cr>
+nnoremap <leader>/c /[\])}>]<cr>
 
 " nnoremap <silent> r[ :call search('(', 'bz')<cr>
 " nnoremap <silent> r] :call search(')', 'z')<cr>
@@ -532,6 +520,7 @@ nnoremap V m`V
 nnoremap <C-v> m`<C-v>
 vnoremap <esc> <esc>``
 vnoremap y y``
+
 " TODO: clean up <leader>l namespace
 nnoremap <leader>lr :%s/<C-r><C-w>/
 nnoremap <leader>lR :%s/<C-r><C-w>/<c-r><c-w>
@@ -582,6 +571,7 @@ set incsearch
 " Toggle highlighting current matches
 nmap <silent><c-c> :set hlsearch! hlsearch?<CR>
 
+set wildignorecase
 set ignorecase
 
 " Case insensitive search when all lowercase
@@ -595,10 +585,6 @@ set infercase
 
 " Switch window if it contains wanted buffer
 set switchbuf=useopen
-
-" Extend a previous match
-nnoremap //   /<C-R>/
-" nnoremap ///  [[/<C-R>/\<BAR>]]
 
 "### Plugin manager
 
@@ -648,6 +634,7 @@ endif
 
 "### Must run last
 
+
 " Detect filetypes and run filetype plugins
 filetype on
 filetype plugin on
@@ -660,3 +647,10 @@ set modelines=0
 if filereadable(g:vim.rc_local)
     execute "source " . g:vim.rc_local
 endif
+
+"### Debugging
+
+" NOTE: Neobundle unsets these
+" set verbosefile=/tmp/vim-debug.log
+" set verbose=15
+

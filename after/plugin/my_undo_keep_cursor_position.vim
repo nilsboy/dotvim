@@ -1,5 +1,5 @@
+finish
 " Keep cursor position on undo and redo
-finish " #######################################################################
 
 function! MyUndoKeepCursorPositionUndo()
     let _view=winsaveview()

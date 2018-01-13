@@ -1,4 +1,4 @@
-finish " #######################################################################
+finish
 " Print documents in echo area. 
 NeoBundle 'Shougo/echodoc', '', 'default'
 call neobundle#config('echodoc', {
