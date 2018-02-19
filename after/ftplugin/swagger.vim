@@ -1,13 +1,20 @@
 setlocal syntax=yaml
 
-nnoremap <buffer> <leader>bl :silent! call SwaggerLint()<cr>
+nnoremap <buffer> <leader>bl :silent! call MySwaggerLint()<cr>
+
+augroup MySwaggerAugroupLint
+  autocmd!
+  " TODO: TextChanged stops UltiSnips snippet expansion
+  " autocmd TextChanged,InsertLeave * :call MySwaggerLint()
+  autocmd BufWritePost <buffer> :silent! call MySwaggerLint()
+augroup END
 
 if exists("b:did_ftplugin_swagger")
     finish
 endif
 let b:did_ftplugin_swagger = 1
 
-" Only create once globally - otherwise the autocmd stops working when opening
+" Only create once _globally_ - otherwise the autocmd stops working when opening
 " a second file
 if exists("g:did_ftplugin_swagger")
     finish
@@ -24,13 +31,6 @@ function! MySwaggerLint() abort
   lwindow
   silent! wincmd w
 endfunction
-
-augroup MySwaggerAugroupLint
-  autocmd!
-  " TODO: TextChanged stops UltiSnips snippet expansion
-  " autocmd TextChanged,InsertLeave * :call SwaggerLint()
-  autocmd BufWritePost *.swagger.* :silent! call SwaggerLint()
-augroup END
 
 finish
 

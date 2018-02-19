@@ -36,7 +36,7 @@ let g:sneak#label = 1
 nmap s <Plug>SneakLabel_s
 nmap S <Plug>SneakLabel_S
 
-" Example: Configure "f" to trigger label-mode: >
+" Example: Configure "f" to trigger label-mode:
 nnoremap <silent> f :<C-U>call sneak#wrap('',           1, 0, 1, 1)<CR>
 nnoremap <silent> F :<C-U>call sneak#wrap('',           1, 1, 1, 1)<CR>
 xnoremap <silent> f :<C-U>call sneak#wrap(visualmode(), 1, 0, 1, 1)<CR>

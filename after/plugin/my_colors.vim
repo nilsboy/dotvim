@@ -10,7 +10,6 @@ if &t_Co > 1
   endif
 endif
 
-
 " Show when lines extend past column 80
 " set colorcolumn=81
 " highlight ColorColumn ctermfg=red ctermbg=NONE
@@ -20,8 +19,6 @@ endif
 
 " Prefer light version of a colorscheme
 set background=light
-
-set cursorline
 
 function! MyColorsColorschemeCleanup() abort
   highlight Normal ctermbg=NONE
@@ -36,11 +33,11 @@ function! MyColorsColorschemeCleanup() abort
   highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
   highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 
-  " Make diffs less glaringly ugly...
-  highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
-  highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
-  highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
-  highlight DiffText cterm=bold ctermfg=magenta ctermbg=black
+  " " Make diffs less glaringly ugly...
+  " highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
+  " highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
+  " highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
+  " highlight DiffText    cterm=bold ctermfg=magenta   ctermbg=black
 
   " see also: :help lcs-trail
   " highlight MyExtraWhitespace ctermbg=darkred
@@ -50,13 +47,15 @@ function! MyColorsColorschemeCleanup() abort
   " highlight MyTabstops ctermbg=darkred
   " syntax match MyTabstops /\t/
 
-  highlight MyLongLines ctermfg=darkred
+  " highlight MyLongLines ctermfg=darkred
   " TODO: messes with vimdoc
   " execute 'syntax match MyLongLines /\%>' . &textwidth . 'v.\+/ containedin=ALL'
+
+  match Todo /TODO/
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!
-  autocmd ColorScheme,Syntax * call MyColorsColorschemeCleanup()
+  autocmd ColorScheme,Syntax,FileType * call MyColorsColorschemeCleanup()
 augroup END
 
 " " Highlight all occurences of word under cursor
@@ -72,8 +71,8 @@ augroup MyColorsAugroupCursorline
   autocmd InsertEnter * setlocal nocursorline
 augroup END
 
-" " highlight the whole file not just the window - slower but more accurate.
-" no augroup MyColorsAugroupHighlightWholeBuffer
+" highlight the whole file not just the window - slower but more accurate.
+" augroup MyColorsAugroupHighlightWholeBuffer
 "   autocmd!
 "   autocmd BufEnter * :syntax sync fromstart
 " augroup END

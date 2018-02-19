@@ -42,6 +42,6 @@ nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tn :TestNearest<CR>
 nmap <silent> <leader>tt :let g:MyTestLast = 1 \| TestLast<CR>
 nmap <silent> <leader>tv :execute 'cd ' . g:MyTestCwd \| TestVisit<CR>
-
-" TODO: <leader>to - open corresponding test file
+" nmap <silent> <leader>te :execute 'edit ' . b:testFile<cr>
+" nmap <silent> <leader>tm :execute 'edit ' . b:mainFile<cr>
 

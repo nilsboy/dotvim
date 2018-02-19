@@ -61,8 +61,10 @@ Sometimes it might even be nice for a user to be able to use a non-offical funct
 - TODO: normalize plugin config file names to exclude vim and '-' etc?
 
 ## TODO
-- give tags another try?: https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
-  https://www.reddit.com/r/vim/comments/7ekcp9/javascript_tags_again_alongside_others/dq5n32d/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=vim
+- give tags another try?: 
+  - https://www.reddit.com/r/vim/comments/7v1nj6/vim_workflow_trouble/dtoukt0/
+  - https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
+  - https://www.reddit.com/r/vim/comments/7ekcp9/javascript_tags_again_alongside_others/dq5n32d/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=vim
 - checkout g@
 - checkout Titlecase plugin
 - see `:h runtime` for directory structure
@@ -78,7 +80,6 @@ Sometimes it might even be nice for a user to be able to use a non-offical funct
   (for the parsing code see: https://github.com/mattboehm/vim-unstack/blob/master/autoload/unstack/extractors.vim)
 - vim-es6
 - vimagit
-- diffchar.vim
 - ctrlsf.vim " Grep with edit in-place
 - Vdebug
 - JavaScript-Context-Coloring

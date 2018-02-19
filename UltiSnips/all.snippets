@@ -191,15 +191,19 @@ snippet "(TODO|DONE)+" "TODO|DONE toggle" r
 endsnippet
 
 snippet '(.*\s*).*note' "NOTE" r
-`!v helpers#surroundings()[0]`NOTE: $0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`NOTE:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '.*tag' "TAGS" r
-`!v helpers#surroundings()[0]`TAGS: $0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`TAGS:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '.*fix' "FIX" r
-`!v helpers#surroundings()[0]`FIX: $0`!v  helpers#surroundings()[1]`
+`!v helpers#surroundings()[0]`FIX:$0`!v  helpers#surroundings()[1]`
+endsnippet
+
+snippet '.*deb' "DEBUG" r
+`!v helpers#surroundings()[0]`DEBUG:$0`!v  helpers#surroundings()[1]`
 endsnippet
 
 snippet '(^\s*).*check' "check out" r
@@ -227,7 +231,7 @@ snippet dir "dir" w
 endsnippet
 
 snippet file "file" w
-`!v expand('%')`
+`!v expand('%:t')`
 endsnippet
 
 snippet home "home" w
@@ -272,4 +276,8 @@ endsnippet
 
 snippet par "parameter" w
 parameter
+endsnippet
+
+snippet ok "ok / done" w
+✔
 endsnippet

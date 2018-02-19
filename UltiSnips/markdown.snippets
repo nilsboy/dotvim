@@ -10,11 +10,6 @@ See also: package.json
 Run `npm run` to see possible commands.
 endsnippet
 
-# [${2:$1}](${1:${VISUAL:filename}})$0
-snippet file "file" w
-[](${1:${VISUAL:filename}})$0
-endsnippet
-
 snippet code "code" b
 \`\`\`${1:language}
 ${VISUAL}$0
@@ -25,6 +20,6 @@ snippet toc "toc" b
 # Table of Contents
 endsnippet
 
-snippet link "link" w
-[$1](${1:${VISUAL}})
+snippet l "link" w
+[](${VISUAL}$0)
 endsnippet

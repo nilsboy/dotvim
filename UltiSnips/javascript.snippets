@@ -91,7 +91,7 @@ snippet new "new" b
 const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($1)
 endsnippet
 
-snippet ex "module.exports"
+snippet export "module.exports"
 module.exports = $1
 endsnippet
 
@@ -117,37 +117,47 @@ const fs = require(\`fs-extra\`)
 endsnippet
 
 snippet readfile "readfile" w
-const ${2:data} = fs.readFileSync(\`${0:file}\`).toString()
+const ${2:data} = fs.readFileSync(\`${VISUAL}$0\`).toString()
 endsnippet
 
 snippet writefile "writefile" w
 fs.writeFileSync(\`${1:file}\`, ${2:data})
 endsnippet
 
-snippet csvParserCli "CSV parser CLI" b
+snippet csvReader "CSV reader" b
 $0const csv = require(\`ya-csv\`)
-
 const file = process.argv[2] || \`my.csv\`
-
-const reader = csv.createCsvFileReader(file, {
-  'separator': ',',
-  'quote': '"',
-  'escape': '"',
-  'comment': '',
+const options = {
+  'separator': \`,\`,
+  'quote': \`"\`,
+  'escape': \`"\`,
+  'comment': \`\`,
   'columnsFromHeader': true,
-})
+}
+const reader = csv.createCsvFileReader(file, options)
 
 // reader.setColumnNames([ 'col1', 'col2' ])
 
 reader.addListener('data', function(data) {
   console.log(data)
 })
+endsnippet
 
-// const writer = new csv.CsvWriter(process.stdout)
-//
-// reader.addListener('data', function(data) {
-//   writer.writeRecord([ data[0] ])
-// })
+snippet csvWriter "csvWriter" b
+$0const _ = require(\`lodash\`)
+const csv = require(\`ya-csv\`)
+const options = {
+	separator: \`,\`
+	, quote: \`"\`
+	, escape: \`"\`
+}
+const header = _.keys(data[0])
+const writer = new csv.CsvWriter(process.stdout, options)
+writer.writeRecord(header)
+for (const row of data) {
+	const orderedRow = _.at(data[0], header)
+	writer.writeRecord(orderedRow)
+}
 endsnippet
 
 snippet trace "Trace" w
@@ -182,8 +192,12 @@ snippet l "let" w
 let $1 = ${2:\`$3\`}
 endsnippet
 
-snippet stringify "stringify JSON" w
+snippet tojson "stringify to JSON" w
 JSON.stringify(${VISUAL}$0, \` \`, 2)
+endsnippet
+
+snippet parse "parse json" w
+JSON.parse(${VISUAL}$0)
 endsnippet
 
 snippet eq "equals" w
@@ -242,7 +256,7 @@ DIE(\`$0\`)
 endsnippet
 
 snippet diee "die with var" w
-DIE(\`$0:\`, $0)
+DIE(\`$1:\`, $1)$0
 endsnippet
 
 snippet pkginfo "add package.json info to module global" b
@@ -276,7 +290,7 @@ describe(\`$1\`, () => {
 endsnippet
 
 snippet it "it" b
-it(\`$1\`, () => {
+it(\`$1\`, async() => {
   ${VISUAL}$0
 })
 endsnippet
@@ -378,29 +392,33 @@ function qw(strings, ...keys) {
 }
 endsnippet
 
-snippet fun "function" b
-function ${1:${VISUAL}}($2) {
-  $0
-}
-endsnippet
-
-snippet m "method" b
-$1 ($2) {
-  ${VISUAL}$0
-}
-endsnippet
-
 snippet f "anonymous function expression" w
 ($1) => { ${VISUAL}$0 }
 endsnippet
 
-snippet af "async function" b
-async $1 ($2) {
+snippet af "async anonymous function expression" w
+async ($1) => { ${VISUAL}$0 }
+endsnippet
+
+snippet fun "function" w
+function $1($2) {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet callback "anonymous node function expression" w
+snippet afun "named function" w
+async function $1($2) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet m "method" w
+$1($2) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet callback "callback" w
 (error, result) => {
   if(error) {
     throw err
@@ -558,24 +576,22 @@ snippet pm2_config "pm2_config" b
 # NOTE: process.env vars don't seem to be set when this is loaded
 # to setup pm2 run pm2-setup
 ({
-
   apps: [
     {
       name: \`$1\`
-      , script: \`./index.js\`
+      , script: \`./src/index.js\`
       , watch: true
-      , ignore_watch: [\`\./test\.*\`, \`\./\..*\`]
+      , ignore_watch: [\`.git\`, \`test\`, \`node_modules\`]
       , restart_delay: 500
       , max_restarts: 1
       , min_uptime: 5000
       , max_memory_restart: \`200M\`
       , next_gen_js: true
       , log_date_format: \`YYYY-MM-DD HH:mm\`
-      , error_file: \`~/log/$1.log\`
-      , out_file: \`~/log/$1.log\`
-      , env: {
-        NODE_ENV: `development`
-      }
+      , error_file: process.env.HOME + \`/log/$1.log\`
+			, out_file: process.env.HOME + \`/log/$1.log\`
+      // avoid WARNING: NODE_APP_INSTANCE value of '0'...
+      , instance_var: \`INSTANCE_ID\`
     }
   ]
 })
@@ -612,17 +628,26 @@ snippet "\.then$" ".then" r
 })
 endsnippet
 
+snippet "\.catch" ".catch" r
+.catch(($1) => {
+  $0
+})
+endsnippet
+
 snippet "\.done$" "done()" r
 .then(() => {
+  done()
+})
+.catch(() => {
   done()
 })$0
 endsnippet
 
 priority -1
 
-snippet "(\.\w+)$" ".+" r
-`!p snip.rv = match.group(1)`($0)
-endsnippet
+# snippet "(\.\w+)$" ".+" r
+# `!p snip.rv = match.group(1)`($0)
+# endsnippet
 
 priority 0
 
@@ -654,8 +679,12 @@ snippet dateNow "now" w
 new Date().toISOString()
 endsnippet
 
-snippet dateFileStamp "dateFileStamp" w
+snippet dateTimestamp "dateTimestamp" w
 moment().format(\`YYYYMMDD-HHmmss\`)
+endsnippet
+
+snippet dateDayOfMonth "dateDayOfMonth" w
+moment().format(\`DD\`)
 endsnippet
 
 snippet config "config" b
@@ -698,23 +727,17 @@ options:
 const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
- 
-# Debugging
-
-# snippet xxx "here"
-# console.trace(\`### HERE`!v
-#   line('.')
-#   ` `!v
-#   expand('%:t') . ':' . line('.')
-#   `\`)
-# endsnippet
 
 snippet e "print to stderr" w
 console.error(\`### ${VISUAL}$0\`)
 endsnippet
 
+snippet eej "print to stderr with variable" w
+console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, JSON.stringify(${VISUAL}$1$0, \` \`, 2))
+endsnippet
+
 snippet ee "print to stderr with variable" w
-console.error(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, ${VISUAL}$1$0)
 endsnippet
 
 snippet eee "print to stderr with variable and trace" w
@@ -731,6 +754,10 @@ endsnippet
 
 snippet cll "console.log" w
 console.log(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+endsnippet
+
+snippet xx "here"
+console.error(\``!v expand('%:p') . ':' . line('.')`:0:### HERE`!v line('.')`\`)
 endsnippet
 
 # TODO
@@ -763,4 +790,49 @@ endsnippet
 
 snippet s "s" w
 [\s\S]*
+endsnippet
+
+# snippet arraySortByElementsHashes "sort any array by the hash of its elements" b
+# const hash = require(\`object-hash\`)
+# function sortArrayByElementsHashes(array) {
+# 	return array.sort((a, b) => {
+# 		return hash(a) > hash(b)
+# 	})
+# }
+# const $1 = sortArrayByElementsHashes($1$0)
+# endsnippet
+
+snippet arraySortedEquals "arraySortedEquals" b
+const hash = require(\`object-hash\`)
+const hashOptions = {
+  respectType: false
+  , unorderedArrays: true
+  //, ignoreUnknown: true
+}
+if (hash($1, hashOptions) == hash($2, hashOptions)) {
+$0
+}
+endsnippet
+
+snippet map "map" b
+$1 = _.map($1, ($2) => {
+	return $0
+})
+endsnippet
+
+snippet mv "mv - move a file" b
+const fs = require(\`fs-extra\`)
+fs.moveSync(${VISUAL}$0)
+endsnippet
+
+snippet rm "rm - remove a file" b
+fs.unlinkSync(${VISUAL}$0)
+endsnippet
+
+snippet try "try" b
+try {
+  ${VISUAL}
+} catch (e) {
+$0
+}
 endsnippet

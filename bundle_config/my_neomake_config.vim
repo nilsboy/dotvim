@@ -36,7 +36,7 @@ function! MyNeomakeConfigOnNeomakeFinished() abort
 endfunction
 
 " nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
-nnoremap <silent><leader>ee :call MyNeomakeConfigRun()<cr>
+nnoremap <silent><leader>ee ma:call MyNeomakeConfigRun()<cr>
 nnoremap <silent><leader>el :silent wall \| Neomake lint<cr>
 nnoremap <silent><leader>ef :silent wall \| Neomake format<cr>
 
@@ -45,6 +45,7 @@ function! MyNeomakeConfigRun() abort
   " for log-dwim
   let $LOG_LEVEL = 'TRACE'
   silent wall
+  silent! `a
   Neomake! run
   let $LOG_LEVEL = logLevel
 endfunction

@@ -1,5 +1,15 @@
+snippet t "tag" b
+{{#$1 $0}}
+  ${VISUAL}
+{{/$1}}
+endsnippet
+
 snippet if "if" b
 {{#if $0}}
   ${VISUAL}
 {{/if}}
+endsnippet
+
+snippet comma "last comma" w
+{{#unless @last}},{{/unless}}
 endsnippet

@@ -1,3 +1,4 @@
+finish
 " Edit a file containing notes on the currently edited file.
 " Usefull for filetypes that do not allow comments i.e. JSON
 

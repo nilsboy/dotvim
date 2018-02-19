@@ -1,5 +1,8 @@
+" use arrays as comments
 let &l:comments = 's1:[",ex:"]'
 let &l:commentstring = '["%s"]'
+
+" let &l:commentstring = '# %s'
 
 if exists("b:MyJsonFtpluginLoaded")
     finish
@@ -7,7 +10,6 @@ endif
 let b:MyJsonFtpluginLoaded = 1
 
 " npm install -g json2yaml
-
 " nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
 function! MyJsonToYaml() abort
   silent wall
@@ -31,14 +33,14 @@ function! MyJsonFromJavascript() " no abort
   %s/`/"/g
 endfunction
 
-" TODO: use Commentary User autocmd instead
-nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
-function! MyJsonCommenter() abort
-  s/\v"/\\"/g
-  unmap <buffer> gcc
-  normal gcc
-  nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
-endfunction
+" " TODO: use Commentary User autocmd instead
+" nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
+" function! MyJsonCommenter() abort
+"   s/\v"/\\"/g
+"   unmap <buffer> gcc
+"   normal gcc
+"   nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
+" endfunction
 
 " augroup MyJsonAugroupEscape
 "   autocmd!

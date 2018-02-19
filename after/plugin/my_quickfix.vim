@@ -28,9 +28,11 @@
 " see also:
 " - vim-qf
 " - detect quickfix:
-"   https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
+"   - https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
 " - async.vim:
-"   https://github.com/prabirshrestha/async.vim
+"   - https://github.com/prabirshrestha/async.vim
+" - vim-makery:
+"   - https://github.com/igemnace/vim-makery
 
 " See also:
 " :Man scanf
@@ -152,9 +154,14 @@ function! MyQuickfixSearch(options) abort
   " TODO: use some other mark
   silent! normal `a
 
+  let term = substitute(term, '\v\..*', '.*', 'ig')
+  let term = substitute(term, '\v[-_ ]+id$', '(.*id){0,1}', 'ig')
+
   " fuzzy search for most case variants
   let term = substitute(term, '\v[-_ ]+', '.*', 'g')
   let term = substitute(term, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.*\l\2', 'g')
+
+  call INFO('term:', term)
 
   let filenameTerm = term
 
@@ -296,27 +303,42 @@ function! MyQuickfixHelp(term) abort
 endfunction
 command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
 
-" " TODO:
+" TODO:
+" TODO: screws with the buffer position
 " augroup MyQuickfixAugroupTodo
 "     autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
 " augroup END
 
-" " TODO: has to be specific to quickfix content
-" function! MyQuickfixCleanQickfixlist() abort
-"   call MyQuickfixRemoveWhitspace()
-"   " call MyQuickfixRemoveInvalidFiles()
-"   " call MyQuickfixRemoveInvalid()
-"   " call DUMP(getqflist())
-" endfunction
+" TODO: has to be specific to quickfix content
+function! MyQuickfixCleanQickfixlist() abort
+  " call MyQuickfixRemoveWhitspace()
+  call MyQuickfixRemoveInvalidFiles()
+  " call MyQuickfixRemoveInvalid()
+  " call DUMP(getqflist())
+  call MyQuickfixRemoveSomeLibs()
+endfunction
+
+function! MyQuickfixRemoveSomeLibs() abort
+  let qflist = getqflist()
+  let newlist = []
+  for i in qflist
+    let path = fnamemodify(bufname(i.bufnr), ':p')
+    if path =~ '\vbluebird'
+      continue
+    endif
+    call add(newlist, i)
+  endfor
+  call setqflist(newlist)
+endfunction
 
 function! MyQuickfixRemoveWhitspace() abort
   let qflist = getqflist()
   let newlist = []
   for i in qflist
     let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
-    if i.text =~ '\v^\s*$'
-      continue
-    endif
+    " if i.text =~ '\v^\s*$'
+    "   continue
+    " endif
     call add(newlist, i)
   endfor
   call setqflist(newlist)
@@ -332,9 +354,9 @@ function! MyQuickfixRemoveInvalidFiles() abort
         continue
       endif
     endif
-    if i.text =~ '\v^\s*$'
-      continue
-    endif
+    " if i.text =~ '\v^\s*$'
+    "   continue
+    " endif
     " let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
     " if path =~ 'mocha'
     "   continue
@@ -382,10 +404,12 @@ nnoremap <silent> <leader>fB :call MyQuickfixSearch({
       \ 'matchBasenameOnly': 1})<cr>
 nnoremap <silent> <leader>fi :call MyQuickfixSearch({
       \ 'term': input('Search: ')})<cr>
+nnoremap <silent> <leader>fF :call MyQuickfixSearch({
+      \ 'term': expand('%:t') })<cr>
 
 nnoremap <silent> <leader>fw mayiw:call MyQuickfixSearch({
       \ 'term': @" })<cr>
-nnoremap <silent> <leader>fW yiW:call MyQuickfixSearch({
+nnoremap <silent> <leader>fW mayiW:call MyQuickfixSearch({
       \ 'term': @"})<cr>
 nnoremap <silent> <leader>fR yiw:call MyQuickfixSearch({
       \ 'term': '\b' . @" . '\b'})<cr>

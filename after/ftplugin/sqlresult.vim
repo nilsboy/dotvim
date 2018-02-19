@@ -1,4 +1,4 @@
-" Used by dbext
+" Used by dbext and my_db
 
 setlocal nowrap
 setlocal sidescroll=1

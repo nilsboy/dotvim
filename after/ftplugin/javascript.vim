@@ -6,29 +6,49 @@
 " TODO: checkout jsctags generator using tern
 " (https://github.com/ramitos/jsctags)
 
-if exists("b:MyJavascriptFtpluginLoaded")
-    finish
-endif
-let b:MyJavascriptFtpluginLoaded = 1
-
 " support module filenames
 setlocal iskeyword+=-
+
+" https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/dgdm8vj/?st=j1ndnrm3&sh=5b3bc21a
+setlocal suffixesadd+=.js
+setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
+setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"]\\{-\\}
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
 
 " edit module documention
-nnoremap <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>
-nnoremap <silent> <leader>lmi :call MyQuickfixSearch({
+nnoremap <buffer> <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>
+nnoremap <buffer> <silent> <leader>lmi :call MyQuickfixSearch({
       \ 'path':  FindRootDirectory() . '/node_modules/',
       \ 'term': input('Module name: '),
       \ 'grep': 0,
       \ })<cr>
-nnoremap <silent> <leader>lmw yi`:call MyQuickfixSearch({
+nnoremap <buffer> <silent> <leader>lmw yi`:call MyQuickfixSearch({
       \ 'path':  FindRootDirectory() . '/node_modules/',
       \ 'term': @",
       \ 'grep': 0,
       \ })<cr>
+
+" function! MyJavascriptSetTestFilename() abort
+"   let b:testFile = substitute(expand('%'), 'src', 'test', 'g')
+"   let b:testFile = substitute(b:testFile, '\.js', '.test.js', 'g')
+"   let b:testFile = fnamemodify(b:testFile, ':p')
+" endfunction
+" call MyJavascriptSetTestFilename()
+
+" function! MyJavascriptSetMainFilename() abort
+"   let b:mainFile = expand('%')
+"   let b:mainFile = substitute(b:mainFile, '\.test\.js', '.js', 'g')
+"   let b:mainFile = substitute(b:mainFile, 'test', 'src', 'g')
+"   let b:mainFile = fnamemodify(b:mainFile, ':p')
+" endfunction
+" call MyJavascriptSetMainFilename()
+
+if exists("b:MyJavascriptFtpluginLoaded")
+    finish
+endif
+let b:MyJavascriptFtpluginLoaded = 1
 
 " nnoremap <buffer> <silent><leader>li :call MyJavascriptInstallModule()<cr>
 " function! MyJavascriptInstallModule() abort
@@ -74,6 +94,7 @@ let g:MyJavascriptErrorformat .= '%*[ ]at %f:%l:%c' . ','
 "   throw new Error('bar');
 "         ^
 let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
+let g:MyJavascriptErrorformat .= '%f:%l:%c:%m,'
 
 " Ignore everything else
 " let g:MyJavascriptErrorformat .= '%-G%.%#,'
@@ -160,11 +181,6 @@ let g:neoformat_javascript_my_formatter = {
       \ 'exe': g:vim.contrib.bin.dir . 'my_javascript_formatter'
       \ }
 
-" https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/dgdm8vj/?st=j1ndnrm3&sh=5b3bc21a
-setlocal suffixesadd+=.js
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
-setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"]\\{-\\}
-
 " let g:syntastic_javascript_checkers = ['eslint']
 
 " " http://eslint.org/docs/rules/
@@ -187,7 +203,3 @@ function! MyJavascriptConvertFromPerl()
   %s/\:\://g
   %s/^\s*#/\/\//g
 endfunction
-
-
-let b:fswitchdst = 'js'
-let b:fswitchlocs = 'reg:/src/test/'
