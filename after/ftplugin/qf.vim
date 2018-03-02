@@ -1,4 +1,3 @@
-" setlocal cursorline
 setlocal nowrap
 let &l:winheight = &lines / 3
 

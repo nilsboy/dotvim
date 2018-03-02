@@ -1,6 +1,10 @@
 finish
+
 " indent-level based motion
 NeoBundle 'jeetsukumaran/vim-indentwise'
+
+nmap { <Plug>(IndentWisePreviousLesserIndent)
+nmap } <Plug>(IndentWiseNextGreaterIndent)
 
 finish
 

@@ -48,7 +48,6 @@ nnoremap <leader>di     :call MyDbInfos()<cr>
 nnoremap <leader>dp     :call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 
 nnoremap <leader>dd  mayip:call MyDbExecSql(@", '[query]')<cr>
-nnoremap <leader>dh     ggyy``P<cr>
 
 nnoremap <leader>dtt    :call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
 nnoremap <leader>dtc mayiw:call MyDbExecSql('SHOW CREATE TABLE ' . @", @" . '.[create_table]', '--yaml')<cr>
@@ -126,6 +125,10 @@ function! MyDbInfos() abort
   normal! i### Database profiles
   execute 'normal! o' . g:MyDbConfigConfigDir . '/default.yaml'
   normal! o
+  normal! o
+  normal! i### Table Data Excerpts
+  execute 'normal! o' . $REMOTE_HOME . '/src/table-data-excerpt/README.md'
+  normal! o
   normal! o### SQLs
   execute 'r! ls -t ' . $REMOTE_HOME . '/src/sql/*.sql'
   normal! 5gg
@@ -144,3 +147,15 @@ function! MyDbConfigKillProcess(processId) abort
   call MyDbExecSql('KILL ' . a:processId, 'Kill process ' . a:processId)
 endfunction
 
+" nnoremap <leader>dh     ggyy``P<cr>
+nnoremap <silent> <leader>dh :call MyDbConfigHeaderSplit()<cr>
+function! MyDbConfigHeaderSplit() abort
+  set scrollopt=hor
+  set scrollbind
+  split
+  wincmd k
+  set scrollbind
+  :0
+  :0 wincmd _
+  wincmd j
+endfunction

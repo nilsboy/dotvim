@@ -1,8 +1,3 @@
-" - RNB, a Vim colorscheme template
-"   (https://gist.github.com/romainl/5cd2f4ec222805f49eca)
-
-" NOTE: https://github.com/atelierbram/syntax-highlighting
-
 " syntax has to be enabled before using it
 if &t_Co > 1
   if !exists('g:syntax_on')
@@ -10,15 +5,25 @@ if &t_Co > 1
   endif
 endif
 
-" Show when lines extend past column 80
-" set colorcolumn=81
-" highlight ColorColumn ctermfg=red ctermbg=NONE
-
 " Disable all blinking
 " set guicursor+=a:blinkon0
 
 " Prefer light version of a colorscheme
 set background=light
+
+" Show arrows for too long lines / show trailing spaces
+" set list
+" set listchars=tab:>\ ,trail:.,precedes:<,extends:>,conceal:Δ,nbsp:%
+" set listchars=trail:.,precedes:<,extends:>,conceal:Δ,nbsp:%
+" set conceallevel=1
+
+" Mark one char after max line width
+" call matchadd('Todo',  '\%81v', 100)
+" Show when lines extend past column 80
+" set colorcolumn=81
+" highlight ColorColumn ctermfg=red ctermbg=NONE
+
+match Todo /TODO/
 
 function! MyColorsColorschemeCleanup() abort
   highlight Normal ctermbg=NONE
@@ -33,25 +38,11 @@ function! MyColorsColorschemeCleanup() abort
   highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
   highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 
-  " " Make diffs less glaringly ugly...
-  " highlight DiffAdd     cterm=bold ctermfg=green     ctermbg=black
-  " highlight DiffChange  cterm=bold ctermfg=grey      ctermbg=black
-  " highlight DiffDelete  cterm=bold ctermfg=black     ctermbg=black
-  " highlight DiffText    cterm=bold ctermfg=magenta   ctermbg=black
-
   " see also: :help lcs-trail
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
 
-  " TODO: makes vim help look awful
-  " highlight MyTabstops ctermbg=darkred
-  " syntax match MyTabstops /\t/
-
-  " highlight MyLongLines ctermfg=darkred
-  " TODO: messes with vimdoc
-  " execute 'syntax match MyLongLines /\%>' . &textwidth . 'v.\+/ containedin=ALL'
-
-  match Todo /TODO/
+  highlight MyColorsEolColor ctermbg=red
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!
@@ -91,6 +82,15 @@ augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd!
   autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
+
+" NOTE: causes missing header in quickfix?
+" augroup MyColorsAugroupEndOfLineWhitespace
+"   autocmd!
+"   autocmd InsertEnter * syn clear MyColorsEolColor
+"         \ | syn match MyColorsEolColor excludenl /\s\+\%#\@!$/
+"   autocmd InsertLeave * syn clear MyColorsEolColor
+"         \ | syn match MyColorsEolColor excludenl /\s\+$/
+" augroup END
 
 " load colorscheme last to ensure own settings have priority
 try

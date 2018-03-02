@@ -12,7 +12,7 @@ if neobundle#tap('vim-altr')
 
     nmap <leader>gn <Plug>(altr-forward)
     " nmap <S-F2>  <Plug>(altr-back)
-    
+
   endfunction
   call neobundle#untap()
 endif

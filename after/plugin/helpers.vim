@@ -363,7 +363,6 @@ command! -nargs=1 Tree call Tree("<args>")
 function! Tree(path) abort
     new tree
     setlocal buftype=nowrite
-
     setlocal listchars=
     nnoremap <buffer> <CR> gf
     execute ":r! root=$(git-root) && cd $root && tree --no-colors --exclude '\class$' " . a:path

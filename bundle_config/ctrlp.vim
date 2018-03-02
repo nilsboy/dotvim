@@ -30,13 +30,6 @@ if executable('ag')
     let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
 endif
 
-" let g:ctrlp_buftag_types = {
-"     \ 'javascript' : {
-"       \ 'bin': 'jsctags',
-"       \ 'args': '-f -',
-"       \ },
-" \ }
-
 let g:ctrlp_line_prefix = ''
 let g:ctrlp_match_window = 'top,order:ttb,min:20,max:20,results:1000'
 let g:ctrlp_use_caching = 0

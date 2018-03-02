@@ -10,7 +10,7 @@ endif
 let b:MyJsonFtpluginLoaded = 1
 
 " npm install -g json2yaml
-" nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
+nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
 function! MyJsonToYaml() abort
   silent wall
   silent !cat % | json2yaml > %:r.yaml

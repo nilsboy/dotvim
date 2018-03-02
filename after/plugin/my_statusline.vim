@@ -49,11 +49,11 @@ let &statusline .= ' | %3l,%-02c | %P '
 
 function! MyStatuslineLocation() abort
 
-    let l:fn = "/home/user/src/dotvim/vimrc"
-    let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-    let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
-    let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
-    let l:fn = "/home/user/bashrc"
+    " let l:fn = "/home/user/src/dotvim/vimrc"
+    " let l:fn = "/usr/share/vim/vim74/doc/change.txt"
+    " let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
+    " let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
+    " let l:fn = "/home/user/bashrc"
     let l:fn = expand("%:p")
 
     let l:prefix = ""

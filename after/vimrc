@@ -1,7 +1,3 @@
-let g:vim['tags']   = g:vim.var.dir . "tags"
-let &tags = g:vim.tags
-set showfulltag
-
 " Keep undo history after closing a file
 set undofile
 let &undodir = g:vim.var.dir . "undo"
@@ -91,6 +87,7 @@ set textwidth=80
 " previous row
 
 " TODO: needs work
+" SEE ALSO: https://www.reddit.com/r/vim/comments/4lvaok/supercharge_vim_formatting_for_plain_text/
 " " These seem to get overwritten by too many plugins
 " function! MyVimrcForceFormattingSettings() abort
 "   setlocal formatoptions=roqanj1c
@@ -122,9 +119,6 @@ set splitbelow
 
 " Line wrapping
 set wrap
-
-" Show arrows for too long lines / show trailing spaces
-set list listchars=tab:\ \ ,trail:.,precedes:<,extends:>
 
 " Stay in the middle of the screen
 set scrolloff=999
@@ -172,7 +166,6 @@ set showcmd
 set display=lastline,uhex
 
 " Vim will wrap long lines at any character in 'breakat'
-set nolist
 set linebreak
 set breakat&vim
 if IsNeoVim()
@@ -188,10 +181,6 @@ set mouse=
 
 " always assume decimal numbers
 set nrformats-=octal
-
-" Determine how text with the "conceal" syntax attribute is shown
-" set conceallevel=1
-" set listchars+=conceal:Δ
 
 set isfname-==
 
@@ -442,12 +431,14 @@ nnoremap <leader>/S /^\S\+<cr>
 nnoremap <leader>/w /\<\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
-nnoremap ( ?[\[({<]<cr>
-nnoremap ) /[\[({<]<cr>
+" nnoremap ( ?[\[({<]<cr>
+" nnoremap ) /[\[({<]<cr>
+nnoremap ( :normal F{<cr>
+nnoremap ) :normal f{<cr>
 " nnoremap ) ?[\])}>]<cr>
 
-nnoremap [[ /{<cr>
-nnoremap ]] ?{<cr>
+" nnoremap [[ ?{<cr>
+" nnoremap ]] /{<cr>
 
 nnoremap <silent> <leader>vt :execute ':edit ' \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
@@ -490,6 +481,10 @@ nnoremap <leader>ga <c-^>
 
 nnoremap <silent> <leader>gw :silent wall<cr>
 
+" Replace selection
+xnoremap gs y:%s/<C-r>"//g<Left><Left>
+nnoremap gs :%s//g<Left><Left>
+
 " ### Searching
 
 " Show matching brackets
@@ -507,7 +502,11 @@ set incsearch
 " Toggle highlighting current matches
 nmap <silent><c-c> :set hlsearch! hlsearch?<CR>
 
+set nowildmenu
+cnoremap <tab> <C-L><C-D>
+
 set wildignorecase
+
 set ignorecase
 
 " Case insensitive search when all lowercase

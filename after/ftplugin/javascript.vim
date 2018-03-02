@@ -11,8 +11,16 @@ setlocal iskeyword+=-
 
 " https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/dgdm8vj/?st=j1ndnrm3&sh=5b3bc21a
 setlocal suffixesadd+=.js
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"]\\)
-setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"]\\{-\\}
+setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"`]\\)
+
+" example for C++.  The string cannot contain an end-of-line, only matches
+" within a line are found.
+" setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"`]\\{-\\}
+
+" let &l:define = '(class\\|function\\|define\\|export\s\(default\)*\)[(''"`]\{-\}'
+"                                  Object.defineProperty(exports, 'urlencoded', {
+" let &l:define = '\v(class|function|Object.defineProperty\s*\(\w*,\ '')'
+let &l:define = '\v(class|function|Object.defineProperty.*?,\s*'')'
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
