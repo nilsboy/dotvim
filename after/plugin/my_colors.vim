@@ -11,6 +11,14 @@ endif
 " Prefer light version of a colorscheme
 set background=light
 
+" augroup MyColorsAugroupTrailingWhitespace
+"   autocmd!
+"   autocmd InsertEnter * syn clear MyColorsEolColor
+"         \ | syn match MyColorsEolColor excludenl /\s\+\%#\@!$/
+"   autocmd InsertLeave * syn clear MyColorsEolColor
+"         \ | syn match MyColorsEolColor excludenl /\s\+$/
+" augroup END
+
 " Show arrows for too long lines / show trailing spaces
 " set list
 " set listchars=tab:>\ ,trail:.,precedes:<,extends:>,conceal:Δ,nbsp:%
@@ -38,7 +46,6 @@ function! MyColorsColorschemeCleanup() abort
   highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
   highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
 
-  " see also: :help lcs-trail
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
 
@@ -48,13 +55,6 @@ augroup MyColorsAugroupColorschemeCleanup
   autocmd!
   autocmd ColorScheme,Syntax,FileType * call MyColorsColorschemeCleanup()
 augroup END
-
-" " Highlight all occurences of word under cursor
-" augroup MyColorsAugroupHighlightWordUnderCursor
-"   autocmd!
-"   autocmd CursorMoved,CursorMovedI * execute printf('match todo /\V\<%s\>/',
-"     \ escape(expand('<cword>'), '/\'))
-" augroup END
 
 augroup MyColorsAugroupCursorline
   autocmd!
@@ -82,15 +82,6 @@ augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd!
   autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
-
-" NOTE: causes missing header in quickfix?
-" augroup MyColorsAugroupEndOfLineWhitespace
-"   autocmd!
-"   autocmd InsertEnter * syn clear MyColorsEolColor
-"         \ | syn match MyColorsEolColor excludenl /\s\+\%#\@!$/
-"   autocmd InsertLeave * syn clear MyColorsEolColor
-"         \ | syn match MyColorsEolColor excludenl /\s\+$/
-" augroup END
 
 " load colorscheme last to ensure own settings have priority
 try

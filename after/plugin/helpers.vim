@@ -5,34 +5,41 @@
 " - ingo-library
 
 " Close a buffer writing its content and closing vim if appropriate.
-" TODO: when emptying a file (i.e. normal! die) save changes on exit
 function! BufferClose() abort
-
-    " netrw leaves its buffers in a weired state
-    if BufferIsNetrw() == 1
-      bwipeout!
-      return
-    endif
-
-    if BufferIsCommandLine() == 1
-        silent q!
-        return
-    endif
-
-    " if BufferIsEmpty() == 1
-    if BufferIsUnnamed() == 1
-    elseif &write
-        silent update
-    endif
-
-    if BufferIsLast() == 1
-        silent q!
-    endif
-
-    " Using bwipe prevents the current postion mark from being saved - so
-    " the file position can not be restored when loading the file again.
+  if BufferIsQuickfix()
+    cclose
+    return
+  endif
+  if BufferIsLoclist()
+    lclose
+    return
+  endif
+  let wasQfOpen = MyHelpersQuickfixIsOpen()
+  if wasQfOpen
+    cclose
+  endif
+  if BufferIsCommandLine() == 1
+    silent q!
+  endif
+  if BufferIsUnnamed() == 1
+  elsif &write
+    silent update
+  endif
+  if BufferIsLast() == 1
+    silent q!
+  endif
+  " Using bwipe prevents the current position mark from being saved - so
+  " the file position can not be restored when loading the file again.
+  " netrw leaves its buffers in a weired state
+  if BufferIsNetrw() == 1
+    silent! bwipeout!
+  else
     silent bdelete!
-
+  endif
+  if wasQfOpen
+    copen
+    wincmd p
+  endif
 endfunction
 
 " function! BufferCheckAndDeleteEmpty() abort
@@ -76,10 +83,10 @@ function! CheckTime(...) abort
 endfunction
 
 function! BufferListedCount() abort
-    let last_buffer = bufnr('$')
+    let lastBuffer = bufnr('$')
     let listed = 0
     let i = 0
-    while i <= last_buffer
+    while i <= lastBuffer
         let i = i + 1
         if BufferIsSpecial() == 1
           continue
@@ -112,7 +119,6 @@ function! BufferIsNetrw() abort
     return 0
 endfunction
 
-
 function! BufferIsUnnamed() abort
     if empty(bufname("%"))
         return 1
@@ -135,11 +141,11 @@ endfunction
 
 function! BufferIsLast() abort
 
-    let last_buffer = bufnr('$')
+    let lastBuffer = bufnr('$')
 
     let listed = 0
     let i = 1
-    while i <= last_buffer
+    while i <= lastBuffer
 
         if buflisted(i) == 1
             let listed = listed + 1
@@ -159,11 +165,11 @@ endfunction
 
 function! BufferFindByFiletype() abort
 
-    let last_buffer = bufnr('$')
+    let lastBuffer = bufnr('$')
 
     let listed = 0
     let i = 1
-    while i <= last_buffer
+    while i <= lastBuffer
 
         if buflisted(i) == 1
             let listed = listed + 1
@@ -182,9 +188,9 @@ function! BufferFindByFiletype() abort
 endfunction
 
 function! BufferFindByName(name) abort
-    let last_buffer = bufnr('$')
+    let lastBuffer = bufnr('$')
     let i = 1
-    while i <= last_buffer
+    while i <= lastBuffer
         if bufname(i) =~ fnameescape(a:name)
           return i
         endif
@@ -202,9 +208,9 @@ function! BufferFindPreviousByName(name, current) abort
 endfunction
 
 function! BufferFindAnotherByName(name, current, direction) abort
-    let l:last_buffer = bufnr('$')
+    let l:lastBuffer = bufnr('$')
     let l:i = bufnr(a:current)
-    while l:i * a:direction <= last_buffer
+    while l:i * a:direction <= lastBuffer
         let l:name = bufname(l:i)
 
         if l:name == a:current
@@ -349,11 +355,9 @@ endfunction
 
 command! -nargs=* RunIntoBufferOrLastCommand call RunIntoBufferOrLastCommand()
 function! RunIntoBufferOrLastCommand(...) abort
-
     if exists('a:1')
         let g:last_command = a:000
     endif
-
     call RunIntoBuffer(g:last_command)
 endfunction
 
@@ -450,7 +454,6 @@ call add(g:commands, 'winpos       ')   " Vim window position (gui)
 
 " Add uppercase versions of above-mentioned redirecting into a new buffer
 function! RedirAddUppercaseVersion() abort
-
     for command in g:commands
         let bufferName = command
         let bufferName = substitute(bufferName, '^verbose ', "", "g")
@@ -470,18 +473,14 @@ call RedirAddUppercaseVersion()
 
 " Display all kinds of vim environment information
 function! VimEnvironment() abort
-
     call BufferCreateTemp("VimEnv")
-
     for command in g:commands
         put='### ' . command . ' #############################'
         call RedirIntoCurrentBuffer(command)
         put=''
     endfor
-
     normal ggdd
     only
-
 endfunction
 
 command! -nargs=0 CommandLine call CommandLine()
@@ -539,20 +538,6 @@ function! EditFileInBufferDir(...) abort
   let l:file = l:dir . '/' . join(a:000)
   let l:file = fnameescape(l:file)
   execute 'edit ' . l:file
-endfunction
-
-function! CdProjectRoot() abort
-
-    " " see vim-rooter
-    " let l:dir = FindRootDirectory()
-    " if empty(l:dir)
-    "     let l:dir = expand("%:p:h")
-    " endif
-
-    let l:dir = expand("%:p:h")
-    execute 'cd' l:dir
-    let l:project_dir = system("git-root")
-    execute 'cd' l:project_dir
 endfunction
 
 function! CdBufferDir() abort
@@ -747,36 +732,130 @@ function! helpers#random(n) abort
   return s:rnd * a:n / 0x10000
 endfunction
 
-" Reduce a range of lines to only the unique ones, preserving order...
-" function! Uniq (...) range
-"     let seen = {}
-"     let uniq_lines = []
-
-"     " Walk through the lines, remembering only the hitherto unseen ones...
-"     for line in getline(a:firstline, a:lastline)
-"         let normalized_line = '>' . (ignore_ws_diffs ? TrimWS(line) : line)
-"         if !get(seen,normalized_line)
-"             call add(uniq_lines, line)
-"             let seen[normalized_line] = 1
-"         endif
-"     endfor
-
-"     " Replace the range of original lines with just the unique lines...
-"     exec a:firstline . ',' . a:lastline . 'delete'
-"     call append(a:firstline-1, uniq_lines)
-" endfunction
-
 function! helpers#surroundings() abort
   return split(get(b:, 'commentary_format', substitute(substitute(
         \ &commentstring, '\S\zs%s',' %s','') ,'%s\ze\S', '%s ', '')), '%s', 1)
 endfunction
 
-function! BufferIsQuickfix() abort
-  return getwininfo(win_getid())[0].quickfix &&
-        \ ! BufferIsLocList()
+function! GetQuickfixBufferNumber() abort
+  for winnr in range(1, winnr('$'))
+    let qflist = filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')
+    if len(qflist) == 0
+      return 0
+    endif
+    return qflist[0].bufnr
+	endfor
 endfunction
 
-function! BufferIsLocList() abort
-  return getwininfo(win_getid())[0].loclist
+function! MyHelpersQuickfixIsOpen() abort
+  return GetQuickfixBufferNumber() != 0
 endfunction
 
+function! GetLoclistBufferNumber() abort
+  for winnr in range(1, winnr('$'))
+    let qflist = filter(getwininfo(), 'v:val.quickfix && v:val.loclist')
+    if len(qflist) == 0
+      return 0
+    endif
+    return qflist[0].bufnr
+	endfor
+endfunction
+
+function! BufferIsQuickfix(...) abort
+  let bufnr = bufnr('%')
+  if a:0 != 0
+    let bufnr = a:1
+  endif
+  return bufnr == GetQuickfixBufferNumber()
+endfunction
+
+function! BufferIsLoclist(...) abort
+  let bufnr = bufnr('%')
+  if a:0 != 0
+    let bufnr = a:1
+  endif
+  return bufnr == GetLoclistBufferNumber()
+endfunction
+
+function! MyHelpersBufferlist() abort
+  let lastBuffer = bufnr('$')
+  let currentBuffer = bufnr('%')
+  let before = []
+  let current = ''
+  let after = []
+  let found = 0
+  let i = 0
+  while i <= lastBuffer
+    let i = i + 1
+    if buflisted(i) != 1
+      continue
+    endif
+    if BufferIsQuickfix(i)
+      continue
+    endif
+    if BufferIsLoclist(i)
+      continue
+    endif
+    let bufferName = bufname(i)
+    if bufferName == ''
+      let bufferName = '[No Name]'
+    else
+      let bufferName = fnamemodify(bufferName, ':p:t')
+    endif
+    if i == currentBuffer
+      let current = bufferName
+      let found = 1
+      continue
+    endif
+    if found
+      let after += [bufferName]
+    else
+      let before += [bufferName]
+    endif
+  endwhile
+  return [ join(before, '  ') , current, join(after, '  ') ]
+endfunction
+
+" nmap <silent>L :bnext<cr>
+" nmap <silent>H :bprev<cr>
+
+nnoremap <silent> L :call MyHelpersNextBuffer()<cr>
+function! MyHelpersNextBuffer() abort
+  let lastBuffer = bufnr('$')
+  let currentBuffer = bufnr('%')
+  let i = currentBuffer
+  while i <= lastBuffer
+    let i = i + 1
+    if buflisted(i) != 1
+      continue
+    endif
+    if BufferIsQuickfix(i)
+      continue
+    endif
+    if BufferIsLoclist(i)
+      continue
+    endif
+    execute 'buffer' i
+    return
+  endwhile
+endfunction
+
+nnoremap <silent> H :call MyHelpersPreviousBuffer()<cr>
+function! MyHelpersPreviousBuffer() abort
+  let currentBuffer = bufnr('%')
+  let i = currentBuffer
+  while i > 0
+    let i = i - 1
+    if buflisted(i) != 1
+      continue
+    endif
+    if BufferIsQuickfix(i)
+      continue
+    endif
+    if BufferIsLoclist(i)
+      continue
+    endif
+    execute 'buffer' i
+    return
+  endwhile
+endfunction

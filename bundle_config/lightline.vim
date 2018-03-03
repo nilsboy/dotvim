@@ -1,20 +1,21 @@
 " A light and configurable statusline/tabline
 NeoBundle 'itchyny/lightline.vim'
 
+" NOTE: dummy is unsed to make sure an inactive statusline is rendered
 let g:lightline = {
       \   'colorscheme': 'mylightline',
-      \   'inactive': { 'left': [[]] , 'right': [[]] },
       \   'active': {
       \     'left': [['paste', 'readonly'], 
       \       ['project'] , ['dir'],  ['filename']],
       \     'right': [['percentwin'], ['lineinfo'], ['fileformat', 'fileencoding', 'filetype']]
       \   },
+      \   'inactive': { 'left': [[]] , 'right': [['dummy']] },
       \   'tabline': {
       \     'left': [['bufferline']],
 		  \     'right': [[]],
       \   },
       \   'component_expand': {
-      \     'bufferline': 'MyLightlineBufferline',
+      \     'bufferline': 'MyHelpersBufferlist',
       \   },
       \   'component_type': {
       \     'bufferline': 'tabsel',
@@ -22,12 +23,14 @@ let g:lightline = {
       \   'component': {
       \     'location': '%{MyStatuslineLocation()}',
       \     'shortendLocation': '%{pathshorten(expand("%:p"))}',
-      \     'project': '%{fnamemodify(FindRootDirectory(), ":t")}',
+      \     'projectOld': '%{fnamemodify(FindRootDirectory(), ":t")}',
+      \     'project': '%{fnamemodify(getcwd(), ":t")}',
       \     'dir': '%{MyLightlineDir()}',
       \     'filetype': '%{&ft!=#""?&ft:""}', 'percent': '%3p%%', 'percentwin': '%P',
       \     'fileencoding': '%{&fenc != "utf-8" ? &fenc:""}',
       \     'fileformat': '%{&ff != "unix" ? &ff : ""}',
 		  \     'lineinfo': '%3l,%-2v',
+      \     'dummy': 'inactive',
       \   },
       \   'component_visible_condition': {
       \     'fileencoding': '&fenc',
@@ -35,23 +38,14 @@ let g:lightline = {
       \   },
       \ }
 
-
 function! MyLightlineDir() abort
   let dir = expand("%:p:h:t")
-  let project = FindRootDirectory()
+  let project = getcwd()
   let project = fnamemodify(project, ':t')
   if dir == project
     return ''
   endif
   return dir
-endfunction
-
-" for vim-bufferline plugin
-function! MyLightlineBufferline()
-  call bufferline#refresh_status()
-  return [ g:bufferline_status_info.before,
-        \ g:bufferline_status_info.current,
-        \ g:bufferline_status_info.after]
 endfunction
 
 " let s:p.{mode}.{where} = [ [ {guifg}, {guibg}, {cuifg}, {cuibg} ], ... ]

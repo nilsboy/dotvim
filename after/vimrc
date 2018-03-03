@@ -278,10 +278,6 @@ command! -nargs=* WW :SudoWrite
 " Does not work on terminal vim
 " nnoremap <s-space> <C-b>
 
-" TODO: exclude :explore buffers
-nmap <silent>L :bnext<cr>
-nmap <silent>H :bprev<cr>
-
 " use <leader>! as prefix to remap stuff
 " Remap <C-i> as it's the same as Tab
 " nnoremap <leader>!a <C-o>
