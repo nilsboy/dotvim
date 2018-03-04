@@ -1,3 +1,5 @@
+priority 0
+
 global !p
 
 def toggle(t, opt):
@@ -841,4 +843,9 @@ snippet while "while" w
 while($1) {
 	$0
 }
+endsnippet
+
+snippet uuid "uuid" w
+const uuid = require(\`uuid/v1\`);
+uuid()
 endsnippet

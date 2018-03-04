@@ -22,7 +22,7 @@ function! BufferClose() abort
     silent q!
   endif
   if BufferIsUnnamed() == 1
-  elsif &write
+  elseif &write
     silent update
   endif
   if BufferIsLast() == 1

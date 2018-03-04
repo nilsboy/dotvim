@@ -109,7 +109,7 @@ let g:MyJavascriptErrorformat .= '%f:%l:%c:%m,'
 
 let g:neomake_run_maker = {
     \ 'exe': 'node',
-    \ 'args': ['%:p'],
+    \ 'args': ['--harmony', '%:p'],
     \ 'errorformat': '%m',
     \ 'output_stream': 'both',
     \ }

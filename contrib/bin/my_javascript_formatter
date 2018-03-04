@@ -11,7 +11,7 @@ out=`mktemp`
 prettier "$@" > $out
 
 eslint \
-  --quiet \
+  # --quiet \ # not supported anymore?
   # --debug \
   --no-color \
   --fix \
