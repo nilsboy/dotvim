@@ -174,7 +174,7 @@ endwhile
 endsnippet
 
 snippet exists "exists" w
-if ! exists('${1:b:var}')
+if exists('${1:b:var}')
   let $1 = $0
 endif
 endsnippet

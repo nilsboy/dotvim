@@ -19,11 +19,14 @@
 " - vim-test
 "   - uses vim-dispatch
 " - ale
-" - asyncrun
+" - asyncrun 500+ github stars
+"   - has no sensible solution for setting &errorformat (2018-03-13)
 " - autoformat
 "   - does not have a lot of preconfigured formatters
 " - neomake-multiprocess
-" - vimmake https://github.com/skywind3000/vimmake
+" - vimmake
+"   - https://github.com/skywind3000/vimmake
+"   - no errorformat support (2018-03-13)
 " - https://github.com/idanarye/vim-erroneous
 " see also:
 " - vim-qf

@@ -25,6 +25,11 @@ let &l:define = '\v(class|function|Object.defineProperty.*?,\s*'')'
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
 
+nnoremap <buffer> gd :LspDefinition<cr>
+nnoremap <buffer> <leader>lr :LspReferences<cr>
+nnoremap <buffer> <leader>lR :LspRename<cr>
+nnoremap <buffer> <leader>lp :LspHover<cr>
+
 " edit module documention
 nnoremap <buffer> <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>
 nnoremap <buffer> <silent> <leader>lmi :call MyQuickfixSearch({

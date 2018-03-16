@@ -1,9 +1,9 @@
 {
-  "settings": {
-  },
+  "settings": {},
   "plugins": {
     "remark-lint-maximum-line-length": {
-      "number": "80"
+      "number": "80",
+      "comment": "this is just a lint rule - not a remark rule?"
     }
   }
 }

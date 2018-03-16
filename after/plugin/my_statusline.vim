@@ -18,6 +18,8 @@ set showtabline=2
 " Prevent mode info messages on the last line to prevent 'hit enter prompt'
 set noshowmode
 
+finish
+
 " Always show ruler (right part of the command line)
 " set ruler
 
@@ -51,7 +53,6 @@ function! MyStatuslineLocation() abort
 
     " let l:fn = "/home/user/src/dotvim/vimrc"
     " let l:fn = "/usr/share/vim/vim74/doc/change.txt"
-    " let l:fn = "/home/user/src/dotvim/plugin/BufferCloseSanely.vim"
     " let l:fn = "/home/user/src/dotvim/after/plugin/Ack.vim"
     " let l:fn = "/home/user/bashrc"
     let l:fn = expand("%:p")

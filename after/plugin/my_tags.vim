@@ -1,10 +1,22 @@
+" - https://www.reddit.com/r/vim/comments/7v1nj6/vim_workflow_trouble/dtoukt0/
+" - https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
 
-" - give tags another try?: 
-"   - https://www.reddit.com/r/vim/comments/7v1nj6/vim_workflow_trouble/dtoukt0/
-"   - https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/?st=j1n9przw&sh=a9a4a220
-"   - https://www.reddit.com/r/vim/comments/7ekcp9/javascript_tags_again_alongside_others/dq5n32d/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=vim
+" NOTE: see gutentags
+" NOTE: alternative to ctags: https://www.gnu.org/software/global/
 
-let g:vim['tags']   = g:vim.var.dir . "tags"
-let &tags = g:vim.tags
+" let g:vim['tags']   = g:vim.var.dir . "tags"
+let &tags = '.git/tags'
 set showfulltag
+set cpoptions=+d
 
+" find . -type f -iregex ".*\.js$" -not -path "./node_modules/*" -exec jsctags {} -f \; | sed '/^$/d' | sort > .git/tags
+
+" augroup MyTagsAugroupPreviewTag
+"   autocmd!
+"   autocmd CursorHold * nested execute "silent! ptag " . expand("<cword>")
+" augroup END
+
+" augroup MyTagsAugroupPreviewLsp
+"   autocmd!
+"   autocmd CursorHold * nested execute "silent! LspHover"
+" augroup END

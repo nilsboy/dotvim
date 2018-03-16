@@ -22,3 +22,7 @@ autocmd BufRead,BufNewFile *.rest setlocal filetype=rest
 
 " default filetype last
 " autocmd BufRead,BufNewFile * if &filetype == '' | setlocal filetype=markdown | endif
+
+autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
+
+autocmd BufRead,BufNewFile ctags.conf setlocal filetype=ctags

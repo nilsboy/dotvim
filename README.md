@@ -25,6 +25,7 @@ Grep through the source to find more notes.
 
 ## Online Help
 - https://www.reddit.com/r/vim/
+- https://github.com/romainl/idiomatic-vimrc
 - https://github.com/mhinz/vim-galore
 
 ## Debugging

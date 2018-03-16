@@ -1,3 +1,4 @@
+finish
 " A jumping experiment
 "
 " - only jump to changes if they are far enough away from each other

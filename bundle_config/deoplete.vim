@@ -6,7 +6,7 @@ endif
 " Dark powered asynchronous completion framework for neovim 
 NeoBundle 'Shougo/deoplete.nvim'
 
-" set completeopt-=preview
+" set completeopt -= preview
 set nowildmenu
 " autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
   

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash-with-comments
 
-# Run through 2 formatters
+# Run through 2 formatters to normalize first and then use the bigger variety of eslint options
 
 source bash-helpers
 
@@ -11,11 +11,11 @@ out=`mktemp`
 prettier "$@" > $out
 
 eslint \
-  # --quiet \ # not supported anymore?
+  --quiet \
   # --debug \
   --no-color \
   --fix \
-  -c $HOME/.vim/etc/contrib/etc/eslintrc-format.json \
+  -c $MY_VIM_DIR/contrib/etc/eslintrc-format.json \
   $out \
 1>&2
 

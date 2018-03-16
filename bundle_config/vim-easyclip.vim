@@ -19,14 +19,21 @@ let g:EasyClipShareYanks = 1
 
 let g:EasyClipYankHistorySize = 500
 
+" let g:EasyClipUseCutDefaults = 0
+" nmap x <Plug>MoveMotionPlug 
+" xmap x <Plug>MoveMotionXPlug
+" nmap xx <Plug>MoveMotionLinePlug
+" nmap x <Plug>MoveMotionPlug 
+
+" let g:EasyClipUsePasteToggleDefaults = 0
+" nmap <c-f> <plug>EasyClipSwapPasteForward
+" nmap <c-d> <plug>EasyClipSwapPasteBackwards
+
 finish
 
 " Notes
 " Also discards deletes when prefixed by a register - like: normal "adgg<esc>
 " - need to use normal! instead
-
-" Needs to be loaded after vim-sneak to not clobber s-mappings:
-" https://github.com/svermeulen/vim-easyclip/issues/60
 
 " Sometimes produces error on start:
 " Error detected while processing function EasyClip#Init[10]..EasyClip#Shared#Init[14]..EasyClip#Yank#GetYankstackHead[1]..EasyClip#Yank#GetYankInfoForReg[1]..provider#clipboard#Call[1]..20[4]..<SNR>225_try_cmd:

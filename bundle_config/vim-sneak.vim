@@ -28,7 +28,6 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
-" " Don't hightlight sneak targets
 autocmd ColorScheme * hi! link Sneak TabLineSel
 " autocmd ColorScheme * hi! link SneakLabel TabLineSel
 

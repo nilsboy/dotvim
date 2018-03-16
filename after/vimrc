@@ -19,6 +19,9 @@ let &runtimepath = '/usr/share/nvim/runtime,'
 execute "set runtimepath+=" . g:vim.etc.dir
 execute "set runtimepath+=" . g:vim.after.dir
 
+let $PATH = $PATH . ':' . g:vim.etc.dir . '/contrib/bin'
+let $MY_VIM_DIR = g:vim.etc.dir
+
 " Reload vimrc on write
 " autocmd BufWritePost vimrc source $MYVIMRC
 " nnoremap <leader>vr :execute "source " . $MYVIMRC<cr>
@@ -82,36 +85,6 @@ set autoindent
 
 " textformattting
 set textwidth=80
-
-" Note: if the listpat fits in the previous row the listpat is wrapped into the
-" previous row
-
-" TODO: needs work
-" SEE ALSO: https://www.reddit.com/r/vim/comments/4lvaok/supercharge_vim_formatting_for_plain_text/
-" " These seem to get overwritten by too many plugins
-" function! MyVimrcForceFormattingSettings() abort
-"   setlocal formatoptions=roqanj1c
-"   let &formatlistpat = '\c\v^\s*[-\+\*]\s+'
-"   let &formatlistpat .= '|\c\v^\s*(todo|note|tags|see also|fix)\s+'
-"   setlocal noautoindent
-" endfunction
-" augroup MyVimrcAugroupForceFormattingSettings
-"   autocmd!
-"   autocmd BufWinEnter * call MyVimrcForceFormattingSettings()
-" augroup END
-
-" see also:
-" :h auto-format
-function! MyVimrcShowFormatSettings() abort
-  call INFO('&comments:', &comments)
-  call INFO('&commentstring:', &commentstring)
-  call INFO('&formatoptions:', &formatoptions)
-  call INFO('&formatlistpat:', &formatlistpat)
-  call INFO('&autoindent:', &autoindent)
-  call INFO('&smartindent:', &smartindent)
-  call INFO('&cindent:', &cindent)
-  " call INFO('g:MyMarkdownFormatoptions:', g:MyMarkdownFormatoptions)
-endfunction
 
 set backspace=indent,start
 
@@ -259,18 +232,14 @@ vmap <leader> <nop>
 nnoremap <leader>vee :call VimEnvironment()<cr><esc>
 nnoremap <leader>veg :call DUMP(g:)<cr>
 
-" use saner regexes
-" TODO checkout bundle 'vim-scripts/eregex.vim'
-nnoremap :s/ :s/\V
-
-nnoremap <c-z> :silent wall<cr><c-z>
-inoremap <c-z> <esc>:silent wall<cr><c-z>
+nnoremap <silent><c-z> :silent wall<cr><c-z>
+inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
 
 " Switch to alternative file
 " nnoremap <BS> <C-^>
 
 " Save file as root
-command! -nargs=* WW :SudoWrite
+command! -nargs=* WriteWithSudo :SudoWrite
 
 " Adding a left shift key does not work like this
 " nnoremap < <shift>
@@ -328,9 +297,9 @@ nnoremap M '
 " Quickly jump to buffers
 nnoremap <nowait>gb :ls<cr>:buffer<space>
 
-nnoremap <silent><leader>if :!firefox
+nnoremap <silent><leader>ii :!firefox
       \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
-vnoremap <silent><leader>if y:execute '!firefox '
+vnoremap <silent><leader>ii y:execute '!firefox '
       \ . 'https://duckduckgo.com/?q=' . @"<cr>
 nnoremap <silent><leader>is :execute
       \ ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
@@ -402,8 +371,8 @@ vnoremap <nowait>> >gv
 nmap <leader>?? <leader>vr
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
 nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/vimrc"<cr>
-nnoremap <silent> <leader>vt :execute "edit " . g:vim.etc.dir
-      \ . '/after/ftplugin/' . &filetype . '.vim'<cr>
+nnoremap <silent> <leader>vt :execute ':edit ' 
+  \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
 command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
@@ -436,8 +405,6 @@ nnoremap ) :normal f{<cr>
 " nnoremap [[ ?{<cr>
 " nnoremap ]] /{<cr>
 
-nnoremap <silent> <leader>vt :execute ':edit ' \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
-
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
 
@@ -451,9 +418,6 @@ nnoremap <C-v> m`<C-v>
 vnoremap <esc> <esc>``
 vnoremap y y``
 
-" TODO: clean up <leader>l namespace
-nnoremap <leader>lr :%s/<C-r><C-w>/
-nnoremap <leader>lR :%s/<C-r><C-w>/<c-r><c-w>
 nnoremap <silent><leader>gm :echom '=== Messages until ' . strftime("%H:%M:%S")
       \ . ' ======================='
       \ \| :silent Verbose messages<cr> \| :silent only \| :normal G <cr>
@@ -473,13 +437,15 @@ vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
 nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 
 " Go to alternate file
-nnoremap <leader>ga <c-^>
+" nnoremap <leader>ga <c-^>
+nnoremap <bs> <c-^>
 
 nnoremap <silent> <leader>gw :silent wall<cr>
 
 " Replace selection
 xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gs :%s//g<Left><Left>
+nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>
 
 " ### Searching
 
@@ -529,5 +495,5 @@ endif
 
 " NOTE: Neobundle unsets these
 " set verbosefile=/tmp/vim-debug.log
-" set verbose=15
+" set verbose=9
 

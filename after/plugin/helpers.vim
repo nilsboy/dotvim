@@ -19,14 +19,15 @@ function! BufferClose() abort
     cclose
   endif
   if BufferIsCommandLine() == 1
-    silent q!
+    silent! quit
+    return
   endif
   if BufferIsUnnamed() == 1
   elseif &write
     silent update
   endif
   if BufferIsLast() == 1
-    silent q!
+    silent! q!
   endif
   " Using bwipe prevents the current position mark from being saved - so
   " the file position can not be restored when loading the file again.
@@ -34,7 +35,7 @@ function! BufferClose() abort
   if BufferIsNetrw() == 1
     silent! bwipeout!
   else
-    silent bdelete!
+    silent! bdelete!
   endif
   if wasQfOpen
     copen
@@ -819,20 +820,20 @@ endfunction
 " nmap <silent>L :bnext<cr>
 " nmap <silent>H :bprev<cr>
 
-nnoremap <silent> L :call MyHelpersNextBuffer()<cr>
+nnoremap <silent> L :silent! call MyHelpersNextBuffer()<cr>
 function! MyHelpersNextBuffer() abort
   let lastBuffer = bufnr('$')
   let currentBuffer = bufnr('%')
   let i = currentBuffer
+  if MyBufferIsSpecial(currentBuffer)
+    return
+  endif
   while i <= lastBuffer
     let i = i + 1
     if buflisted(i) != 1
       continue
     endif
-    if BufferIsQuickfix(i)
-      continue
-    endif
-    if BufferIsLoclist(i)
+    if MyBufferIsSpecial(i)
       continue
     endif
     execute 'buffer' i
@@ -840,22 +841,50 @@ function! MyHelpersNextBuffer() abort
   endwhile
 endfunction
 
-nnoremap <silent> H :call MyHelpersPreviousBuffer()<cr>
+nnoremap <silent> H :silent! call MyHelpersPreviousBuffer()<cr>
 function! MyHelpersPreviousBuffer() abort
   let currentBuffer = bufnr('%')
   let i = currentBuffer
+  if MyBufferIsSpecial(currentBuffer)
+    return
+  endif
   while i > 0
     let i = i - 1
     if buflisted(i) != 1
       continue
     endif
-    if BufferIsQuickfix(i)
-      continue
-    endif
-    if BufferIsLoclist(i)
+    if MyBufferIsSpecial(i)
       continue
     endif
     execute 'buffer' i
-    return
+    break
   endwhile
 endfunction
+
+function! MyBufferIsSpecial(bufnr) abort
+  if BufferIsQuickfix(a:bufnr)
+    return 1
+  endif
+  if BufferIsLoclist(a:bufnr)
+    return 1
+  endif
+  if MyBufferIsVerySpecial(a:bufnr)
+    return 1
+  endif
+  return 0
+endfunction
+
+" Skip Mundo buffers etc
+function! MyBufferIsVerySpecial(bufnr) abort
+  return bufname(a:bufnr) =~ '\v^__.+__$'
+endfunction
+
+
+" TODO: rename
+nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
+function! MyHelpersOpenOrg() abort
+  let fileName = substitute(expand('%:p'), '/txt', '/org', 'g')
+  let fileName = substitute(fileName, '\.txt', '', 'g')
+  silent! execute '!see ' fileName ' &'
+endfunction
+

@@ -1,15 +1,17 @@
 " A light and configurable statusline/tabline
 NeoBundle 'itchyny/lightline.vim'
 
-" NOTE: dummy is unsed to make sure an inactive statusline is rendered
+" NOTE: dummy is used to make sure an inactive statusline is rendered
 let g:lightline = {
       \   'colorscheme': 'mylightline',
       \   'active': {
-      \     'left': [['paste', 'readonly'], 
-      \       ['project'] , ['dir'],  ['filename']],
-      \     'right': [['percentwin'], ['lineinfo'], ['fileformat', 'fileencoding', 'filetype']]
+      \     'left': [['project'] , ['dir'],  ['filename']],
+      \     'right': [['percentwin'], ['lineinfo'],
+      \         ['fileformat', 'fileencoding', 'filetype'],
+      \         ['empty'],
+      \         ['paste', 'tags']], 
       \   },
-      \   'inactive': { 'left': [[]] , 'right': [['dummy']] },
+      \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
       \   'tabline': {
       \     'left': [['bufferline']],
 		  \     'right': [[]],
@@ -30,13 +32,26 @@ let g:lightline = {
       \     'fileencoding': '%{&fenc != "utf-8" ? &fenc:""}',
       \     'fileformat': '%{&ff != "unix" ? &ff : ""}',
 		  \     'lineinfo': '%3l,%-2v',
-      \     'dummy': 'inactive',
+      \     'dummy': '_',
+      \     'empty': ' ',
+      \     'tags': '%{MyLightlineTags()}'
       \   },
       \   'component_visible_condition': {
       \     'fileencoding': '&fenc',
       \     'fileformat': '&ff',
       \   },
       \ }
+
+      " \   'component_function_visible_condition': {
+      " \     'tags': '(call MyLightlineTags() == 0)',
+      " \   },
+
+function! MyLightlineTags() abort
+  if exists(':GutentagsUpdate')
+    return gutentags#statusline("")
+  endif
+  return ''
+endfunction
 
 function! MyLightlineDir() abort
   let dir = expand("%:p:h:t")
@@ -57,10 +72,9 @@ let s:blue3 = [ '', '',  238, 45 ]
 
 let s:p = {'normal': {}, 'tabline' : {} }
 
-let s:p.normal.left = [ s:red, s:grey, s:blue, s:blue3 ]
+let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
 let s:p.normal.middle = [ s:grey ]
-" let s:p.normal.right = [ s:blue, s:grey, s:blue ]
-let s:p.normal.right = [ s:grey, s:grey, s:grey ]
+let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:red ]
 
 let s:p.tabline.tabsel = [ s:blue ]
 let s:p.tabline.left = [ s:grey ]

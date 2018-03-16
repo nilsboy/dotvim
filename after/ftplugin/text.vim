@@ -3,10 +3,10 @@
 
 setlocal syntax=txt
 
-setlocal formatoptions+=t
+" setlocal formatoptions+=t
 
 " :help format-comments
-let &l:comments = 'nb:>,fb:-'
+" let &l:comments = 'nb:>,fb:-'
 
 " Use comment string for quoting
-let &l:commentstring = '> %s'
+" let &l:commentstring = '> %s'

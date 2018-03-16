@@ -1,3 +1,4 @@
+finish
 " fzf :heart: vim
 NeoBundle 'junegunn/fzf'
 NeoBundle 'junegunn/fzf.vim'

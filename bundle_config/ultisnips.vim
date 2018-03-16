@@ -51,9 +51,9 @@ function s:expandOrAll() abort
   return ""
 endfunction
 
-execute 'inoremap <silent> <expr>'
-      \ . ' <c-space>'
-      \ . ' "\<C-R>=<sid>expandOrAll()\<CR>"'
+" execute 'inoremap <silent> <expr>'
+"       \ . ' <c-space>'
+"       \ . ' "\<C-R>=<sid>expandOrAll()\<CR>"'
 
 execute 'inoremap <silent> <expr> '
       \ . g:UltiSnipsJumpForwardTrigger
