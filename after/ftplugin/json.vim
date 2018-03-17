@@ -9,7 +9,7 @@ if exists("b:MyJsonFtpluginLoaded")
 endif
 let b:MyJsonFtpluginLoaded = 1
 
-" npm install -g json2yaml
+MyInstall json2yaml
 nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
 function! MyJsonToYaml() abort
   silent wall

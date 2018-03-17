@@ -7,7 +7,7 @@ if exists("b:did_ftplugin_css")
 endif
 let b:did_ftplugin_css = 1
 
-" npm install csscomb -g
+MyInstall csscomb
 let g:neoformat_enabled_css = [ 'csscomb' ]
 let g:neoformat_css_csscomb = {
       \ 'exe': 'csscomb',
@@ -15,7 +15,7 @@ let g:neoformat_css_csscomb = {
       \ 'replace': 1
       \ }
 
-" npm install csslint -g
+MyInstall csslint
 let g:ale_linters['css'] = ['mycsslint']
 call ale#linter#Define('css', {
       \ 'name': 'mycsslint',

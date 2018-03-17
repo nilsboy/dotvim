@@ -879,12 +879,23 @@ function! MyBufferIsVerySpecial(bufnr) abort
   return bufname(a:bufnr) =~ '\v^__.+__$'
 endfunction
 
-
-" TODO: rename
+" TODO: remap
 nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
   let fileName = substitute(expand('%:p'), '/txt', '/org', 'g')
   let fileName = substitute(fileName, '\.txt', '', 'g')
   silent! execute '!see ' fileName ' &'
 endfunction
+
+function! MyInstall(app, ...) abort
+  let cmd = join(a:000)
+  if cmd == ''
+    let cmd = '!npm install -g ' . a:app
+  endif
+  if !executable(a:app)
+    call INFO('Installing ' . a:app . " via: " . cmd)
+    silent execute cmd
+  endif
+endfunction
+command! -nargs=* MyInstall call MyInstall (<f-args>)
 

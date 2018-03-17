@@ -175,14 +175,13 @@ let g:neoformat_javascript_eslint = {
 
 " let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 
-" npm install -g prettier
+MyInstall prettier !npm install -g prettier prettier-eslint-cli
 " let g:neoformat_enabled_javascript = [ 'prettier' ]
 let g:neoformat_javascript_prettier = {
       \ 'exe': 'prettier'
       \ ,'args': ['--no-semi', '--single-quote']
       \ }
 
-" npm install -g prettier-eslint-cli
 " let g:neoformat_enabled_javascript = [ 'prettier_eslint' ]
 let g:neoformat_javascript_prettier_eslint = {
       \ 'exe': 'prettier-eslint'

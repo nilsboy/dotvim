@@ -19,19 +19,19 @@ let b:MyMarkdownFtpluginLoaded = 1
 " autocmd User SyntaxMarkdownPreLeaveA let &formatoptions = g:MyMarkdownFormatoptions
 " autocmd User SyntaxMarkdownPreLeaveA unsilent echo 'left ' . &formatoptions
 
-" !npm install -g remark-cli remark-lint-maximum-line-length remark-lint-list-item-indent
-" NOTE: has no line wrap?
-let g:neoformat_markdown_myremark = {
-  \ 'exe': 'remark',
-  \ 'args': ['--no-color', '--silent',
-  \   '--rc-path', g:vim.contrib.etc.dir . 'remark.json',
-  \ ],
-  \ 'stdin': 1,
-  \ }
-  " \ '--use' , 'remark-preset-lint-markdown-style-guide',
-let g:neoformat_enabled_markdown = [ 'myremark' ]
+" MyInstall remark !npm install -g remark-cli remark-lint-maximum-line-length remark-lint-list-item-indent
+" " NOTE: has no line wrap?
+" let g:neoformat_markdown_myremark = {
+"   \ 'exe': 'remark',
+"   \ 'args': ['--no-color', '--silent',
+"   \   '--rc-path', g:vim.contrib.etc.dir . 'remark.json',
+"   \ ],
+"   \ 'stdin': 1,
+"   \ }
+"   " \ '--use' , 'remark-preset-lint-markdown-style-guide',
+" let g:neoformat_enabled_markdown = [ 'myremark' ]
 
-" !npm install -g prettier
+MyInstall prettier
 let g:neoformat_markdown_myprettier = {
   \ 'exe': 'prettier',
   \ 'args': ['--no-color',

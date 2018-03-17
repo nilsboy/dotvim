@@ -1,4 +1,3 @@
-finish
 " Fast! Extensible! Async! Completion Framework for Neovim
 " NOTE: does not work with vim-lsp
 " NOTE: breaks own CursorHoldI autocmds

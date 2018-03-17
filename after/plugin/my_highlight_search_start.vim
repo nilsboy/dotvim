@@ -1,4 +1,5 @@
 finish
+" Highlight where a search has started
 " TODO: play nice with previous nN-mappings
 nnoremap / :let b:first = 1<cr>/
 nnoremap ? :let b:first = 1<cr>?

@@ -27,9 +27,8 @@ function! MyHtmlShrinkBeforeRestore() abort
   normal Go
 endfunction
 
-" posthtml-cli
-" https://libraries.io/npm/posthtml-cli
 " Needs a package json / every option is a npm package
+MyInstall posthtml !npm install -g posthtml-cli
 let g:neoformat_enabled_html = [ 'posthtml' ]
 let g:neoformat_html_posthtml = {
       \ 'exe': 'posthtmlwrapper'
@@ -38,8 +37,8 @@ let g:neoformat_html_posthtml = {
 finish
 
 " clean-html has all kinds of problems
-" https://www.npmjs.com/package/clean-html
 " i.e. can't handle doctype tag, wrap seems to create a deep recursion.
+MyInstall clean-html
 let g:neoformat_enabled_html = ['clean_html']
 let g:neoformat_html_clean_html = {
       \ 'exe': 'clean-html'
@@ -91,6 +90,7 @@ let g:neoformat_html_htmlbeautify = {
 "
 " npm install -g prettydiff/prettydiff
 " let g:neoformat_enabled_html = ['prettydiff']
+MyInstall prettydiff npm install -g prettydiff/prettydiff
 let g:neoformat_html_prettydiff = {
       \ 'exe': 'prettydiff',
       \ 'args': ['mode:"beautify"',

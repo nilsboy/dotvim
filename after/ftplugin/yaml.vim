@@ -1,9 +1,15 @@
 " The default linter for neomake is:
 " http://yamllint.readthedocs.io/en/latest/quickstart.html
 
-" npm install -g js-yaml
-
 nnoremap <buffer> <silent> <leader>gc :silent call MyYamlToJson()<cr>
+
+if exists("b:MyYamlFtpluginLoaded")
+    finish
+endif
+let b:MyYamlFtpluginLoaded = 1
+
+MyInstall js-yaml
+
 function! MyYamlToJson() abort
   silent wall
   silent !js-yaml % > %:r.json
