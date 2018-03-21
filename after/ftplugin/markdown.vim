@@ -1,11 +1,5 @@
-let b:MyMarkdownChangeTick = 0
 setlocal formatoptions=
 " setlocal conceallevel=2
-augroup MyMarkdownAugroupFormat
-  autocmd!
-  " CursorHoldI does not work in combination with ale or nvim-completion-manager
-  autocmd CursorHold <buffer> call MyMarkdownFormat()
-augroup END
 
 if exists("b:MyMarkdownFtpluginLoaded")
     finish
@@ -44,11 +38,3 @@ let g:neoformat_markdown_myprettier = {
   " \ '--use' , 'remark-preset-lint-markdown-style-guide',
 let g:neoformat_enabled_markdown = [ 'myprettier' ]
 
-function! MyMarkdownFormat() abort
-  if b:MyMarkdownChangeTick == 0
-    " avoid running when opening new buffer
-  elseif b:MyMarkdownChangeTick != b:changedtick
-    Neoformat
-  endif
-  let b:MyMarkdownChangeTick = b:changedtick
-endfunction

@@ -164,7 +164,7 @@ function! MyQuickfixSearch(options) abort
   let term = substitute(term, '\v[-_ ]+', '.*', 'g')
   let term = substitute(term, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.*\l\2', 'g')
 
-  call INFO('term:', term)
+  " call INFO('term:', term)
 
   let filenameTerm = term
 

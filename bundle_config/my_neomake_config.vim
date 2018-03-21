@@ -26,13 +26,14 @@ augroup MyNeomakeConfigAugroupOnNeomakeFinished
   autocmd User NeomakeFinished call MyNeomakeConfigOnNeomakeFinished()
 augroup END
 function! MyNeomakeConfigOnNeomakeFinished() abort
-  if g:neomake_hook_context.jobinfo.file_mode == 1
-    " call MyQuickfixSetNavigationType('locationlist')
-    lopen
-  else
+  " var is not set anymore? (2018-03-21)
+  " if g:neomake_hook_context.jobinfo.file_mode == 1
+  "   " call MyQuickfixSetNavigationType('locationlist')
+  "   lopen
+  " else
     " call MyQuickfixSetNavigationType('quickfix')
     copen
-  endif
+  " endif
 endfunction
 
 " nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
