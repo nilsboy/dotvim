@@ -1,6 +1,9 @@
 setlocal nowrap
 let &l:winheight = &lines / 3
 
+" restore <cr> if remapped elsewhere
+" nnoremap <buffer> <cr> <cr>
+
 " nmap <buffer><silent> f :QFilter<space>
 
 " TODO previewwindow

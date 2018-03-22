@@ -49,6 +49,10 @@ function! MyColorsColorschemeCleanup() abort
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
 
+  highlight clear Folded
+  highlight Folded ctermfg=249
+  highlight FoldColumn cterm=NONE ctermbg=NONE
+
   highlight MyColorsEolColor ctermbg=red
 endfunction
 augroup MyColorsAugroupColorschemeCleanup

@@ -194,7 +194,7 @@ set suffixesadd=.txt,.md
 let &shellpipe = '&>'
 
 " turn off folding
-set nofoldenable
+" set nofoldenable
 
 "### Mappings
 
@@ -360,6 +360,9 @@ augroup END
 " Reselect visual block after indent
 vnoremap <nowait>< <gv
 vnoremap <nowait>> >gv
+
+" similar to gv, reselects the last changed block
+nnoremap gV `[v`]
 
 " hide annoying quit message
 " nnoremap <C-c> <C-c>:echo<cr>

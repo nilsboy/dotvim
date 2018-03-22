@@ -33,23 +33,24 @@ nnoremap <silent> <leader>x :Neoformat<cr>
 "   Neoformat
 " endfunction
 
-let b:MyNeoformatAutoFormatEnabled = 0
 nnoremap <silent> <leader>X :let b:MyNeoformatAutoFormatEnabled = 1<cr>
 
-let b:MyNeoformatChangeTick = 0
 augroup MyNeoformatAugroupFormat
   autocmd!
   " CursorHoldI does not work in combination with ale or nvim-completion-manager
-  autocmd CursorHold <buffer> call MyNeoformatFormat()
+  autocmd CursorHold * call MyNeoformatFormat()
 augroup END
 
 function! MyNeoformatFormat() abort
-  if ! b:MyNeoformatAutoFormatEnabled
+  if ! exists('b:MyNeoformatAutoFormatEnabled')
     return
   endif
-  if b:MyNeoformatChangeTick == 0
-    " avoid running when opening new buffer
-  elseif b:MyNeoformatChangeTick != b:changedtick
+  if ! exists('b:MyNeoformatChangeTick')
+    let b:MyNeoformatChangeTick = 0
+  endif
+  " if b:MyNeoformatChangeTick == 0
+  "   " avoid running when opening new buffer
+  if b:MyNeoformatChangeTick != b:changedtick
     Neoformat
   endif
   let b:MyNeoformatChangeTick = b:changedtick
