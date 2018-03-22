@@ -2,22 +2,26 @@ finish
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
 " NOTE: delay not working?
-" NOTE: doesnot fuzzy complete?
+" NOTE: does not fuzzy complete?
 NeoBundle 'prabirshrestha/asyncomplete.vim'
-" let g:asyncomplete_log_file = expand('~/tmp/asyncomplete.log')
+NeoBundle 'prabirshrestha/async.vim'
 
 " let g:asyncomplete_remove_duplicates = 1
-set completeopt+=preview
+" set completeopt+=preview
 " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " does not work (2018-03-13):
-let g:cm_complete_delay = 200
+let g:asyncomplete_complete_delay = 200
+
+let g:asyncomplete_force_refresh_on_context_changed = 1
 
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
+
+NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
 
 NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
@@ -28,9 +32,7 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 	\ 'completor': function('asyncomplete#sources#buffer#completor'),
 	\ }))
 
-" TODO: prio 8
-NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
-
+finish
 " NeoBundle 'prabirshrestha/asyncomplete-flow.vim', {
 "   \ 'build': { 'unix': 'npm install -g flow-bin' }
 "   \ }
@@ -52,7 +54,6 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 	\ 'completor': function('asyncomplete#sources#ultisnips#completor'),
 	\ }))
 
-" TODO: reactivate when lsp has a priority
 " NeoBundle 'wellle/tmux-complete.vim'
 " let g:tmuxcomplete#asyncomplete_source_options = {
 " 	\ 'name':      'tmux',

@@ -7,9 +7,7 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_trace = 'verbose'
 
 " Language Server Protocol (LSP) support
-NeoBundle 'autozimu/LanguageClient-neovim' , {
-      \ 'build': { 'unix': 'npm install -g javascript-typescript-langserver ; bash install.sh' }
-      \}
+NeoBundle 'autozimu/LanguageClient-neovim'
 
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>

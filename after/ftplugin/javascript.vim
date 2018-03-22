@@ -1,8 +1,5 @@
 " FormatterSet eslint-formatter
 " TODO: add?: https://github.com/lebab/lebab
-" TODO: checkout husky:
-" (see https://github.com/prettier/prettier)
-" TODO: checkout formatter: https://www.npmjs.com/package/prettier-in-html
 " TODO: checkout jsctags generator using tern
 " (https://github.com/ramitos/jsctags)
 
@@ -13,14 +10,12 @@ setlocal iskeyword+=-
 setlocal suffixesadd+=.js
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"`]\\)
 
-" example for C++.  The string cannot contain an end-of-line, only matches
-" within a line are found.
-" setlocal define=^\\s*[^/,\\":=]*\\s*[:=]*\\s*\\(class\\\|function\\\|define\\\|export\\s\\(default\\)*\\)[('\"`]\\{-\\}
+" get an error:
+" let &l:define = '\v(class|function|Object.defineProperty.*?,\s*'')'
+" TODO: Object.defineProperty does not work like this:
+let &l:define = '\v(class|function|Object.defineProperty)'
 
-" let &l:define = '(class\\|function\\|define\\|export\s\(default\)*\)[(''"`]\{-\}'
-"                                  Object.defineProperty(exports, 'urlencoded', {
-" let &l:define = '\v(class|function|Object.defineProperty\s*\(\w*,\ '')'
-let &l:define = '\v(class|function|Object.defineProperty.*?,\s*'')'
+setlocal omnifunc=lsp#omni#complete
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
@@ -43,43 +38,10 @@ nnoremap <buffer> <silent> <leader>lmw yi`:call MyQuickfixSearch({
       \ 'grep': 0,
       \ })<cr>
 
-" function! MyJavascriptSetTestFilename() abort
-"   let b:testFile = substitute(expand('%'), 'src', 'test', 'g')
-"   let b:testFile = substitute(b:testFile, '\.js', '.test.js', 'g')
-"   let b:testFile = fnamemodify(b:testFile, ':p')
-" endfunction
-" call MyJavascriptSetTestFilename()
-
-" function! MyJavascriptSetMainFilename() abort
-"   let b:mainFile = expand('%')
-"   let b:mainFile = substitute(b:mainFile, '\.test\.js', '.js', 'g')
-"   let b:mainFile = substitute(b:mainFile, 'test', 'src', 'g')
-"   let b:mainFile = fnamemodify(b:mainFile, ':p')
-" endfunction
-" call MyJavascriptSetMainFilename()
-
 if exists("b:MyJavascriptFtpluginLoaded")
     finish
 endif
 let b:MyJavascriptFtpluginLoaded = 1
-
-" nnoremap <buffer> <silent><leader>li :call MyJavascriptInstallModule()<cr>
-" function! MyJavascriptInstallModule() abort
-"   let a = @a
-"   if search('\v`.+`', '', line('.')) != 0
-"     normal! l
-"     normal! "ayt`
-"   else
-"     if search('\v".+"', '', line('.')) != 0
-"       normal! l
-"       normal! "ayt"
-"     else
-"       return
-"     endif
-"   endif
-"   execute ':terminal npm install ' @a
-"   let @a = a
-" endfunction
 
 " augroup MyJavascriptAugroupAddTypeMarker
 "   autocmd!
@@ -122,19 +84,6 @@ let g:neomake_run_maker = {
     " \ 'postprocess':
     " function('MyJavascriptFixCoreFileLocationInQuickfix')
 
-" " TODO
-" function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
-"   let filename = bufname(i.bufnr)
-"   " Non-existing file in the quickfix list, assume a core file
-"   if filereadable(filename)
-"     return
-"   endif
-"   " Load the node.js core file (thanks @izs for pointing this out!)
-"   silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
-"   " Delete the first line, always empty for some reason
-"   execute ':1d'
-" endfunction
-
 " mocha first
 let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
       \ "Karma", "Lab", "Jasmine", "Jest"] }
@@ -148,16 +97,6 @@ let g:ale_linters['javascript'] = ['eslint']
 
 "### Formatter
 
-" augroup MyJavascriptAugroupAutoformat
-"   autocmd!
-"   " autocmd InsertLeave <buffer> :Neoformat
-"   " autocmd CursorHold <buffer> :Neoformat
-"   " autocmd TextChanged,InsertLeave <buffer> :Neoformat
-" augroup END
-
-" alternative javascript formatters:
-" - https://github.com/prettydiff/prettydiff
-
 " eslint can not format from stdin - only lint.
 " Errors are reported to stdout never to stderr. Specifying --quiet suppresses
 " them completely.
@@ -168,12 +107,6 @@ let g:neoformat_javascript_eslint = {
       \ , g:vim.contrib.etc.dir . 'eslintrc-format.yml']
       \ , 'replace': 1
       \ }
-
-" let g:neoformat_javascript_eswraplines = {
-"       \ 'exe': 'es-wrap-lines'
-"       \ }
-
-" let g:neoformat_enabled_javascript = [ 'eslint',  'eswraplines']
 
 MyInstall prettier !npm install -g prettier prettier-eslint-cli
 " let g:neoformat_enabled_javascript = [ 'prettier' ]
@@ -195,11 +128,6 @@ let g:neoformat_javascript_my_formatter = {
 
 " let g:syntastic_javascript_checkers = ['eslint']
 
-" " http://eslint.org/docs/rules/
-" " stdin currently does not work with --fix
-" let g:formatters_javascript = ['eslint']
-" let g:formatdef_eslint = '"pipe-wrapper eslint --fix -c ~/.eslintrc-format.yml"'
-
 " let g:neomake_javascript_enabled_makers = ['eslint']
 
 nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>
@@ -215,3 +143,32 @@ function! MyJavascriptConvertFromPerl()
   %s/\:\://g
   %s/^\s*#/\/\//g
 endfunction
+
+" function! MyJavascriptSetTestFilename() abort
+"   let b:testFile = substitute(expand('%'), 'src', 'test', 'g')
+"   let b:testFile = substitute(b:testFile, '\.js', '.test.js', 'g')
+"   let b:testFile = fnamemodify(b:testFile, ':p')
+" endfunction
+" call MyJavascriptSetTestFilename()
+
+" function! MyJavascriptSetMainFilename() abort
+"   let b:mainFile = expand('%')
+"   let b:mainFile = substitute(b:mainFile, '\.test\.js', '.js', 'g')
+"   let b:mainFile = substitute(b:mainFile, 'test', 'src', 'g')
+"   let b:mainFile = fnamemodify(b:mainFile, ':p')
+" endfunction
+" call MyJavascriptSetMainFilename()
+
+" " TODO
+" function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
+"   let filename = bufname(i.bufnr)
+"   " Non-existing file in the quickfix list, assume a core file
+"   if filereadable(filename)
+"     return
+"   endif
+"   " Load the node.js core file (thanks @izs for pointing this out!)
+"   silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
+"   " Delete the first line, always empty for some reason
+"   execute ':1d'
+" endfunction
+

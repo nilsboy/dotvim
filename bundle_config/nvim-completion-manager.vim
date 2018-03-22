@@ -5,30 +5,31 @@ NeoBundle 'roxma/nvim-completion-manager'
 
 " Note: alternatives: https://www.reddit.com/r/vim/comments/4ufblz/alternatives_to_youcompleteme/
 
-NeoBundle 'roxma/nvim-cm-tern', {
-      \ 'build': { 'unix': 'npm install' }}
+" NeoBundle 'roxma/nvim-cm-tern', {
+"       \ 'build': { 'unix': 'npm install' }}
+
+let g:cm_sources_enable = 0
 
 let g:cm_complete_delay = 200
-
+let g:cm_smart_enable = 1
+let g:cm_refresh_default_min_word_len = [[1,1]]
 let g:cm_matcher = {
       \ 'module': "cm_matchers.fuzzy_matcher",
       \ 'case': "smartcase" }
 
-let g:cm_refresh_default_min_word_len = [[1,1]]
-
-" Highest priority for current buffer keyword completion
-    " \ 'cm-lsp': {'priority': 9},
+" " Highest priority for current buffer keyword completion
+"     " \ 'cm-lsp': {'priority': 9},
 let g:cm_sources_override = {
-    \ 'cm-bufkeyword': {'priority': 9},
+    \ 'cm-bufkeyword': {'priority': 0},
+    \ 'cm-tmux': {'priority': 0},
+    \ 'cm-filepath': {'priority': 0},
     \ }
 
 " the popup-menu prevents the first <cr> to work:
 " not sure what <c-g>u is - but this seems to work:
 " https://stackoverflow.com/questions/16804859/vim-how-to-make-autocomplpop-snipmate-supertab-work-together
 inoremap <expr> <cr> pumvisible() ? "\<c-g>u\<cr>" : "\<cr>"
-
-let g:cm_smart_enable = 1
-let g:cm_sources_enable	= 1
+imap <c-space> <Plug>(cm_force_refresh)
 
 " " css completion via `csscomplete#CompleteCSS`
 " " The `'cm_refresh_patterns'` is PCRE.

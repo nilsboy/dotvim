@@ -235,9 +235,6 @@ nnoremap <leader>veg :call DUMP(g:)<cr>
 nnoremap <silent><c-z> :silent wall<cr><c-z>
 inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
 
-" Switch to alternative file
-" nnoremap <BS> <C-^>
-
 " Save file as root
 command! -nargs=* WriteWithSudo :SudoWrite
 
@@ -440,7 +437,6 @@ vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
 nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 
 " Go to alternate file
-" nnoremap <leader>ga <c-^>
 nnoremap <bs> <c-^>
 
 nnoremap <silent> <leader>gw :silent wall<cr>
@@ -449,6 +445,8 @@ nnoremap <silent> <leader>gw :silent wall<cr>
 xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gs :%s//g<Left><Left>
 nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>
+
+nnoremap <cr> :
 
 " ### Searching
 
