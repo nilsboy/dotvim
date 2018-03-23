@@ -9,7 +9,9 @@ let g:lightline = {
       \     'right': [['percentwin'], ['lineinfo'],
       \         ['fileformat', 'fileencoding', 'filetype'],
       \         ['empty'],
-      \         ['paste', 'tags']], 
+      \         ['warnings', ],
+      \         ['errors', 'paste', ],
+      \     ],
       \   },
       \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
       \   'tabline': {
@@ -34,17 +36,20 @@ let g:lightline = {
 		  \     'lineinfo': '%3l,%-2v',
       \     'dummy': '_',
       \     'empty': ' ',
-      \     'tags': '%{MyLightlineTags()}'
+      \     'tags': '%{MyLightlineTags()}',
+      \     'errors': '%{MyQuickfixGetErrorCount() > 0 ? MyQuickfixGetErrorCount() : ""}',
+      \     'warnings': '%{MyLoclistGetErrorCount() > 0 ? MyLoclistGetErrorCount() : ""}',
+      \     'paste': '%{&paste == 1 ? "paste" : ""}',
       \   },
       \   'component_visible_condition': {
       \     'fileencoding': '&fenc',
       \     'fileformat': '&ff',
+      \     'paste': '(&paste == 1)',
+      \     'errors': '(MyQuickfixGetErrorCount() != 0)',
+      \     'warnings': '(MyLoclistGetErrorCount() != 0)',
+      \     'tags': '(MyLightlineTags() != "")',
       \   },
       \ }
-
-      " \   'component_function_visible_condition': {
-      " \     'tags': '(call MyLightlineTags() == 0)',
-      " \   },
 
 function! MyLightlineTags() abort
   if exists(':GutentagsUpdate')
@@ -69,12 +74,13 @@ let s:red =  [ '', '',  238, 208 ]
 let s:blue =  [ '', '',  238, 153 ]
 let s:blue2 = [ '', '',  238, 39 ]
 let s:blue3 = [ '', '',  238, 45 ]
+let s:orange = [ '', '',  238, 221 ]
 
 let s:p = {'normal': {}, 'tabline' : {} }
 
 let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
 let s:p.normal.middle = [ s:grey ]
-let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:red ]
+let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:orange, s:red ]
 
 let s:p.tabline.tabsel = [ s:blue ]
 let s:p.tabline.left = [ s:grey ]

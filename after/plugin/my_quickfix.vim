@@ -1,7 +1,5 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
-" makeprg and errorformat together are also flawed
-" (https://github.com/vim-syntastic/syntastic/issues/699#issuecomment-248517315)
 
 " Related plugins:
 " - make (builtin)
@@ -47,6 +45,9 @@
 " To send to stdin see:
 " :h jobsend()
 
+" NOTE: makeprg and errorformat together are flawed
+" (https://github.com/vim-syntastic/syntastic/issues/699#issuecomment-248517315)
+" https://www.reddit.com/r/vim/comments/86hsvv/errorformat_question/
 " Note: :compiler is only meant to be used for one tool/buffer at a time -
 " is not possible to have several commands e.g. linter, finder, formatter
 " see also: https://github.com/LucHermitte/vim-build-tools-wrapper/blob/master/doc/filter.md
@@ -68,8 +69,6 @@
 
 " TODO: word with boundaries search
 " TODO: and search ignoring order of search words
-" TODO: include search for related snail-, camel-, etc, case
-" TODO: allow to search for line and dash separated words?
 " TODO: highlight lines with errors: https://github.com/mh21/errormarker.vim
 " TODO: Highlight quickfix errors https://github.com/jceb/vim-hier
 " TODO: format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
@@ -79,7 +78,6 @@
 " TODO: checkout fix code in quickfix window https://github.com/stefandtw/quickfix-reflector.vim
 " TODO: add description to quickfix window title
 " TODO: add error count to statusline (see neomake)
-" TODO: refactoring from &makeprg to neomake makers made search() slower
 " TODO: don't jump if the current quickfix entry is invalid
 
 " Always show signs column
@@ -498,3 +496,10 @@ nnoremap <silent> <leader>vph :execute 'Help ' . expand('%:t:r')<cr>
 "     autocmd QuickFixCmdPost    l* botright lopen
 " augroup END
 
+function! MyQuickfixGetErrorCount() abort
+  return len(filter(getqflist(), 'v:val.valid'))
+endfunction
+
+function! MyLoclistGetErrorCount() abort
+  return len(filter(getloclist(0), 'v:val.valid'))
+endfunction
