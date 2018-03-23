@@ -10,7 +10,7 @@ let g:lightline = {
       \         ['fileformat', 'fileencoding', 'filetype'],
       \         ['empty'],
       \         ['warnings', ],
-      \         ['errors', 'paste', ],
+      \         ['errors', 'paste', 'tags', ],
       \     ],
       \   },
       \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
@@ -53,7 +53,7 @@ let g:lightline = {
 
 function! MyLightlineTags() abort
   if exists(':GutentagsUpdate')
-    return gutentags#statusline("")
+    return gutentags#statusline("") != '' ? 'generating tags' : ''
   endif
   return ''
 endfunction

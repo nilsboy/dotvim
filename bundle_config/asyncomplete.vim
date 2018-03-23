@@ -1,4 +1,3 @@
-finish
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
 " NOTE: delay not working?
@@ -21,18 +20,17 @@ let g:asyncomplete_force_refresh_on_context_changed = 1
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 
-NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
+" NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
 
-NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-	\ 'name': 'buffer',
-	\ 'priority': 9,
-	\ 'whitelist': ['*'],
-	\ 'blacklist': ['go'],
-	\ 'completor': function('asyncomplete#sources#buffer#completor'),
-	\ }))
+" NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
+" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+" 	\ 'name': 'buffer',
+" 	\ 'priority': 9,
+" 	\ 'whitelist': ['*'],
+" 	\ 'blacklist': ['go'],
+" 	\ 'completor': function('asyncomplete#sources#buffer#completor'),
+" 	\ }))
 
-finish
 " NeoBundle 'prabirshrestha/asyncomplete-flow.vim', {
 "   \ 'build': { 'unix': 'npm install -g flow-bin' }
 "   \ }
@@ -45,14 +43,14 @@ finish
 "   \  },
 "   \ }))
 
-NeoBundle 'prabirshrestha/asyncomplete-ultisnips.vim'
-" let g:UltiSnipsExpandTrigger="<c-e>"
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-	\ 'name': 'ultisnips',
-	\ 'whitelist': ['*'],
-	\ 'priority': 7,
-	\ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-	\ }))
+" NeoBundle 'prabirshrestha/asyncomplete-ultisnips.vim'
+" " let g:UltiSnipsExpandTrigger="<c-e>"
+" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+" 	\ 'name': 'ultisnips',
+" 	\ 'whitelist': ['*'],
+" 	\ 'priority': 7,
+" 	\ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+" 	\ }))
 
 " NeoBundle 'wellle/tmux-complete.vim'
 " let g:tmuxcomplete#asyncomplete_source_options = {
@@ -69,20 +67,20 @@ au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#source
 " 	\     }
 " 	\ }
 
-NeoBundle 'prabirshrestha/asyncomplete-file.vim'
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-	\ 'name': 'file',
-	\ 'whitelist': ['*'],
-	\ 'priority': 2,
-	\ 'completor': function('asyncomplete#sources#file#completor')
-	\ }))
-
-" NeoBundle 'yami-beta/asyncomplete-omni.vim'
-" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-" 	\ 'name': 'omni',
-" 	\ 'priority': 1,
+" NeoBundle 'prabirshrestha/asyncomplete-file.vim'
+" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+" 	\ 'name': 'file',
 " 	\ 'whitelist': ['*'],
-" 	\ 'blacklist': ['html'],
-" 	\ 'completor': function('asyncomplete#sources#omni#completor')
-" 	\  }))
+" 	\ 'priority': 2,
+" 	\ 'completor': function('asyncomplete#sources#file#completor')
+" 	\ }))
+
+NeoBundle 'yami-beta/asyncomplete-omni.vim'
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+	\ 'name': 'omni',
+	\ 'priority': 1,
+	\ 'whitelist': ['javascript'],
+	\ 'blacklist': [],
+	\ 'completor': function('asyncomplete#sources#omni#completor')
+	\  }))
 

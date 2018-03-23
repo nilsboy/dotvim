@@ -447,6 +447,7 @@ nnoremap gs :%s//g<Left><Left>
 nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>
 
 nnoremap <cr> :
+" inoremap <c-space> <c-x><c-o>
 
 " ### Searching
 
