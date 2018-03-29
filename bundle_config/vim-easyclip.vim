@@ -1,42 +1,89 @@
 " Simplified clipboard functionality for Vim
+" NOTE: Also discards deletes when prefixed by a register - like: normal "adgg<esc>
+" - need to use normal! instead
+" SEE ALSO: https://github.com/kana/vim-operator-replace
 NeoBundle 'svermeulen/vim-easyclip', {
     \ 'build': 'sudo apt-get install xsel'
     \ }
 
-" Does not seam to have any effect
-let g:EasyClipUseSubstituteDefaults = 0
+let g:EasyClipAutoFormat = 1
 
-let g:EasyClipAutoFormat = 0
-
-" let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
+let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
 let g:EasyClipPreserveCursorPositionAfterYank = 1
 
-" Store yanks to file
+let g:EasyClipUseCutDefaults = 0
+nmap Y <Plug>MoveMotionPlug
+xmap Y <Plug>MoveMotionXPlug
+nmap YY <Plug>MoveMotionLinePlug
+
 let g:EasyClipShareYanksDirectory = g:vim.var.dir . "/easyclip"
 let g:EasyClipShareYanksFile = "shared-yanks"
 call Mkdir(g:EasyClipShareYanksDirectory, 'p')
 let g:EasyClipShareYanks = 1
-
 let g:EasyClipYankHistorySize = 500
 
-" let g:EasyClipUseCutDefaults = 0
-" nmap x <Plug>MoveMotionPlug 
-" xmap x <Plug>MoveMotionXPlug
-" nmap xx <Plug>MoveMotionLinePlug
-" nmap x <Plug>MoveMotionPlug 
+" cmap <c-v> <plug>EasyClipCommandModePaste
+
+" nmap rl <plug>EasyClipRotateYanksForward
+" nmap rh <plug>EasyClipRotateYanksBackward
 
 " let g:EasyClipUsePasteToggleDefaults = 0
-" nmap <c-f> <plug>EasyClipSwapPasteForward
-" nmap <c-d> <plug>EasyClipSwapPasteBackwards
+" nmap <c-p> <plug>EasyClipSwapPasteForward
+" nmap <c-n> <plug>EasyClipSwapPasteBackwards
 
-finish
+" let g:EasyClipUseSubstituteDefaults = 0
+" nmap <leader>s <plug>SubstituteOverMotionMap
+" " gs        <plug>G_SubstituteOverMotionMap
+" " ss        <plug>SubstituteLine
+" " s         <plug>XEasyClipPaste
+" " S         <plug>SubstituteToEndOfLine
+" " gS        <plug>G_SubstituteToEndOfLine
 
-" Notes
-" Also discards deletes when prefixed by a register - like: normal "adgg<esc>
-" - need to use normal! instead
+inoremap <c-v> <c-x><c-u>
 
-" Sometimes produces error on start:
-" Error detected while processing function EasyClip#Init[10]..EasyClip#Shared#Init[14]..EasyClip#Yank#GetYankstackHead[1]..EasyClip#Yank#GetYankInfoForReg[1]..provider#clipboard#Call[1]..20[4]..<SNR>225_try_cmd:
-" line    2:
-" E5677: Error writing input to shell-command: EPIPE
-" Press ENTER or type command to continue
+augroup MyEasyclipAugroupCleanNewLines
+  autocmd!
+  " workaround from EasyClipRing.vim - changes the whole buffer
+  " Vars are stored with <00> in vim vars - no way to replace them for
+  " completion menu
+  autocmd CompleteDone * :%s/\%x00/\r/ge | call MyEasyclipSavePasteToRegister()
+augroup END
+
+function! MyEasyclipSavePasteToRegister() abort
+  if ! empty(v:completed_item) 
+    " Removes new lines:
+    call setreg('+', v:completed_item.word)
+    " normal `[y`]
+  endif
+endfunction
+
+function! MyEasyclipYanks()
+  let yanks = []
+  for yank in EasyClip#Yank#EasyClipGetAllYanks()
+    let line = yank.text
+    call add(yanks, line)
+  endfor
+  return yanks
+endfunction
+
+" SEE ALSO: :h NL-used-for-Nul
+function! MyEasyclipCompleteYanks(findstart, base)
+  if a:findstart
+    " locate the start of the word
+    let line = getline('.')
+    let start = col('.') - 1
+    while start > 0 && line[start - 1] =~ '\a'
+      let start -= 1
+    endwhile
+    return start
+  else
+    let res = []
+    for m in MyEasyclipYanks()
+      if m =~ '' . a:base
+        call add(res, m)
+      endif
+    endfor
+    return res
+  endif
+endfun
+set completefunc=MyEasyclipCompleteYanks

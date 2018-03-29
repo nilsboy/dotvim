@@ -1,58 +1,34 @@
-finish
-if ! IsNeoVim()
-  finish
-endif
-
-" Dark powered asynchronous completion framework for neovim 
 NeoBundle 'Shougo/deoplete.nvim'
 
-" set completeopt -= preview
-set nowildmenu
-" autocmd CmdwinEnter * let b:deoplete_sources = ['buffer']
-  
+" pip3 install --user neovim
+" pip3 install --upgrade --user neovim
+
+NeoBundle 'ternjs/tern_for_vim', { 'build': 'npm install' }
+" NeoBundle 'carlitux/deoplete-ternjs'
+
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_start_length = 0
+let g:deoplete#sources = {}
+let g:deoplete#sources.javascript = ['tern', 'buffer', 'ultisnips']
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
 let g:deoplete#enable_camel_case = 1
 let g:deoplete#enable_refresh_always = 1
+" let g:deoplete#auto_complete_delay = 200
 
-let g:deoplete#auto_complete_start_length = 1
-" let g:deoplete#max_menu_width = 10
-
-" workaround for: deoplete trigger completing automatically (2017-03-02)
-" https://github.com/Shougo/deoplete.nvim/issues/440
-let g:deoplete#auto_complete_delay = 147
-
-if neobundle#tap('deoplete.nvim') 
-  function! neobundle#hooks.on_post_source(bundle) abort
-    " TODO
-    " call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
-		" call deoplete#custom#set('_', 'matchers', ['matcher_head'])
-
-    " close popup and delete backword char.
-    inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
-
-    " list all possible copletions even without typing a prefix
-    inoremap <silent><expr> <c-space> 
-          \ deoplete#mappings#manual_complete()
-
-    " TODO
-		let g:deoplete#sources = []
-    " let g:deoplete#sources.javascript = ['ultisnips', 'ternjs']
-    " let g:deoplete#sources._ = ['ultisnips']
-    " let g:deoplete#sources.javascript = []
-    " let g:deoplete#sources.javascript = ['ultisnips']
-    " let g:deoplete#sources.sh = ['buffer', 'tag']
-  endfunction
-  call neobundle#untap()
+if !exists('g:deoplete#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
 endif
 
-function! DeopleteInfo() abort
-		let g:deoplete#keyword_patterns = {}
-endfunction
+" inoremap <silent><expr> <c-space> 
+"       \ deoplete#mappings#manual_complete()
 
-finish
+" " close popup and delete backword char.
+" inoremap <expr><bs> deoplete#smart_close_popup()."<bs>"
 
-" Use tab key to move down in popup menu
-" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
+" inoremap <expr> <cr> pclose
+
+" tern
+autocmd FileType javascript nnoremap <silent> <buffer> gt :TernDef<CR>

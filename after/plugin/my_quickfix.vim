@@ -1,6 +1,5 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
-
 " Related plugins:
 " - make (builtin)
 "   - synchronous
@@ -34,6 +33,7 @@
 "   - https://github.com/prabirshrestha/async.vim
 " - vim-makery:
 "   - https://github.com/igemnace/vim-makery
+" - vim-grepper
 
 " See also:
 " :Man scanf

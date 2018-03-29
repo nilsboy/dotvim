@@ -39,7 +39,7 @@ Using non-global functions and variables is harder to debug and has no real bene
 Sometimes it might even be nice for a user to be able to use a non-offical function as a workaround.
 
 ### Vim restrictions
-- variable names must not include a # (like functions can)
+- variable names must not include a # (like functions can) - false?
 - function names must not include "-" (so using the plugin filename directly is not always possible)
 - function names must start with an upper case letter
 - commands must start with an uppercase letter. Rest can be uppercase letters, lowercase letters or digits.

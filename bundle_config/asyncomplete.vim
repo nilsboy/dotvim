@@ -1,3 +1,4 @@
+finish
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
 " NOTE: delay not working?

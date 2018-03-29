@@ -52,6 +52,7 @@ let g:lightline = {
       \ }
 
 function! MyLightlineTags() abort
+  return ''
   if exists(':GutentagsUpdate')
     return gutentags#statusline("") != '' ? 'generating tags' : ''
   endif

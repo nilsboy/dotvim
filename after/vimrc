@@ -281,9 +281,6 @@ nnoremap <leader>gu U
 " Dont use Q for Ex mode
 nnoremap Q :xa<cr>
 
-" Yank from the cursor to the end of the line, to be consistent with C and D.
-nnoremap Y y$
-
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
@@ -448,6 +445,10 @@ nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>
 
 nnoremap <cr> :
 " inoremap <c-space> <c-x><c-o>
+
+" TODO: find mapping - gp?
+" select last pasted text
+" nnoremap x `[v`]
 
 " ### Searching
 

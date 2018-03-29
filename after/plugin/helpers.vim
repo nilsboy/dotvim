@@ -22,6 +22,9 @@ function! BufferClose() abort
     silent! quit
     return
   endif
+  if ! &previewwindow
+    pclose
+  endif
   if BufferIsUnnamed() == 1
   elseif &write
     silent update
@@ -748,6 +751,17 @@ function! GetQuickfixBufferNumber() abort
 	endfor
 endfunction
 
+" " TODO:
+" function! MyGetPreviewBufferNumber() abort
+"   for winnr in range(1, winnr('$'))
+"     let blist = filter(getwininfo(winnr), 'v:val.previewwindow')
+"     if len(blist) == 0
+"       return 0
+"     endif
+"     return blist[0].bufnr
+" 	endfor
+" endfunction
+
 function! MyHelpersQuickfixIsOpen() abort
   return GetQuickfixBufferNumber() != 0
 endfunction
@@ -828,6 +842,7 @@ function! MyHelpersNextBuffer() abort
   if MyBufferIsSpecial(currentBuffer)
     return
   endif
+  pclose
   while i <= lastBuffer
     let i = i + 1
     if buflisted(i) != 1
@@ -848,6 +863,7 @@ function! MyHelpersPreviousBuffer() abort
   if MyBufferIsSpecial(currentBuffer)
     return
   endif
+  pclose
   while i > 0
     let i = i - 1
     if buflisted(i) != 1
@@ -871,6 +887,9 @@ function! MyBufferIsSpecial(bufnr) abort
   if MyBufferIsVerySpecial(a:bufnr)
     return 1
   endif
+  " if  MyBufferIsScratch(a:bufnr)
+  "   return 1
+  " endif
   return 0
 endfunction
 
@@ -878,6 +897,10 @@ endfunction
 function! MyBufferIsVerySpecial(bufnr) abort
   return bufname(a:bufnr) =~ '\v^__.+__$'
 endfunction
+
+" function! MyBufferIsScratch(bufnr) abort
+"   return bufname(a:bufnr) == ''
+" endfunction
 
 " TODO: remap
 nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
