@@ -46,6 +46,7 @@ augroup MyEasyclipAugroupCleanNewLines
   " workaround from EasyClipRing.vim - changes the whole buffer
   " Vars are stored with <00> in vim vars - no way to replace them for
   " completion menu
+  " TODO: make this atomic
   autocmd CompleteDone * :%s/\%x00/\r/ge | call MyEasyclipSavePasteToRegister()
 augroup END
 

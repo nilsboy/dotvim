@@ -922,3 +922,85 @@ function! MyInstall(app, ...) abort
 endfunction
 command! -nargs=* MyInstall call MyInstall (<f-args>)
 
+" TODO: store and restore state of marks, registers
+function! MyHelpersStoreState() abort
+  " let save_cursor = getcurpos()
+  " call setpos('.', save_cursor)
+
+  " " or
+  " let view = winsaveview()
+  " call winrestview(view)<cr>
+endfunction
+
+" SEE ALSO: https://www.reddit.com/r/vim/comments/88h2wv/substitute_vims_and_with_b_when_you_invoke/dwl5rbg/
+function! RegexToPcre(vim_regex) abort
+    " Translate vim regular expression to perl regular expression (what grep
+    " uses). Only a partial translation. See perl-patterns for more details.
+    let search = a:vim_regex
+    let search = substitute(search, '\C\\v', '', 'g')
+    let was_verymagic = len(search) < len(a:vim_regex)
+
+    let escape = '\\'
+    let unescape = ''
+    if was_verymagic
+        " verymagic flips escaping rules
+        let escape = ''
+        let unescape = '\\'
+    endif
+
+    " Some funky scripting for notgrep_prg may not handle spaces (using xargs
+    " to grep a list of files).
+    if exists("g:notgrep_replace_space_with_dot") && g:notgrep_replace_space_with_dot
+        let search = substitute(search,' ','.','g')
+    endif
+
+    " Don't let the shell get confused by quotes.
+    let search = substitute(search,"[\"']",'.','g')
+
+    " No easy support for disabling regex so ignore
+    let search = substitute(search,'\\V','','g')
+    " PCRE word boundaries
+    let search = substitute(search,'\('. escape .'<\|'. escape .'>\)','\\b','g')
+
+    " PCRE character classes
+    let character_classes = {
+                \ 's' : '[[:space:]]',
+                \ 'S' : '[^ \\t]',
+                \ 'd' : '[[:digit:]]',
+                \ 'D' : '[^0-9]',
+                \ 'x' : '[[:xdigit:]]',
+                \ 'X' : '[^0-9A-Fa-f]',
+                \ 'o' : '[0-7]',
+                \ 'O' : '[^0-7]',
+                \ 'w' : '[0-9A-Za-z_]',
+                \ 'W' : '[^0-9A-Za-z_]',
+                \ 'h' : '[A-Za-z_]',
+                \ 'H' : '[^A-Za-z_]',
+                \ 'a' : '[[:alpha:]]',
+                \ 'A' : '[^A-Za-z]',
+                \ 'l' : '[[:lower:]]',
+                \ 'L' : '[^a-z]',
+                \ 'u' : '[[:upper:]]',
+                \ 'U' : '[^A-Z]',
+                \ }
+    for vim_class in keys(character_classes)
+        " case is very important!
+        let search = substitute(search, '\C\\'. vim_class .'\>', character_classes[vim_class], 'g')
+    endfor
+
+    if was_verymagic
+        " Always need to escape pipe in shell
+        let search = substitute(search, '|','\\|','g')
+    else
+        " PCRE operates a bit like verymagic, so remove some escaping
+
+        " Dot regular unescaped parens
+        let search = substitute(search, '\v(\\)@<![()]','.','g')
+        " Remove escape from escaped capture parens
+        let search = substitute(search, '\v\\([()])','\1','g')
+
+        " Unescape some multis
+        let search = substitute(search,'\v\\([+=?])','\1','g')
+    endif
+    return search
+endfunction
