@@ -15,17 +15,12 @@ if !IsPluginInstalled("neobundle.vim")
 endif
 execute "set runtimepath+=" . g:vim.bundle.dir . "/neobundle.vim/"
 
-" Required:
 call neobundle#begin(g:vim.bundle.dir)
 
 " Let NeoBundle manage NeoBundle
-" Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
-    execute 'source' fpath
-endfor
-
+runtime! bundle_config/**/*.vim
 call neobundle#end()
 
 NeoBundleCheck

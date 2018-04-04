@@ -72,16 +72,10 @@ let $MY_VIM_DIR = g:vim.etc.dir
 
 execute "source " . g:vim.etc.dir . '/load_plugins.vim'
 
-execute "source " . g:vim.after.dir . '/vimrc'
-
 " Detect filetypes and run filetype plugins
 filetype on
 filetype plugin on
 filetype indent on
-
-" if filereadable(g:vim.rc_local)
-"   execute "source " . g:vim.rc_local
-" endif
 
 "### Debugging
 

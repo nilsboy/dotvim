@@ -83,12 +83,10 @@ nnoremap Q :xa<cr>
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
-" Remap set mark because m is used by easyclip
-nnoremap <leader>m m
 nnoremap M '
 
 " Quickly jump to buffers
-nnoremap <nowait>gb :ls<cr>:buffer<space>
+nnoremap gb :ls<cr>:buffer<space>
 
 nnoremap <silent><leader>ii :!firefox
       \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
@@ -132,8 +130,7 @@ augroup END
 augroup MyVimrcAugroupCmdwinSetup
   autocmd!
   " Reset <cr> mapping for command-line-window in case <cr> is mapped somewhere
-  " TODO:
-  " autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
+  autocmd CmdwinEnter * nnoremap <buffer> <cr> <cr>
 
   " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
   autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
@@ -232,8 +229,6 @@ nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 " Go to alternate file
 nnoremap <bs> <c-^>
 
-nnoremap <silent> <leader>gw :silent wall<cr>
-
 " Replace selection
 xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gs :%s//g<Left><Left>
@@ -250,7 +245,7 @@ command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
 
 " Toggle highlighting current matches
-nmap <silent><c-c> :set hlsearch! hlsearch?<CR>
+nmap <silent><c-c> :silent set hlsearch! hlsearch?<CR>
 
 set nowildmenu
 cnoremap <tab> <C-L><C-D>
