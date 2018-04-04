@@ -62,15 +62,15 @@ augroup END
 
 augroup MyColorsAugroupCursorline
   autocmd!
-  autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-  autocmd InsertEnter,WinLeave * setlocal nocursorline
+  autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
+  autocmd InsertEnter,WinLeave,FocusLost * setlocal nocursorline
 augroup END
 
 " highlight the whole file not just the window - slower but more accurate.
-" augroup MyColorsAugroupHighlightWholeBuffer
-"   autocmd!
-"   autocmd BufEnter * :syntax sync fromstart
-" augroup END
+augroup MyColorsAugroupHighlightWholeBuffer
+  autocmd!
+  autocmd BufEnter * :syntax sync fromstart
+augroup END
 
 function! MyColorsShowSyntaxGroups(...) abort
   echo map(synstack(line('.'), col('.')),
@@ -80,7 +80,7 @@ nnoremap <leader>gs :call MyColorsShowSyntaxGroups()<cr>
 command! -nargs=* MyColorsShowSyntaxGroups
       \ call MyColorsShowSyntaxGroups (<f-args>)
 
-command! MyColorsShowCurrentColors :so $VIMRUNTIME/syntax/hitest.vim
+command! MyColorsShowCurrentColors :source $VIMRUNTIME/syntax/hitest.vim
 
 augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd!
