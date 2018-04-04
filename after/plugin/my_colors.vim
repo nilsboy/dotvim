@@ -63,7 +63,7 @@ augroup END
 augroup MyColorsAugroupCursorline
   autocmd!
   autocmd InsertLeave,WinEnter,BufEnter * setlocal cursorline
-  autocmd InsertEnter * setlocal nocursorline
+  autocmd InsertEnter,WinLeave * setlocal nocursorline
 augroup END
 
 " highlight the whole file not just the window - slower but more accurate.

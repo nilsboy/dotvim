@@ -9,8 +9,9 @@ let g:lightline = {
       \     'right': [['percentwin'], ['lineinfo'],
       \         ['fileformat', 'fileencoding', 'filetype'],
       \         ['empty'],
-      \         ['warnings', ],
-      \         ['errors', 'paste', 'tags', ],
+      \         ['paste', 'tags', ],
+			\         ['warnings', ],
+			\         ['errors', ],
       \     ],
       \   },
       \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
@@ -77,11 +78,15 @@ let s:blue2 = [ '', '',  238, 39 ]
 let s:blue3 = [ '', '',  238, 45 ]
 let s:orange = [ '', '',  238, 221 ]
 
+let s:info = s:blue
+let s:warn = s:orange
+let s:error = s:red
+
 let s:p = {'normal': {}, 'tabline' : {} }
 
 let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
 let s:p.normal.middle = [ s:grey ]
-let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:orange, s:red ]
+let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:warn, s:error, s:info ]
 
 let s:p.tabline.tabsel = [ s:blue ]
 let s:p.tabline.left = [ s:grey ]

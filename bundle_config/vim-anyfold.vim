@@ -25,7 +25,7 @@ endfunction
 " set foldclose=all
 
 " nnoremap <expr> <CR> foldlevel('.') ? 'za' : '<CR>'
-nnoremap <CR> za
+" nnoremap <CR> za
 
 " set foldmethod=manual
 " nnoremap <expr> <CR> foldlevel('.') ? 'za' : 'zfip'

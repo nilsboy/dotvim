@@ -38,7 +38,7 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-execute "source " . g:vim.after.dir . '/plugin/helpers.vim'
+execute "source " . g:vim.etc.dir . '/helpers.vim'
 
 call Mkdir(g:vim.dir, "p")
 call Mkdir(g:vim.etc.dir, "p")
@@ -50,70 +50,42 @@ autocmd!
 " reset everything to their defaults
 set all&
 
-"### Plugin manager
+" Keep undo history after closing a file
+set undofile
+let &undodir = g:vim.var.dir . "undo"
+call Mkdir(&undodir, "p")
 
-function! IsPluginInstalled(path)
-    let l:basename = fnamemodify(a:path,':t:h')
-    if isdirectory(g:vim.bundle.dir . l:basename)
-        return 1
-    endif
-    return 0
-endfunction
+augroup MyVimrcAugroupOnlySetCurrentDirAsPath
+  autocmd!
+  autocmd VimEnter * set path=,,
+augroup END
 
-if !IsPluginInstalled("neobundle.vim")
-    echo "Installing NeoBundle..."
-    echo ""
-    call Mkdir(g:vim.bundle.dir, "p")
-    execute "!git clone https://github.com/Shougo/neobundle.vim " .
-                \ g:vim.bundle.dir . "/neobundle.vim"
-endif
-execute "set runtimepath+=" . g:vim.bundle.dir . "/neobundle.vim/"
+" Make helpgrep find vim's own help files before plugin help files
+let &runtimepath = '/usr/share/nvim/runtime,'
+      \ . &runtimepath
 
-" Required:
-call neobundle#begin(g:vim.bundle.dir)
+execute "set runtimepath+=" . g:vim.etc.dir
+execute "set runtimepath+=" . g:vim.after.dir
 
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
+let $PATH = $PATH . ':' . g:vim.etc.dir . '/contrib/bin'
+let $MY_VIM_DIR = g:vim.etc.dir
 
-" TODO checkout runtime! *.vim
-" execute "runtime! " . g:vim.bundle.settings.dir . "/*.vim"
-for fpath in split(globpath(g:vim.bundle.settings.dir, '*.vim'), '\n')
-    execute 'source' fpath
-endfor
-
-call neobundle#end()
-
-NeoBundleCheck
-
-if IsNeoVim()
-  " Provides Neovim's UpdateRemotePlugins but does not seem to be sourced jet:
-  source /usr/share/nvim/runtime/plugin/rplugin.vim
-  " Calls UpdateRemotePlugins the NeoBundle way
-  silent! NeoBundleRemotePlugins
-endif
-
-" Remove installed plugins that are not configured anymore
-" :NeoBundleClean!
+execute "source " . g:vim.etc.dir . '/load_plugins.vim'
 
 execute "source " . g:vim.after.dir . '/vimrc'
-
-if filereadable(g:vim.rc_local)
-    execute "source " . g:vim.rc_local
-endif
 
 " Detect filetypes and run filetype plugins
 filetype on
 filetype plugin on
 filetype indent on
 
+" if filereadable(g:vim.rc_local)
+"   execute "source " . g:vim.rc_local
+" endif
+
 "### Debugging
 
-" NOTE: Neobundle unsets these
+" " NOTE: Neobundle unsets these
 " set verbosefile=/tmp/vim-debug.log
-" set verbose=15
-
-" TODO: move
-command! -nargs=* EditInBufferDir
-      \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
+" set verbose=13
 
