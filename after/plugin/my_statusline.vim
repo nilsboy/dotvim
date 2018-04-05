@@ -13,7 +13,7 @@ endif
 set laststatus=2
 
 " always show tab page labels
-set showtabline=2
+" set showtabline=2
 
 " Prevent mode info messages on the last line to prevent 'hit enter prompt'
 set noshowmode

@@ -15,16 +15,6 @@ let g:lightline = {
       \     ],
       \   },
       \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
-      \   'tabline': {
-      \     'left': [['bufferline']],
-		  \     'right': [[]],
-      \   },
-      \   'component_expand': {
-      \     'bufferline': 'MyHelpersBufferlist',
-      \   },
-      \   'component_type': {
-      \     'bufferline': 'tabsel',
-      \   },
       \   'component': {
       \     'location': '%{MyStatuslineLocation()}',
       \     'shortendLocation': '%{pathshorten(expand("%:p"))}',
@@ -51,6 +41,18 @@ let g:lightline = {
       \     'tags': '(MyLightlineTags() != "")',
       \   },
       \ }
+
+      " \   'component_expand': {
+      " \     'bufferline': 'MyHelpersBufferlist',
+      " \   },
+      " \   'component_type': {
+      " \     'bufferline': 'tabsel',
+      " \   },
+
+      " \   'tabline': {
+      " \     'left': [['bufferline']],
+      " \     'right': [[]],
+      " \   },
 
 function! MyLightlineTags() abort
   return ''
@@ -82,15 +84,24 @@ let s:info = s:blue
 let s:warn = s:orange
 let s:error = s:red
 
-let s:p = {'normal': {}, 'tabline' : {} }
+" let s:p = {'normal': {}, 'tabline' : {} }
+let s:p = {'normal': {}}
 
 let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
 let s:p.normal.middle = [ s:grey ]
 let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:warn, s:error, s:info ]
 
-let s:p.tabline.tabsel = [ s:blue ]
-let s:p.tabline.left = [ s:grey ]
-let s:p.tabline.middle = [ s:grey ]
-let s:p.tabline.right = [ s:grey ]
+" let s:p.tabline.tabsel = [ s:blue ]
+" let s:p.tabline.left = [ s:grey ]
+" let s:p.tabline.middle = [ s:grey ]
+" let s:p.tabline.right = [ s:grey ]
+
+let g:lightline.enable = {
+      \ 'statusline': 1,
+      \ }
+let g:lightline.enable = {
+      \ 'statusline': 1,
+      \ 'tabline': 0,
+      \ }
 
 let g:lightline#colorscheme#mylightline#palette = s:p
