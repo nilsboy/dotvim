@@ -7,8 +7,6 @@ NeoBundle 'nilsboy/vim-easyclip'
 
 MyInstall xsel !sudo apt-get install xsel
 
-finish
-
 let g:EasyClipAutoFormat = 1
 
 let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
@@ -55,9 +53,7 @@ augroup END
 
 function! MyEasyclipSavePasteToRegister() abort
   if ! empty(v:completed_item) 
-    " Removes new lines:
     call setreg('+', v:completed_item.word)
-    " normal `[y`]
   endif
 endfunction
 
