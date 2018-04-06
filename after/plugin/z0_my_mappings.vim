@@ -163,7 +163,7 @@ nnoremap gV `[v`]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
-nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/vimrc"<cr>
+nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_vimrc.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' 
   \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 

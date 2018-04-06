@@ -6,12 +6,14 @@ let g:lightline = {
       \   'colorscheme': 'mylightline',
       \   'active': {
       \     'left': [['project'] , ['dir'],  ['filename']],
-      \     'right': [['percentwin'], ['lineinfo'],
+      \     'right': [
+      \         ['percentwin'],
+      \         ['lineinfo'],
       \         ['fileformat', 'fileencoding', 'filetype'],
-      \         ['empty'],
-      \         ['paste', 'tags', ],
 			\         ['warnings', ],
 			\         ['errors', ],
+      \         ['empty', ],
+      \         ['paste', 'tags', ],
       \     ],
       \   },
       \   'inactive': { 'left': [['dummy']] , 'right': [['dummy']] },
@@ -25,7 +27,7 @@ let g:lightline = {
       \     'fileencoding': '%{&fenc != "utf-8" ? &fenc:""}',
       \     'fileformat': '%{&ff != "unix" ? &ff : ""}',
 		  \     'lineinfo': '%3l,%-2v',
-      \     'dummy': '_',
+      \     'dummy': '',
       \     'empty': ' ',
       \     'tags': '%{MyLightlineTags()}',
       \     'errors': '%{MyQuickfixGetErrorCount() > 0 ? MyQuickfixGetErrorCount() : ""}',
@@ -89,7 +91,7 @@ let s:p = {'normal': {}}
 
 let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
 let s:p.normal.middle = [ s:grey ]
-let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:warn, s:error, s:info ]
+let s:p.normal.right = [ s:grey, s:grey, s:grey, s:error, s:info, s:grey, s:error ]
 
 " let s:p.tabline.tabsel = [ s:blue ]
 " let s:p.tabline.left = [ s:grey ]
@@ -97,11 +99,8 @@ let s:p.normal.right = [ s:grey, s:grey, s:grey, s:grey, s:warn, s:error, s:info
 " let s:p.tabline.right = [ s:grey ]
 
 let g:lightline.enable = {
-      \ 'statusline': 1,
-      \ }
-let g:lightline.enable = {
-      \ 'statusline': 1,
-      \ 'tabline': 0,
-      \ }
+  \ 'statusline': 1,
+  \ 'tabline': 0,
+  \ }
 
 let g:lightline#colorscheme#mylightline#palette = s:p
