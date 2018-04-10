@@ -34,8 +34,8 @@ set expandtab
 " automatically indent to match adjacent lines
 set autoindent
 
-" textformattting
-set textwidth=80
+" only set for specific filetypes
+" set textwidth=80
 
 set backspace=indent,start
 

@@ -107,6 +107,7 @@ let g:neoformat_javascript_eslint = {
       \ , g:vim.contrib.etc.dir . 'eslintrc-format.yml']
       \ , 'replace': 1
       \ }
+MyInstall eslint !npm install -g eslint
 
 MyInstall prettier !npm install -g prettier prettier-eslint-cli
 " let g:neoformat_enabled_javascript = [ 'prettier' ]

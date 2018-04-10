@@ -741,6 +741,8 @@ function! helpers#surroundings() abort
         \ &commentstring, '\S\zs%s',' %s','') ,'%s\ze\S', '%s ', '')), '%s', 1)
 endfunction
 
+" detect quickfix:
+" https://www.reddit.com/r/vim/comments/5ulthc/how_would_i_detect_whether_quickfix_window_is_open/
 function! GetQuickfixBufferNumber() abort
   for winnr in range(1, winnr('$'))
     let qflist = filter(getwininfo(), 'v:val.quickfix && !v:val.loclist')
