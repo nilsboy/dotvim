@@ -218,6 +218,12 @@ else {
 }
 endsnippet
 
+snippet foreachkeyjs5 "foreachkeyjs5" b
+Object.keys(${1:object}).forEach(function(${2:key}) {
+  let ${3:value} = $1[$2]$0
+})
+endsnippet
+
 snippet foreachkey "for each in object" b
 for(const ${2:variable} in ${1:iterable}) {
   $0

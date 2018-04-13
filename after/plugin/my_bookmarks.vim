@@ -1,4 +1,5 @@
 " Manually create bookmarks for files
+" SEE ALSO: https://github.com/MattesGroeger/vim-bookmarks
 
 let g:MyBookmarksDir = $XDG_DATA_HOME . '/nilsboy_bookmarks'
 let g:MyBookmarksFile = g:MyBookmarksDir . '/bookmarks'

@@ -63,7 +63,7 @@ augroup END
 augroup MyColorsAugroupCursorline
   autocmd!
   autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
-  autocmd InsertEnter,WinLeave,FocusLost * setlocal nocursorline
+  autocmd InsertEnter,FocusLost * setlocal nocursorline
 augroup END
 
 " highlight the whole file not just the window - slower but more accurate.
@@ -72,7 +72,7 @@ augroup MyColorsAugroupHighlightWholeBuffer
   autocmd BufEnter * :syntax sync fromstart
 augroup END
 
-function! MyColorsShowSyntaxGroups(...) abort
+function! MyColorsShowSyntaxGroups() abort
   echo map(synstack(line('.'), col('.')),
     \ 'synIDattr(v:val, "name")')
 endfunction

@@ -49,7 +49,10 @@ command! -nargs=* WriteWithSudo :SudoWrite
 " nnoremap <leader>!a <C-o>
 " nnoremap <leader>!b <C-i>
 
+" jump list
+" <c-i> is the same as <tab>
 nnoremap <c-u> <c-o>
+nnoremap <c-o> <c-i>
 
 " " Write all when leaving a tmux pane
 " nmap <silent><c-j> :silent wall<cr><c-j>
@@ -249,4 +252,11 @@ nmap <silent><c-c> :silent set hlsearch! hlsearch?<CR>
 
 set nowildmenu
 cnoremap <tab> <C-L><C-D>
+
+" switch lower case marks with uppercase ones
+" https://www.reddit.com/r/vim/comments/3g5v2m/is_there_any_way_to_use_lowercase_marks_instead/ctv5k6s/
+noremap <silent> <expr> ' "'".toupper(nr2char(getchar()))
+noremap <silent> <expr> m "m".toupper(nr2char(getchar()))
+sunmap '
+sunmap m
 

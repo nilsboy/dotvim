@@ -76,10 +76,10 @@ augroup MyVimrcAugroupMaximizeHelp
   autocmd BufEnter * :if &buftype == 'help' | only | endif
 augroup END
 
-augroup MyVimrcAugroupListAllBuffers
-  autocmd!
-  autocmd BufEnter * :setlocal buflisted
-augroup END
+" augroup MyVimrcAugroupListAllBuffers
+"   autocmd!
+"   autocmd BufEnter * :setlocal buflisted
+" augroup END
 
 " show count of selected lines / columns
 set showcmd
