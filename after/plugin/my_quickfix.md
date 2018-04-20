@@ -23,12 +23,12 @@
 * :h errorformat
 * :h :signs for the gutter
 
-## Why not :make, errorformat, :compiler
+## Why not :make, &errorformat, :compiler
 
 * makeprg and errorformat together are flawed
   (https://github.com/vim-syntastic/syntastic/issues/699#issuecomment-248517315)
-* :compiler is only meant to be used for one tool/buffer at a time - is not
-  possible to have several commands e.g. linter, finder, formatter
+* :compiler is only meant to be used for one tool per buffer at a time - it is
+  not possible to have several commands e.g. linter, finder, formatter
 * :compiler doesn't scale:
   https://github.com/LucHermitte/vim-build-tools-wrapper/blob/master/doc/filter.md
 * :make has trouble quoting filenames. (read some where... - Syntactic creater?)
@@ -50,7 +50,7 @@
 * vim-erroneous (https://github.com/idanarye/vim-erroneous)
   * chooses errorformat by run command
   * needs Ruby to suppress command output
-  * not jobs support?
+  * no jobs support?
 * vim-makejob
   * no stdin support - add maybe?
   * uses makeprg and errorformat

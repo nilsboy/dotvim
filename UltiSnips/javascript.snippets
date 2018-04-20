@@ -220,7 +220,7 @@ endsnippet
 
 snippet foreachkeyjs5 "foreachkeyjs5" b
 Object.keys(${1:object}).forEach(function(${2:key}) {
-  let ${3:value} = $1[$2]$0
+  var ${3:value} = $1[$2]$0
 })
 endsnippet
 
@@ -854,4 +854,12 @@ endsnippet
 snippet uuid "uuid" w
 const uuid = require(\`uuid/v1\`);
 uuid()
+endsnippet
+
+snippet isArray "isArray" w
+Array.isArray($0)
+endsnippet
+
+snippet isObject "isObject" w
+typeof $0 === `object`
 endsnippet

@@ -15,8 +15,9 @@ endglobal
 
 ### Brackets
 
-snippet '(^|\s+)(\(|r)' "round brackets / parens" r
-`!p snip.rv = match.group(1)`(${VISUAL}$1)$0
+# snippet '(^|\s+)(\(|r)' "round brackets / parens" r
+snippet '\(' "round brackets / parens" r
+(${VISUAL}$0)
 endsnippet
 
 snippet "(^|\s*)({|c)" "curly brackets / braces" r

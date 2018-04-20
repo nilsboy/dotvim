@@ -186,7 +186,7 @@ nnoremap <leader>/C /\v^\s*[/"#]+<cr>
 " nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/b /^.*{.*$<cr>
 nnoremap <leader>/S /^\S\+<cr>
-nnoremap <leader>/w /\<\><left><left>
+nnoremap <leader>/w /\\<\\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
 " nnoremap ( ?[\[({<]<cr>
@@ -233,9 +233,10 @@ nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
 nnoremap <bs> <c-^>
 
 " Replace selection
-xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gs :%s//g<Left><Left>
+xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>/g<left><left>
+xnoremap gS :%s/<C-r>"/<c-r>"/g<left><left>
 
 nnoremap <cr> :
 " inoremap <c-space> <c-x><c-o>

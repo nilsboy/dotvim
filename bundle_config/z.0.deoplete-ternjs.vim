@@ -1,8 +1,9 @@
 " deoplete.nvim source for javascript
 " can also be used with tern_for_vim plugin
+" NOTE: tern needs a .tern-project file
 NeoBundle 'carlitux/deoplete-ternjs'
 
-" MyInstall tern
+MyInstall tern
 
 " " Set bin if you have many instalations
 " let g:deoplete#sources#ternjs#tern_bin = '/path/to/tern_bin'
@@ -18,7 +19,7 @@ let g:deoplete#sources#ternjs#depths = 1
 
 " Whether to include documentation strings (if found) in the result data.
 " Default: 0
-let g:deoplete#sources#ternjs#docs = 1
+" let g:deoplete#sources#ternjs#docs = 1
 
 " When on, only completions that match the current word at the given point will
 " be returned. Turn this off to get all results, so that you can filter on the 

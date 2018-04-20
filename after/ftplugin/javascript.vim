@@ -10,17 +10,15 @@ setlocal iskeyword+=-
 setlocal suffixesadd+=.js
 setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"`]\\)
 
-" get an error:
-" let &l:define = '\v(class|function|Object.defineProperty.*?,\s*'')'
-" TODO: Object.defineProperty does not work like this:
-let &l:define = '\v(class|function|Object.defineProperty)'
+" NOTE: the keyword always has to match after &define
+let &l:define = '\v(class|function|Object.defineProperty|\.prototype.|const)'
 
 setlocal omnifunc=lsp#omni#complete
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
 
-nnoremap <buffer> gd :LspDefinition<cr>
+" nnoremap <buffer> gd :LspDefinition<cr>
 nnoremap <buffer> <leader>lr :LspReferences<cr>
 nnoremap <buffer> <leader>lR :LspRename<cr>
 nnoremap <buffer> <leader>lp :LspHover<cr>
@@ -91,7 +89,7 @@ let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
 "### Linter
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
-let g:ale_linters['javascript'] = ['eslint']
+let g:ale_linters['javascript'] = ['flow']
 " " let g:ale_javascript_eslint_executable = 'babel-eslint'
 " " let g:ale_javascript_eslint_use_global = 1
 

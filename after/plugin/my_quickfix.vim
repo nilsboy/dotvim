@@ -1,49 +1,15 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
 " Always show signs column
+sign define MyQuickfixSignEmpty
 augroup MyQuickfixAugroupPersistentSignsColumn
   autocmd!
-  autocmd BufEnter * execute 'sign define MyQuickfixSignEmpty'
   autocmd BufEnter * execute 'execute ":sign place 9999 line=1
       \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
 augroup END
 
-let g:MyQuickfixMode = ''
-
 nnoremap <silent> <tab> :copen<cr>
 nnoremap <silent> <s-tab> :lopen<cr>
-
-" " TODO make mappings move through lists by history
-" function! MyQuickfixSetNavigationType(type) abort
-"     if a:type == 'quickfix'
-"       " call INFO("Quickfix navigation activated")
-"       let g:MyQuickfixMode = 'quickfix'
-"       nnoremap <silent> <tab> :copen<cr>
-"       nnoremap <silent> <s-tab> :lopen<cr>
-"       nnoremap <silent> <c-n> :silent! cnext<cr>
-"       nnoremap <silent> <c-p> :silent! cprevious<cr>
-"     else
-"       " call INFO("Locationlist navigation activated")
-"       let g:MyQuickfixMode = 'locationlist'
-"       nnoremap <silent> <tab> :lopen<cr>
-"       nnoremap <silent> <c-n> :silent! lnext<cr>
-"       nnoremap <silent> <c-p> :silent! lprevious<cr>
-"     endif
-" endfunction
-" silent call MyQuickfixSetNavigationType('quickfix')
-
-" function! MyQuickfixToggleNavigationType() abort
-"     if g:MyQuickfixMode != 'quickfix'
-"       silent! lclose
-"       silent call MyQuickfixSetNavigationType('quickfix')
-"     else
-"       silent! cclose
-"       silent call MyQuickfixSetNavigationType('locationlist')
-"     endif
-" endfunction
-
-" " TODO: call MyQuickfixSetNavigationType('quickfix')
-" nnoremap <leader>gl :call MyQuickfixToggleNavigationType()<cr>
 
 function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
@@ -54,9 +20,9 @@ let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
 let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
       \  g:MyQuickfixIgnoreFile
 if executable('ag')
-  let g:MyQuickfixGrepCommand = 'ag --nogroup --nocolor --column '
+  let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
         \ . ' --ignore-case --all-text'
-        \ . ' -p ' . g:MyQuickfixIgnoreFile
+
   " TODO: add --smart-case option?
   " TODO: --word-regexp:
   " TODO: checkout --vimgrep
@@ -71,6 +37,7 @@ function! MyQuickfixSearch(options) abort
   let grep = get(a:options, 'grep', '1')
   let matchBasenameOnly = get(a:options, 'matchBasenameOnly', '0')
   let orderBy = get(a:options, 'orderBy', '')
+  let useIgnoreFile = get(a:options, 'useIgnoreFile', 1)
 
   " TODO: use some other mark
   silent! normal `a
@@ -105,6 +72,10 @@ function! MyQuickfixSearch(options) abort
 
   let grepprg = g:MyQuickfixGrepCommand
 
+  if useIgnoreFile
+    let grepprg .= ' -p ' . g:MyQuickfixIgnoreFile
+  endif
+
   let limit = ''
   if g:MyQuickfixSearchLimit
     let limit = ' -' . g:MyQuickfixSearchLimit
@@ -128,8 +99,6 @@ function! MyQuickfixSearch(options) abort
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' /dev/null'
         \ . ' | head-warn ' . limit
-
-  " call MyQuickfixSetNavigationType('quickfix')
 
   let makers = 'find'
   if term != ''
@@ -209,7 +178,6 @@ endfunction
 nnoremap <silent><leader>vb :call MyQuickfixBuffers('')<cr>
 nnoremap <silent><leader>vB :call MyQuickfixBuffers('!')<cr>
 function! MyQuickfixBuffers(hidden) abort
-    " call MyQuickfixSetNavigationType('quickfix')
     let MyErrorformat  = '%s"%f"%s'
     cexpr execute(':buffers' . a:hidden)
     copen
@@ -217,7 +185,6 @@ endfunction
 
 " TODO nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 function! MyQuickfixHelp(term) abort
-    " call MyQuickfixSetNavigationType('quickfix')
     silent! execute 'helpgrep ' . a:term
     " silent! execute 'tag /' . a:term
     silent! copen
@@ -327,6 +294,15 @@ nnoremap <silent> <leader>fi :call MyQuickfixSearch({
       \ 'term': input('Search: ')})<cr>
 nnoremap <silent> <leader>fF :call MyQuickfixSearch({
       \ 'term': expand('%:t') })<cr>
+nnoremap <silent> <leader>fai :call MyQuickfixSearch({
+      \ 'useIgnoreFile': 0,
+      \ 'term': input('Search: ')})<cr>
+nnoremap <silent> <leader>faa yiw:call MyQuickfixSearch({
+      \ 'useIgnoreFile': 0,
+      \ 'term': @" })<cr>
+vnoremap <silent> <leader>faa y:call MyQuickfixSearch({
+      \ 'useIgnoreFile': 0,
+      \ 'term': @" })<cr>
 
 nnoremap <silent> <leader>fw mayiw:call MyQuickfixSearch({
       \ 'term': @" })<cr>
@@ -358,8 +334,6 @@ nnoremap <silent> <leader>fbfi :call MyQuickfixSearch({
 nnoremap <silent> <leader>ft :call MyQuickfixSearch({
       \ 'term': 'todo'})<cr>
 
-" Search for keyword under cursor
-nmap <silent> <leader>fbw [I
 nnoremap <silent> <leader>fbb yiw:call MyQuickfixSearch({
       \ 'term': @",
       \ 'path': expand('%')})<cr>

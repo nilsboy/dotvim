@@ -4,7 +4,6 @@ NeoBundle 'Shougo/deoplete.nvim'
 " pip3 install --upgrade --user neovim
 
 NeoBundle 'ternjs/tern_for_vim', { 'build': 'npm install' }
-" NeoBundle 'carlitux/deoplete-ternjs'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 0

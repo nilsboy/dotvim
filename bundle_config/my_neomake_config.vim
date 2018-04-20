@@ -23,18 +23,8 @@ let g:neomake_highlight_columns = 1
 
 augroup MyNeomakeConfigAugroupOnNeomakeFinished
   autocmd!
-  autocmd User NeomakeFinished call MyNeomakeConfigOnNeomakeFinished()
+  autocmd User NeomakeFinished copen
 augroup END
-function! MyNeomakeConfigOnNeomakeFinished() abort
-  " var is not set anymore? (2018-03-21)
-  " if g:neomake_hook_context.jobinfo.file_mode == 1
-  "   " call MyQuickfixSetNavigationType('locationlist')
-  "   lopen
-  " else
-    " call MyQuickfixSetNavigationType('quickfix')
-    copen
-  " endif
-endfunction
 
 " nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
 nnoremap <silent><leader>ee ma:call MyNeomakeConfigRun()<cr>
