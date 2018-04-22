@@ -251,7 +251,10 @@ command! -nargs=* EditInBufferDir
 " Toggle highlighting current matches
 nmap <silent><c-c> :silent set hlsearch! hlsearch?<CR>
 
-set nowildmenu
+" prevents statusline from being rendered
+" set nowildmenu
+
+set nomore
 cnoremap <tab> <C-L><C-D>
 
 " switch lower case marks with uppercase ones
