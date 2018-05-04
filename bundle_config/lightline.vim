@@ -27,7 +27,7 @@ let g:lightline = {
       \     'fileencoding': '%{&fenc != "utf-8" ? &fenc:""}',
       \     'fileformat': '%{&ff != "unix" ? &ff : ""}',
 		  \     'lineinfo': '%3l,%-2v',
-      \     'dummy': '_',
+      \     'dummy': '',
       \     'empty': ' ',
       \     'tags': '%{MyLightlineTags()}',
       \     'errors': '%{MyQuickfixGetErrorCount() > 0 ? MyQuickfixGetErrorCount() : ""}',

@@ -1,4 +1,5 @@
-" setlocal nowrap
+setlocal nowrap
+setlocal cursorline
 let &l:winheight = &lines / 3
 
 " restore <cr> if remapped elsewhere

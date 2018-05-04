@@ -86,13 +86,8 @@ nnoremap Q :xa<cr>
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
-nnoremap M '
-
-" Quickly jump to buffers
-nnoremap gb :ls<cr>:buffer<space>
-
-nnoremap <silent><leader>ii :!firefox
-      \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr><cr>
+nnoremap <silent><leader>ii :silent !firefox
+      \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr>
 vnoremap <silent><leader>ii y:execute '!firefox '
       \ . 'https://duckduckgo.com/?q=' . @"<cr>
 nnoremap <silent><leader>is :execute
@@ -166,7 +161,7 @@ nnoremap gV `[v`]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
-nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_vimrc.vim"<cr>
+nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappings.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' 
   \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
@@ -200,9 +195,6 @@ nnoremap ) :normal f{<cr>
 
 " Make gf work with relative file names and non existent files
 nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
-
-nnoremap ' `
-nnoremap ` '
 
 " Restore cursor position after visual selection
 nnoremap v m`v
@@ -238,7 +230,11 @@ xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>/g<left><left>
 xnoremap gS :%s/<C-r>"/<c-r>"/g<left><left>
 
-nnoremap <cr> :
+" Quickly jump to buffers
+nnoremap gb :ls<cr>:buffer<space>
+
+" nnoremap <cr> :b<space>
+nnoremap <cr> :ls<cr>:buffer<space>
 " inoremap <c-space> <c-x><c-o>
 
 " TODO: find mapping - gp?
@@ -257,10 +253,14 @@ nmap <silent><c-c> :silent set hlsearch! hlsearch?<CR>
 set nomore
 cnoremap <tab> <C-L><C-D>
 
+" Marks:
 " switch lower case marks with uppercase ones
 " https://www.reddit.com/r/vim/comments/3g5v2m/is_there_any_way_to_use_lowercase_marks_instead/ctv5k6s/
-noremap <silent> <expr> ' "'".toupper(nr2char(getchar()))
+noremap <silent> <expr> ' "`".toupper(nr2char(getchar()))
 noremap <silent> <expr> m "m".toupper(nr2char(getchar()))
 sunmap '
 sunmap m
+" nnoremap ' `
+" nnoremap ` '
+" nnoremap M '
 

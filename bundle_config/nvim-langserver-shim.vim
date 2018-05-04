@@ -1,6 +1,7 @@
 finish
 
 " Shim for the language server protocol
+" TAGS: lsp
 NeoBundle 'tjdevries/nvim-langserver-shim'
 
 let g:langserver_executables = {

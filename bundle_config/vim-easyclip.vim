@@ -1,9 +1,10 @@
 " Simplified clipboard functionality for Vim
+NeoBundle 'svermeulen/vim-easyclip'
+" NeoBundle 'nilsboy/vim-easyclip'
+
 " NOTE: Also discards deletes when prefixed by a register - like: normal "adgg<esc>
 " - need to use normal! instead
 " SEE ALSO: https://github.com/kana/vim-operator-replace
-" NeoBundle 'svermeulen/vim-easyclip'
-NeoBundle 'nilsboy/vim-easyclip'
 
 MyInstall xsel !sudo apt-get install xsel
 
@@ -11,6 +12,8 @@ let g:EasyClipAutoFormat = 1
 
 let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
 let g:EasyClipPreserveCursorPositionAfterYank = 1
+
+let g:EasyClipUsePasteToggleDefaults = 0
 
 let g:EasyClipUseCutDefaults = 0
 nmap Y <Plug>MoveMotionPlug
@@ -23,28 +26,11 @@ call Mkdir(g:EasyClipShareYanksDirectory, 'p')
 let g:EasyClipShareYanks = 1
 let g:EasyClipYankHistorySize = 500
 
-" cmap <c-v> <plug>EasyClipCommandModePaste
-
-" nmap rl <plug>EasyClipRotateYanksForward
-" nmap rh <plug>EasyClipRotateYanksBackward
-
-" let g:EasyClipUsePasteToggleDefaults = 0
-" nmap <c-p> <plug>EasyClipSwapPasteForward
-" nmap <c-n> <plug>EasyClipSwapPasteBackwards
-
-" let g:EasyClipUseSubstituteDefaults = 0
-" nmap <leader>s <plug>SubstituteOverMotionMap
-" " gs        <plug>G_SubstituteOverMotionMap
-" " ss        <plug>SubstituteLine
-" " s         <plug>XEasyClipPaste
-" " S         <plug>SubstituteToEndOfLine
-" " gS        <plug>G_SubstituteToEndOfLine
-
 inoremap <c-v> <c-x><c-u>
 
 augroup MyEasyclipAugroupCleanNewLines
   autocmd!
-  " workaround from EasyClipRing.vim - changes the whole buffer
+  " Workaround from EasyClipRing.vim - changes the whole buffer.
   " Vars are stored with <00> in vim vars - no way to replace them for
   " completion menu
   " TODO: make this atomic

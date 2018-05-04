@@ -40,7 +40,7 @@ function! MyQuickfixSearch(options) abort
   let useIgnoreFile = get(a:options, 'useIgnoreFile', 1)
 
   " TODO: use some other mark
-  silent! normal `a
+  " silent! normal `a
 
   let term = substitute(term, '\v\..*', '.*', 'ig')
   let term = substitute(term, '\v[-_ ]+id$', '(.*id){0,1}', 'ig')
@@ -108,13 +108,17 @@ function! MyQuickfixSearch(options) abort
     endif
   endif
 
-  let MyErrorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
+  " let MyErrorformat = '%f:%l:%m,%f:%l%m,%f  %l%m,%f'
+  let MyErrorformat = '%f:%l:%c:%m,%f:%l%m,%f  %l%m,%f'
   let g:neomake_delimiter_maker = MyQuickfixToMaker('echo',
         \ MyErrorformat)
   let g:neomake_find_maker = MyQuickfixToMaker(findprg,
         \ MyErrorformat)
   let g:neomake_grep_maker = MyQuickfixToMaker(grepprg,
         \ MyErrorformat)
+
+  " call INFO('findprg:', findprg)
+  " call INFO('grepprg:', grepprg)
 
   execute 'Neomake! ' . makers
   " copen
@@ -254,20 +258,45 @@ function! MyQuickfixRemoveInvalidFiles() abort
   call setqflist(newlist)
 endfunction
 
-" auto filetype qf call MyQuickfixFormat()
-" TODO:
+auto filetype qf call MyQuickfixFormat()
+" setqflist() has a fixed display format
+" setqflist() triggers event qf
+let g:MyQuickfixFullPath = 0
 function! MyQuickfixFormat() abort
+  let saved_cursor = getcurpos()
   let qflist = getqflist()
   setlocal modifiable
   %delete
   let i = -1
   for entry in qflist
     let i = i + 1
-    call append(i, entry.text)
+    let path = fnamemodify(bufname(entry.bufnr), ':.')
+    let dir = fnamemodify(path, ':h:t')
+    if dir == '.'
+      let dir = ''
+    else
+      let dir .= '/'
+    endif
+    let filename = fnamemodify(path, ':t')
+
+    let text = dir . filename
+    if g:MyQuickfixFullPath
+      let text = path
+    endif
+
+    if !empty(entry.text)
+      let text = text . ' || ' . entry.text
+    endif
+    call append(i, text)
   endfor
+  normal! dd
+  call setpos('.', saved_cursor)
   setlocal nomodifiable
   setlocal nomodified
 endfunction
+
+nnoremap <silent> <leader>qff :let g:MyQuickfixFullPath = 1 \| :call MyQuickfixFormat()<cr>
+nnoremap <silent> <leader>qfs :let g:MyQuickfixFullPath = 0 \| :call MyQuickfixFormat()<cr>
 
 function! MyQuickfixRemoveInvalid() abort
     call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
@@ -299,14 +328,14 @@ nnoremap <silent> <leader>fai :call MyQuickfixSearch({
       \ 'term': input('Search: ')})<cr>
 nnoremap <silent> <leader>faa yiw:call MyQuickfixSearch({
       \ 'useIgnoreFile': 0,
-      \ 'term': @" })<cr>
+      \ })<cr>
 vnoremap <silent> <leader>faa y:call MyQuickfixSearch({
       \ 'useIgnoreFile': 0,
       \ 'term': @" })<cr>
 
-nnoremap <silent> <leader>fw mayiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>fw yiw:call MyQuickfixSearch({
       \ 'term': @" })<cr>
-nnoremap <silent> <leader>fW mayiW:call MyQuickfixSearch({
+nnoremap <silent> <leader>fW yiW:call MyQuickfixSearch({
       \ 'term': @"})<cr>
 nnoremap <silent> <leader>fR yiw:call MyQuickfixSearch({
       \ 'term': '\b' . @" . '\b'})<cr>

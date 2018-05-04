@@ -15,6 +15,8 @@
 * don't jump if the current quickfix entry is invalid
 * operator for searching
 * stacktrace vs error message line
+* add "exclude file containing" search?: https://www.reddit.com/r/vim/comments/8f5fsf/how_do_you_search_through_all_files_that_contain/
+* optionally only show one match per file
 
 ## Help
 

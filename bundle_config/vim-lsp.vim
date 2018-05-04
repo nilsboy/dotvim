@@ -1,4 +1,5 @@
 " async language server protocol plugin
+" NOTE: alternatives: vim-lsc
 NeoBundle 'prabirshrestha/async.vim'
 NeoBundle 'prabirshrestha/vim-lsp'
 
