@@ -8,6 +8,7 @@ NeoBundle 'svermeulen/vim-easyclip'
 
 MyInstall xsel !sudo apt-get install xsel
 
+" fix indent level
 let g:EasyClipAutoFormat = 1
 
 let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1

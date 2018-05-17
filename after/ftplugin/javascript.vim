@@ -37,7 +37,7 @@ nnoremap <buffer> <silent> <leader>lmw yi`:call MyQuickfixSearch({
       \ })<cr>
 
 if exists("b:MyJavascriptFtpluginLoaded")
-    finish
+  finish
 endif
 let b:MyJavascriptFtpluginLoaded = 1
 
@@ -73,14 +73,14 @@ let g:MyJavascriptErrorformat .= '%f:%l:%c:%m,'
 " let g:MyJavascriptErrorformat .= '%-G%.%#,'
 
 let g:neomake_run_maker = {
-    \ 'exe': 'node',
-    \ 'args': ['--harmony', '%:p'],
-    \ 'errorformat': '%m',
-    \ 'output_stream': 'both',
-    \ }
-    " \ 'errorformat': g:MyJavascriptErrorformat,
-    " \ 'postprocess':
-    " function('MyJavascriptFixCoreFileLocationInQuickfix')
+      \ 'exe': 'node',
+      \ 'args': ['--harmony', '%:p'],
+      \ 'errorformat': '%m',
+      \ 'output_stream': 'both',
+      \ }
+" \ 'errorformat': g:MyJavascriptErrorformat,
+" \ 'postprocess':
+" function('MyJavascriptFixCoreFileLocationInQuickfix')
 
 " mocha first
 let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
@@ -118,7 +118,7 @@ let g:neoformat_javascript_prettier = {
 let g:neoformat_javascript_prettier_eslint = {
       \ 'exe': 'prettier-eslint'
       \ }
-      " \ ,'args': ['--log-level', 'error']
+" \ ,'args': ['--log-level', 'error']
 
 let g:neoformat_enabled_javascript = [ 'my_formatter' ]
 let g:neoformat_javascript_my_formatter = {
@@ -170,4 +170,3 @@ endfunction
 "   " Delete the first line, always empty for some reason
 "   execute ':1d'
 " endfunction
-

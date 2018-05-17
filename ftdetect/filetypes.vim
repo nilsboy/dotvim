@@ -26,3 +26,5 @@ autocmd BufRead,BufNewFile *.rest setlocal filetype=rest
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 
 autocmd BufRead,BufNewFile ctags.conf setlocal filetype=ctags
+
+autocmd BufRead,BufNewFile *proxy*/*.conf setlocal filetype=nginx

@@ -115,6 +115,10 @@ const util = require(\`util\`)
 endsnippet
 
 snippet fs "require fs" b
+const fs = require(\`fs\`)
+endsnippet
+
+snippet fsextra "require fs-extra" b
 const fs = require(\`fs-extra\`)
 endsnippet
 
@@ -123,7 +127,7 @@ const ${2:data} = fs.readFileSync(\`${VISUAL}$0\`).toString()
 endsnippet
 
 snippet writefile "writefile" w
-fs.writeFileSync(\`${1:file}\`, ${2:data})
+fs.writeFileSync(\`${1:file}\`, ${VISUAL}$0)
 endsnippet
 
 snippet csvReader "CSV reader" b
@@ -194,7 +198,7 @@ snippet l "let" w
 let $1 = ${2:\`$3\`}
 endsnippet
 
-snippet tojson "stringify to JSON" w
+snippet toString "stringify to JSON" w
 JSON.stringify(${VISUAL}$0, \` \`, 2)
 endsnippet
 
@@ -491,7 +495,7 @@ endsnippet
 
 snippet main "main" b
 async function main() {
-  $0
+  ${VISUAL}$0
 }
 
 main()
@@ -736,6 +740,10 @@ const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
 
+snippet err "print to stderr" w
+console.error(\`${VISUAL}$0\`)
+endsnippet
+
 snippet e "print to stderr" w
 console.error(\`### ${VISUAL}$0\`)
 endsnippet
@@ -863,3 +871,8 @@ endsnippet
 snippet isObject "isObject" w
 typeof $0 === `object`
 endsnippet
+
+snippet keys "object keys" w
+Object.keys(${VISUAL}$0)
+endsnippet
+

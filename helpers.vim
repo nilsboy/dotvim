@@ -1006,3 +1006,9 @@ function! RegexToPcre(vim_regex) abort
     endif
     return search
 endfunction
+
+function! Web(...) abort
+  let query = join(a:000, ' ')
+  silent execute '!firefox https://duckduckgo.com/?q=' . shellescape(query)
+endfunction
+

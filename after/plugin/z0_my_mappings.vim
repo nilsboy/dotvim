@@ -86,12 +86,17 @@ nnoremap Q :xa<cr>
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
-nnoremap <silent><leader>ii :silent !firefox
-      \ "https://duckduckgo.com/?q=<cword> site:stackoverflow.com"<cr>
-vnoremap <silent><leader>ii y:execute '!firefox '
-      \ . 'https://duckduckgo.com/?q=' . @"<cr>
-nnoremap <silent><leader>is :execute
-      \ ":RunIntoBuffer so-lucky ". expand("<cword>") . " [" . &filetype . "]"<cr>
+nnoremap <silent><leader>ii :call Web(expand('<cword>'))<cr>
+vnoremap <silent><leader>ii y:call Web(@")<cr>
+
+nnoremap <silent><leader>it :call Web(&filetype, expand('<cword>'))<cr>
+vnoremap <silent><leader>it y:call Web(&filetype, @")<cr>
+
+nnoremap <silent><leader>is :call Web(
+      \ 'site:stackoverflow.com',
+      \ expand('<cword>'))<cr>
+vnoremap <silent><leader>is y:call Web(
+      \ 'site:stackoverflow.com', @")<cr>
 
 " Run current line in the shell
 nnoremap <silent><leader>el :RunCursorLine<cr>
@@ -264,3 +269,7 @@ sunmap m
 " nnoremap ` '
 " nnoremap M '
 
+nmap <silent> <leader>x =ie
+
+nnoremap <silent><buffer>K :call Web(&filetype, expand('<cword>'))<cr>
+vnoremap <silent><buffer>K y:call Web(&filetype, @")<cr>
