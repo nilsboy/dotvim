@@ -5,6 +5,8 @@ if &t_Co > 1
   endif
 endif
 
+set synmaxcol=200
+
 " Disable all blinking
 " set guicursor+=a:blinkon0
 

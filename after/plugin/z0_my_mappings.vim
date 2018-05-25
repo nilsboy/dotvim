@@ -191,8 +191,8 @@ nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
 " nnoremap ( ?[\[({<]<cr>
 " nnoremap ) /[\[({<]<cr>
-nnoremap ( :normal F{<cr>
-nnoremap ) :normal f{<cr>
+" nnoremap ( :normal F{<cr>
+" nnoremap ) :normal f{<cr>
 " nnoremap ) ?[\])}>]<cr>
 
 " nnoremap [[ ?{<cr>
@@ -239,7 +239,7 @@ xnoremap gS :%s/<C-r>"/<c-r>"/g<left><left>
 nnoremap gb :ls<cr>:buffer<space>
 
 " nnoremap <cr> :b<space>
-nnoremap <cr> :ls<cr>:buffer<space>
+" nnoremap <cr> :ls<cr>:buffer<space>
 " inoremap <c-space> <c-x><c-o>
 
 " TODO: find mapping - gp?
@@ -269,7 +269,3 @@ sunmap m
 " nnoremap ` '
 " nnoremap M '
 
-nmap <silent> <leader>x =ie
-
-nnoremap <silent><buffer>K :call Web(&filetype, expand('<cword>'))<cr>
-vnoremap <silent><buffer>K y:call Web(&filetype, @")<cr>

@@ -261,7 +261,7 @@ endfunction
 auto filetype qf call MyQuickfixFormat()
 " setqflist() has a fixed display format
 " setqflist() triggers event qf
-let g:MyQuickfixFullPath = 0
+let g:MyQuickfixFullPath = 1
 function! MyQuickfixFormat() abort
   let saved_cursor = getcurpos()
   let qflist = getqflist()

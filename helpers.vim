@@ -1007,6 +1007,8 @@ function! RegexToPcre(vim_regex) abort
     return search
 endfunction
 
+command! -nargs=* Web call Web (<f-args>)
+command! -nargs=* WebWithFiletype call Web (&filetype, <f-args>)
 function! Web(...) abort
   let query = join(a:000, ' ')
   silent execute '!firefox https://duckduckgo.com/?q=' . shellescape(query)

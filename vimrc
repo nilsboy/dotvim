@@ -1,15 +1,15 @@
 set nocompatible
 
 if empty($XDG_CONFIG_HOME)
-    let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
+  let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
 endif
 
 if empty($XDG_DATA_HOME)
-    let $XDG_DATA_HOME = $REMOTE_HOME . "/.local/share"
+  let $XDG_DATA_HOME = $REMOTE_HOME . "/.local/share"
 endif
 
 if empty($XDG_CACHE_DIR)
-    let $XDG_CACHE_DIR = $REMOTE_HOME . "/.cache"
+  let $XDG_CACHE_DIR = $REMOTE_HOME . "/.cache"
 endif
 
 " vars
@@ -49,6 +49,9 @@ autocmd!
 
 " reset everything to their defaults
 set all&
+
+" Search the web by default instead of manpages
+let &keywordprg = ':WebWithFiletype'
 
 " Keep undo history after closing a file
 set undofile
