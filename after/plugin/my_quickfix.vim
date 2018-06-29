@@ -15,7 +15,7 @@ function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
 endfunction
 
-" NOTE: to ignore files but not .gitignore use a .agignore file
+" NOTE: to ignore files not in .gitignore use a .agignore file
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
 let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
       \  g:MyQuickfixIgnoreFile
@@ -32,6 +32,7 @@ let g:MyQuickfixSearchLimit = '500'
 
 command! -bang -nargs=1 Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
+  let l:save_pos = getcurpos() 
   let term = get(a:options, 'term', '')
   let find = get(a:options, 'find', '1')
   let grep = get(a:options, 'grep', '1')
@@ -48,6 +49,8 @@ function! MyQuickfixSearch(options) abort
   " fuzzy search for most case variants
   let term = substitute(term, '\v[-_ ]+', '.*', 'g')
   let term = substitute(term, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.*\l\2', 'g')
+  " TODO: add %S/facilit{y,ies}/building{,s}/g
+  " https://old.reddit.com/r/vim/comments/8ukr9j/what_is_the_most_underrate_vim_plugin_you_use/e1gklby/
 
   " call INFO('term:', term)
 
@@ -61,7 +64,7 @@ function! MyQuickfixSearch(options) abort
   let path = fnamemodify(path, ':p')
 
   " force path to be ralative in quickfix display
-  execute 'lcd' path
+  " execute 'lcd' path
 
   if matchBasenameOnly
     let filenameTerm = '\/.*' . term . '[^/]*$'
@@ -120,27 +123,34 @@ function! MyQuickfixSearch(options) abort
   " call INFO('findprg:', findprg)
   " call INFO('grepprg:', grepprg)
 
-  execute 'Neomake! ' . makers
-  " copen
+  call cursor(l:save_pos[1:])
 
-  return
-  if term != ''
-    execute 'match Todo /\c\v' . term . '/'
-  endif
-  normal! j
+  execute 'Neomake! ' . makers
 endfunction
 
-" TODO: use this to create a maker?:
-" function! s:Rg(file_mode, args)
-"   let cmd = "rg --vimgrep ".a:args
-"   let custom_maker = neomake#utils#MakerFromCommand(cmd)
-"   let custom_maker.name = cmd
-"   let custom_maker.remove_invalid_entries = 0
-"   let custom_maker.errorformat = "%f:%l:%c:%m"
-"   let enabled_makers =  [custom_maker]
-"   call neomake#Make(a:file_mode, enabled_makers) | echo "running: " . cmd
-" endfunction
-" command! -bang -nargs=* -complete=file G call s:Rg(<bang>0, <q-args>)
+let g:lastCommand = 'echo "Specify command"'
+function! MyQuickfixRun(...) abort
+  let saved_cursor = getcurpos()
+  " TODO: limit to myrun
+  NeomakeCancelJobs
+  " prevent vim from removing leading space by replacing it with special space (utf8 2001)
+  " let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/\x{2001}/g'" 
+  let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/ /g'" 
+  let g:lastCommand = cmd
+  silent wall
+  let g:neomake_myrun_maker = MyQuickfixToMaker(
+        \ cmd,
+        \ '%f:%l:%c:%m,%f')
+  call setpos('.', saved_cursor)
+  execute 'Neomake! myrun'
+  call setpos('.', saved_cursor)
+endfunction
+command! -bang -nargs=1 Run call MyQuickfixRun(<f-args>)
+nnoremap <silent> <leader>ef :call MyQuickfixRun(expand('%:p'))<cr>
+nnoremap <silent> <leader>el :call MyQuickfixRun(substitute(getline('.'), '\v^["#/ ]+', "", ""))<cr>
+nnoremap <silent> <leader>ee :call MyQuickfixRun(g:lastCommand)<cr>
+nnoremap <silent> <leader>ep :NeomakeListJobs<cr>
+
 function! MyQuickfixToMaker(cmd, errorformat) abort
   let cmd = a:cmd
   let exe = substitute(cmd, '\s.*', '', 'g')
@@ -158,13 +168,9 @@ function! MyQuickfixOutline() abort
   if exists("b:filetype")
     let l:filetype = b:filetype
   endif
-  let MyErrorformat = '%f:%l:%c:%m'
   let cmd = 'outline --filename ' . expand('%:p')
         \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
-  let g:neomake_outline_maker = MyQuickfixToMaker(cmd, MyErrorformat)
-  silent wall
-  Neomake! outline
-  copen
+  call MyQuickfixRun(cmd)
 endfunction
 
 command! -nargs=* MyQuickfixDump call MyQuickfixDump (<f-args>)
@@ -195,21 +201,6 @@ function! MyQuickfixHelp(term) abort
 endfunction
 command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
 
-" TODO:
-" TODO: screws with the buffer position
-" augroup MyQuickfixAugroupTodo
-"     autocmd QuickFixCmdPost * call MyQuickfixCleanQickfixlist()<cr>
-" augroup END
-
-" TODO: has to be specific to quickfix content
-function! MyQuickfixCleanQickfixlist() abort
-  " call MyQuickfixRemoveWhitspace()
-  call MyQuickfixRemoveInvalidFiles()
-  " call MyQuickfixRemoveInvalid()
-  " call DUMP(getqflist())
-  call MyQuickfixRemoveSomeLibs()
-endfunction
-
 function! MyQuickfixRemoveSomeLibs() abort
   let qflist = getqflist()
   let newlist = []
@@ -223,7 +214,7 @@ function! MyQuickfixRemoveSomeLibs() abort
   call setqflist(newlist)
 endfunction
 
-function! MyQuickfixRemoveWhitspace() abort
+function! MyQuickfixRemoveWhitespace() abort
   let qflist = getqflist()
   let newlist = []
   for i in qflist
@@ -258,7 +249,6 @@ function! MyQuickfixRemoveInvalidFiles() abort
   call setqflist(newlist)
 endfunction
 
-auto filetype qf call MyQuickfixFormat()
 " setqflist() has a fixed display format
 " setqflist() triggers event qf
 let g:MyQuickfixFullPath = 1
@@ -266,7 +256,7 @@ function! MyQuickfixFormat() abort
   let saved_cursor = getcurpos()
   let qflist = getqflist()
   setlocal modifiable
-  %delete
+  %delete _
   let i = -1
   for entry in qflist
     let i = i + 1
@@ -278,22 +268,27 @@ function! MyQuickfixFormat() abort
       let dir .= '/'
     endif
     let filename = fnamemodify(path, ':t')
-
     let text = dir . filename
     if g:MyQuickfixFullPath
       let text = path
     endif
-
     if !empty(entry.text)
       let text = text . ' || ' . entry.text
     endif
+    " let text = substitute(text, '\v^ \+', '  ', 'g')
+    let text = substitute(text, '\v^ +', 'XXX', 'g')
     call append(i, text)
   endfor
-  normal! dd
+  normal! "_dd
   call setpos('.', saved_cursor)
   setlocal nomodifiable
   setlocal nomodified
 endfunction
+
+augroup MyQuickfixAugroupFormat
+  autocmd!
+  autocmd filetype qf call MyQuickfixFormat()
+augroup END
 
 nnoremap <silent> <leader>qff :let g:MyQuickfixFullPath = 1 \| :call MyQuickfixFormat()<cr>
 nnoremap <silent> <leader>qfs :let g:MyQuickfixFullPath = 0 \| :call MyQuickfixFormat()<cr>
@@ -314,8 +309,8 @@ command! -bang -nargs=1 -complete=file QFilter call
 nnoremap <silent> <leader>f <nop>
 nnoremap <silent> <leader>fr :call MyQuickfixSearch({'orderBy': 'recent'})<cr>
 nnoremap <silent> <leader>ff :call MyQuickfixSearch({})<cr>
-vnoremap <silent> <leader>ff y:call MyQuickfixSearch({
-      \ 'term': @"})<cr>
+vnoremap <silent> <leader>ff :call MyQuickfixSearch({
+      \ 'term': MyHelpersGetVisualSelection()})<cr>
 nnoremap <silent> <leader>fB :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'matchBasenameOnly': 1})<cr>
@@ -326,30 +321,30 @@ nnoremap <silent> <leader>fF :call MyQuickfixSearch({
 nnoremap <silent> <leader>fai :call MyQuickfixSearch({
       \ 'useIgnoreFile': 0,
       \ 'term': input('Search: ')})<cr>
-nnoremap <silent> <leader>faa yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>faa :call MyQuickfixSearch({
       \ 'useIgnoreFile': 0,
       \ })<cr>
-vnoremap <silent> <leader>faa y:call MyQuickfixSearch({
+vnoremap <silent> <leader>faa :call MyQuickfixSearch({
       \ 'useIgnoreFile': 0,
-      \ 'term': @" })<cr>
+      \ 'term': MyHelpersGetVisualSelection() })<cr>
 
-nnoremap <silent> <leader>fw yiw:call MyQuickfixSearch({
-      \ 'term': @" })<cr>
-nnoremap <silent> <leader>fW yiW:call MyQuickfixSearch({
-      \ 'term': @"})<cr>
-nnoremap <silent> <leader>fR yiw:call MyQuickfixSearch({
-      \ 'term': '\b' . @" . '\b'})<cr>
-nnoremap <silent> <leader>fRi yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>fw :call MyQuickfixSearch({
+      \ 'term': expand('<cword>') })<cr>
+nnoremap <silent> <leader>fW :call MyQuickfixSearch({
+      \ 'term': expand('<cWORD>') })<cr>
+nnoremap <silent> <leader>fR :call MyQuickfixSearch({
+      \ 'term': '\b' . expand('<cWORD>') . '\b'})<cr>
+nnoremap <silent> <leader>fRi :call MyQuickfixSearch({
       \ 'term': '\b' . input('Word to search for: ') . '\b'})<cr>
 
-nnoremap <silent> <leader>fsf yiw:call MyQuickfixSearch({
-      \ 'term': @",
+nnoremap <silent> <leader>fsf :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': '~/src/'})<cr>
-vnoremap <silent> <leader>fsf y:call MyQuickfixSearch({
-      \ 'term': @",
+vnoremap <silent> <leader>fsf :call MyQuickfixSearch({
+      \ 'term': MyHelpersGetVisualSelection(),
       \ 'path': '~/src/'})<cr>
-nnoremap <silent> <leader>fsW yiW:call MyQuickfixSearch({
-      \ 'term': @",
+nnoremap <silent> <leader>fsW :call MyQuickfixSearch({
+      \ 'term': expand('<cWORD>'),
       \ 'path': '~/src/'})<cr>
 nnoremap <silent> <leader>fsi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
@@ -363,23 +358,28 @@ nnoremap <silent> <leader>fbfi :call MyQuickfixSearch({
 nnoremap <silent> <leader>ft :call MyQuickfixSearch({
       \ 'term': 'todo'})<cr>
 
-nnoremap <silent> <leader>fbb yiw:call MyQuickfixSearch({
-      \ 'term': @",
+nnoremap <silent> <leader>fbb :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': expand('%')})<cr>
+nnoremap <silent> <leader>fbi :call MyQuickfixSearch({
+      \ 'term': input('Search: '),
+      \ 'path': expand('%:p')})<cr>
 
-nnoremap <silent> <leader>vff yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vff :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': g:vim.etc.dir})<cr>
-nnoremap <silent> <leader>vfw yiw:call MyQuickfixSearch({
-      \ 'term': @",
+nnoremap <silent> <leader>vfw :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': g:vim.etc.dir})<cr>
 nnoremap <silent> <leader>vfi :call MyQuickfixSearch({
       \ 'term': input('Search: '),
       \ 'path': g:vim.etc.dir})<cr>
 
-nnoremap <silent> <leader>vpff yiw:call MyQuickfixSearch({
+nnoremap <silent> <leader>vpff :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': g:vim.bundle.dir})<cr>
-nnoremap <silent> <leader>vpfw yiw:call MyQuickfixSearch({
-      \ 'term': @",
+nnoremap <silent> <leader>vpfw :call MyQuickfixSearch({
+      \ 'term': expand('<cword>'),
       \ 'path': g:vim.bundle.dir})<cr>
 nnoremap <silent> <leader>vpfi :call MyQuickfixSearch({
       \ 'term': input('Search: '),

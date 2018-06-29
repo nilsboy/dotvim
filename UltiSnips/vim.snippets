@@ -33,10 +33,11 @@ def fncc(v):
 endglobal
 
 snippet command "command" b
-command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1 (<f-args>)
 function! $1(...) abort
-  $0
+  let cmd = join(a:000)
+  ${VISUAL}$0
 endfunction
+command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1 (<f-args>)
 endsnippet
 
 snippet deinrc "Boilerplaite vimrc" b
@@ -364,4 +365,24 @@ if exists("b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded")
 endif
 let b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded = 1
 $0
+endsnippet
+
+snippet saveCursorPosition "savecursorposition" b
+let saved_cursor = getcurpos()
+endsnippet
+
+snippet restoreCursorPosition "restoreCursorPosition" b
+call setpos('.', saved_cursor)
+endsnippet
+
+snippet setlocal "setlocal" b
+let &l:$1 = $0
+endsnippet
+
+snippet	cword "expand cword" w
+expand('<cword>')
+endsnippet
+
+snippet	cWORD "expand cWORD" w
+expand('<cWORD>')
 endsnippet

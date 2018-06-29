@@ -1,4 +1,6 @@
 NeoBundle 'Shougo/deoplete.nvim'
+" tags: complete
+" TODO: checkout maralla/completor.vim
 
 " pip3 install --user neovim
 " pip3 install --upgrade --user neovim

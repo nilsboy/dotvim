@@ -1,11 +1,28 @@
 " use arrays as comments
-let &l:comments = 's1:[",ex:"]'
-let &l:commentstring = '["%s"]'
+" let &l:comments = 's1:[",ex:"]'
+" let &l:commentstring = '["%s"]'
 
-" let &l:commentstring = '# %s'
+let &l:commentstring = '// %s'
+
+let g:MyJsonStrict = 1
+
+function! MyJsonStrict(...) abort
+  let cmd = join(a:000)
+  if g:MyJsonStrict
+    let g:MyJsonStrict = 0
+    highlight! default link jsonCommentError Comment
+    highlight! default link jsonTrailingCommaError NONE
+  else
+    let g:MyJsonStrict = 1
+    highlight! default link jsonCommentError Error
+    highlight! default link jsonTrailingCommaError Error
+  endif
+endfunction
+command! -nargs=* MyJsonStrict call MyJsonStrict (<f-args>)
+call MyJsonStrict()
 
 if exists("b:MyJsonFtpluginLoaded")
-    finish
+  finish
 endif
 let b:MyJsonFtpluginLoaded = 1
 

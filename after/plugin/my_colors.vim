@@ -1,7 +1,7 @@
 " syntax has to be enabled before using it
 if &t_Co > 1
   if !exists('g:syntax_on')
-      syntax enable
+    syntax enable
   endif
 endif
 
@@ -65,7 +65,7 @@ augroup END
 augroup MyColorsAugroupCursorline
   autocmd!
   autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
-  autocmd InsertEnter,FocusLost * setlocal nocursorline
+  autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
 augroup END
 
 " highlight the whole file not just the window - slower but more accurate.
@@ -76,7 +76,7 @@ augroup END
 
 function! MyColorsShowSyntaxGroups() abort
   echo map(synstack(line('.'), col('.')),
-    \ 'synIDattr(v:val, "name")')
+        \ 'synIDattr(v:val, "name")')
 endfunction
 nnoremap <leader>gs :call MyColorsShowSyntaxGroups()<cr>
 command! -nargs=* MyColorsShowSyntaxGroups
@@ -91,7 +91,7 @@ augroup END
 
 " load colorscheme last to ensure own settings have priority
 try
-    colorscheme lucius
+  colorscheme lucius
 catch /find/
-    " nothing
+  " nothing
 endtry

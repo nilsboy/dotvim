@@ -223,6 +223,10 @@ snippet ls "ls" b
 `ls -1`
 endsnippet
 
+snippet pwd "pwd" w
+`!v getcwd()`
+endsnippet
+
 snippet path "path" w
 `!v expand('%:p')`
 endsnippet
@@ -243,7 +247,7 @@ snippet "(DEBUG|INFO)+" "DEBUG|INFO toggle" r
 `!p snip.rv = toggle('DEBUG|INFO', match.group(1))`
 endsnippet
 
-snippet uuid "uuid" w
+snippet uuid "uuid" i
 `uuidgen`
 endsnippet
 
@@ -281,4 +285,8 @@ endsnippet
 
 snippet ok "ok / done" w
 ✔
+endsnippet
+
+snippet "(-|=>)+" "-|=> toggle" r
+`!p snip.rv = toggle('-|=>', match.group(1))`
 endsnippet

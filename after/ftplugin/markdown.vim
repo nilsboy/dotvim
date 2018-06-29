@@ -1,5 +1,5 @@
 setlocal formatoptions=
-" setlocal conceallevel=2
+setlocal conceallevel=0
 
 if exists("b:MyMarkdownFtpluginLoaded")
     finish
@@ -26,15 +26,14 @@ let b:MyMarkdownFtpluginLoaded = 1
 " let g:neoformat_enabled_markdown = [ 'myremark' ]
 
 MyInstall prettier
-    let g:neoformat_markdown_myprettier = {
-      \ 'exe': 'prettier',
-      \ 'args': ['--no-color',
-      \   '--parser', 'markdown',
-      \   '--print-width' , '80',
-      \   '--prose-wrap', 'always'
-      \ ],
-      \ 'stdin': 1,
-      \ }
-  " \ '--use' , 'remark-preset-lint-markdown-style-guide',
+let g:neoformat_markdown_myprettier = {
+  \ 'exe': 'prettier',
+  \ 'args': ['--no-color',
+  \   '--parser', 'markdown',
+  \   '--print-width' , '80',
+  \   '--prose-wrap', 'always'
+  \ ],
+  \ 'stdin': 1,
+  \ }
 let g:neoformat_enabled_markdown = [ 'myprettier' ]
 

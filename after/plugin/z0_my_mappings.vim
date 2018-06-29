@@ -98,9 +98,6 @@ nnoremap <silent><leader>is :call Web(
 vnoremap <silent><leader>is y:call Web(
       \ 'site:stackoverflow.com', @")<cr>
 
-" Run current line in the shell
-nnoremap <silent><leader>el :RunCursorLine<cr>
-
 " Don't wait after escape in insert mode
 " Breaks curser keys etc. (apparently not in Neovim)
 " removed from Neovim (2017-03-01)

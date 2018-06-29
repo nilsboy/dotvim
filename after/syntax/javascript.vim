@@ -11,3 +11,4 @@
 
   highlight link ha EXIT
   syntax region ha start=/awai/ end=/t/
+  syntax region ha start=/asyn/ end=/c/

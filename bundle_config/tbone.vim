@@ -1,10 +1,11 @@
 " tbone.vim: tmux basics
 NeoBundle 'tpope/vim-tbone'
+" TAGS: tmux shell command line
 
-" Note: Similar plugins:
-" Note: https://github.com/idanarye/vim-terminalogy
-" see also: https://github.com/kassio/neoterm
-" see also: https://github.com/hkupty/nvimux
+" SEE ALSO: https://github.com/idanarye/vim-terminalogy
+" SEE ALSO: https://github.com/kassio/neoterm
+" SEE ALSO: https://github.com/hkupty/nvimux
+" SEE ALSO: https://github.com/kabbamine/zeavim.vim
 
 " Note: can only send via range not via motion
 

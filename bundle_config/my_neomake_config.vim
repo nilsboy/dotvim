@@ -27,26 +27,25 @@ augroup MyNeomakeConfigAugroupOnNeomakeFinished
 augroup END
 
 " nnoremap <silent><leader>ee :silent wall \| Neomake! run<cr>
-nnoremap <silent><leader>ee ma:call MyNeomakeConfigRun()<cr>
-nnoremap <silent><leader>el :silent wall \| Neomake lint<cr>
-nnoremap <silent><leader>ef :silent wall \| Neomake format<cr>
+" nnoremap <silent><leader>el :silent wall \| Neomake lint<cr>
+" nnoremap <silent><leader>ef :silent wall \| Neomake format<cr>
 
 function! MyNeomakeConfigRun() abort
+  let l:save_pos = getcurpos() 
   let logLevel = $LOG_LEVEL
   " for log-dwim
   let $LOG_LEVEL = 'TRACE'
   silent wall
-  silent! `a
+  call cursor(l:save_pos[1:])
   Neomake! run
   let $LOG_LEVEL = logLevel
 endfunction
+nnoremap <silent><leader>ee :call MyNeomakeConfigRun()<cr>
 
-nnoremap <silent><leader>ed :edit /tmp/neomake.log <cr>
-
-nnoremap <silent><leader>eh :Verbose call MyNeomakeConfigInfos()<cr>
 function! MyNeomakeConfigInfos() abort
   echo '&makeprg: ' . &makeprg
   echo '&errorformat: ' . &errorformat
   echo 'g:neomake_' . &filetype . '_run_maker: '
   execute 'echo g:neomake_' . &filetype . '_run_maker'
 endfunction
+nnoremap <silent><leader>eh :Verbose call MyNeomakeConfigInfos()<cr>

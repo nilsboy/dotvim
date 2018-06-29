@@ -300,7 +300,6 @@ function! Run(...) abort
 endfunction
 
 " Checkout: https://github.com/thinca/vim-quickrun
-command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 function! RunIntoBuffer(...) abort
 
     silent wall
@@ -351,31 +350,7 @@ function! RunIntoBuffer(...) abort
     " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
 
 endfunction
-
-command! -nargs=0 RunIntoBufferCurrentBuffer call RunIntoBufferCurrentBuffer()
-function! RunIntoBufferCurrentBuffer() abort
-    call RunIntoBufferOrLastCommand("\"$(run-guess-command-by-filename " . expand("%:p"). ")\"")
-endfunction
-
-command! -nargs=* RunIntoBufferOrLastCommand call RunIntoBufferOrLastCommand()
-function! RunIntoBufferOrLastCommand(...) abort
-    if exists('a:1')
-        let g:last_command = a:000
-    endif
-    call RunIntoBuffer(g:last_command)
-endfunction
-
-let g:ack_default_options = '--ignore-file "^\.*"'
-
-command! -nargs=1 Tree call Tree("<args>")
-function! Tree(path) abort
-    new tree
-    setlocal buftype=nowrite
-    setlocal listchars=
-    nnoremap <buffer> <CR> gf
-    execute ":r! root=$(git-root) && cd $root && tree --no-colors --exclude '\class$' " . a:path
-    normal gg
-endfunction
+command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 
 let g:commands = []
 
@@ -502,31 +477,27 @@ function! CommandLine() abort
     " nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
 endfunction
 
-" Run current buffer
-command! -nargs=0 RunCurrentBuffer call RunCurrentBuffer()
-function! RunCurrentBuffer() abort
-    call RunIntoBuffer(expand("%:p"))
-endfunction
-
 " Run line under cursor as vim script or shell command depending on leading :
-command! -nargs=0 RunCursorLine call RunCursorLine()
 function! RunCursorLine() abort
     let l:cmd = GetRunableCursorLine()
     call RunIntoBuffer(l:cmd)
 endfunction
+command! -nargs=0 RunCursorLine call RunCursorLine()
+nnoremap <silent><leader>el :RunCursorLine<cr>
 
 " Run current line as vim script
-nnoremap <silent><leader>ev :call RunCursorLineVim()<cr>
-nnoremap <silent><leader>eV :call RunCursorLineVimVerbose()<cr>
 function! RunCursorLineVim() abort
     let l:cmd = GetRunableCursorLine()
     execute l:cmd
 endfunction
+nnoremap <silent><leader>ev :call RunCursorLineVim()<cr>
+nnoremap <silent> <leader>ee :execute g:MyLastCommand<cr>
 
 function! RunCursorLineVimVerbose() abort
     let l:cmd = GetRunableCursorLine()
     execute 'Verbose ' . l:cmd
 endfunction
+nnoremap <silent><leader>eV :call RunCursorLineVimVerbose()<cr>
 
 function! GetRunableCursorLine() abort
     let l:cmd = getline(".")
@@ -536,13 +507,13 @@ function! GetRunableCursorLine() abort
     return l:cmd
 endfunction
 
-command! -nargs=* E call EditFileInBufferDir(<f-args>)
 function! EditFileInBufferDir(...) abort
   let l:dir = expand("%:h")
   let l:file = l:dir . '/' . join(a:000)
   let l:file = fnameescape(l:file)
   execute 'edit ' . l:file
 endfunction
+command! -nargs=* E call EditFileInBufferDir(<f-args>)
 
 function! CdBufferDir() abort
     let l:dir = expand("%:p:h")
@@ -560,13 +531,6 @@ function! helpers#touch(path) abort
       call writefile([], l:path, 'a')
     endif
 endfunction
-
-" command! -nargs=* Help call Help(<f-args>)
-" function! Help(...) abort
-"   execute "help " a:1
-"   silent only
-"   setlocal buflisted
-" endfunction
 
 if $DEBUG
   silent execute '!echo "==========" > /tmp/vim.log'
@@ -613,10 +577,10 @@ function! _DUMP(input) abort
 endfunction
 
 " Copy current buffer to a new file in the buffers directory
-command! -nargs=* Copy call Copy(<f-args>)
 function! Copy(dst) abort
   silent execute 'saveas %:p:h/' . a:dst
 endfunction
+command! -nargs=* Copy call Copy(<f-args>)
 
 " Vim's writefile does not support the append (a) flag (2017-02-21)
 " Vim's mkdir complains if directory alread exists (2017-02-21)
@@ -666,31 +630,6 @@ function! Uniq (...) range
     " Replace the range of original lines with just the unique lines...
     exec a:firstline . ',' . a:lastline . 'delete'
     call append(a:firstline-1, uniq_lines)
-endfunction
-
-" Only in visual mode...
-" vmap  q :call Uniq()<CR>
-" vmap Q :call Uniq('ignore whitespace')<CR>
-" TODO: save and restore makeprg and errorformat
-
-function! MyRun(...) abort
-  let command = ''
-  if exists("a:1")
-    let command = a:1
-  endif
-  if command == ''
-    let command = get(g:, 'last_command', expand('%'))
-  endif
-  let g:last_command = command
-  silent wall
-  setlocal errorformat=%m
-  " execute 'NeomakeSh! ' . command
-  let &l:makeprg = command . ' 2>&1'
-  call INFO('command:', command)
-  Neomake!
-  " needs to wait - otherwise copen does not work
-  sleep 600m
-  copen
 endfunction
 
 function! helpers#createUniqueSignId() abort
@@ -1013,4 +952,15 @@ function! Web(...) abort
   let query = join(a:000, ' ')
   silent execute '!firefox https://duckduckgo.com/?q=' . shellescape(query)
 endfunction
+" SEE ALSO: https://github.com/kabbamine/zeavim.vim
 
+" https://stackoverflow.com/a/1534347 
+function! MyHelpersGetVisualSelection()
+  try
+    let a_save = @a
+    normal! gv"ay
+    return @a
+  finally
+    let @a = a_save
+  endtry
+endfunction

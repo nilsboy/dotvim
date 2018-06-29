@@ -28,33 +28,43 @@ let g:vrc_set_default_mapping = 0
 
 " be quiet and only show errors
 let g:vrc_curl_opts = {
-  \ '-s' : '',
-  \ '-S' : '',
-  \ '-i' : '',
-  \ '-L' : '',
-  \ '--connect-timeout' : '1',
-\}
+      \ '-s' : '',
+      \ '-S' : '',
+      \ '-i' : '',
+      \ '-L' : '',
+      \ '--connect-timeout' : '1',
+      \}
 
 " Sorts the JSON keys
 let g:vrc_auto_format_response_enabled = 0
 
-let g:MyRestConsoleRequestsCount = 0
-
+let g:MyRestConsoleResultId = 0
 function! MyRestConsoleCall(...) abort
-    " VrcQuery messes up current buffer position
-    let b:winview = winsaveview()
-    call VrcQuery()
-    if(exists('b:winview')) | call winrestview(b:winview) | endif
-    only
-    execute 'edit ' b:vrc_output_buffer_name
-    setlocal filetype=restresult
 
-    set modifiable
+  " VrcQuery messes up current buffer position
+  let b:winview = winsaveview()
+  call VrcQuery()
+  if(exists('b:winview')) | call winrestview(b:winview) | endif
 
-    " normal! vip
-    " '<,'>s/"/\\"/g
-    " normal! <esc>
-    " normal gcip
+  only
 
-    Neoformat
+  let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
+  let fileName = '/tmp/rest-call.' . g:MyRestConsoleResultId . '.restresult'
+
+  silent execute 'edit ' . b:vrc_output_buffer_name
+  set buftype=
+  silent! execute 'saveas! ' . fileName
+
+  setlocal filetype=restresult
+
+  set modifiable
+  normal! ggdap
+
+  Neoformat
+
+  normal! ggP
+  normal gcip
+  normal! k
+  " need echo here for last normal to be executed?!?
+  echo 'done'
 endfunction

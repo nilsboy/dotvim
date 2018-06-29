@@ -430,6 +430,12 @@ $1($2) {
 }
 endsnippet
 
+snippet am "async method" w
+async $1($2) {
+  ${VISUAL}$0
+}
+endsnippet
+
 snippet callback "callback" w
 (error, result) => {
   if(error) {
@@ -641,8 +647,8 @@ snippet "\.then$" ".then" r
 endsnippet
 
 snippet "\.catch" ".catch" r
-.catch(($1) => {
-  $0
+.catch((error) => {
+  $0console.error(error.stack)
 })
 endsnippet
 
@@ -740,40 +746,24 @@ const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
 
-snippet err "print to stderr" w
-console.error(\`${VISUAL}$0\`)
-endsnippet
-
-snippet e "print to stderr" w
-console.error(\`### ${VISUAL}$0\`)
-endsnippet
-
-snippet eej "print to stderr with variable" w
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, JSON.stringify(${VISUAL}$1$0, \` \`, 2))
-endsnippet
-
 snippet ee "print to stderr with variable" w
 console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, ${VISUAL}$1$0)
 endsnippet
 
-snippet eee "print to stderr with variable and trace" w
+snippet ej "print to stderr with json to variable" w
+console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, JSON.stringify(${VISUAL}$1$0, \` \`, 2))
+endsnippet
+
+snippet eo "print to stderr" w
+console.error(\`### ${VISUAL}$0\`)
+endsnippet
+
+snippet et "print to stderr with variable and trace" w
 console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
 endsnippet
 
-snippet ex "print to stderr with variable and exit" w
-console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0) ; process.exit(1)
-endsnippet
-
-snippet cl "console.log" w
-console.log(\`#### ${VISUAL}$1\`)
-endsnippet
-
-snippet cll "console.log" w
-console.log(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
-endsnippet
-
 snippet xx "here"
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### HERE`!v line('.')`\`)
+console.error(\``!v expand('%:p') . ':' . line('.')`:0:### HERE`!v line('.')`$0\`)
 endsnippet
 
 # TODO
@@ -784,20 +774,6 @@ snippet dump "dump a var" b
 # TODO: snippet
 const util = require(\`util\`)
 console.error(\`### $1:\n\`, util.inspect($1, {depth: 30}))
-endsnippet
-
-# NOTE: uses special space character (utf8 2001) to prevent vim from
-# filtering it in the quickfix window
-# console.error(\`### ${VISUAL}$1:\n\`, JSON.stringify(${VISUAL}$1, undefined, \`  \`))$0
-snippet jsonn "json" b
-# TODO: snippet
-console.error(\`### ${VISUAL}$1:\`) ; console.dir(${VISUAL}$1)$0
-endsnippet
-
-# JSON.stringify(${VISUAL}$1, undefined, \`  \`)$0
-snippet json "json" w
-# TODO: snippet
-console.error(\`### ${VISUAL}$1:\n\`) ; console.dir(${VISUAL}$1)$0
 endsnippet
 
 snippet tempFileName "tempFileName" b
@@ -876,3 +852,11 @@ snippet keys "object keys" w
 Object.keys(${VISUAL}$0)
 endsnippet
 
+snippet jsonRelaxedParser "jsonRelaxedParser" b
+const relaxedJson = require(\`relaxed-json\`)
+const $0 = relaxedJson.parse($1)
+endsnippet
+
+snippet clone "clone" w
+const ${2:dst}$0 = Object.assign({}, ${1:src})
+endsnippet

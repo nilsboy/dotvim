@@ -94,10 +94,12 @@ set linebreak
 set breakat&vim
 if IsNeoVim()
   set breakindent
-  let &showbreak="  ↪ "
+  " let &showbreak="  ↪ "
+  let &showbreak=repeat('›', &tabstop - 1) . " " 
   " let &showbreak="  "
 else
-  let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
+  " let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
+  let &showbreak=repeat('›', &tabstop - 1) . " " 
 endif
 
 set mousehide
@@ -120,7 +122,8 @@ set guicursor=
 "### Undo and swap
 
 " Maximum amount of memory in Kbyte to use for all buffers together.
-set maxmemtot=2048
+" not supported anymore? (2018-06-19)
+" set maxmemtot=2048
 
 " Never create backup files
 set nobackup
