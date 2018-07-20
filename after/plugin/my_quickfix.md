@@ -76,6 +76,7 @@
   https://github.com/stefandtw/quickfix-reflector.vim
 * Highlight quickfix errors https://github.com/jceb/vim-hier
 * format quickfix output: https://github.com/MarcWeber/vim-addon-qf-layout
+* filter quickfix: https://old.reddit.com/r/vim/comments/8xp94m/plugin_vimkickfix_filter_discard_save_entries/
 
 ## Single purpose plugins
 

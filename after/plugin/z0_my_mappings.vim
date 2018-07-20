@@ -239,9 +239,8 @@ nnoremap gb :ls<cr>:buffer<space>
 " nnoremap <cr> :ls<cr>:buffer<space>
 " inoremap <c-space> <c-x><c-o>
 
-" TODO: find mapping - gp?
 " select last pasted text
-" nnoremap x `[v`]
+nnoremap vi<space>p `[v`]
 
 command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')

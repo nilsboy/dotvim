@@ -33,11 +33,11 @@ def className():
 endglobal
 
 snippet s "String" b
-\`${1:key}\`: \`${0:value}\`,
+"${1:key}": "${0:value}",
 endsnippet
 
 snippet n "Number" b
-\`${1:key}\`: ${0:value},
+"${1:key}": ${0:value},
 endsnippet
 
 snippet a "Array" b
@@ -47,7 +47,7 @@ snippet a "Array" b
 endsnippet
 
 snippet na "Named array" b
-\`${1:key}\`: [
+"${1:key}": [
   ${VISUAL}$0
 ],
 endsnippet
@@ -59,13 +59,13 @@ snippet o "Object" b
 endsnippet
 
 snippet no "Named object" b
-\`${1:key}\`: {
+"${1:key}": {
   ${VISUAL}$0
 },
 endsnippet
 
 snippet null "Null" b
-\`${0:key}\`: null,
+"${0:key}": null,
 endsnippet
 
 snippet req "require" b
@@ -780,7 +780,7 @@ snippet tempFileName "tempFileName" b
 const fileName = require('tmp').fileSync().name
 endsnippet
 
-snippet s "s" w
+snippet \s "s" w
 [\s\S]*
 endsnippet
 

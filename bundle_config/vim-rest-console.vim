@@ -16,7 +16,7 @@ NeoBundle 'diepm/vim-rest-console'
 let g:vrc_debug = 0
 
 " breaks result formatting...
-let g:vrc_show_command = 0
+let g:vrc_show_command = 1
 
 let g:vrc_horizontal_split = 1
 
@@ -57,10 +57,14 @@ function! MyRestConsoleCall(...) abort
 
   setlocal filetype=restresult
 
+  let is_json = search('json', 'n')
+
   set modifiable
   normal! ggdap
 
-  Neoformat
+  if is_json
+    Neoformat
+  endif
 
   normal! ggP
   normal gcip
