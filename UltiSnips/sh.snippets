@@ -54,3 +54,7 @@ if [[ ! -z \$$1 ]] ; then
 fi
 endsnippet
 
+snippet trap "trap" b
+function cleanup() { test -e "$1" && rm "$1$0" ; }
+trap cleanup ERR
+endsnippet
