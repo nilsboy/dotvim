@@ -7,7 +7,7 @@ let g:MyTestCwd = ''
 let g:MyTestLast = ''
 function! MyTestStrategy(cmd)
   silent! wall
-  if g:MyTestLast != 1
+  if g:MyTestLast != 1 || ! g:MyTestCwd
     let g:MyTestCwd = getcwd()
   endif
   let g:MyTestLast = 0

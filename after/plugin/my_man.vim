@@ -17,13 +17,16 @@ function! Man(cmd) abort
     " Cannot setlocal filetype=man because it messes with the filename
     " Needs ! to supress error from /usr/share/nvim/runtime/syntax/man.vim
     silent! execute 'edit ' . file_name
+    let saved_cursor = getcurpos()
     setlocal noreadonly
     setlocal modifiable
     let &l:buftype = ''
     normal ggdG
     silent execute 'r!SHORT=1 man-multi-lookup' cmd
-    normal ggdd/^---
+    normal! ggdd
+    " normal! /^---
     update
+    call setpos('.', saved_cursor)
 
     syntax case  ignore
     syntax match manReference      display '[^()[:space:]]\+([0-9nx][a-z]*)'

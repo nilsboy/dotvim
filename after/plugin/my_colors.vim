@@ -66,6 +66,8 @@ augroup MyColorsAugroupCursorline
   autocmd!
   autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
   autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
+  " Neomake does not seem to send the BufEnter event:
+  autocmd Filetype qf set cursorline
 augroup END
 
 " highlight the whole file not just the window - slower but more accurate.

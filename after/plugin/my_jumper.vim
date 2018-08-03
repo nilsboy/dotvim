@@ -1,11 +1,9 @@
-finish
-" A jumping experiment
+" An experiment in jumping
 "
 " - only jump to changes if they are far enough away from each other
 " - save only one entry for files opened but not edited
 
 " TODO: There are a lot more signs than marks - use them instead?
-" TODO: checkout vim-projectionist cycles
 
 let g:MyJumperDir = $XDG_DATA_HOME . '/jumper'
 let g:MyJumperFile = g:MyJumperDir . '/jumps'

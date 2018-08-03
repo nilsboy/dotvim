@@ -58,3 +58,9 @@ snippet trap "trap" b
 function cleanup() { test -e "$1" && rm "$1$0" ; }
 trap cleanup ERR
 endsnippet
+
+snippet eof "eof" b
+cat << 'EOF' >> ${1:dst file}
+${VISUAL}$0
+EOF
+endsnippet

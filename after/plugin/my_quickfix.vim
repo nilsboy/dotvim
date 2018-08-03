@@ -4,9 +4,14 @@
 sign define MyQuickfixSignEmpty
 augroup MyQuickfixAugroupPersistentSignsColumn
   autocmd!
-  autocmd BufEnter * execute 'execute ":sign place 9999 line=1
-      \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
+  autocmd BufEnter * call MyQuickfixShowSignsColumn()
+  autocmd FileType qf call MyQuickfixShowSignsColumn()
 augroup END
+
+function! MyQuickfixShowSignsColumn() abort
+  execute 'execute ":sign place 9999 line=1
+      \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
+endfunction
 
 nnoremap <silent> <tab> :copen<cr>
 nnoremap <silent> <s-tab> :lopen<cr>
@@ -261,6 +266,9 @@ function! MyQuickfixFormat() abort
   for entry in qflist
     let i = i + 1
     let path = fnamemodify(bufname(entry.bufnr), ':.')
+    if ! filereadable(path)
+      continue
+    endif
     let dir = fnamemodify(path, ':h:t')
     if dir == '.'
       let dir = ''

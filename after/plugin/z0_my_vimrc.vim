@@ -94,12 +94,14 @@ set linebreak
 set breakat&vim
 if IsNeoVim()
   set breakindent
-  " let &showbreak="  ↪ "
-  let &showbreak=repeat('›', &tabstop - 1) . " " 
-  " let &showbreak="  "
+  " more chars:
+  " :help digraph-table
+  " ≡ ↪ »«‖⇒→><│▓├┠▶ ↑^∟┃
+  let &showbreak=repeat('┃', &tabstop - 1) . " " 
 else
   " let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
   let &showbreak=repeat('›', &tabstop - 1) . " " 
+
 endif
 
 set mousehide

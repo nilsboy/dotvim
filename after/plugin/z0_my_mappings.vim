@@ -114,13 +114,13 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 
 " Open command-line window
 " :h cmdline-window
-nnoremap <space><space> q:i
+nnoremap <space><space> :cclose \| :lclose<cr>q:i
 vnoremap <space><space> q:i
 nnoremap <leader>k q:i<esc>k
 nnoremap <leader>A q:i<esc>kA
 
 augroup MyVimrcAugroupAdjustWindowSizes
-  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 5
+  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3
   autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
   autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
   autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
@@ -135,17 +135,17 @@ augroup MyVimrcAugroupCmdwinSetup
   " autocmd CmdwinEnter * inoremap <buffer><silent> <tab> <esc>:quit<cr>
   autocmd CmdwinEnter * nnoremap <buffer><silent> <tab> :quit<cr>
 
-  autocmd CmdwinEnter * nmap <buffer><silent> <c-h> :quit<cr><c-h>
-  autocmd CmdwinEnter * nmap <buffer><silent> <c-j> :quit<cr><c-j>
+  autocmd CmdwinEnter * nmap <buffer><silent> <c-j> :quit<cr>
   autocmd CmdwinEnter * nmap <buffer><silent> <c-k> :quit<cr>
-  autocmd CmdwinEnter * nmap <buffer><silent> <c-l> :quit<cr><c-l>
 
-  autocmd CmdwinEnter * nmap <buffer><silent> <leader>k :quit<cr>
-
-  autocmd CmdwinEnter * imap <buffer><silent> <c-h> <esc>:quit<cr><c-h>
-  autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr><c-j>
+  " autocmd CmdwinEnter * imap <buffer><silent> <c-h> <esc><c-h>
+  autocmd CmdwinEnter * imap <buffer><silent> <c-j> <esc>:quit<cr>
   autocmd CmdwinEnter * imap <buffer><silent> <c-k> <esc>:quit<cr>
-  autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc>:quit<cr><c-l>
+  " autocmd CmdwinEnter * imap <buffer><silent> <c-l> <esc><c-l>
+
+  " autocmd CmdwinEnter * nmap <space><space> q:i
+  autocmd CmdwinEnter * nmap <buffer><silent> <leader>k :quit<cr>
+  autocmd CmdwinEnter * nmap <buffer><silent> Q <esc>:xa<cr>
 augroup END
 
 " Reselect visual block after indent

@@ -43,7 +43,7 @@ endfunction
 
 function! MyMruListFiles(file) abort
     cclose
-    let &l:makeprg='tac ' . a:file . ' | head -1001 | uniq-unsorted'
+    let &l:makeprg='tac ' . a:file . ' | grep -v "^/tmp/" | head -1001 | uniq-unsorted'
     setlocal errorformat=%f
     Neomake!
     copen

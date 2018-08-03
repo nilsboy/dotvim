@@ -6,6 +6,10 @@
 
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose() abort
+  if BufferIsCommandLine() == 1
+    silent! quit
+    return
+  endif
   if BufferIsQuickfix()
     cclose
     return
@@ -17,10 +21,6 @@ function! BufferClose() abort
   let wasQfOpen = MyHelpersQuickfixIsOpen()
   if wasQfOpen
     cclose
-  endif
-  if BufferIsCommandLine() == 1
-    silent! quit
-    return
   endif
   if ! &previewwindow
     pclose

@@ -8,6 +8,8 @@ setlocal nowrap
 " TODO previewwindow
 " nmap <buffer><silent> p :pedit! <cfile><cr>
 
+execute &cmdwinheight . 'wincmd _'
+
 if BufferIsQuickfix()
   nnoremap <silent> <c-n> :silent! cnext<cr>
   nnoremap <silent> <c-p> :silent! cprevious<cr>
