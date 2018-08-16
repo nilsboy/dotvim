@@ -70,7 +70,7 @@ snippet "(u|ü)+" "u|ü toggle" r
 endsnippet
 
 snippet "(U|Ü)+" "U|Ü toggle" r
-`!p snip.rv = toggle('U|ü', match.group(1))`
+`!p snip.rv = toggle('U|Ü', match.group(1))`
 endsnippet
 
 snippet "(a|ä)+" "a|ä toggle" r
@@ -301,4 +301,18 @@ endsnippet
 
 snippet uu "unter Umstaenden" w
 u. U.
+endsnippet
+
+snippet ( "(" w
+(${VISUAL}$0)
+endsnippet
+
+snippet { "{" w
+{
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet [ "[" w
+[${VISUAL}$0]
 endsnippet

@@ -7,9 +7,6 @@ endif
 
 set synmaxcol=200
 
-" Disable all blinking
-" set guicursor+=a:blinkon0
-
 " Prefer light version of a colorscheme
 set background=light
 

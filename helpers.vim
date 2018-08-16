@@ -71,21 +71,6 @@ endfunction
 "     " autocmd BufReadPost * :call BufferDeleteEmpty()
 " augroup END
 
-" argument: bufspec
-function! CheckTime(...) abort
-
-    let bufspec = ""
-    if a:0 != 0
-        let bufspec = a:1
-    endif
-
-    if BufferIsCommandLine()
-        return
-    endif
-
-    execute ":checktime " . bufspec
-endfunction
-
 function! BufferListedCount() abort
     let lastBuffer = bufnr('$')
     let listed = 0
@@ -483,7 +468,17 @@ function! RunCursorLine() abort
     call RunIntoBuffer(l:cmd)
 endfunction
 command! -nargs=0 RunCursorLine call RunCursorLine()
-nnoremap <silent><leader>el :RunCursorLine<cr>
+nnoremap <silent><leader>vl :RunCursorLine<cr>
+nnoremap <silent><leader>vx :call MyHelpersSourceFile()<cr>
+
+function! MyHelpersSourceFile() abort
+  let b:winview = winsaveview()
+  wall
+  source %
+  if exists('b:winview')
+    call winrestview(b:winview)
+  endif
+endfunction
 
 " Run current line as vim script
 function! RunCursorLineVim() abort

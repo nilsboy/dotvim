@@ -52,6 +52,7 @@ set all&
 
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
+nnoremap <silent> <leader>gK :execute 'WebWithFiletype ' . expand('<cword>')<cr>
 
 " Keep undo history after closing a file
 set undofile

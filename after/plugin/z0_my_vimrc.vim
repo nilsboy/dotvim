@@ -56,7 +56,7 @@ set iskeyword+=_,$,@,%,#,-
 
 " Don't make noise
 set noerrorbells
-set novisualbell
+set visualbell
 set t_vb=
 
 " assume fast terminal connection
@@ -119,6 +119,12 @@ command! -nargs=* RemoveNewlineBlocks
 
 " Deactivate gui cursor to fix nvim regression (2017-07-25)
 " (https://github.com/neovim/neovim/issues/7049)
+" (https://github.com/neovim/neovim/issues/6041)
+" Fixes 001b appearing on the command line
+" This does not help when running without config `-u NORC`.
+" (See ~/.bin/vi for a workaround)
+" Alacritty does not have this problem.
+" Newer gnome-terminal supposedly fixes this - currently running: 3.6.2.
 set guicursor=
 
 "### Undo and swap

@@ -1,4 +1,6 @@
 setlocal formatoptions=
+" setlocal formatoptions=tacqwn
+
 setlocal conceallevel=0
 
 if exists("b:MyMarkdownFtpluginLoaded")

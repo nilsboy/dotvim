@@ -32,8 +32,8 @@ vmap <leader> <nop>
 nnoremap <leader>vee :call VimEnvironment()<cr><esc>
 nnoremap <leader>veg :call DUMP(g:)<cr>
 
-nnoremap <silent><c-z> :silent wall<cr><c-z>
-inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
+" nnoremap <silent><c-z> :silent wall<cr><c-z>
+" inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
 
 " Save file as root
 command! -nargs=* WriteWithSudo :SudoWrite
@@ -49,16 +49,10 @@ command! -nargs=* WriteWithSudo :SudoWrite
 " nnoremap <leader>!a <C-o>
 " nnoremap <leader>!b <C-i>
 
-" jump list
+" jumplist
 " <c-i> is the same as <tab>
 nnoremap <c-u> <c-o>
 nnoremap <c-o> <c-i>
-
-" " Write all when leaving a tmux pane
-" nmap <silent><c-j> :silent wall<cr><c-j>
-" nmap <silent><c-k> :silent wall<cr><c-k>
-" nmap <silent><c-h> :silent wall<cr><c-h>
-" nmap <silent><c-l> :silent wall<cr><c-l>
 
 imap <c-h> <esc><c-h>
 imap <c-l> <esc><c-l>
@@ -264,4 +258,18 @@ sunmap m
 " nnoremap ' `
 " nnoremap ` '
 " nnoremap M '
+
+" augroup MyZ0MyMappingsAugroup
+"   autocmd!
+"   autocmd CursorHold * silent! :call MyVerbose()
+" augroup END
+
+" TODO: check restore position on open plugin - add keepjumps to skip adding
+" first line of file as a jump.
+
+" TODO:
+clearjumps
+function! MyVerbose() abort
+  redir => output | exec 'jumps' | redir END | cexpr output
+endfunction
 

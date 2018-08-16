@@ -1,3 +1,12 @@
+" FocusGained / FocusLost do not get triggert in TUI without workaround
+augroup MyReloadFilesOnChange
+  autocmd!
+  autocmd FocusLost,BufLeave,WinLeave,QuickFixCmdPre,CursorHold * :silent! wall
+  autocmd FocusGained,BufEnter,WinEnter,CursorMoved * silent! checktime
+augroup end
+noremap <silent> <c-z> :suspend<cr>:checktime<cr>
+
+finish
 " vim tip from
 "   http://vim.wikia.com/wiki/Have_Vim_check_automatically_if_the_file_has_changed_externally
 "
@@ -180,3 +189,19 @@ endfunction
 " always run function
 let autoreadargs={'autoread':1} 
 execute WatchForChanges("*",autoreadargs) 
+
+" argument: bufspec
+function! CheckTime(...) abort
+
+    let bufspec = ""
+    if a:0 != 0
+        let bufspec = a:1
+    endif
+
+    if BufferIsCommandLine()
+        return
+    endif
+
+    execute ":checktime " . bufspec
+endfunction
+

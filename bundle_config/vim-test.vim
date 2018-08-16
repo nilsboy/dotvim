@@ -19,12 +19,23 @@ function! MyTestStrategy(cmd)
   let arguments = join(cmds[1:])
   let compiler = fnamemodify(path, ':t')
   " call INFO('Using compiler: ' . compiler)
+  let g:makefilter = ''
   execute 'compiler! ' . compiler
-  execute 'silent! make! ' . arguments
-  execute 'cd ' . cwd
+  let &makeprg .= ' ' . arguments 
+  " . ' 2>&1'
+  " call INFO(g:makefilter)
+  if g:makefilter != ''
+    let &makeprg .= ' \| ' . g:makefilter
+  endif
+  " call INFO('g:makefilter:', g:makefilter)
   " call INFO('Running make ' . arguments)
+  " call INFO('&makeprg:', &makeprg)
+
+  " execute 'silent! make! ' . arguments . ' 2>&1 \| ' . g:makefilter
+  execute 'silent! make!' 
+  execute 'cd ' . cwd
   " call MyQuickfixRemoveWhitspace()
-  copen
+  cwindow
 endfunction
 
 let g:test#custom_strategies = {'MyTestStrategy': function('MyTestStrategy')}

@@ -72,6 +72,7 @@
 * https://github.com/mh21/errormarker.vim
 * vim-makery for managing your makeprgs:
   * https://github.com/igemnace/vim-makery
+  * might as well just use npm - this way it can be run on the console too
 * edit files in quickfix window:
   https://github.com/stefandtw/quickfix-reflector.vim
 * Highlight quickfix errors https://github.com/jceb/vim-hier

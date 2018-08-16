@@ -6,6 +6,10 @@ augroup MyKeepCursorPositionAutogroupOnSwitch
   autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 augroup END
 
+" :h last-position-jump*
 augroup MyKeepCursorPositionAugroupOnReopen
-  autocmd BufReadPost * if line("'\"") | exe "normal '\"" | endif
+     autocmd BufReadPost *
+         \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+         \ |   exe "normal! g`\""
+         \ | endif
 augroup END

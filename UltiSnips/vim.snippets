@@ -260,7 +260,7 @@ endif
 endsnippet
 
 snippet push "array push" b
-call add(${1:array}, ${2:item})
+call add(${1:array}, ${VISUAL}${2:item}$0)
 endsnippet
 
 snippet remove_array_entry "array remove at index" w
@@ -385,4 +385,16 @@ endsnippet
 
 snippet	cWORD "expand cWORD" w
 expand('<cWORD>')
+endsnippet
+
+snippet joinhash "joinhash" w
+call extend(${1:target}, ${2:source}$0)
+endsnippet
+
+snippet join "join" w
+join(${1:list}, ${2:sparator}$0)
+endsnippet
+
+snippet listlength "listlength" w
+len(${VISUAL}$0)
 endsnippet

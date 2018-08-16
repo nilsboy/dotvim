@@ -8,6 +8,9 @@ let g:sneak#prompt = 'sneak> '
 let g:sneak#use_ic_scs = 1
 let g:sneak#s_next = 0
 
+" exclude R as target label:
+let g:sneak#target_labels = ";sftunq/SFGHLTUNMQZ?0"
+
 " " 1-character enhanced 'f'
 " nmap f <Plug>Sneak_f
 " nmap F <Plug>Sneak_F
