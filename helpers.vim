@@ -72,19 +72,19 @@ endfunction
 " augroup END
 
 function! BufferListedCount() abort
-    let lastBuffer = bufnr('$')
-    let listed = 0
-    let i = 0
-    while i <= lastBuffer
-        let i = i + 1
-        if BufferIsSpecial() == 1
-          continue
-        endif
-        if buflisted(i) == 1
-            let listed = listed + 1
-        endif
-    endwhile
-    return listed
+  let lastBuffer = bufnr('$')
+  let listed = 0
+  let i = 0
+  while i <= lastBuffer
+    let i = i + 1
+    if BufferIsSpecial() == 1
+      continue
+    endif
+    if buflisted(i) == 1
+      let listed = listed + 1
+    endif
+  endwhile
+  return listed
 endfunction
 
 function! BufferIsSpecial() abort
@@ -95,97 +95,97 @@ function! BufferIsSpecial() abort
 endfunction
 
 function! BufferIsCommandLine() abort
-    if bufname("%") == '[Command Line]'
-        return 1
-    endif
-    return 0
+  if bufname("%") == '[Command Line]'
+    return 1
+  endif
+  return 0
 endfunction
 
 function! BufferIsNetrw() abort
-    if &filetype == 'netrw'
-        return 1
-    endif
-    return 0
+  if &filetype == 'netrw'
+    return 1
+  endif
+  return 0
 endfunction
 
 function! BufferIsUnnamed() abort
-    if empty(bufname("%"))
-        return 1
-    else
-        return 2
-    endif
+  if empty(bufname("%"))
+    return 1
+  else
+    return 2
+  endif
 endfunction
 
 function! BufferIsEmpty() abort
-    if line('$') == 1 && getline(1) == '' 
-        return 1
-    else
-        return 0
-    endif
+  if line('$') == 1 && getline(1) == ''
+    return 1
+  else
+    return 0
+  endif
 endfunction
 
 function! BufferCanWrite() abort
-    return &write
+  return &write
 endfunction
 
 function! BufferIsLast() abort
 
-    let lastBuffer = bufnr('$')
+  let lastBuffer = bufnr('$')
 
-    let listed = 0
-    let i = 1
-    while i <= lastBuffer
+  let listed = 0
+  let i = 1
+  while i <= lastBuffer
 
-        if buflisted(i) == 1
-            let listed = listed + 1
-        endif
+    if buflisted(i) == 1
+      let listed = listed + 1
+    endif
 
-        if listed > 1
-            return 0
-        endif
+    if listed > 1
+      return 0
+    endif
 
-        let i = i + 1
+    let i = i + 1
 
-    endwhile
+  endwhile
 
-    return 1
+  return 1
 
 endfunction
 
 function! BufferFindByFiletype() abort
 
-    let lastBuffer = bufnr('$')
+  let lastBuffer = bufnr('$')
 
-    let listed = 0
-    let i = 1
-    while i <= lastBuffer
+  let listed = 0
+  let i = 1
+  while i <= lastBuffer
 
-        if buflisted(i) == 1
-            let listed = listed + 1
-        endif
+    if buflisted(i) == 1
+      let listed = listed + 1
+    endif
 
-        if listed > 1
-            return 0
-        endif
+    if listed > 1
+      return 0
+    endif
 
-        let i = i + 1
+    let i = i + 1
 
-    endwhile
+  endwhile
 
-    return 1
+  return 1
 
 endfunction
 
 function! BufferFindByName(name) abort
-    let lastBuffer = bufnr('$')
-    let i = 1
-    while i <= lastBuffer
-        if bufname(i) =~ fnameescape(a:name)
-          return i
-        endif
-        let i = i + 1
-    endwhile
-    return 0
+  let lastBuffer = bufnr('$')
+  let i = 1
+  while i <= lastBuffer
+    if bufname(i) =~ fnameescape(a:name)
+      return i
+    endif
+    let i = i + 1
+  endwhile
+  return 0
 endfunction
 
 function! BufferFindNextByName(name, current) abort
@@ -197,23 +197,23 @@ function! BufferFindPreviousByName(name, current) abort
 endfunction
 
 function! BufferFindAnotherByName(name, current, direction) abort
-    let lastBuffer = bufnr('$')
-    let i = bufnr(a:current)
-    while i * a:direction <= lastBuffer
-        let name = bufname(i)
+  let lastBuffer = bufnr('$')
+  let i = bufnr(a:current)
+  while i * a:direction <= lastBuffer
+    let name = bufname(i)
 
-        if name == a:current
-          let i = i + a:direction
-          continue
-        endif
+    if name == a:current
+      let i = i + a:direction
+      continue
+    endif
 
-        if name =~ fnameescape(a:name)
-          return i
-        endif
+    if name =~ fnameescape(a:name)
+      return i
+    endif
 
-        let i = i + a:direction
-    endwhile
-    return 0
+    let i = i + a:direction
+  endwhile
+  return 0
 endfunction
 
 function! BufferSwitchToNextByName(name) abort
@@ -234,159 +234,23 @@ function! BufferSwitchToPreviousByName(name) abort
   execute ":buffer " . unite_buffer
 endfunction
 
-command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
-function! BufferCreateTemp(...) abort
-    execute ":new /tmp/" . split(a:1, " ")[0]
-    normal ggdG
-    setlocal buftype=nowrite
-endfunction
-
-function! RedirNew(name, command) abort
-    call BufferCreateTemp(a:name)
-    silent execute ":Redir :" . a:command
-endfunction
-command! -nargs=+ RedirNew call RedirNew("<args>")
-
-command! -nargs=+ Redir call Redir("<args>")
-function! Redir(command) abort
-    call RedirIntoCurrentBuffer(a:command)
-    normal ggdddd
-endfunction
-
-" TODO checkout :Verbose
-function! RedirIntoCurrentBuffer(command) abort
-
-    let output = ""
-    redir => output
-
-    " Execute the specified command
-    try
-        silent execute a:command
-    catch
-        put='command failed'
-    finally
-        redir END
-
-        " Place the output in the destination buffer.
-        silent put=output
-    endtry
-
-endfunction
-
-command! -nargs=* Run call Run(<f-args>)
-function! Run(...) abort
-    let buffer_name = a:1
-    let command = join(a:000[1:])
-    call INFO('Running ' . command)
-    silent! execute ":e " . buffer_name
-    " normal! ggdG
-    setlocal buftype=nowrite
-    silent execute ":r! " . command
-endfunction
-
-" Checkout: https://github.com/thinca/vim-quickrun
-function! RunIntoBuffer(...) abort
-
-    silent wall
-
-    let buffer_name = a:1
-    let buffer_name = substitute(buffer_name, '[^a-zA-Z0-9_\-/\.]', "", "g")
-    if buffer_name == ""
-        let buffer_name = "cmd"
-    endif
-    let buffer_name = buffer_name . ".output"
-
-    call BufferCreateTemp(buffer_name)
-    normal die
-    only
-
-    let command = join(a:000)
-    " let command = substitute(command, ';', "\\\\;", "g")
-    " silent! execute ":r!run-and-capture 'echo " . command . " | bash'"
-    let command = shellescape(command)
-    " echom "Running command: " . command
-    silent! execute ":r!run-and-capture " . command
-    normal ggddG
-
-    " %!html-strip
-
-    " Remove broken linebreak
-    %s/\r//ge
-
-    " Hack: remove duplicate perl line number
-    " %s/\v,  line \d+//ge
-
-    " Convert ansi colors
-    " Screws with color conversion of colorscheme
-    " AnsiEsc
-    " fix invisible ansi white
-    " hi ansiWhite ctermfg=black
-
-    setlocal wrap
-
-    " TODO execute "/" . command
-
-    " Seems to break CSApprox vim colors:
-    " AnsiEsc
-
-    setlocal syntax=txt
-
-    " autocmd BufEnter <buffer> :AnsiEsc
-    " autocmd BufEnter <buffer> hi ansiWhite ctermfg=black
-
-endfunction
-command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
-
-" Display all kinds of vim environment information
-function! VimEnvironment() abort
-    call BufferCreateTemp("VimEnv")
-    for command in g:commands
-        put='### ' . command . ' #############################'
-        call RedirIntoCurrentBuffer(command)
-        put=''
-    endfor
-    normal ggdd
-    only
-endfunction
-
-" Run line under cursor as vim script or shell command depending on leading :
-function! RunCursorLine() abort
-    let cmd = GetRunableCursorLine()
-    call RunIntoBuffer(cmd)
-endfunction
-command! -nargs=0 RunCursorLine call RunCursorLine()
-nnoremap <silent><leader>vl :RunCursorLine<cr>
-
-function! MyHelpersSourceFile() abort
-  let b:winview = winsaveview()
+let g:MyHelpersLastVimCommand = 'echo "Specify vim command."'
+function! MyHelpersRunVim(cmd)
+  let cmd = a:cmd
+  let cmd = substitute(cmd, '\v^["#/ ]+', "", "")
+  let g:MyHelpersLastVimCommand = cmd
   wall
-  silent! source %
-  source %
-  if exists('b:winview')
-    call winrestview(b:winview)
-  endif
+  let b:winview = winsaveview()
+  Verbose execute cmd
 endfunction
-nnoremap <silent><leader>vx :call MyHelpersSourceFile()<cr>
+nnoremap <silent> <leader>vef :call MyHelpersRunVim('source ' . expand('%:p'))<cr>
+nnoremap <silent> <leader>vel :call MyHelpersRunVim(getline("."))<cr>
+nnoremap <silent> <leader>vee :call MyHelpersRunVim(g:MyHelpersLastVimCommand)<cr>
 
-" Run current line as vim script
-function! RunCursorLineVim() abort
-    let cmd = GetRunableCursorLine()
-    execute cmd
-endfunction
-nnoremap <silent><leader>ev :call RunCursorLineVim()<cr>
-nnoremap <silent> <leader>ee :execute g:MyLastCommand<cr>
-
-function! RunCursorLineVimVerbose() abort
-    let cmd = GetRunableCursorLine()
-    execute 'Verbose ' . cmd
-endfunction
-nnoremap <silent><leader>eV :call RunCursorLineVimVerbose()<cr>
-
-function! GetRunableCursorLine() abort
-    let cmd = getline(".")
-    let cmd = substitute(cmd, '\v^["#/ ]+', "", "")
-    return cmd
-endfunction
+" augroup MyZ0MyMappingsAugroup
+"   autocmd!
+"   autocmd CursorHold * silent! :call MyHelpersRunVim('jumps')
+" augroup END
 
 function! EditFileInBufferDir(...) abort
   let dir = expand("%:h")
@@ -397,15 +261,15 @@ endfunction
 command! -nargs=* E call EditFileInBufferDir(<f-args>)
 
 function! helpers#touch(path) abort
-    if empty(a:path)
-        throw "Specify non empty path to create"
-    endif
-    let path = fnamemodify(a:path, ':p')
-    let dir = fnamemodify(a:path, ':p:h')
-    call Mkdir(dir, 'p')
-    if IsNeoVim()
-      call writefile([], path, 'a')
-    endif
+  if empty(a:path)
+    throw "Specify non empty path to create"
+  endif
+  let path = fnamemodify(a:path, ':p')
+  let dir = fnamemodify(a:path, ':p:h')
+  call Mkdir(dir, 'p')
+  if IsNeoVim()
+    call writefile([], path, 'a')
+  endif
 endfunction
 
 if $DEBUG
@@ -436,38 +300,32 @@ endfunction
 
 " dump any vim structure to json
 function! _DUMP(input) abort
-    let json = ''
-    if type(a:input) == type({})
-        let parts = copy(a:input)
-        call map(parts, '"\"" . escape(v:key, "\"") . "\":" . _DUMP(v:val)')
-        let json .= "{" . join(values(parts), ",") . "}"
-    elseif type(a:input) == type([])
-        let parts = map(copy(a:input), '_DUMP(v:val)')
-        let json .= "[" . join(parts, ",") . "]"
-    elseif type(a:input) == 2
-      " TODO: how to convert funcrefs to string?
-    else
-        let json .= '"'.escape(a:input, '"').'"'
-    endif
-    return json
+  let json = ''
+  if type(a:input) == type({})
+    let parts = copy(a:input)
+    call map(parts, '"\"" . escape(v:key, "\"") . "\":" . _DUMP(v:val)')
+    let json .= "{" . join(values(parts), ",") . "}"
+  elseif type(a:input) == type([])
+    let parts = map(copy(a:input), '_DUMP(v:val)')
+    let json .= "[" . join(parts, ",") . "]"
+  elseif type(a:input) == 2
+    " TODO: how to convert funcrefs to string?
+  else
+    let json .= '"'.escape(a:input, '"').'"'
+  endif
+  return json
 endfunction
-
-" Copy current buffer to a new file in the buffers directory
-function! Copy(dst) abort
-  silent execute 'saveas %:p:h/' . a:dst
-endfunction
-command! -nargs=* Copy call Copy(<f-args>)
 
 " Vim's writefile does not support the append (a) flag (2017-02-21)
 " Vim's mkdir complains if directory alread exists (2017-02-21)
 function! IsNeoVim() abort
-    redir => s
-    silent! version
-    redir END
-    return matchstr(s, 'NVIM') == 'NVIM'
+  redir => s
+  silent! version
+  redir END
+  return matchstr(s, 'NVIM') == 'NVIM'
 endfunction
 
-" For vim compatibility 
+" For vim compatibility
 " Vim complains if the directory already exists (2017-02-20)
 function! Mkdir(dir, ...) abort
   if glob(a:dir) != ''
@@ -477,35 +335,35 @@ function! Mkdir(dir, ...) abort
 endfunction
 
 " Normalize whitespace in a string...
-function! TrimWS (str)
-    " Remove whitespace fore and aft...
-    let trimmed = substitute(a:str, '^\s\+\|\s\+$', '', 'g')
+function! TrimWS(str)
+  " Remove whitespace fore and aft...
+  let trimmed = substitute(a:str, '^\s\+\|\s\+$', '', 'g')
 
-    " Then condense internal whitespaces...
-    return substitute(trimmed, '\s\+', ' ', 'g')
+  " Then condense internal whitespaces...
+  return substitute(trimmed, '\s\+', ' ', 'g')
 endfunction
 
 " Reduce a range of lines to only the unique ones, preserving order...
 function! Uniq (...) range
-    " Ignore whitespace differences, if asked to...
-    let ignore_ws_diffs = len(a:000)
+  " Ignore whitespace differences, if asked to...
+  let ignore_ws_diffs = len(a:000)
 
-    " Nothing unique seen yet...
-    let seen = {}
-    let uniq_lines = []
+  " Nothing unique seen yet...
+  let seen = {}
+  let uniq_lines = []
 
-    " Walk through the lines, remembering only the hitherto unseen ones...
-    for line in getline(a:firstline, a:lastline)
-        let normalized_line = '>' . (ignore_ws_diffs ? TrimWS(line) : line)
-        if !get(seen,normalized_line)
-            call add(uniq_lines, line)
-            let seen[normalized_line] = 1
-        endif
-    endfor
+  " Walk through the lines, remembering only the hitherto unseen ones...
+  for line in getline(a:firstline, a:lastline)
+    let normalized_line = '>' . (ignore_ws_diffs ? TrimWS(line) : line)
+    if !get(seen,normalized_line)
+      call add(uniq_lines, line)
+      let seen[normalized_line] = 1
+    endif
+  endfor
 
-    " Replace the range of original lines with just the unique lines...
-    exec a:firstline . ',' . a:lastline . 'delete'
-    call append(a:firstline-1, uniq_lines)
+  " Replace the range of original lines with just the unique lines...
+  exec a:firstline . ',' . a:lastline . 'delete'
+  call append(a:firstline-1, uniq_lines)
 endfunction
 
 function! helpers#createUniqueSignId() abort
@@ -565,7 +423,7 @@ function! GetQuickfixBufferNumber() abort
       return 0
     endif
     return qflist[0].bufnr
-	endfor
+  endfor
 endfunction
 
 " " TODO:
@@ -576,7 +434,7 @@ endfunction
 "       return 0
 "     endif
 "     return blist[0].bufnr
-" 	endfor
+"   endfor
 " endfunction
 
 function! MyHelpersQuickfixIsOpen() abort
@@ -590,7 +448,7 @@ function! GetLoclistBufferNumber() abort
       return 0
     endif
     return qflist[0].bufnr
-	endfor
+  endfor
 endfunction
 
 function! BufferIsQuickfix(...) abort
@@ -715,10 +573,6 @@ function! MyBufferIsVerySpecial(bufnr) abort
   return bufname(a:bufnr) =~ '\v^__.+__$'
 endfunction
 
-" function! MyBufferIsScratch(bufnr) abort
-"   return bufname(a:bufnr) == ''
-" endfunction
-
 " TODO: remap
 nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
@@ -838,7 +692,7 @@ function! Web(...) abort
 endfunction
 " SEE ALSO: https://github.com/kabbamine/zeavim.vim
 
-" https://stackoverflow.com/a/1534347 
+" https://stackoverflow.com/a/1534347
 function! MyHelpersGetVisualSelection()
   try
     let a_save = @a
@@ -873,13 +727,3 @@ function! MyHelpersShortenPath(str, max) abort
   endif
   return newStr
 endfunction
-
-" TODO:
-" clearjumps
-function! MyVerbose() abort
-  redir => output | exec 'jumps' | redir END | cexpr output
-endfunction
-" augroup MyZ0MyMappingsAugroup
-"   autocmd!
-"   autocmd CursorHold * silent! :call MyVerbose()
-" augroup END

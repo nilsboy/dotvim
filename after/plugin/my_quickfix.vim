@@ -251,36 +251,19 @@ nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 let g:lastCommand = 'echo "Specify command"'
 function! MyQuickfixRun(...) abort
   let saved_cursor = getcurpos()
-  " TODO: limit to myrun
-  NeomakeCancelJobs
-  " prevent vim from removing leading space by replacing it with special space (utf8 2001)
-  " let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/\x{2001}/g'"
-  let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/ /g'"
-  let g:lastCommand = cmd
+  let &l:makeprg = join(a:000) . ' 2>&1 '
+  let &l:errorformat = '%f:%l:%c:%m,%f'
+  let g:lastCommand = &l:makeprg
   silent wall
-  let g:neomake_myrun_maker = MyQuickfixToMaker(
-        \ cmd,
-        \ '%f:%l:%c:%m,%f')
-  call setpos('.', saved_cursor)
-  execute 'Neomake! myrun'
+  silent! make!
+  copen
   call setpos('.', saved_cursor)
 endfunction
 command! -bang -nargs=1 Run call MyQuickfixRun(<f-args>)
 nnoremap <silent> <leader>ef :call MyQuickfixRun(expand('%:p'))<cr>
+nnoremap <silent> <leader>ei :call MyQuickfixRun(input('Command: '))<cr>
 nnoremap <silent> <leader>el :call MyQuickfixRun(substitute(getline('.'), '\v^["#/ ]+', "", ""))<cr>
 nnoremap <silent> <leader>ee :call MyQuickfixRun(g:lastCommand)<cr>
-nnoremap <silent> <leader>ep :NeomakeListJobs<cr>
-
-function! MyQuickfixToMaker(cmd, errorformat) abort
-  let cmd = a:cmd
-  let exe = substitute(cmd, '\s.*', '', 'g')
-  let args = substitute(cmd, '^\w\+\s*', '', 'g')
-  return {
-        \ 'exe' : exe,
-        \ 'args': args,
-        \ 'errorformat': a:errorformat
-        \ }
-endfunction
 
 command! -nargs=* MyQuickfixDump call MyQuickfixDump (<f-args>)
 function! MyQuickfixDump(...) abort

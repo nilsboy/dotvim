@@ -21,7 +21,7 @@ function! MyBrowser() abort
             let url = "https://duckduckgo.com/html/?q=" . url
         endif
     endif
-    silent! :execute ":RunIntoBuffer elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\" &"
+    silent! :execute ":Verbose elinks -dump -dump-width 80 -no-numbering -no-references -no-connect \"" . url . "\" &"
     normal gg
 endfunction
 
