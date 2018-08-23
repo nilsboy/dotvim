@@ -10,6 +10,11 @@ setlocal nowrap
 
 execute &cmdwinheight . 'wincmd _'
 
+nnoremap <silent> <buffer> <bs> :call MyQuickfixFormatToggle()<cr>
+
+nmap <buffer> <c-u> <esc><c-u>
+nmap <buffer> <c-o> <esc><c-o>
+
 if BufferIsQuickfix()
   nnoremap <silent> <c-n> :silent! cnext<cr>
   nnoremap <silent> <c-p> :silent! cprevious<cr>

@@ -3,15 +3,32 @@
 " TODO: checkout jsctags generator using tern
 " (https://github.com/ramitos/jsctags)
 
+" Get source of core node modules: process.binding("natives").assert
+
 " support module filenames
 setlocal iskeyword+=-
 
-" https://www.reddit.com/r/vim/comments/65vnrq/coworkers_criticize_my_workflow_for_lacking/dgdm8vj/?st=j1ndnrm3&sh=5b3bc21a
-setlocal suffixesadd+=.js
-setlocal include=^\\s*[^\/]\\+\\(from\\\|require(['\"`]\\)
+setlocal suffixesadd=.js,.node,.json
+let &l:include = '\v<(require\([''"]|from\s+[''"])'
+let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+)'
 
-" NOTE: the keyword always has to match after &define
-let &l:define = '\v(class|function|Object.defineProperty|\.prototype.|const)'
+setlocal path+=node_modules,~/src/node/lib
+
+" This does what &include by itself should do - but still works a lot
+" better!?!
+function! MyJavascriptIncluedExpr() abort
+  let wanted = v:fname
+  for dir in split(&path, ',')
+    for suffix in split(&suffixesadd, ',')
+      let file = dir . '/' . wanted . suffix
+      if filereadable(file)
+        return file
+      endif
+    endfor
+  endfor
+  return wanted
+endfunction
+set includeexpr=MyJavascriptIncluedExpr()
 
 setlocal omnifunc=lsp#omni#complete
 
@@ -40,11 +57,6 @@ if exists("b:MyJavascriptFtpluginLoaded")
   finish
 endif
 let b:MyJavascriptFtpluginLoaded = 1
-
-" augroup MyJavascriptAugroupAddTypeMarker
-"   autocmd!
-"   autocmd BufLeave <buffer> normal! mJ
-" augroup END
 
 " from vim-nodejs-errorformat: Error: bar at Object.foo [as _onTimeout]
 " (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
@@ -125,10 +137,6 @@ let g:neoformat_javascript_my_formatter = {
       \ 'exe': g:vim.contrib.bin.dir . 'my_javascript_formatter'
       \ }
 
-" let g:syntastic_javascript_checkers = ['eslint']
-
-" let g:neomake_javascript_enabled_makers = ['eslint']
-
 nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>
 function! MyJavascriptConvertFromPerl()
   %s/sub //g
@@ -142,31 +150,3 @@ function! MyJavascriptConvertFromPerl()
   %s/\:\://g
   %s/^\s*#/\/\//g
 endfunction
-
-" function! MyJavascriptSetTestFilename() abort
-"   let b:testFile = substitute(expand('%'), 'src', 'test', 'g')
-"   let b:testFile = substitute(b:testFile, '\.js', '.test.js', 'g')
-"   let b:testFile = fnamemodify(b:testFile, ':p')
-" endfunction
-" call MyJavascriptSetTestFilename()
-
-" function! MyJavascriptSetMainFilename() abort
-"   let b:mainFile = expand('%')
-"   let b:mainFile = substitute(b:mainFile, '\.test\.js', '.js', 'g')
-"   let b:mainFile = substitute(b:mainFile, 'test', 'src', 'g')
-"   let b:mainFile = fnamemodify(b:mainFile, ':p')
-" endfunction
-" call MyJavascriptSetMainFilename()
-
-" " TODO
-" function! MyJavascriptFixCoreFileLocationInQuickfix(entry) abort
-"   let filename = bufname(i.bufnr)
-"   " Non-existing file in the quickfix list, assume a core file
-"   if filereadable(filename)
-"     return
-"   endif
-"   " Load the node.js core file (thanks @izs for pointing this out!)
-"   silent! execute 'read !node -e "console.log(process.binding(\"natives\").' expand('%:r') ')"'
-"   " Delete the first line, always empty for some reason
-"   execute ':1d'
-" endfunction

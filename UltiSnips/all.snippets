@@ -15,34 +15,34 @@ endglobal
 
 ### Brackets
 
-# snippet '(^|\s+)(\(|r)' "round brackets / parens" r
-snippet '\(' "round brackets / parens" r
-(${VISUAL}$0)
-endsnippet
+# # snippet '(^|\s+)(\(|r)' "round brackets / parens" r
+# snippet '\(' "round brackets / parens" r
+# (${VISUAL}$0)
+# endsnippet
 
-snippet "(^|\s*)({|c)" "curly brackets / braces" r
-`!p snip.rv = match.group(1)`{${VISUAL}$0}
-endsnippet
+# snippet "(^|\s*)({|c)" "curly brackets / braces" r
+# `!p snip.rv = match.group(1)`{${VISUAL}$0}
+# endsnippet
 
-snippet '(^|\s+)(\[|s)' "square brackets" r
-`!p snip.rv = match.group(1)`[${VISUAL}$1]$0
-endsnippet
+# snippet '(^|\s+)(\[|s)' "square brackets" r
+# `!p snip.rv = match.group(1)`[${VISUAL}$1]$0
+# endsnippet
 
-snippet '(^|\s+)(\<|a)' "angle brackets / chevrons" r
-`!p snip.rv = match.group(1)`<${VISUAL}$1>$0
-endsnippet
+# snippet '(^|\s+)(\<|a)' "angle brackets / chevrons" r
+# `!p snip.rv = match.group(1)`<${VISUAL}$1>$0
+# endsnippet
 
-snippet " "quote" w
-"${VISUAL}$1"$0
-endsnippet
+# snippet " "quote" w
+# "${VISUAL}$1"$0
+# endsnippet
 
-snippet ' "single quote" w
-'${VISUAL}$1'$0
-endsnippet
+# snippet ' "single quote" w
+# '${VISUAL}$1'$0
+# endsnippet
 
-snippet ` "backtick" w
-\`${VISUAL}$1\`$0
-endsnippet
+# snippet ` "backtick" w
+# \`${VISUAL}$1\`$0
+# endsnippet
 
 # TODO: check if existing quotes are balanced
 # snippet '(^[^"]+)"' "ha" rA
@@ -65,35 +65,35 @@ endsnippet
 
 # possible alternative :h langmap
 
-snippet "(u|ü)+" "u|ü toggle" r
+snippet "(u|ü)" "u|ü toggle" r
 `!p snip.rv = toggle('u|ü', match.group(1))`
 endsnippet
 
-snippet "(U|Ü)+" "U|Ü toggle" r
+snippet "(U|Ü)" "U|Ü toggle" r
 `!p snip.rv = toggle('U|Ü', match.group(1))`
 endsnippet
 
-snippet "(a|ä)+" "a|ä toggle" r
+snippet "(a|ä)" "a|ä toggle" r
 `!p snip.rv = toggle('a|ä', match.group(1))`
 endsnippet
 
-snippet "(A|Ä)+" "A|Ä toggle" r
+snippet "(A|Ä)" "A|Ä toggle" r
 `!p snip.rv = toggle('A|Ä', match.group(1))`
 endsnippet
 
-snippet "(o|ö)+" "o|ö toggle" r
+snippet "(o|ö)" "o|ö toggle" r
 `!p snip.rv = toggle('o|ö', match.group(1))`
 endsnippet
 
-snippet "(O|Ö)+" "O|Ö toggle" r
+snippet "(O|Ö)" "O|Ö toggle" r
 `!p snip.rv = toggle('O|Ö', match.group(1))`
 endsnippet
 
-snippet "(ss|ß)+" "ss|ß toggle" r
+snippet "(ss|ß)" "ss|ß toggle" r
 `!p snip.rv = toggle('ss|ß', match.group(1))`
 endsnippet
 
-snippet "(eur|EUR|€)+" "eur|EUR|€ toggle" r
+snippet "(eur|EUR|€)" "eur|EUR|€ toggle" r
 `!p snip.rv = toggle('eur|EUR|€', match.group(1))`
 endsnippet
 

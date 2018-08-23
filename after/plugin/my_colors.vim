@@ -40,6 +40,8 @@ function! MyColorsColorschemeCleanup() abort
   highlight TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
   highlight TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
 
+  highlight QuickFixLine ctermfg=238 ctermbg=153 cterm=NONE
+
   highlight CursorLine   ctermbg=254 ctermfg=NONE
 
   highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE

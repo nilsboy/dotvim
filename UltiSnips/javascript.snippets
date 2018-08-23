@@ -77,7 +77,7 @@ const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)
 endsnippet
 
 snippet i "import" b
-import `!p snip.rv = toMethodCase(t[1])` hahahaha from "$1"
+import `!p snip.rv = toMethodCase(t[1])` from "$1"
 endsnippet
 
 snippet ic "import class" b
@@ -123,7 +123,7 @@ const fs = require(\`fs-extra\`)
 endsnippet
 
 snippet readfile "readfile" w
-const ${2:data} = fs.readFileSync(\`${VISUAL}$0\`).toString()
+fs.readFileSync(\`${VISUAL}$0\`).toString()
 endsnippet
 
 snippet writefile "writefile" w

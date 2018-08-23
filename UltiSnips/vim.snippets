@@ -1,3 +1,6 @@
+# TODO: add mappings for javascript expressions
+# https://w0rp.com/blog/post/vim-script-for-the-javascripter/
+
 global !p
 
 def toCamelCase(v):
@@ -175,9 +178,11 @@ endwhile
 endsnippet
 
 snippet exists "exists" w
-if exists('${1:b:var}')
-  let $1 = $0
-endif
+exists('${VISUAL}${1:b:var}')
+endsnippet
+
+snippet existsFile "existsFile" w
+filereadable($0)
 endsnippet
 
 snippet get "let with default" w
@@ -260,7 +265,7 @@ endif
 endsnippet
 
 snippet push "array push" b
-call add(${1:array}, ${VISUAL}${2:item}$0)
+call add(${1:array}, ${VISUAL}${0:item})
 endsnippet
 
 snippet remove_array_entry "array remove at index" w
@@ -388,13 +393,26 @@ expand('<cWORD>')
 endsnippet
 
 snippet joinhash "joinhash" w
-call extend(${1:target}, ${2:source}$0)
+call extend(${1:target}, ${2:source})
 endsnippet
 
 snippet join "join" w
-join(${1:list}, ${2:sparator}$0)
+join(${1:list}, ${2:separator}$0)
+endsnippet
+
+snippet split "split" w
+split(${1:src}, '${0:pattern}')
 endsnippet
 
 snippet listlength "listlength" w
 len(${VISUAL}$0)
+endsnippet
+
+snippet appendToFile "appendToFile" b
+call writefile(${1:list of lines}, ${0:filename}, 'a')
+endsnippet
+
+snippet match "match" w
+let ${1:result} = []
+call substitute(${2:source}, ${0:pattern}, '\=add($1, submatch(0))', 'g')
 endsnippet

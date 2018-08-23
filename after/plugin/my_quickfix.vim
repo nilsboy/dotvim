@@ -10,7 +10,7 @@ augroup END
 
 function! MyQuickfixShowSignsColumn() abort
   execute 'execute ":sign place 9999 line=1
-      \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
+        \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
 endfunction
 
 nnoremap <silent> <tab> :copen<cr>
@@ -37,7 +37,7 @@ let g:MyQuickfixSearchLimit = '500'
 
 command! -bang -nargs=1 Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
-  let l:save_pos = getcurpos() 
+  let l:save_pos = getcurpos()
   let term = get(a:options, 'term', '')
   let find = get(a:options, 'find', '1')
   let grep = get(a:options, 'grep', '1')
@@ -48,21 +48,30 @@ function! MyQuickfixSearch(options) abort
   let ask = get(a:options, 'ask', '0')
   let selection = get(a:options, 'selection', '0')
   let wordBoundary = get(a:options, 'wordBoundary', '0')
+  let title = get(a:options, 'title', '')
+  let strict = 0
 
   if selection
-    let term = '\Q' . MyHelpersGetVisualSelection() . '\E'
+    let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g') 
+    let strict = 1
   elseif ask
     let term = input('Search: ')
   endif
 
   if exists('a:options["expand"]')
     let term = expand(a:options['expand'])
+    let strict = 1
+  endif
+
+  " apparently you can not work-bind non-word characters
+  let isWordBoundable = 0
+  if term =~ '\v^\w' && term =~ '\v\w$' 
+    let isWordBoundable = 1
   endif
 
   " fuzzy search for most case variants and plurals
   if fuzzy
     let words = split(term, ' +')
-    let finalTerms = []
     let variants = []
     for word in words
       call add(variants, word)
@@ -70,23 +79,26 @@ function! MyQuickfixSearch(options) abort
       call add(variants, substitute(word, '$', 's', 'gi'))
       call add(variants, substitute(word, 'y$', 'ies', 'gi'))
       call add(variants, substitute(word, 'ies$', 'y', 'gi'))
-      call add(finalTerms, '(' . join(variants, '|') . ')')
     endfor
     let words = copy(variants)
     for word in words
-      call add(variants, substitute(word, '[-_]+', '.', 'g'))
-      call add(variants, substitute(word, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1[\s\_\-]{0,1}\l\2', 'g'))
+      call add(variants, substitute(word, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.{0,1}\l\2', 'g'))
+    endfor
+    let words = copy(variants)
+    let variants = []
+    for word in words
+      call add(variants, substitute(word, '\v[-_]+', '.{0,1}', 'g'))
     endfor
     let term = '(' . join(uniq(sort(variants)), '|') . ')+'
   endif
 
-  if wordBoundary
-    let term = '\b' . term . '\b'
+  if strict && ! fuzzy
+    let term = '\Q' . term . '\E'
   endif
 
-  " call INFO('term:', term)
-
-  let filenameTerm = term
+  if wordBoundary && isWordBoundable
+    let term = '\b' . term . '\b'
+  endif
 
   let project_dir = FindRootDirectory()
   if project_dir == ''
@@ -95,9 +107,7 @@ function! MyQuickfixSearch(options) abort
   let path = get(a:options, 'path', project_dir)
   let path = fnamemodify(path, ':p')
 
-  " force path to be ralative in quickfix display
-  " execute 'lcd' path
-
+  let filenameTerm = term
   if matchFilenameOnly
     let filenameTerm = '\/.*' . term . '[^/]*$'
   else
@@ -126,63 +136,62 @@ function! MyQuickfixSearch(options) abort
     let findprg .= ' | sort-by-file-modification | tac '
   else
     let findprg .= ''
-        \ . ' | sort '
-        \ . ' | sort-by-path-depth '
-        \ . ' | head-warn ' . limit
+          \ . ' | sort '
+          \ . ' | sort-by-path-depth '
+          \ . ' | head-warn' . limit
   endif
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' /dev/null'
-        \ . ' | head-warn ' . limit
+        \ . ' | head-warn' . limit
 
-  let makers = 'find'
-  if term != ''
-    if grep != '0'
-      " let makers .= ' delimiter grep'
-      let makers .= ' grep'
+  let tempfile = tempname()
+  call writefile([], tempfile)
+
+  if $DEBUG
+    call writefile([tempfile . ':0:0:tempfile'], tempfile, 'a')
+    if find
+      call writefile(['/dev/null:0:0:findprg: ' . findprg], tempfile, 'a')
+    endif
+    if grep
+      call writefile(['/dev/null:0:0:grepprg: ' . grepprg], tempfile, 'a')
     endif
   endif
 
-  let MyErrorformat = '%f:%l:%c:%m,%f:%l%m,%f  %l%m,%f'
-  let g:neomake_delimiter_maker = MyQuickfixToMaker('echo',
-        \ MyErrorformat)
   if find
-    let g:neomake_find_maker = MyQuickfixToMaker(findprg,
-          \ MyErrorformat)
+    call system(findprg . '>> ' . tempfile)
   endif
   if grep
-    let g:neomake_grep_maker = MyQuickfixToMaker(grepprg,
-          \ MyErrorformat)
+    call system(grepprg . '>> ' . tempfile)
   endif
 
-  let findprg = substitute(findprg, '|', '\\|', 'g')
-  let grepprg = substitute(grepprg, '|', '\\|', 'g')
+  " NOTE: semicolon seem to trigger a redirect into a vim tempfile.
+  " let &l:makeprg = findprg . '\; ' . grepprg
+  " make!
 
-  " call INFO('findprg:', findprg)
-  " call INFO('grepprg:', grepprg)
-
-  call cursor(l:save_pos[1:])
+  if term != ''
+    let title = term
+  endif
+  if title != ''
+    let title = 'Search for: ' . title
+  endif
 
   " let &l:errorformat = '%f:%l:%c:%m,%f:%l%m,%f  %l%m,%f'
-  " let &l:makeprg = findprg . '\; ' . grepprg
-  " let &l:makeprg = grepprg
-  " let &l:makeprg = findprg 
-
-  " call INFO('Running: ' . &makeprg . ' ###')
-
-  " make!
-  " copen
-
-  execute 'Neomake! ' . makers
+  let &l:errorformat = '%f:%l:%c:%m,%f,%m'
+  execute 'cgetfile ' . tempfile
+  call MyQuickfixSetTitle(title)
+  call cursor(l:save_pos[1:])
+  copen
 endfunction
 
 let g:MyQuickfixAllSearchOptions = []
 function! MyQuickfixAddMappings(key, options) abort
   let options = [
-        \ { 'key': 'f' },
+        \ { 'key': 'f' , 'title': '<all files>', },
         \ { 'key': 'i', 'ask': 1, },
-        \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1 },
-        \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1 },
+        \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
+        \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
+        \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1, },
         \ { 'key': 'l', 'expand': '<cword>', },
         \ { 'key': 'L', 'expand': '<cWORD>', },
         \ { 'key': 'r', 'orderBy': 'recent', },
@@ -194,9 +203,9 @@ function! MyQuickfixAddMappings(key, options) abort
     call extend(combinedOptions, a:options)
     call add(g:MyQuickfixAllSearchOptions, combinedOptions)
 
-    execute 'nnoremap <silent> <leader>' 
-          \ . a:key . optionsEntry['key'] 
-          \ . ' :call MyQuickfixSearch(g:MyQuickfixAllSearchOptions[' 
+    execute 'nnoremap <silent> <leader>'
+          \ . a:key . optionsEntry['key']
+          \ . ' :call MyQuickfixSearch(g:MyQuickfixAllSearchOptions['
           \ . (len(g:MyQuickfixAllSearchOptions) - 1)
           \ . '])<cr>'
   endfor
@@ -205,24 +214,39 @@ function! MyQuickfixAddMappings(key, options) abort
   call extend(combinedOptions, {'selection' : 1})
   call add(g:MyQuickfixAllSearchOptions, combinedOptions)
   " let keyPostfix = a:key[-1:]
-  execute 'vnoremap <silent> <leader>' 
+  execute 'vnoremap <silent> <leader>'
         \ . a:key
         \ . 's'
-        \ . ' :call MyQuickfixSearch(g:MyQuickfixAllSearchOptions[' 
+        \ . ' :call MyQuickfixSearch(g:MyQuickfixAllSearchOptions['
         \ . (len(g:MyQuickfixAllSearchOptions) - 1)
         \ . '])<cr>'
 endfunction
 nnoremap <silent> <leader>f <nop>
+
 nnoremap <silent> <leader>ft :call MyQuickfixSearch({ 'term': 'todo'})<cr>
-call MyQuickfixAddMappings('ff', {})
+
+call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
-call MyQuickfixAddMappings('fs', { 'path': '~/src/' })
+call MyQuickfixAddMappings('fS', { 'path': '~/src/' })
 call MyQuickfixAddMappings('fb', { 'find': 0, 'path': expand('%:p') })
 call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
 call MyQuickfixAddMappings('fvp', { 'path': g:vim.bundle.dir })
 call MyQuickfixAddMappings('fd', { 'path': MyQuickfixBufferDir() })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
+
+function! MyQuickfixOutline(location) abort
+  cclose
+  " let pcreDefine = substitute(&define, '^\\v', '', 'g')
+  let pcreDefine = RegexToPcre(&define)
+  if a:location == 'bufferOnly'
+    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
+  else
+    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, })
+  endif
+endfunction
+nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
+nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 
 let g:lastCommand = 'echo "Specify command"'
 function! MyQuickfixRun(...) abort
@@ -230,8 +254,8 @@ function! MyQuickfixRun(...) abort
   " TODO: limit to myrun
   NeomakeCancelJobs
   " prevent vim from removing leading space by replacing it with special space (utf8 2001)
-  " let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/\x{2001}/g'" 
-  let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/ /g'" 
+  " let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/\x{2001}/g'"
+  let cmd = join(a:000) . ' 2>&1 ' . " | perl -pe 's/^\\s/ /g'"
   let g:lastCommand = cmd
   silent wall
   let g:neomake_myrun_maker = MyQuickfixToMaker(
@@ -252,21 +276,10 @@ function! MyQuickfixToMaker(cmd, errorformat) abort
   let exe = substitute(cmd, '\s.*', '', 'g')
   let args = substitute(cmd, '^\w\+\s*', '', 'g')
   return {
-      \ 'exe' : exe,
-      \ 'args': args,
-      \ 'errorformat': a:errorformat
-      \ }
-endfunction
-
-nnoremap <silent><leader>o :call MyQuickfixOutline()<cr>
-function! MyQuickfixOutline() abort
-  let l:filetype = &filetype
-  if exists("b:filetype")
-    let l:filetype = b:filetype
-  endif
-  let cmd = 'outline --filename ' . expand('%:p')
-        \ . ' --filetype ' . l:filetype . ' 2>/dev/null'
-  call MyQuickfixRun(cmd)
+        \ 'exe' : exe,
+        \ 'args': args,
+        \ 'errorformat': a:errorformat
+        \ }
 endfunction
 
 command! -nargs=* MyQuickfixDump call MyQuickfixDump (<f-args>)
@@ -279,114 +292,97 @@ function! MyLoclistDump(...) abort
   call DUMP(getloclist(0))
 endfunction
 
-" TODO nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
-function! MyQuickfixHelp(term) abort
-    silent! execute 'helpgrep ' . a:term
-    " silent! execute 'tag /' . a:term
-    silent! copen
-endfunction
-command! -bang -nargs=1 -complete=file H call MyQuickfixHelp(<q-args>)
-
-function! MyQuickfixRemoveSomeLibs() abort
+" setqflist() has a fixed display format so it can not be used for formatting.
+" This function only formats and *must* not delete entries - use a different
+" function for that.
+function! MyQuickfixFormatSimple() abort
   let qflist = getqflist()
-  let newlist = []
-  for i in qflist
-    let path = fnamemodify(bufname(i.bufnr), ':p')
-    if path =~ '\vbluebird'
-      continue
-    endif
-    call add(newlist, i)
-  endfor
-  call setqflist(newlist)
-endfunction
-
-function! MyQuickfixRemoveWhitespace() abort
-  let qflist = getqflist()
-  let newlist = []
-  for i in qflist
-    let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
-    " if i.text =~ '\v^\s*$'
-    "   continue
-    " endif
-    call add(newlist, i)
-  endfor
-  call setqflist(newlist)
-endfunction
-
-function! MyQuickfixRemoveInvalidFiles() abort
-  let qflist = getqflist()
-  let newlist = []
-  for i in qflist
-    let path = fnamemodify(bufname(i.bufnr), ':p')
-    if i.valid == 1
-      if ! filereadable(path)
-        continue
-      endif
-    endif
-    " if i.text =~ '\v^\s*$'
-    "   continue
-    " endif
-    " let i.text = substitute(i.text, '\v^[ [:return:]]*', '', 'g')
-    " if path =~ 'mocha'
-    "   continue
-    " endif
-    call add(newlist, i)
-  endfor
-  call setqflist(newlist)
-endfunction
-
-" setqflist() has a fixed display format
-" setqflist() triggers event qf
-let g:MyQuickfixFullPath = 1
-function! MyQuickfixFormat() abort
-  let saved_cursor = getcurpos()
-  let qflist = getqflist()
-  " setlocal modifiable
-  " %delete _
-  let i = -1
-  let newlist = []
+  setlocal modifiable
+  %delete _
+  let maxFilenameLength = 0
+  let maxTextLength = 0
   for entry in qflist
-    let path = fnamemodify(bufname(entry.bufnr), ':.')
-    if ! filereadable(path)
-      " continue
+    let textLength = len(entry.text)
+    if textLength > maxTextLength
+      let maxTextLength = textLength
     endif
+    let path = fnamemodify(bufname(entry.bufnr), ':.')
+    let basename = fnamemodify(path, ':t')
     let dir = fnamemodify(path, ':h:t')
     if dir == '.'
       let dir = ''
     else
       let dir .= '/'
     endif
-    let filename = fnamemodify(path, ':t')
-    let text = dir . filename
-    if g:MyQuickfixFullPath
-      let text = path
+    let filename = dir . basename
+    let filenameLength = len(filename)
+    if filenameLength > maxFilenameLength
+      let maxFilenameLength = filenameLength
     endif
-    if !empty(entry.text)
-      let text = text . ' || ' . entry.text
-    endif
-    " let text = substitute(text, '\v^ \+', '  ', 'g')
-    let text = substitute(text, '\v^ +', 'XXX', 'g')
-    let i = i + 1
-    " call append(i, text)
-    call add(newlist, entry)
   endfor
-  call setqflist(newlist)
-  " normal! "_dd
-  " call setpos('.', saved_cursor)
-  " setlocal nomodifiable
-  " setlocal nomodified
+  for entry in qflist
+    let path = fnamemodify(bufname(entry.bufnr), ':.')
+    let basename = fnamemodify(path, ':t')
+    let dir = fnamemodify(path, ':h:t')
+    if dir == '.'
+      let dir = ''
+    else
+      let dir .= '/'
+    endif
+    let filename = dir . basename
+    let text = printf('%-' . maxFilenameLength . 's', filename)
+    " if entry.text != ''
+      if maxTextLength > 0
+        let text .= ' │ '
+      endif
+      " let text .= entry.text
+      let text .= substitute(entry.text, '\v^\s*', '', 'g')
+    " endif
+    let text = substitute(text, '\v[\r\s]*$', '', 'g')
+		call append(line('$'), text)
+  endfor
+  keepjumps normal! "_dd
+  setlocal nomodifiable
+  setlocal nomodified
 endfunction
 
 augroup MyQuickfixAugroupFormat
   autocmd!
-  autocmd QuickfixCmdPost * call MyQuickfixFormat()
+  autocmd FileType qf :call MyQuickfixFormat()
 augroup END
 
-nnoremap <silent> <leader>qff :let g:MyQuickfixFullPath = 1 \| :call MyQuickfixFormat()<cr>
-nnoremap <silent> <leader>qfs :let g:MyQuickfixFullPath = 0 \| :call MyQuickfixFormat()<cr>
+let g:MyQuickfixFormat = 'Simple'
+function! MyQuickfixFormat() abort
+  if g:MyQuickfixFormat == 'None'
+    return
+  endif
+  call function('MyQuickfixFormat' . g:MyQuickfixFormat)()
+endfunction
+
+function! MyQuickfixSetTitle(title) abort
+  call setqflist([], 'a', { 'title' : a:title })
+endfunction
+
+function! MyQuickfixFormatToggle() abort
+  let found = 0
+  for format in ['Simple', 'None', 'last']
+    if found == 1
+      let g:MyQuickfixFormat = format
+      break
+    endif
+    if g:MyQuickfixFormat == format
+      let found = 1
+    endif
+  endfor
+  if g:MyQuickfixFormat == 'last'
+    let g:MyQuickfixFormat = 'Simple'
+  endif
+  " call MyQuickfixSetTitle(g:MyQuickfixFormat)
+  copen
+endfunction
 
 function! MyQuickfixRemoveInvalid() abort
-    call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
+  call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
 endfunction
 
 " http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list

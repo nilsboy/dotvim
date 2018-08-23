@@ -197,41 +197,41 @@ function! BufferFindPreviousByName(name, current) abort
 endfunction
 
 function! BufferFindAnotherByName(name, current, direction) abort
-    let l:lastBuffer = bufnr('$')
-    let l:i = bufnr(a:current)
-    while l:i * a:direction <= lastBuffer
-        let l:name = bufname(l:i)
+    let lastBuffer = bufnr('$')
+    let i = bufnr(a:current)
+    while i * a:direction <= lastBuffer
+        let name = bufname(i)
 
-        if l:name == a:current
-          let l:i = l:i + a:direction
+        if name == a:current
+          let i = i + a:direction
           continue
         endif
 
-        if l:name =~ fnameescape(a:name)
-          return l:i
+        if name =~ fnameescape(a:name)
+          return i
         endif
 
-        let l:i = l:i + a:direction
+        let i = i + a:direction
     endwhile
     return 0
 endfunction
 
 function! BufferSwitchToNextByName(name) abort
-  let l:unite_buffer = BufferFindNextByName(a:name, expand('%'))
-  if l:unite_buffer == 0
+  let unite_buffer = BufferFindNextByName(a:name, expand('%'))
+  if unite_buffer == 0
     echo "No next " . a:name . " buffer found."
     return
   endif
-  execute ":buffer " . l:unite_buffer
+  execute ":buffer " . unite_buffer
 endfunction
 
 function! BufferSwitchToPreviousByName(name) abort
-  let l:unite_buffer = BufferFindPreviousByName(a:name, expand('%'))
-  if l:unite_buffer == 0
+  let unite_buffer = BufferFindPreviousByName(a:name, expand('%'))
+  if unite_buffer == 0
     echo "No previous " . a:name . " buffer found."
     return
   endif
-  execute ":buffer " . l:unite_buffer
+  execute ":buffer " . unite_buffer
 endfunction
 
 command! -nargs=1 BufferCreateTemp call BufferCreateTemp(<f-args>)
@@ -337,104 +337,6 @@ function! RunIntoBuffer(...) abort
 endfunction
 command! -nargs=* RunIntoBuffer call RunIntoBuffer(<f-args>)
 
-let g:commands = []
-
-call add(g:commands, 'verbose map<buffer>  ')   " buffer local Normal and Visual mode maps
-call add(g:commands, 'verbose map!<buffer> ')   " buffer local Insert and Command-line mode maps
-
-" ### There are six sets of mappings
-
-call add(g:commands, 'verbose map          ')   " Normal-mode mappings only
-
-" - For Normal mode: When typing commands.
-call add(g:commands, 'verbose nmap         ')   " Normal-mode mappings only
-
-" - For Visual mode: When typing commands while the Visual area is highlighted.
-call add(g:commands, 'verbose xmap         ')   " visual mode maps only
-
-" - For Select mode: like Visual mode but typing text replaces the selection.
-call add(g:commands, 'verbose smap         ')   " Select-mode mappings only
-
-" - For Operator-pending mode: When an operator is pending (after "d", "y", "c",
-"   etc.).  See below: |omap-info|.
-call add(g:commands, 'verbose omap         ')   " Operator-pending mode mappings only
-
-" - For Insert mode.  These are also used in Replace mode.
-call add(g:commands, 'verbose imap         ')   " list insert mode maps
-
-" - For Command-line mode: When entering a ":" or "/" command.
-call add(g:commands, 'verbose cmap         ')   " list command mode maps
-
-call add(g:commands, 'verbose lmap         ')   " language mappings (set by keymap or by lmap)
-
-call add(g:commands, 'abbreviate   ')   " list abbreviations
-call add(g:commands, 'args         ')   " argument list
-call add(g:commands, 'augroup      ')   " augroups
-call add(g:commands, 'verbose autocmd      ')   " list auto-commands
-call add(g:commands, 'buffers      ')   " list buffers
-call add(g:commands, 'breaklist    ')   " list current breakpoints
-call add(g:commands, 'cabbrev      ')   " list command mode abbreviations
-call add(g:commands, 'changes      ')   " changes
-call add(g:commands, 'verbose command      ')   " list commands
-call add(g:commands, 'compiler     ')   " list compiler scripts
-call add(g:commands, 'digraphs     ')   " digraphs
-call add(g:commands, 'file         ')   " print filename, cursor position and status (like Ctrl-G)
-call add(g:commands, 'filetype     ')   " on/off settings for filetype detect/plugins/indent
-call add(g:commands, 'verbose function     ')   " list user-defined functions (names and argument lists but not the full code)
-call add(g:commands, 'highlight    ')   " highlight groups
-call add(g:commands, 'history c    ')   " command history
-call add(g:commands, 'history =    ')   " expression history
-call add(g:commands, 'history s    ')   " search history
-call add(g:commands, 'history      ')   " your commands
-call add(g:commands, 'iabbrev      ')   " list insert mode abbreviations
-call add(g:commands, 'intro        ')   " the Vim splash screen, with summary version info
-call add(g:commands, 'jumps        ')   " your movements
-call add(g:commands, 'language     ')   " current language settings
-call add(g:commands, 'let          ')   " all variables
-call add(g:commands, 'let g:       ')   " global variables
-call add(g:commands, 'let v:       ')   " Vim variables
-call add(g:commands, 'list         ')   " buffer lines (many similar commands)
-call add(g:commands, 'ls           ')   " buffers
-call add(g:commands, 'ls!          ')   " buffers, including unlisted buffers
-call add(g:commands, 'marks        ')   " marks
-call add(g:commands, 'menu         ')   " menu items
-call add(g:commands, 'messages     ')   " message history
-call add(g:commands, 'print        ')   " display buffer lines (useful after :g or with a range)
-call add(g:commands, 'reg          ')   " registers
-call add(g:commands, 'scriptnames  ')   " all scripts sourced so far
-call add(g:commands, 'set all      ')   " all options, including defaults
-call add(g:commands, 'setglobal    ')   " global option values
-call add(g:commands, 'setlocal     ')   " local option values
-call add(g:commands, 'set          ')   " options with non-default value
-call add(g:commands, 'set termcap  ')   " list terminal codes and terminal keys
-call add(g:commands, 'spellinfo    ')   " spellfiles used
-call add(g:commands, 'syntax       ')   " syntax items
-call add(g:commands, 'syn sync     ')   " current syntax sync mode
-call add(g:commands, 'tabs         ')   " tab pages
-call add(g:commands, 'tags         ')   " tag stack contents
-call add(g:commands, 'undolist     ')   " leaves of the undo tree
-call add(g:commands, 'version      ')   " list version and build options
-call add(g:commands, 'winpos       ')   " Vim window position (gui)
-
-" Add uppercase versions of above-mentioned redirecting into a new buffer
-function! RedirAddUppercaseVersion() abort
-    for command in g:commands
-        let bufferName = command
-        let bufferName = substitute(bufferName, '^verbose ', "", "g")
-        let bufferName = substitute(bufferName , '\v\s*$', "", "g")
-        let bufferName = substitute(bufferName, '\v(\w+)', '\u\1', 'g')
-        let bufferName = substitute(bufferName , '\v\s*', "", "g")
-        let bufferName = substitute(bufferName, '\v\W', "x", "g")
-        try
-            execute "command! -nargs=0 " . bufferName . " :Verbose :" . command
-        catch
-            echom "error creating command " . bufferName
-        endtry
-    endfor
-
-endfunction
-call RedirAddUppercaseVersion()
-
 " Display all kinds of vim environment information
 function! VimEnvironment() abort
     call BufferCreateTemp("VimEnv")
@@ -447,83 +349,62 @@ function! VimEnvironment() abort
     only
 endfunction
 
-command! -nargs=0 CommandLine call CommandLine()
-function! CommandLine() abort
-    silent execute ':e ' . g:vim.etc.dir . 'command-line.vim'
-    normal Go:
-    startinsert!
-
-    " clear search register than execute line under cursor
-    " nnoremap <silent> <buffer> <CR> :let @/ = "" \| :execute getline(".")<cr>
-
-    nnoremap <silent> <buffer> <CR> :execute getline(".")<cr>
-    inoremap <silent> <buffer> <CR> <esc> :execute getline(".")<cr>
-
-    " nnoremap <silent> <buffer> o :normal Go: \| :startinsert!<cr>
-endfunction
-
 " Run line under cursor as vim script or shell command depending on leading :
 function! RunCursorLine() abort
-    let l:cmd = GetRunableCursorLine()
-    call RunIntoBuffer(l:cmd)
+    let cmd = GetRunableCursorLine()
+    call RunIntoBuffer(cmd)
 endfunction
 command! -nargs=0 RunCursorLine call RunCursorLine()
 nnoremap <silent><leader>vl :RunCursorLine<cr>
-nnoremap <silent><leader>vx :call MyHelpersSourceFile()<cr>
 
 function! MyHelpersSourceFile() abort
   let b:winview = winsaveview()
   wall
+  silent! source %
   source %
   if exists('b:winview')
     call winrestview(b:winview)
   endif
 endfunction
+nnoremap <silent><leader>vx :call MyHelpersSourceFile()<cr>
 
 " Run current line as vim script
 function! RunCursorLineVim() abort
-    let l:cmd = GetRunableCursorLine()
-    execute l:cmd
+    let cmd = GetRunableCursorLine()
+    execute cmd
 endfunction
 nnoremap <silent><leader>ev :call RunCursorLineVim()<cr>
 nnoremap <silent> <leader>ee :execute g:MyLastCommand<cr>
 
 function! RunCursorLineVimVerbose() abort
-    let l:cmd = GetRunableCursorLine()
-    execute 'Verbose ' . l:cmd
+    let cmd = GetRunableCursorLine()
+    execute 'Verbose ' . cmd
 endfunction
 nnoremap <silent><leader>eV :call RunCursorLineVimVerbose()<cr>
 
 function! GetRunableCursorLine() abort
-    let l:cmd = getline(".")
-    let l:cmd = substitute(l:cmd, '\v^["#/ ]+', "", "")
-    " let l:cmd = substitute(l:cmd, '\v^', ":!", "")
-    " let l:cmd = substitute(l:cmd, '\v^:!:', ":", "")
-    return l:cmd
+    let cmd = getline(".")
+    let cmd = substitute(cmd, '\v^["#/ ]+', "", "")
+    return cmd
 endfunction
 
 function! EditFileInBufferDir(...) abort
-  let l:dir = expand("%:h")
-  let l:file = l:dir . '/' . join(a:000)
-  let l:file = fnameescape(l:file)
-  execute 'edit ' . l:file
+  let dir = expand("%:h")
+  let file = dir . '/' . join(a:000)
+  let file = fnameescape(file)
+  execute 'edit ' . file
 endfunction
 command! -nargs=* E call EditFileInBufferDir(<f-args>)
-
-function! CdBufferDir() abort
-    let l:dir = expand("%:p:h")
-    execute 'cd' l:dir
-endfunction
 
 function! helpers#touch(path) abort
     if empty(a:path)
         throw "Specify non empty path to create"
     endif
-    let l:path = fnamemodify(a:path, ':p')
-    let l:dir = fnamemodify(a:path, ':p:h')
-    call Mkdir(l:dir, 'p')
+    let path = fnamemodify(a:path, ':p')
+    let dir = fnamemodify(a:path, ':p:h')
+    call Mkdir(dir, 'p')
     if IsNeoVim()
-      call writefile([], l:path, 'a')
+      call writefile([], path, 'a')
     endif
 endfunction
 
@@ -595,7 +476,7 @@ function! Mkdir(dir, ...) abort
   call mkdir(a:dir, 'p')
 endfunction
 
-" Normalize she whitespace in a string...
+" Normalize whitespace in a string...
 function! TrimWS (str)
     " Remove whitespace fore and aft...
     let trimmed = substitute(a:str, '^\s\+\|\s\+$', '', 'g')
@@ -634,22 +515,22 @@ endfunction
 
 sign define BlinkLine linehl=Todo
 function! helpers#blinkLine() abort
-  let l:cursorline = &cursorline
-  let l:count = 1
-  let l:signId = helpers#createUniqueSignId()
+  let cursorline = &cursorline
+  let count = 1
+  let signId = helpers#createUniqueSignId()
   let i = 0
-  while i <= l:count
+  while i <= count
     let i = i + 1
     set nocursorline
-    execute 'sign place ' . l:signId . ' name=BlinkLine line='
+    execute 'sign place ' . signId . ' name=BlinkLine line='
           \ . line('.') . ' buffer=' . bufnr('%')
     set cursorline
     sleep 60m
-    execute 'sign unplace ' . l:signId
+    execute 'sign unplace ' . signId
     set nocursorline
     sleep 60m
   endwhile
-  let &cursorline = l:cursorline
+  let &cursorline = cursorline
 endfunction
 
 " " OR ELSE just highlight the match in red...
@@ -664,10 +545,10 @@ endfunction
 "     redraw
 " endfunction
 
-let s:rnd = localtime() % 0x10000
 function! helpers#random(n) abort
-  let s:rnd = (s:rnd * 31421 + 6927) % 0x10000
-  return s:rnd * a:n / 0x10000
+  let rnd = localtime() % 0x10000
+  let rnd = (rnd * 31421 + 6927) % 0x10000
+  return rnd * a:n / 0x10000
 endfunction
 
 function! helpers#surroundings() abort
@@ -858,87 +739,95 @@ function! MyInstall(app, ...) abort
 endfunction
 command! -nargs=* MyInstall call MyInstall (<f-args>)
 
-" TODO: store and restore state of marks, registers
-function! MyHelpersStoreState() abort
-  " let save_cursor = getcurpos()
-  " call setpos('.', save_cursor)
-
-  " " or
-  " let view = winsaveview()
-  " call winrestview(view)<cr>
-endfunction
-
 " SEE ALSO: https://www.reddit.com/r/vim/comments/88h2wv/substitute_vims_and_with_b_when_you_invoke/dwl5rbg/
 function! RegexToPcre(vim_regex) abort
-    " Translate vim regular expression to perl regular expression (what grep
-    " uses). Only a partial translation. See perl-patterns for more details.
-    let search = a:vim_regex
-    let search = substitute(search, '\C\\v', '', 'g')
-    let was_verymagic = len(search) < len(a:vim_regex)
+  " Translate vim regular expression to perl regular expression (what grep
+  " uses). Only a partial translation. See perl-patterns for more details.
+  let search = a:vim_regex
+  let search = substitute(search, '\C\\v', '', 'g')
+  let was_verymagic = len(search) < len(a:vim_regex)
 
-    let escape = '\\'
-    let unescape = ''
-    if was_verymagic
-        " verymagic flips escaping rules
-        let escape = ''
-        let unescape = '\\'
-    endif
+  let escape = '\\'
+  let unescape = ''
+  if was_verymagic
+    " verymagic flips escaping rules
+    let escape = ''
+    let unescape = '\\'
+  endif
 
-    " Some funky scripting for notgrep_prg may not handle spaces (using xargs
-    " to grep a list of files).
-    if exists("g:notgrep_replace_space_with_dot") && g:notgrep_replace_space_with_dot
-        let search = substitute(search,' ','.','g')
-    endif
+  " Some funky scripting for notgrep_prg may not handle spaces (using xargs
+  " to grep a list of files).
+  if exists("g:notgrep_replace_space_with_dot") && g:notgrep_replace_space_with_dot
+    let search = substitute(search,' ','.','g')
+  endif
 
-    " Don't let the shell get confused by quotes.
-    let search = substitute(search,"[\"']",'.','g')
+  " Don't let the shell get confused by quotes.
+  let search = substitute(search,"[\"']",'.','g')
 
-    " No easy support for disabling regex so ignore
-    let search = substitute(search,'\\V','','g')
-    " PCRE word boundaries
-    let search = substitute(search,'\('. escape .'<\|'. escape .'>\)','\\b','g')
+  " No easy support for disabling regex so ignore
+  let search = substitute(search,'\\V','','g')
+  " PCRE word boundaries
+  let search = substitute(search,'\('. escape .'<\|'. escape .'>\)','\\b','g')
 
-    " PCRE character classes
-    let character_classes = {
-                \ 's' : '[[:space:]]',
-                \ 'S' : '[^ \\t]',
-                \ 'd' : '[[:digit:]]',
-                \ 'D' : '[^0-9]',
-                \ 'x' : '[[:xdigit:]]',
-                \ 'X' : '[^0-9A-Fa-f]',
-                \ 'o' : '[0-7]',
-                \ 'O' : '[^0-7]',
-                \ 'w' : '[0-9A-Za-z_]',
-                \ 'W' : '[^0-9A-Za-z_]',
-                \ 'h' : '[A-Za-z_]',
-                \ 'H' : '[^A-Za-z_]',
-                \ 'a' : '[[:alpha:]]',
-                \ 'A' : '[^A-Za-z]',
-                \ 'l' : '[[:lower:]]',
-                \ 'L' : '[^a-z]',
-                \ 'u' : '[[:upper:]]',
-                \ 'U' : '[^A-Z]',
-                \ }
-    for vim_class in keys(character_classes)
-        " case is very important!
-        let search = substitute(search, '\C\\'. vim_class .'\>', character_classes[vim_class], 'g')
+  " PCRE character classes
+  let character_classes = {
+        \ 's' : ' ',
+        \ 'S' : '[^ \\t]',
+        \ 'd' : '[[:digit:]]',
+        \ 'D' : '[^0-9]',
+        \ 'x' : '[[:xdigit:]]',
+        \ 'X' : '[^0-9A-Fa-f]',
+        \ 'o' : '[0-7]',
+        \ 'O' : '[^0-7]',
+        \ 'w' : '[0-9A-Za-z_]',
+        \ 'W' : '[^0-9A-Za-z_]',
+        \ 'h' : '[A-Za-z_]',
+        \ 'H' : '[^A-Za-z_]',
+        \ 'a' : '[[:alpha:]]',
+        \ 'A' : '[^A-Za-z]',
+        \ 'l' : '[[:lower:]]',
+        \ 'L' : '[^a-z]',
+        \ 'u' : '[[:upper:]]',
+        \ 'U' : '[^A-Z]',
+        \ }
+  for vim_class in keys(character_classes)
+    " case is very important!
+    let search = substitute(search, '\C\\'. vim_class .'\>', character_classes[vim_class], 'g')
+  endfor
+  call INFO('search:', search)
+
+  if was_verymagic
+    " Always need to escape pipe in shell
+    " TODO:
+    " let search = substitute(search, '|','\\|','g')
+  else
+    " PCRE operates a bit like verymagic, so remove some escaping
+
+    " Dot regular unescaped parens
+    let search = substitute(search, '\v(\\)@<![()]','.','g')
+    " Remove escape from escaped capture parens
+    let search = substitute(search, '\v\\([()])','\1','g')
+
+    " Unescape some multis
+    let search = substitute(search,'\v\\([+=?])','\1','g')
+  endif
+
+  " Translate vim sequences: \%[]
+  let sequences = []
+  call substitute(search, '\v\\\%\[([^\]]+)\]', '\=add(sequences, submatch(0))', 'g')
+  for sequence in sequences
+    let pcre = sequence[3:-2]
+    let sequenceList = []
+    let word = ''
+    for char in split(pcre, '\zs')
+      let word .= char
+      call add(sequenceList, word)
     endfor
+    let pcre = '(' . join(reverse(sequenceList), '|') . ')'
+    let search = substitute(search, '\V' . escape(sequence, '\\'), pcre, '')
+  endfor
 
-    if was_verymagic
-        " Always need to escape pipe in shell
-        let search = substitute(search, '|','\\|','g')
-    else
-        " PCRE operates a bit like verymagic, so remove some escaping
-
-        " Dot regular unescaped parens
-        let search = substitute(search, '\v(\\)@<![()]','.','g')
-        " Remove escape from escaped capture parens
-        let search = substitute(search, '\v\\([()])','\1','g')
-
-        " Unescape some multis
-        let search = substitute(search,'\v\\([+=?])','\1','g')
-    endif
-    return search
+  return search
 endfunction
 
 command! -nargs=* Web call Web (<f-args>)
@@ -959,3 +848,38 @@ function! MyHelpersGetVisualSelection()
     let @a = a_save
   endtry
 endfunction
+
+function! MyHelpersShortenPath(str, max) abort
+  let str = a:str
+  let max = a:max
+  let parts = split(str, "/")
+  let partMax = max / len(parts)
+  let newParts = []
+  for part in parts
+    if len(str) <= max
+      call add(newParts, part)
+      continue
+    endif
+    let length = len(part)
+    if length > partMax
+      let half = (partMax / 2) - 2
+      let part = part[0 : half] . '...' . part[length - half : length]
+    endif
+    call add(newParts, part)
+  endfor
+  let newStr = join(newParts, '/')
+  if len(newStr) < max
+    let newStr = printf('%-' . max . 's', newStr)
+  endif
+  return newStr
+endfunction
+
+" TODO:
+" clearjumps
+function! MyVerbose() abort
+  redir => output | exec 'jumps' | redir END | cexpr output
+endfunction
+" augroup MyZ0MyMappingsAugroup
+"   autocmd!
+"   autocmd CursorHold * silent! :call MyVerbose()
+" augroup END

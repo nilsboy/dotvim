@@ -46,7 +46,7 @@ command! -nargs=* WriteWithSudo :SudoWrite
 
 " use <leader>! as prefix to remap stuff
 " Remap <C-i> as it's the same as Tab
-" nnoremap <leader>!a <C-o>
+" nnoremap <leader>!a <C-o> haha
 " nnoremap <leader>!b <C-i>
 
 " jumplist
@@ -157,12 +157,13 @@ nnoremap gV `[v`]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
 nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
-nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappings.vim"<cr>
+nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "vimrc"<cr>
+nnoremap <leader>vm :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappings.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' 
   \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
 " Show all <leader> mappings
-nnoremap <leader>vm :Verbose cmap <bar> map<cr> :only<cr>
+nnoremap <leader>vM :Verbose cmap <bar> map<cr> :only<cr>
 
 " Show all <leader> search mappings
 nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
@@ -258,18 +259,4 @@ sunmap m
 " nnoremap ' `
 " nnoremap ` '
 " nnoremap M '
-
-" augroup MyZ0MyMappingsAugroup
-"   autocmd!
-"   autocmd CursorHold * silent! :call MyVerbose()
-" augroup END
-
-" TODO: check restore position on open plugin - add keepjumps to skip adding
-" first line of file as a jump.
-
-" TODO:
-clearjumps
-function! MyVerbose() abort
-  redir => output | exec 'jumps' | redir END | cexpr output
-endfunction
 

@@ -3,6 +3,8 @@ setlocal formatoptions=
 
 setlocal conceallevel=0
 
+let &l:define = '\v#+\s+'
+
 if exists("b:MyMarkdownFtpluginLoaded")
     finish
 endif

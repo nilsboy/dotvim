@@ -59,10 +59,12 @@ set undofile
 let &undodir = g:vim.var.dir . "undo"
 call Mkdir(&undodir, "p")
 
-augroup MyVimrcAugroupOnlySetCurrentDirAsPath
-  autocmd!
-  autocmd VimEnter * set path=,,
-augroup END
+" augroup MyVimrcAugroupOnlySetCurrentDirAsPath
+"   autocmd!
+"   autocmd VimEnter * set path=.,,
+" augroup END
+
+set path=.,,
 
 " Make helpgrep find vim's own help files before plugin help files
 let &runtimepath = '/usr/share/nvim/runtime,'

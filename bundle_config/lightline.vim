@@ -5,14 +5,14 @@ NeoBundle 'itchyny/lightline.vim'
 let g:lightline = {
       \   'colorscheme': 'mylightline',
       \   'active': {
-      \     'left': [['project'] , ['dir'],  ['filename']],
+      \     'left': [['project'] , ['dir'],  ['filename'], ['quickfix_title'],],
       \     'right': [
       \         ['percentwin'],
       \         ['lineinfo'],
       \         ['fileformat', 'fileencoding', 'filetype'],
 			\         ['warnings', ],
 			\         ['errors', ],
-      \         ['empty', ],
+      \         ['empty'],
       \         ['paste', 'tags', ],
       \     ],
       \   },
@@ -33,6 +33,7 @@ let g:lightline = {
       \     'errors': '%{MyQuickfixGetErrorCount() > 0 ? MyQuickfixGetErrorCount() : ""}',
       \     'warnings': '%{MyLoclistGetErrorCount() > 0 ? MyLoclistGetErrorCount() : ""}',
       \     'paste': '%{&paste == 1 ? "paste" : ""}',
+      \     'quickfix_title': '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
       \   },
       \   'component_visible_condition': {
       \     'fileencoding': '&fenc',
@@ -41,6 +42,7 @@ let g:lightline = {
       \     'errors': '(MyQuickfixGetErrorCount() != 0)',
       \     'warnings': '(MyLoclistGetErrorCount() != 0)',
       \     'tags': '(MyLightlineTags() != "")',
+      \     'quickfix_title': '(exists("w:quickfix_title") != 0)',
       \   },
       \ }
 
