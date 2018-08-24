@@ -260,3 +260,4 @@ sunmap m
 " nnoremap ` '
 " nnoremap M '
 
+nnoremap gd [<c-d>

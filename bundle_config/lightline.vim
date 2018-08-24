@@ -80,8 +80,7 @@ endfunction
 let s:grey = [ '', '',  240, 249 ]
 let s:red =  [ '', '',  238, 208 ]
 let s:blue =  [ '', '',  238, 153 ]
-let s:blue2 = [ '', '',  238, 39 ]
-let s:blue3 = [ '', '',  238, 45 ]
+let s:blue2 = [ '', '',  238, 81 ]
 let s:orange = [ '', '',  238, 221 ]
 
 let s:info = s:blue
@@ -91,7 +90,7 @@ let s:error = s:red
 " let s:p = {'normal': {}, 'tabline' : {} }
 let s:p = {'normal': {}}
 
-let s:p.normal.left = [ s:grey, s:blue, s:blue3 ]
+let s:p.normal.left = [ s:grey, s:blue, s:blue2 ]
 let s:p.normal.middle = [ s:grey ]
 let s:p.normal.right = [ s:grey, s:grey, s:grey, s:error, s:info, s:grey, s:error ]
 

@@ -3,10 +3,4 @@
 setlocal buflisted
 " only
 
-setlocal keywordprg=:help
-
-" augroup augroup_help
-"   autocmd!
-"   autocmd BufLeave <buffer> normal! mH
-" augroup END
-
+let &l:define = '\v^(\S.+\ *~$|\*[\d+\.]{2,}\*\s+\w+)'

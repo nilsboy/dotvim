@@ -251,7 +251,8 @@ nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 let g:lastCommand = 'echo "Specify command"'
 function! MyQuickfixRun(...) abort
   let saved_cursor = getcurpos()
-  let &l:makeprg = join(a:000) . ' 2>&1 '
+  let cmd = join(a:000)
+  let &l:makeprg = cmd
   let &l:errorformat = '%f:%l:%c:%m,%f'
   let g:lastCommand = &l:makeprg
   silent wall

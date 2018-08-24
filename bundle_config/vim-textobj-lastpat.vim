@@ -1,4 +1,6 @@
+finish
 " Text objects for the last searched pattern
+" Superseded by now build in gn / gN.
 NeoBundle 'kana/vim-textobj-lastpat'
 
 if neobundle#tap('vim-textobj-user') 

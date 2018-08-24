@@ -73,11 +73,6 @@ non-offical function as a workaround.
 * forece my prefix in snippets even if file has none (jet)?
 * TODO: normalize plugin config file names to exclude vim and '-' etc?
 
-## :s and :g Examples
-
-* `%s/^\u\.\.\..\{-}\zs\(\d\+\)/\=submatch(1) - 22`
-  (https://www.reddit.com/r/vim/comments/6z9i5j/example_of_vims_exmode_magic_that_can_make_you/)
-
 ## TODO
 
 * checkout g@

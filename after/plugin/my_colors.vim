@@ -42,9 +42,9 @@ function! MyColorsColorschemeCleanup() abort
 
   highlight QuickFixLine ctermfg=238 ctermbg=153 cterm=NONE
   highlight qfFileName   ctermfg=240 cterm=NONE
-  " highlight qfSeparator  ctermfg=NONE ctermbg=153
+  highlight qfSeparator  ctermfg=238 ctermbg=NONE
+  highlight qfLineNr     ctermfg=238 ctermbg=NONE
   " highlight qfError      ctermfg=NONE ctermbg=153
-  " highlight qfLineNr
 
   highlight CursorLine   ctermbg=254 ctermfg=NONE
 
