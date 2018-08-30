@@ -15,7 +15,7 @@ endif
 " vars
 let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"
-let g:vim['etc']    = { 'dir' : g:vim.dir . "etc/" }
+let g:vim['etc']    = { 'dir' : g:vim.dir }
 let g:vim['after']  = { 'dir' : g:vim.etc.dir . "after/" }
 let g:vim.rc        = g:vim.etc.dir . "vimrc"
 let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
@@ -88,4 +88,12 @@ filetype indent on
 " " NOTE: Neobundle unsets these
 " set verbosefile=/tmp/vim-debug.log
 " set verbose=13
+
+nnoremap <silent> <leader>sn :Redir scriptnames<cr>
+
+function! MyVimrcRtp() abort
+Redir echo &rtp
+%s/,/\r/g
+endfunction
+nnoremap <silent> <leader>rp :call MyVimrcRtp()<cr>
 

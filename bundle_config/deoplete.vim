@@ -1,3 +1,4 @@
+finish
 NeoBundle 'Shougo/deoplete.nvim'
 " tags: complete
 " TODO: checkout maralla/completor.vim
@@ -10,7 +11,8 @@ NeoBundle 'ternjs/tern_for_vim', { 'build': 'npm install' }
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 0
 let g:deoplete#sources = {}
-let g:deoplete#sources.javascript = ['tern', 'buffer', 'ultisnips']
+" let g:deoplete#sources.javascript = ['tern', 'buffer', 'ultisnips']
+let g:deoplete#sources.java = ['lsp']
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 0
 let g:deoplete#enable_camel_case = 1

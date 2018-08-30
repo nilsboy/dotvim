@@ -648,7 +648,6 @@ function! RegexToPcre(vim_regex) abort
     " case is very important!
     let search = substitute(search, '\C\\'. vim_class .'\>', character_classes[vim_class], 'g')
   endfor
-  call INFO('search:', search)
 
   if was_verymagic
     " Always need to escape pipe in shell

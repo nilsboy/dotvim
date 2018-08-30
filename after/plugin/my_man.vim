@@ -41,10 +41,8 @@ function! Man(cmd) abort
     highlight default link manReference      PreProc
     highlight default link manSubHeading     Function
 
-    " force filetype for outline
-    let b:filetype = "man"
-
     " keywordprg only works for external apps
     nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>
+    let &l:filetype = 'man'
 endfunction
 command! -nargs=1 Man call Man("<args>")

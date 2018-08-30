@@ -37,19 +37,30 @@ let g:MyQuickfixSearchLimit = '500'
 
 command! -bang -nargs=1 Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
+
+  let options = {}
+  call extend(options, a:options)
+
+  let functionRef = get(a:options, 'function', '')
+  echo functionRef
+  if functionRef != ''
+    call extend(options, {functionRef}())
+  endif
+
   let l:save_pos = getcurpos()
-  let term = get(a:options, 'term', '')
-  let find = get(a:options, 'find', '1')
-  let grep = get(a:options, 'grep', '1')
-  let matchFilenameOnly = get(a:options, 'matchFilenameOnly', '1')
-  let orderBy = get(a:options, 'orderBy', '')
-  let useIgnoreFile = get(a:options, 'useIgnoreFile', 1)
-  let fuzzy = get(a:options, 'fuzzy', '0')
-  let ask = get(a:options, 'ask', '0')
-  let selection = get(a:options, 'selection', '0')
-  let wordBoundary = get(a:options, 'wordBoundary', '0')
-  let title = get(a:options, 'title', '')
+  let term = get(options, 'term', '')
+  let find = get(options, 'find', '1')
+  let grep = get(options, 'grep', '1')
+  let matchFilenameOnly = get(options, 'matchFilenameOnly', '1')
+  let orderBy = get(options, 'orderBy', '')
+  let useIgnoreFile = get(options, 'useIgnoreFile', 1)
+  let fuzzy = get(options, 'fuzzy', '0')
+  let ask = get(options, 'ask', '0')
+  let selection = get(options, 'selection', '0')
+  let wordBoundary = get(options, 'wordBoundary', '0')
+  let title = get(options, 'title', '')
   let strict = 0
+  let path = get(options, 'path', '')
 
   if selection
     let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g') 
@@ -58,8 +69,8 @@ function! MyQuickfixSearch(options) abort
     let term = input('Search: ')
   endif
 
-  if exists('a:options["expand"]')
-    let term = expand(a:options['expand'])
+  if exists('options["expand"]')
+    let term = expand(options['expand'])
     let strict = 1
   endif
 
@@ -104,7 +115,9 @@ function! MyQuickfixSearch(options) abort
   if project_dir == ''
     let project_dir = MyQuickfixBufferDir()
   endif
-  let path = get(a:options, 'path', project_dir)
+  if path == ''
+    let path = project_dir
+  endif
   let path = fnamemodify(path, ':p')
 
   let filenameTerm = term
@@ -192,8 +205,8 @@ function! MyQuickfixAddMappings(key, options) abort
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
         \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1, },
-        \ { 'key': 'l', 'expand': '<cword>', },
-        \ { 'key': 'L', 'expand': '<cWORD>', },
+        \ { 'key': 'p', 'expand': '<cword>', },
+        \ { 'key': 'P', 'expand': '<cWORD>', },
         \ { 'key': 'r', 'orderBy': 'recent', },
         \ { 'key': 'F', 'expand': '%:t', },
         \ { 'key': 'B', 'expand': '%:t:r', },
@@ -223,16 +236,24 @@ function! MyQuickfixAddMappings(key, options) abort
 endfunction
 nnoremap <silent> <leader>f <nop>
 
-nnoremap <silent> <leader>ft :call MyQuickfixSearch({ 'term': 'todo'})<cr>
+nnoremap <silent> <leader>ft :call MyQuickfixSearch({ 'term': 'todo' })<cr>
+
+function! MyQuickfixFindInBuffer() abort
+  return { 'find': 0, 'path': expand('%:p') }
+endfunction
+
+function! MyQuickfixFindInBufferDir() abort
+  return { 'path': MyQuickfixBufferDir() }
+endfunction
 
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fS', { 'path': '~/src/' })
-call MyQuickfixAddMappings('fb', { 'find': 0, 'path': expand('%:p') })
+call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
 call MyQuickfixAddMappings('fvp', { 'path': g:vim.bundle.dir })
-call MyQuickfixAddMappings('fd', { 'path': MyQuickfixBufferDir() })
+call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 
 function! MyQuickfixOutline(location) abort
@@ -322,7 +343,7 @@ function! MyQuickfixFormatSimple() abort
       " let text .= entry.text
       let text .= substitute(entry.text, '\v^\s*', '', 'g')
     " endif
-    let text = substitute(text, '\v[\r\s]*$', '', 'g')
+    let text = substitute(text, '\v[\r]*$', '', 'g')
 		call append(line('$'), text)
   endfor
   keepjumps normal! "_dd

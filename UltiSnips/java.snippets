@@ -1,0 +1,32 @@
+snippet if "if" b
+if($1) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet else "else" b
+else {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet ee "ee" b
+System.err.println("$1: " + $1);
+endsnippet
+
+snippet xx "xx" b
+System.err.println("`!v expand('%:p') . ':' . line('.')`:0:### HERE`!v line('.')`$0")
+endsnippet
+
+snippet fun "function" b
+public void $1() throws Exception
+{$0
+}
+endsnippet
+
+snippet test "test function" b
+@Test
+public void test$1() throws Exception
+{$0
+}
+endsnippet

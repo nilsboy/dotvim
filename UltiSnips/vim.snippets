@@ -392,8 +392,13 @@ snippet	cWORD "expand cWORD" w
 expand('<cWORD>')
 endsnippet
 
-snippet joinhash "joinhash" w
+snippet joinmap "joinmap" w
 call extend(${1:target}, ${2:source})
+endsnippet
+
+snippet clonemap "clonemap" w
+let ${1:target} = {}
+call extend(${1:target}, ${0:source})
 endsnippet
 
 snippet join "join" w

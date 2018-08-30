@@ -200,12 +200,17 @@ nnoremap <C-v> m`<C-v>
 vnoremap <esc> <esc>``
 vnoremap y y``
 
-nnoremap <silent><leader>gm :echom '=== Messages until ' . strftime("%H:%M:%S")
-      \ . ' ======================='
-      \ \| :silent Verbose messages<cr> \| :silent only \| :normal G <cr>
-      \ \| :setlocal syntax=txt
-      \ \| echom ''
-      \ <cr>
+function! MyZ0MyMappingsMessages() abort
+  echom '=== Messages until ' . strftime("%H:%M:%S") . ' ======================='
+  silent Verbose messages
+  silent only
+  normal G
+  setlocal syntax=txt
+  silent! %s/\v\<09\>/\t/g
+  silent! %s/\v\<00\>/\r/g
+  echom ''
+endfunction
+nnoremap <silent> <leader>gm :call MyZ0MyMappingsMessages()<cr><cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
