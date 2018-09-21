@@ -114,6 +114,7 @@ nnoremap <leader>k q:i<esc>k
 nnoremap <leader>A q:i<esc>kA
 
 augroup MyVimrcAugroupAdjustWindowSizes
+  autocmd VimEnter,VimResized * :let &previewheight = &lines / 3
   autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3
   autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
   autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
@@ -266,3 +267,5 @@ sunmap m
 " nnoremap M '
 
 nnoremap gd [<c-d>
+
+nnoremap <silent> <leader>X :Neoformat! json<cr>

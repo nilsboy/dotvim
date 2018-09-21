@@ -2,10 +2,6 @@
 NeoBundle 'svermeulen/vim-easyclip'
 " NeoBundle 'nilsboy/vim-easyclip'
 
-" NOTE: Also discards deletes when prefixed by a register - like: normal "adgg<esc>
-" - need to use normal! instead
-" SEE ALSO: https://github.com/kana/vim-operator-replace
-
 MyInstall xsel !sudo apt-get install xsel
 
 " fix indent level

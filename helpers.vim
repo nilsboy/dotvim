@@ -4,8 +4,20 @@
 " - tomtom/tlib_vim
 " - ingo-library
 
+function! MyHelpersClosePreviewWindow() abort
+  silent! wincmd P
+  if &previewwindow
+    pclose
+  endif
+endfunction
+
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose() abort
+  silent! wincmd P
+  if &previewwindow
+    pclose
+    return
+  endif
   if BufferIsCommandLine() == 1
     silent! quit
     return
@@ -22,9 +34,6 @@ function! BufferClose() abort
   if wasQfOpen
     cclose
   endif
-  if ! &previewwindow
-    pclose
-  endif
   if BufferIsUnnamed() == 1
   elseif &write
     silent update
@@ -32,12 +41,12 @@ function! BufferClose() abort
   if BufferIsLast() == 1
     silent! q!
   endif
-  " Using bwipe prevents the current position mark from being saved - so
-  " the file position can not be restored when loading the file again.
-  " netrw leaves its buffers in a weired state
+  " Netrw leaves its buffers in a weired state
   if BufferIsNetrw() == 1
     silent! bwipeout!
   else
+    " Using bwipe prevents the current position mark from being saved - so
+    " the file position can not be restored when loading the file again.
     silent! bdelete!
   endif
   if wasQfOpen
@@ -426,16 +435,16 @@ function! GetQuickfixBufferNumber() abort
   endfor
 endfunction
 
-" " TODO:
-" function! MyGetPreviewBufferNumber() abort
-"   for winnr in range(1, winnr('$'))
-"     let blist = filter(getwininfo(winnr), 'v:val.previewwindow')
-"     if len(blist) == 0
-"       return 0
-"     endif
-"     return blist[0].bufnr
-"   endfor
-" endfunction
+" TODO:
+function! MyGetPreviewBufferNumber() abort
+  for winnr in range(1, winnr('$'))
+    let blist = filter(getwininfo(winnr), 'v:variables.previewwindow')
+    if len(blist) == 0
+      return 0
+    endif
+    return blist[0].bufnr
+  endfor
+endfunction
 
 function! MyHelpersQuickfixIsOpen() abort
   return GetQuickfixBufferNumber() != 0
@@ -580,6 +589,7 @@ function! MyHelpersOpenOrg() abort
   let fileName = substitute(fileName, '\.txt', '', 'g')
   silent! execute '!see ' fileName ' &'
 endfunction
+command! -nargs=* MyOriginal call MyHelpersOpenOrg(<f-args>)
 
 function! MyInstall(app, ...) abort
   let cmd = join(a:000)

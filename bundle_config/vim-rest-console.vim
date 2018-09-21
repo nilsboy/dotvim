@@ -60,15 +60,13 @@ function! MyRestConsoleCall(...) abort
   let is_json = search('json', 'n')
 
   set modifiable
-  normal! ggdap
+  normal G%kgcgg
+  normal! G%k"adgg
 
   if is_json
     Neoformat
   endif
 
-  normal! ggP
-  normal gcip
-  normal! k
-  " need echo here for last normal to be executed?!?
-  echo 'done'
+  normal! gg"aP
+  normal! G%k
 endfunction

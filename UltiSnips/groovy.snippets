@@ -1,0 +1,39 @@
+snippet print "print" b
+println "$0"
+endsnippet
+
+snippet task.defineForAllProjects "for all projects" b
+allprojects {
+  $0
+}
+endsnippet
+
+snippet task.defineForAllSubprojects "for all subprojects" b
+subprojects {
+	$0
+}
+endsnippet
+
+snippet task "task" b
+task $1 {
+  $0
+}
+endsnippet
+
+snippet task.defineForProject "forproject" b
+project(':${1:projectName}').${2:taskName} {
+  $0
+}
+endsnippet
+
+snippet task.extend "task.extend" b
+${1:taskName}.doLast {
+  $0
+}
+endsnippet
+
+snippet task.extendFilteredProjects "task.extendFilteredProjects" b
+configure(subprojects.findAll {it.name != 'tropicalFish'}) {
+  task
+}
+endsnippet

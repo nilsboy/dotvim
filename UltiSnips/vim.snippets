@@ -96,6 +96,10 @@ if $1
 endif
 endsnippet
 
+snippet elseif "elseif" b
+elseif
+endsnippet
+
 snippet info "info" 
 call INFO(${VISUAL}$0)
 endsnippet
@@ -361,7 +365,7 @@ let &$1 = $0
 endsnippet
 
 snippet replace "replace" w
-substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
+let $1 = substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
 endsnippet
 
 snippet if_already_loaded "ftplugin_done" b
@@ -420,4 +424,20 @@ endsnippet
 snippet match "match" w
 let ${1:result} = []
 call substitute(${2:source}, ${0:pattern}, '\=add($1, submatch(0))', 'g')
+endsnippet
+
+snippet matches "matches" w
+${VISUAL}$1 =~ $0
+endsnippet
+
+snippet define "define" b
+let &l:define = '\v^$0'
+endsnippet
+
+snippet startsWith "startsWith" w
+  return stridx($1, '$0') == 0
+endsnippet
+
+snippet mapremoveKey "hash.removeKey" w
+remove(${VISUAL}$1, ${2:key}$0)
 endsnippet

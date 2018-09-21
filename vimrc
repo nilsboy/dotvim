@@ -12,6 +12,7 @@ if empty($XDG_CACHE_DIR)
   let $XDG_CACHE_DIR = $REMOTE_HOME . "/.cache"
 endif
 
+" TODO: replace with stdpath()
 " vars
 let g:vim           = {}
 let g:vim.dir       = $REMOTE_HOME . "/.vim/"

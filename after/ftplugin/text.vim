@@ -9,4 +9,4 @@ setlocal syntax=txt
 " let &l:comments = 'nb:>,fb:-'
 
 " Use comment string for quoting
-" let &l:commentstring = '> %s'
+let &l:commentstring = '# %s'

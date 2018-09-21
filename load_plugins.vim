@@ -6,6 +6,8 @@ function! IsPluginInstalled(path)
     return 0
 endfunction
 
+let g:neobundle#types#git#clone_depth = 1
+
 if !IsPluginInstalled("neobundle.vim")
     echo "Installing NeoBundle..."
     echo ""

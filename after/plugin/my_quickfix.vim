@@ -194,6 +194,7 @@ function! MyQuickfixSearch(options) abort
   execute 'cgetfile ' . tempfile
   call MyQuickfixSetTitle(title)
   call cursor(l:save_pos[1:])
+  call MyHelpersClosePreviewWindow()
   copen
 endfunction
 
@@ -205,8 +206,8 @@ function! MyQuickfixAddMappings(key, options) abort
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
         \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1, },
-        \ { 'key': 'p', 'expand': '<cword>', },
-        \ { 'key': 'P', 'expand': '<cWORD>', },
+        \ { 'key': 'l', 'expand': '<cword>', },
+        \ { 'key': 'L', 'expand': '<cWORD>', },
         \ { 'key': 'r', 'orderBy': 'recent', },
         \ { 'key': 'F', 'expand': '%:t', },
         \ { 'key': 'B', 'expand': '%:t:r', },
@@ -249,14 +250,19 @@ endfunction
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
-call MyQuickfixAddMappings('fS', { 'path': '~/src/' })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
 call MyQuickfixAddMappings('fvp', { 'path': g:vim.bundle.dir })
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 
+call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
+nnoremap <silent> <leader>fpp :edit ~/src/<cr>
+
+nnoremap <silent> <leader>vph :execute 'help ' . expand('%:t:r')<cr>
+
 function! MyQuickfixOutline(location) abort
+  silent wall
   cclose
   " let pcreDefine = substitute(&define, '^\\v', '', 'g')
   let pcreDefine = RegexToPcre(&define)

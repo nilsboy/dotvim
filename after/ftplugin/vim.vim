@@ -11,3 +11,8 @@ setlocal shiftwidth=2
 " https://github.com/Kuniwak/vint/issues/182
 " let g:ale_linters['vim'] = ['vint']
 " let g:ale_vim_vint_show_style_issues = 0
+"
+" function! lsp#ui#vim#references() abort
+  " ^\s*fu\%[nction][! ]\s*\%(s:\)\=
+
+let &l:define = '^\s*fu\%[nction][! ]|augroup\s*'

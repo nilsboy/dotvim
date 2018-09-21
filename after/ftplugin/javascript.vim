@@ -10,7 +10,7 @@ setlocal iskeyword+=-
 
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
-let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+)'
+let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+|async )'
 
 setlocal path+=node_modules,~/src/node/lib
 
@@ -30,15 +30,10 @@ function! MyJavascriptIncluedExpr() abort
 endfunction
 set includeexpr=MyJavascriptIncluedExpr()
 
-setlocal omnifunc=lsp#omni#complete
+" setlocal omnifunc=lsp#omni#complete
 
 nnoremap <buffer> <leader>lI :terminal npm install<cr>
 nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
-
-" nnoremap <buffer> gd :LspDefinition<cr>
-nnoremap <buffer> <leader>lr :LspReferences<cr>
-nnoremap <buffer> <leader>lR :LspRename<cr>
-nnoremap <buffer> <leader>lp :LspHover<cr>
 
 " edit module documention
 nnoremap <buffer> <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>
@@ -101,7 +96,7 @@ let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
 "### Linter
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
-let g:ale_linters['javascript'] = ['flow']
+" let g:ale_linters['javascript'] = ['flow']
 " " let g:ale_javascript_eslint_executable = 'babel-eslint'
 " " let g:ale_javascript_eslint_use_global = 1
 

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+## Java language server
+# https://github.com/georgewfraser/vscode-javac
+
+# NOTE: For setup see https://github.com/georgewfraser/vscode-javac/issues/41
+
+source bash-helpers
+
+cd /home/nilsb/tmp/vscode-javac/out/
+
+> /tmp/LanguageClient.log
+> /tmp/LanguageServer.log
+> /tmp/vim-lsp.log
+
+# Using javaconfig.json is deprecated but there does not seem to be another
+# way when using the standalone version.
+
+# TODO: add sources to gradle conf
+
+export CLASSPATH=$(pwd)/fat-jar.jar
+java org.javacs.Main
+

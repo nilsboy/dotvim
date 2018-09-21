@@ -64,3 +64,19 @@ cat << 'EOF' >> ${1:dst file}
 ${VISUAL}$0
 EOF
 endsnippet
+
+snippet p "print" w
+echo "$0"
+endsnippet
+
+snippet pe "print error" w
+echo "$0" >&2
+endsnippet
+
+snippet pee "print error with label" w
+echo '$1: ' $1$0 >&2
+endsnippet
+
+snippet s "string" w
+$1 = "$0"
+endsnippet

@@ -1,27 +1,25 @@
-finish
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
 " NOTE: delay not working?
 " NOTE: does not fuzzy complete?
 NeoBundle 'prabirshrestha/asyncomplete.vim'
 NeoBundle 'prabirshrestha/async.vim'
+NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
 
-" let g:asyncomplete_remove_duplicates = 1
-" set completeopt+=preview
-" autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" does not work (2018-03-13):
-let g:asyncomplete_complete_delay = 200
-
-let g:asyncomplete_force_refresh_on_context_changed = 1
+" let g:lsp_async_completion = 1
 
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+
+" autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" let g:asyncomplete_remove_duplicates = 1
+set completeopt+=preview
+
+" let g:asyncomplete_force_refresh_on_context_changed = 1
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
-
-" NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
 
 " NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
 " au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
@@ -31,18 +29,6 @@ imap <c-space> <Plug>(asyncomplete_force_refresh)
 " 	\ 'blacklist': ['go'],
 " 	\ 'completor': function('asyncomplete#sources#buffer#completor'),
 " 	\ }))
-
-" NeoBundle 'prabirshrestha/asyncomplete-flow.vim', {
-"   \ 'build': { 'unix': 'npm install -g flow-bin' }
-"   \ }
-" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#flow#get_source_options({
-"   \ 'name': 'flow',
-"   \ 'whitelist': ['javascript'],
-"   \ 'priority': 8,
-"   \ 'completor': function('asyncomplete#sources#flow#completor'),
-"   \ 'config': {
-"   \  },
-"   \ }))
 
 " NeoBundle 'prabirshrestha/asyncomplete-ultisnips.vim'
 " " let g:UltiSnipsExpandTrigger="<c-e>"
@@ -76,12 +62,12 @@ imap <c-space> <Plug>(asyncomplete_force_refresh)
 " 	\ 'completor': function('asyncomplete#sources#file#completor')
 " 	\ }))
 
-NeoBundle 'yami-beta/asyncomplete-omni.vim'
-au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-	\ 'name': 'omni',
-	\ 'priority': 1,
-	\ 'whitelist': ['javascript'],
-	\ 'blacklist': [],
-	\ 'completor': function('asyncomplete#sources#omni#completor')
-	\  }))
+" NeoBundle 'yami-beta/asyncomplete-omni.vim'
+" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+" 	\ 'name': 'omni',
+" 	\ 'priority': 1,
+" 	\ 'whitelist': ['javascript'],
+" 	\ 'blacklist': [],
+" 	\ 'completor': function('asyncomplete#sources#omni#completor')
+" 	\  }))
 

@@ -21,7 +21,7 @@ inoremap <tab> <c-r>=MyUltisnipsJump()<cr>
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 execute 'vmap <silent> <tab> ' . g:UltiSnipsExpandTrigger
 
-function MyUltisnipsJump() abort
+function! MyUltisnipsJump() abort
   call UltiSnips#JumpForwards()
   if g:ulti_jump_forwards_res == 1
     return ''

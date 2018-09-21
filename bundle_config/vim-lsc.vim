@@ -1,11 +1,16 @@
+finish
 " A vim plugin for communicating with a language server
+" NOTE: Does support Neovim: https://github.com/natebosch/vim-lsc/issues/52#issuecomment-383341285
+" TAGS: lsp
 NeoBundle 'natebosch/vim-lsc'
 
-let g:lsc_server_commands = {
-    \ 'java': {
-    \   'name': 'javac lsp',
-    \   'command': 'tee /tmp/vim-lsc.in.log | java -cp /home/nilsb/.vim/var/vscode-javac/out/fat-jar.jar org.javacs.Main | tee /tmp/vim-lsc.out.log',
-    \ },
-    \}
+" NOTE: Does not work with javacs - the rootPath does not seem to be set: 
+"   https://github.com/georgewfraser/vscode-javac/issues/45
+"   https://github.com/georgewfraser/vscode-javac/issues/51
+"   Caused by: java.lang.NullPointerException
+"     at org.javacs.JavaLanguageServer.initialize(JavaLanguageServer.java:136)
+" NOTE: eclipse.jdt.ls: https://github.com/natebosch/vim-lsc/issues/56
 
-    " \   'command': 'tee /tmp/vim-lsc.in.log | java -cp /home/nilsb/.vim/var/vscode-javac/out/fat-jar.jar org.javacs.Main | tee /tmp/vim-lsc.out.log',
+let g:lsc_server_commands = {
+      \ 'java': 'javacs'
+      \ }

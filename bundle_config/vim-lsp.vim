@@ -1,32 +1,44 @@
-finish
 " async language server protocol plugin
-NeoBundle 'prabirshrestha/async.vim'
-NeoBundle 'prabirshrestha/vim-lsp'
+" NOTE: ~/.vim/bundle/vim-lsp/minimal.vimrc
+" NOTE: normal mode changes are only refreshed on LSP side when buffer is saved manually.
+" (https://github.com/prabirshrestha/vim-lsp/issues/125)
+" NOTE: due to missing refresh all actions after a change of the buffer have
+" the wrong line and column and thus working with the wrong code.
+" NeoBundle 'prabirshrestha/vim-lsp'
+NeoBundle 'nilsboy/vim-lsp'
 
 MyInstall javascript-typescript-stdio !npm install -g javascript-typescript-langserver
 
-" let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_echo_cursor = 1
 
 let g:lsp_signs_enabled = 1
 let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/tmp/vim-lsp.log')
-" let g:lsp_async_completion = 1
+let g:lsp_log_file = expand('/tmp/vim-lsp.log')
 
-" augroup MyLspAugroupInitJavasciptServer
-"   autocmd!
-"   autocmd User lsp_setup call lsp#register_server({
-"     \ 'name': 'javascript-typescript-stdio',
-"     \ 'cmd': {server_info->['javascript-typescript-stdio']},
-"     \ 'whitelist': ['javascript'],
-"     \ 'config': {},
-"     \ })
-" augroup END
+nnoremap <silent> <leader>ld :LspDefinition<cr>
+nnoremap <silent> <leader>lf :LspDocumentFormat<cr>
+nnoremap <silent> <leader>ls :LspDocumentSymbol<cr>
+nnoremap <silent> <leader>li :LspImplementation<cr>
+nnoremap <silent> <leader>lR :LspRename<cr>
+nnoremap <silent> <leader>lt :LspTypeDefinition<cr>
+nnoremap <silent> <leader>le :LspDocumentDiagnostics<cr>
+nnoremap <silent> <leader>lF :LspDocumentRangeFormat<cr>
+nnoremap <silent> <leader>lk :LspHover<cr>
+nnoremap <silent> <leader>lp :LspPreviousError<cr>
+nnoremap <silent> <leader>ln :LspNextError<cr>
+nnoremap <silent> <leader>lr :LspReferences<cr>
+nnoremap <silent> <leader>lS :LspStatus<cr>
+nnoremap <silent> <leader>lw :LspWorkspaceSymbol<cr>
+
+" NOTE: not implemented jet:
+" https://github.com/prabirshrestha/vim-lsp/pull/162
+nnoremap <silent> <leader>la :LspCodeAction<cr>
 
 augroup MyLspAugroupInitJavasciptServer
   autocmd!
   autocmd User lsp_setup call lsp#register_server({
-    \ 'name': 'javac',
-    \ 'cmd': {server_info->['java', '-cp', '/home/nilsb/.vim/var/vscode-javac/out/fat-jar.jar', 'org.javacs.Main' ]},
+    \ 'name': 'javacs',
+    \ 'cmd': {server_info->['javacs']},
     \ 'whitelist': ['java'],
     \ 'config': {},
     \ })
