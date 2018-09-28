@@ -24,14 +24,21 @@ endfunction
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
 let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
       \  g:MyQuickfixIgnoreFile
-if executable('ag')
-  let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
-        \ . ' --ignore-case --all-text'
 
-  " TODO: add --smart-case option?
-  " TODO: --word-regexp:
-  " TODO: checkout --vimgrep
-endif
+" rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
+" its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
+
+" ag gives the wrong result for (it returns empty lines as well):
+" let b:define = '^[[:upper:]]+[[:upper:][:space:]]+$'
+
+" ack is to complicated to install and has wontfix bugs pre ack3.
+
+let g:MyQuickfixGrepCommand = 'rg --pcre2 --vimgrep'
+" if executable('ag')
+  " let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
+  "       \ . ' --all-text'
+  "       \ . ' --ignore-case --all-text'
+" endif
 
 let g:MyQuickfixSearchLimit = '500'
 
@@ -61,6 +68,7 @@ function! MyQuickfixSearch(options) abort
   let title = get(options, 'title', '')
   let strict = 0
   let path = get(options, 'path', '')
+  let ignoreCase = get(options, 'ignoreCase', 1)
 
   if selection
     let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g') 
@@ -108,7 +116,7 @@ function! MyQuickfixSearch(options) abort
   endif
 
   if wordBoundary && isWordBoundable
-    let term = '\b' . term . '\b'
+    let term = '(\b|_)' . term . '(\b|_)'
   endif
 
   let project_dir = FindRootDirectory()
@@ -122,7 +130,7 @@ function! MyQuickfixSearch(options) abort
 
   let filenameTerm = term
   if matchFilenameOnly
-    let filenameTerm = '\/.*' . term . '[^/]*$'
+    let filenameTerm = '/.*' . term . '[^/]*$'
   else
     " exclude current path from file match
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
@@ -131,7 +139,12 @@ function! MyQuickfixSearch(options) abort
   let grepprg = g:MyQuickfixGrepCommand
 
   if useIgnoreFile
-    let grepprg .= ' -p ' . g:MyQuickfixIgnoreFile
+    let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
+    " let grepprg .= ' --path-to-agignore ' . g:MyQuickfixIgnoreFile
+  endif
+
+  if ignoreCase
+    let grepprg .= ' --ignore-case'
   endif
 
   let limit = ''
@@ -139,23 +152,36 @@ function! MyQuickfixSearch(options) abort
     let limit = ' -' . g:MyQuickfixSearchLimit
   endif
 
-  " /dev/null forces absolute paths if greping a single file
+  " ag:
+  " " /dev/null forces absolute paths if greping a single file
+  " let findprg = grepprg
+  "       \ . ' -g ' . shellescape(filenameTerm)
+  "       \ . ' ' . fnameescape(path)
+  "       \ . ' /dev/null'
+
   let findprg = grepprg
-        \ . ' -g ' . shellescape(filenameTerm)
+        \ . ' --files '
         \ . ' ' . fnameescape(path)
-        \ . ' /dev/null'
+
+  if filenameTerm != ''
+    let findprg .= ' | rg --ignore-case --pcre2 ' . shellescape(filenameTerm)
+  endif
 
   if orderBy == 'recent'
     let findprg .= ' | sort-by-file-modification | tac '
   else
     let findprg .= ''
-          \ . ' | sort '
-          \ . ' | sort-by-path-depth '
+          \ . ' | sort'
+          \ . ' | sort-by-path-depth'
           \ . ' | head-warn' . limit
   endif
 
+  " ag:
+  " let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
+  "       \ . ' /dev/null'
+  "       \ . ' | head-warn' . limit
+
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
-        \ . ' /dev/null'
         \ . ' | head-warn' . limit
 
   let tempfile = tempname()
@@ -171,6 +197,8 @@ function! MyQuickfixSearch(options) abort
     endif
   endif
 
+  " call INFO('grepprg:', grepprg)
+  " call INFO('findprg:', findprg)
   if find
     call system(findprg . '>> ' . tempfile)
   endif
@@ -191,6 +219,7 @@ function! MyQuickfixSearch(options) abort
 
   " let &l:errorformat = '%f:%l:%c:%m,%f:%l%m,%f  %l%m,%f'
   let &l:errorformat = '%f:%l:%c:%m,%f,%m'
+  " let &l:errorformat = '%m'
   execute 'cgetfile ' . tempfile
   call MyQuickfixSetTitle(title)
   call cursor(l:save_pos[1:])
@@ -201,7 +230,7 @@ endfunction
 let g:MyQuickfixAllSearchOptions = []
 function! MyQuickfixAddMappings(key, options) abort
   let options = [
-        \ { 'key': 'f' , 'title': '<all files>', },
+        \ { 'key': 'f' , 'title': '<all files>', 'grep': 0,},
         \ { 'key': 'i', 'ask': 1, },
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
@@ -265,7 +294,11 @@ function! MyQuickfixOutline(location) abort
   silent wall
   cclose
   " let pcreDefine = substitute(&define, '^\\v', '', 'g')
-  let pcreDefine = RegexToPcre(&define)
+  if exists('b:define')
+    let pcreDefine = b:define
+  else
+    let pcreDefine = RegexToPcre(&define)
+  endif
   if a:location == 'bufferOnly'
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
   else
@@ -312,6 +345,8 @@ function! MyQuickfixFormatSimple() abort
   %delete _
   let maxFilenameLength = 0
   let maxTextLength = 0
+  let singleFilename = 1
+  let lastFilename = ''
   for entry in qflist
     let textLength = len(entry.text)
     if textLength > maxTextLength
@@ -326,6 +361,12 @@ function! MyQuickfixFormatSimple() abort
       let dir .= '/'
     endif
     let filename = dir . basename
+    if lastFilename == ''
+      let lastFilename = filename
+    endif
+    if lastFilename != filename
+      let singleFilename = 0
+    endif
     let filenameLength = len(filename)
     if filenameLength > maxFilenameLength
       let maxFilenameLength = filenameLength
@@ -341,9 +382,12 @@ function! MyQuickfixFormatSimple() abort
       let dir .= '/'
     endif
     let filename = dir . basename
-    let text = printf('%-' . maxFilenameLength . 's', filename)
+    let text = ''
+    if ! singleFilename
+      let text = printf('%-' . maxFilenameLength . 's', filename)
+    endif
     " if entry.text != ''
-      if maxTextLength > 0
+      if maxTextLength > 0 && ! singleFilename
         let text .= ' │ '
       endif
       " let text .= entry.text

@@ -10,7 +10,7 @@ setlocal iskeyword+=-
 
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
-let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+|async )'
+let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+|async | \w+\(.+\{)'
 
 setlocal path+=node_modules,~/src/node/lib
 

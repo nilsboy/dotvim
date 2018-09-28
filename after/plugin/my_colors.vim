@@ -30,7 +30,7 @@ set background=light
 " set colorcolumn=81
 " highlight ColorColumn ctermfg=red ctermbg=NONE
 
-match Todo /TODO/
+match Todo /\ctodo/
 
 function! MyColorsColorschemeCleanup() abort
   highlight Normal ctermbg=NONE

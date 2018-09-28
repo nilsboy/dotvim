@@ -7,7 +7,9 @@
 function! MyHelpersClosePreviewWindow() abort
   silent! wincmd P
   if &previewwindow
-    pclose
+    bwipe
+    " cannot close if it's the last window
+    " pclose
   endif
 endfunction
 
@@ -15,7 +17,7 @@ endfunction
 function! BufferClose() abort
   silent! wincmd P
   if &previewwindow
-    pclose
+    bwipe
     return
   endif
   if BufferIsCommandLine() == 1
@@ -635,7 +637,7 @@ function! RegexToPcre(vim_regex) abort
 
   " PCRE character classes
   let character_classes = {
-        \ 's' : ' ',
+        \ 's' : '[[:space:]]',
         \ 'S' : '[^ \\t]',
         \ 'd' : '[[:digit:]]',
         \ 'D' : '[^0-9]',

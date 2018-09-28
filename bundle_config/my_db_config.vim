@@ -99,8 +99,8 @@ function! MyDbExecSql(...) abort
 	silent execute 'edit ' . fileName
   " silent 1,$d
 	let cmd = 'NODE_CONFIG_DIR=' . g:MyDbConfigConfigDir
-        \ . ' dbquery ' 
-        \ . ' --profile ' . g:MyDbConfigProfileName . ' '
+        \ . ' dbquery' 
+        \ . ' --profile ' . g:MyDbConfigProfileName
         \ . limit
         \ . g:MyDbConfigOptions 
         \ . options 

@@ -193,6 +193,10 @@ snippet get "let with default" w
 let $1 = get(${1/\:.*/:/}, '${1/^.*\://}', ${2:default})
 endsnippet
 
+snippet getoption "get value from option dict" w
+let $1 = get(${2:dict}, '$1', ${0:default})
+endsnippet
+
 snippet s "String" w
 '${1:key}': '${2:value}',$0
 endsnippet
@@ -435,9 +439,33 @@ let &l:define = '\v^$0'
 endsnippet
 
 snippet startsWith "startsWith" w
-  return stridx($1, '$0') == 0
+return stridx($1, '$0') == 0
 endsnippet
 
 snippet mapremoveKey "hash.removeKey" w
 remove(${VISUAL}$1, ${2:key}$0)
+endsnippet
+
+snippet "\\w" "\w" r
+[:upper:][:lower:]
+endsnippet
+
+snippet "\\W" "\W" r
+[:upper:][:lower:][:punct:]
+endsnippet
+
+snippet "\\d" "\d" r
+[:digit:]
+endsnippet
+
+snippet "\\u" "\u" r
+[:upper:]
+endsnippet
+
+snippet "\\U" "\U" r
+[:lower:]
+endsnippet
+
+snippet "\\s" "\s" r
+[:space:]
 endsnippet

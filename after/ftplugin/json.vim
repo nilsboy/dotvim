@@ -4,6 +4,8 @@
 
 let &l:commentstring = '// %s'
 
+let &l:define = '\v^.*\w.+[\{\[]+'
+
 let g:MyJsonStrict = 1
 
 function! MyJsonStrict(...) abort
@@ -25,6 +27,8 @@ if exists("b:MyJsonFtpluginLoaded")
   finish
 endif
 let b:MyJsonFtpluginLoaded = 1
+
+MyInstall prettier
 
 MyInstall json2yaml
 nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>

@@ -33,6 +33,7 @@ let g:vrc_curl_opts = {
       \ '-i' : '',
       \ '-L' : '',
       \ '--connect-timeout' : '1',
+      \ '--insecure' : '1',
       \}
 
 " Sorts the JSON keys

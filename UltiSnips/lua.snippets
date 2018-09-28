@@ -53,30 +53,14 @@ if $1 then
 end
 endsnippet
 
-snippet ife "if/else statement" b
-if $1 then
-	$2
+snippet else "else" b
 else
 	$0
-end
 endsnippet
 
-snippet eif "if/elseif statement" b
-if $1 then
-	$2
+snippet elseif "elseif" b
 elseif $3 then
 	$0
-end
-endsnippet
-
-snippet eife "if/elseif/else statement" b
-if $1 then
-	$2
-elseif $3 then
-	$4
-else
-	$0
-end
 endsnippet
 
 snippet pcall "pcall statement" b
@@ -92,4 +76,6 @@ snippet local "local x = 1"
 local ${1:x} = ${0:1}
 endsnippet
 
-# vim:ft=snippets:
+snippet null "null" w
+nil
+endsnippet

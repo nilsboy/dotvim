@@ -10,3 +10,8 @@ setlocal syntax=txt
 
 " Use comment string for quoting
 let &l:commentstring = '# %s'
+
+let &l:define = '\v^(TABLE OF CONTENTS|page \d+|[\u\s]+$)'
+
+" let b:define = '^([[:upper:]]+[[:upper:][:space:]]+|(?i)page \d+)$'
+let b:define = '^((?-i)[[:upper:]]+[[:upper:][:space:]]+)$'

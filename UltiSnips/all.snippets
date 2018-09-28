@@ -251,6 +251,12 @@ snippet uuid "uuid" i
 `uuidgen`
 endsnippet
 
+snippet b64 "base64"
+`!p
+snip.rv = os.popen("base64-my " + snip.v.text).read()
+`
+endsnippet
+
 snippet javascript_skeleton "javascript_skeleton" b
 README.md
 package.json
@@ -315,4 +321,12 @@ endsnippet
 
 snippet [ "[" w
 [${VISUAL}$0]
+endsnippet
+
+snippet internalip "internalip" w
+`internalip`
+endsnippet
+
+snippet localhost "internalip" w
+`internalip`
 endsnippet
