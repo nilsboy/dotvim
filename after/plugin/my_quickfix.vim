@@ -1,5 +1,7 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
+MyInstall rg !cd /tmp ; wget https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb ; sudo dpkg -i ripgrep*.deb  
+
 " Always show signs column
 sign define MyQuickfixSignEmpty
 augroup MyQuickfixAugroupPersistentSignsColumn
