@@ -18,7 +18,7 @@ Grep through the source to find more notes.
 * don't remap any vim keys that you think you wouldn't use anyway
 * only use leader key mapping for your own mappings
 * use text-objects (buildin and provided by plugins)
-* learn vim script - it's ugly but makes vim powerfull
+* learn vim script - it's not that bad and it makes vim powerfull
 
 ## Inline Help
 

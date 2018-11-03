@@ -22,8 +22,8 @@ endfunction
 
 " NOTE: to ignore files not in .gitignore use a .agignore file
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
-let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
-      \  g:MyQuickfixIgnoreFile
+" let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
+"       \  g:MyQuickfixIgnoreFile
 
 " rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
 " its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
@@ -157,6 +157,8 @@ function! MyQuickfixSearch(options) abort
   if useIgnoreFile
     let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
     " let grepprg .= ' --path-to-agignore ' . g:MyQuickfixIgnoreFile
+  else
+    let grepprg .= ' --no-ignore --iglob "!.git" '
   endif
 
   if hidden

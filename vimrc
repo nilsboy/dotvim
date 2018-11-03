@@ -51,6 +51,9 @@ autocmd!
 " reset everything to their defaults
 set all&
 
+set packpath^=~/.vim
+execute "source " . g:vim.etc.dir . '/minpac-setup.vim'
+
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
 nnoremap <silent> <leader>gK :execute 'WebWithFiletype ' . expand('<cword>')<cr>
@@ -77,8 +80,6 @@ execute "set runtimepath+=" . g:vim.after.dir
 let $PATH = $PATH . ':' . g:vim.etc.dir . '/contrib/bin'
 let $MY_VIM_DIR = g:vim.etc.dir
 
-execute "source " . g:vim.etc.dir . '/load_plugins.vim'
-
 " Detect filetypes and run filetype plugins
 filetype on
 filetype plugin on
@@ -86,7 +87,6 @@ filetype indent on
 
 "### Debugging
 
-" " NOTE: Neobundle unsets these
 " set verbosefile=/tmp/vim-debug.log
 " set verbose=13
 

@@ -118,16 +118,15 @@ endsnippet
 
 snippet plugin "Description" b
 " ${0:description}
-NeoBundle '${1:plugin name or github url}'
+PackAdd ${1:plugin name or github url}
 endsnippet
 
-snippet neobundlepost "do something after plugin is loaded" b
-if neobundle#tap('${1:`!v expand('%:t:r')`}') 
-  function! neobundle#hooks.on_post_source(bundle) abort
-    $0
-  endfunction
-  call neobundle#untap()
-endif
+snippet pluginadd "Description" b
+PackAdd ${VISUAL}$0
+endsnippet
+
+snippet pluginafter "do something after plugin is loaded" b
+" TODO packloadall
 endsnippet
 
 snippet ifneo "if is neovim" b
@@ -428,6 +427,7 @@ endsnippet
 snippet match "match" w
 let ${1:result} = []
 call substitute(${2:source}, ${0:pattern}, '\=add($1, submatch(0))', 'g')
+" call substitute(a:package, '', {m -> let x = m}, 'g')
 endsnippet
 
 snippet matches "matches" w
