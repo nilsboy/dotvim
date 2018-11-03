@@ -1,1 +1,1 @@
-let &l:define = '\v^(\-\-\-)'
+let &l:define = '\v(\-\-\-)'

@@ -1,7 +1,5 @@
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
-" NOTE: delay not working?
-" NOTE: does not fuzzy complete?
 NeoBundle 'prabirshrestha/asyncomplete.vim'
 NeoBundle 'prabirshrestha/async.vim'
 NeoBundle 'prabirshrestha/asyncomplete-lsp.vim'
@@ -21,23 +19,23 @@ set completeopt+=preview
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 
-" NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
-" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-" 	\ 'name': 'buffer',
-" 	\ 'priority': 9,
-" 	\ 'whitelist': ['*'],
-" 	\ 'blacklist': ['go'],
-" 	\ 'completor': function('asyncomplete#sources#buffer#completor'),
-" 	\ }))
+NeoBundle 'prabirshrestha/asyncomplete-buffer.vim'
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+	\ 'name': 'buffer',
+	\ 'priority': 9,
+	\ 'whitelist': ['*'],
+	\ 'blacklist': ['go'],
+	\ 'completor': function('asyncomplete#sources#buffer#completor'),
+	\ }))
 
-" NeoBundle 'prabirshrestha/asyncomplete-ultisnips.vim'
-" " let g:UltiSnipsExpandTrigger="<c-e>"
-" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-" 	\ 'name': 'ultisnips',
-" 	\ 'whitelist': ['*'],
-" 	\ 'priority': 7,
-" 	\ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-" 	\ }))
+NeoBundle 'prabirshrestha/asyncomplete-ultisnips.vim'
+" let g:UltiSnipsExpandTrigger="<c-e>"
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+	\ 'name': 'ultisnips',
+	\ 'whitelist': ['*'],
+	\ 'priority': 7,
+	\ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+	\ }))
 
 " NeoBundle 'wellle/tmux-complete.vim'
 " let g:tmuxcomplete#asyncomplete_source_options = {

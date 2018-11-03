@@ -35,9 +35,9 @@ let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
 
 let g:MyQuickfixGrepCommand = 'rg --pcre2 --vimgrep'
 " if executable('ag')
-  " let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
-  "       \ . ' --all-text'
-  "       \ . ' --ignore-case --all-text'
+" let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
+"       \ . ' --all-text'
+"       \ . ' --ignore-case --all-text'
 " endif
 
 let g:MyQuickfixSearchLimit = '500'
@@ -61,6 +61,7 @@ function! MyQuickfixSearch(options) abort
   let matchFilenameOnly = get(options, 'matchFilenameOnly', '1')
   let orderBy = get(options, 'orderBy', '')
   let useIgnoreFile = get(options, 'useIgnoreFile', 1)
+  let hidden = get(options, 'hidden', 1)
   let fuzzy = get(options, 'fuzzy', '0')
   let ask = get(options, 'ask', '0')
   let selection = get(options, 'selection', '0')
@@ -71,7 +72,7 @@ function! MyQuickfixSearch(options) abort
   let ignoreCase = get(options, 'ignoreCase', 1)
 
   if selection
-    let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g') 
+    let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g')
     let strict = 1
   elseif ask
     let term = input('Search: ')
@@ -84,31 +85,46 @@ function! MyQuickfixSearch(options) abort
 
   " apparently you can not work-bind non-word characters
   let isWordBoundable = 0
-  if term =~ '\v^\w' && term =~ '\v\w$' 
+  if term =~ '\v^\w' && term =~ '\v\w$'
     let isWordBoundable = 1
+  endif
+
+  let pos = []
+  call substitute(term, '\v([^\:]+)\:(\d+)(\:(\d+))*', {m -> extend(pos, m)[0]}, 'g')
+  let file = get(pos, 1, term)
+  let line = get(pos, 2)
+  let column = get(pos, 4)
+
+  if line
+    let term = file
   endif
 
   " fuzzy search for most case variants and plurals
   if fuzzy
-    let words = split(term, ' +')
-    let variants = []
+    let words = split(term, '\v\s+')
+    let allVariants = []
     for word in words
+      let variants = []
       call add(variants, word)
       call add(variants, substitute(word, 's$', '', 'gi'))
       call add(variants, substitute(word, '$', 's', 'gi'))
       call add(variants, substitute(word, 'y$', 'ies', 'gi'))
       call add(variants, substitute(word, 'ies$', 'y', 'gi'))
+      let words = copy(variants)
+      for word in words
+        call add(variants, substitute(word, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.{0,1}\l\2', 'g'))
+      endfor
+      let words = copy(variants)
+      let variants = []
+      for word in words
+        call add(variants, substitute(word, '\v[-_]+', '.{0,1}', 'g'))
+      endfor
+      call add(allVariants, variants)
     endfor
-    let words = copy(variants)
-    for word in words
-      call add(variants, substitute(word, '\(\<\u\l\+\|\l\+\)\(\u\)', '\l\1.{0,1}\l\2', 'g'))
+    let term = ''
+    for variants in allVariants
+      let term .= '(?=^.*(' . join(uniq(sort(variants)), '|') . ').*$)'
     endfor
-    let words = copy(variants)
-    let variants = []
-    for word in words
-      call add(variants, substitute(word, '\v[-_]+', '.{0,1}', 'g'))
-    endfor
-    let term = '(' . join(uniq(sort(variants)), '|') . ')+'
   endif
 
   if strict && ! fuzzy
@@ -143,6 +159,10 @@ function! MyQuickfixSearch(options) abort
     " let grepprg .= ' --path-to-agignore ' . g:MyQuickfixIgnoreFile
   endif
 
+  if hidden
+    let grepprg .= ' --hidden '
+  endif
+
   if ignoreCase
     let grepprg .= ' --ignore-case'
   endif
@@ -151,13 +171,6 @@ function! MyQuickfixSearch(options) abort
   if g:MyQuickfixSearchLimit
     let limit = ' -' . g:MyQuickfixSearchLimit
   endif
-
-  " ag:
-  " " /dev/null forces absolute paths if greping a single file
-  " let findprg = grepprg
-  "       \ . ' -g ' . shellescape(filenameTerm)
-  "       \ . ' ' . fnameescape(path)
-  "       \ . ' /dev/null'
 
   let findprg = grepprg
         \ . ' --files '
@@ -175,11 +188,6 @@ function! MyQuickfixSearch(options) abort
           \ . ' | sort-by-path-depth'
           \ . ' | head-warn' . limit
   endif
-
-  " ag:
-  " let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
-  "       \ . ' /dev/null'
-  "       \ . ' | head-warn' . limit
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' | head-warn' . limit
@@ -221,10 +229,24 @@ function! MyQuickfixSearch(options) abort
   let &l:errorformat = '%f:%l:%c:%m,%f,%m'
   " let &l:errorformat = '%m'
   execute 'cgetfile ' . tempfile
+  if line
+    call MyQuickfixSetDefaultPos(line, column)
+  endif
   call MyQuickfixSetTitle(title)
   call cursor(l:save_pos[1:])
   call MyHelpersClosePreviewWindow()
   copen
+endfunction
+
+function! MyQuickfixSetDefaultPos(line, column) abort
+  let qflist = getqflist()
+  for entry in qflist
+    if entry.lnum == 0
+      let entry.lnum = a:line
+      let entry.col = a:column
+    endif
+  endfor
+  call setqflist(qflist)
 endfunction
 
 let g:MyQuickfixAllSearchOptions = []
@@ -279,6 +301,7 @@ endfunction
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
+call MyQuickfixAddMappings('fh', { 'hidden': 1, 'useIgnoreFile': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
 call MyQuickfixAddMappings('fvp', { 'path': g:vim.bundle.dir })
@@ -339,7 +362,27 @@ endfunction
 " setqflist() has a fixed display format so it can not be used for formatting.
 " This function only formats and *must* not delete entries - use a different
 " function for that.
-function! MyQuickfixFormatSimple() abort
+function! MyQuickfixFormatAsSimple() abort
+  " When defining an autocommand in a script, it will be able to call functions
+  " local to the script and use mappings local to the script.  When the event is
+  " triggered and the command executed, it will run in the context of the script
+  " it was defined in.  This matters if |<SID>| is used in a command.
+  " TODO: use BufferIsLoclist() instead somehow?
+
+  " let loclistBufNr = 0
+  " for winnr in range(1, winnr('$'))
+  "   let qflist = filter(getwininfo(), 'v:val.quickfix && v:val.loclist')
+  "   if len(qflist) == 0
+  "     let loclistBufNr = -1
+  "     break
+  "   endif
+  "   let loclistBufNr = qflist[0].bufnr
+  "   break
+  " endfor
+  " if bufnr('%') == loclistBufNr
+  "   return
+  " endif
+
   let qflist = getqflist()
   setlocal modifiable
   %delete _
@@ -372,6 +415,7 @@ function! MyQuickfixFormatSimple() abort
       let maxFilenameLength = filenameLength
     endif
   endfor
+  let texts = []
   for entry in qflist
     let path = fnamemodify(bufname(entry.bufnr), ':.')
     let basename = fnamemodify(path, ':t')
@@ -384,56 +428,59 @@ function! MyQuickfixFormatSimple() abort
     let filename = dir . basename
     let text = ''
     if ! singleFilename
-      let text = printf('%-' . maxFilenameLength . 's', filename)
-    endif
-    " if entry.text != ''
-      if maxTextLength > 0 && ! singleFilename
+      let text = filename
+      if maxTextLength > 0
+        let text = printf('%-' . maxFilenameLength . 's', filename)
         let text .= ' │ '
       endif
-      " let text .= entry.text
-      let text .= substitute(entry.text, '\v^\s*', '', 'g')
-    " endif
+    endif
+    let text .= substitute(entry.text, '\v^\s*', '', 'g')
     let text = substitute(text, '\v[\r]*$', '', 'g')
-		call append(line('$'), text)
+    call add(texts, text)
   endfor
+  " a lot faster to add all lines in a list sometimes (umlauts problem?)
+  call append(line('$'), texts)
   keepjumps normal! "_dd
   setlocal nomodifiable
   setlocal nomodified
 endfunction
 
+augroup MyQuickfixAugroupCloseQfWindows
+  autocmd!
+  autocmd QuickFixCmdPre * cclose | lclose
+augroup END
+
 augroup MyQuickfixAugroupFormat
   autocmd!
-  autocmd FileType qf :call MyQuickfixFormat()
+  autocmd FileType qf call MyQuickfixFormat()
 augroup END
 
 let g:MyQuickfixFormat = 'Simple'
 function! MyQuickfixFormat() abort
-  if g:MyQuickfixFormat == 'None'
-    return
+  call function('MyQuickfixFormatAs' . g:MyQuickfixFormat)()
+endfunction
+
+function! MyQuickfixFormatAsNone() abort
+  " nothing
+endfunction
+
+function! MyQuickfixFormatToggle() abort
+  if g:MyQuickfixFormat == 'Simple'
+    let g:MyQuickfixFormat = 'None'
+  else
+    let g:MyQuickfixFormat = 'Simple'
   endif
-  call function('MyQuickfixFormat' . g:MyQuickfixFormat)()
+  if BufferIsQuickfix()
+    cclose
+    copen
+  else
+    lclose
+    lopen
+  endif
 endfunction
 
 function! MyQuickfixSetTitle(title) abort
   call setqflist([], 'a', { 'title' : a:title })
-endfunction
-
-function! MyQuickfixFormatToggle() abort
-  let found = 0
-  for format in ['Simple', 'None', 'last']
-    if found == 1
-      let g:MyQuickfixFormat = format
-      break
-    endif
-    if g:MyQuickfixFormat == format
-      let found = 1
-    endif
-  endfor
-  if g:MyQuickfixFormat == 'last'
-    let g:MyQuickfixFormat = 'Simple'
-  endif
-  " call MyQuickfixSetTitle(g:MyQuickfixFormat)
-  copen
 endfunction
 
 function! MyQuickfixRemoveInvalid() abort

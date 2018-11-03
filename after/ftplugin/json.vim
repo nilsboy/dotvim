@@ -4,9 +4,14 @@
 
 let &l:commentstring = '// %s'
 
-let &l:define = '\v^.*\w.+[\{\[]+'
+let &l:define = '\v^\s\s"\w.+[\{\[]+'
 
 let g:MyJsonStrict = 1
+
+if exists("b:MyJsonFtpluginLoaded")
+  finish
+endif
+let b:MyJsonFtpluginLoaded = 1
 
 function! MyJsonStrict(...) abort
   let cmd = join(a:000)
@@ -22,11 +27,6 @@ function! MyJsonStrict(...) abort
 endfunction
 command! -nargs=* MyJsonStrict call MyJsonStrict (<f-args>)
 call MyJsonStrict()
-
-if exists("b:MyJsonFtpluginLoaded")
-  finish
-endif
-let b:MyJsonFtpluginLoaded = 1
 
 MyInstall prettier
 

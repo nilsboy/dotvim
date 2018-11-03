@@ -272,7 +272,7 @@ if filereadable($1)
 endif
 endsnippet
 
-snippet push "array push" b
+snippet push "array push" w
 call add(${1:array}, ${VISUAL}${0:item})
 endsnippet
 
@@ -468,4 +468,12 @@ endsnippet
 
 snippet "\\s" "\s" r
 [:space:]
+endsnippet
+
+snippet lamda "lamda" w
+{ $1 -> $0 }
+endsnippet
+
+snippet k "k" w
+keepjumps
 endsnippet

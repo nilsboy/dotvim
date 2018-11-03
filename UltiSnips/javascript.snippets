@@ -224,26 +224,33 @@ endsnippet
 
 snippet foreachkeyjs5 "foreachkeyjs5" b
 Object.keys(${1:object}).forEach(function(${2:key}) {
-  var ${3:value} = $1[$2]$0
+  var ${3:value} = $1[$2]
+  ${VISUAL}$0
 })
 endsnippet
 
 snippet foreachkey "for each in object" b
 for(const ${2:variable} in ${1:iterable}) {
-  $0
+  ${VISUAL}$0
 }
 endsnippet
 
 snippet foreach "for each in collection" b
 for(const ${2:variable} of ${1:iterable}) {
-  $0
+  ${VISUAL}$0
 }
 endsnippet
 
-snippet forpairs "forpairs" b
+snippet foreachpairses5 "forpairs" b
   _.toPairs(${1:object}).map(([${2:key}, ${3:value}]) => {
   $0
 })
+endsnippet
+
+snippet foreachpairs "foreachpairs" b
+for (const [${1:key}, ${2:value}] of Object.entries(${3:object})) {
+  $0
+}
 endsnippet
 
 snippet fori "fori" b
@@ -770,17 +777,28 @@ endsnippet
 # let dump = require(`circular-json`).stringify
 # console.error(`### node: \n`, dump(node, null, '  '))
 
-snippet dump "dump a var" b
 # TODO: snippet
-const util = require(\`util\`)
-console.error(\`### $1:\n\`, util.inspect($1, {depth: 30}))
+# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
+# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
+snippet dump "dump a var" b
+require(\`fs\`).writeFileSync(\`/tmp/dumpjs\`, require(\`util\`).inspect($1, {depth: 3}))
 endsnippet
+
+# snippet dump "dump" b
+# const cycle = require(`cycle`)
+# const util = require(`util`)
+# function dump(x) {
+#   return util.inspect(cycle.decycle(x), {
+#     depth: null
+#   })
+# }
+# endsnippet
 
 snippet tempFileName "tempFileName" b
 const fileName = require('tmp').fileSync().name
 endsnippet
 
-snippet \s "s" w
+snippet multiline "(?m) multiline" w
 [\s\S]*
 endsnippet
 

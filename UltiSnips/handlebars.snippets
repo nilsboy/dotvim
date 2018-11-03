@@ -13,3 +13,9 @@ endsnippet
 snippet comma "last comma" w
 {{#unless @last}},{{/unless}}
 endsnippet
+
+snippet for "for" b
+{{#each $1}}
+${VISUAL}$0
+{{/each}}
+endsnippet

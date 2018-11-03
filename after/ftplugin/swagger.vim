@@ -9,6 +9,8 @@ augroup MySwaggerAugroupLint
   autocmd BufWritePost <buffer> :silent! call MySwaggerLint()
 augroup END
 
+let &l:define = '\v^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
+
 if exists("b:did_ftplugin_swagger")
     finish
 endif

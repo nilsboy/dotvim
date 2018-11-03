@@ -35,11 +35,14 @@ function! BufferClose() abort
   let wasQfOpen = MyHelpersQuickfixIsOpen()
   if wasQfOpen
     cclose
+    " TODO: test
+    return
   endif
   if BufferIsUnnamed() == 1
   elseif &write
     silent update
   endif
+  lclose
   if BufferIsLast() == 1
     silent! q!
   endif
@@ -587,7 +590,7 @@ endfunction
 " TODO: remap
 nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
-  let fileName = substitute(expand('%:p'), '/txt', '/org', 'g')
+  let fileName = substitute(expand('%:p'), '/txt/org', '/org', 'g')
   let fileName = substitute(fileName, '\.txt', '', 'g')
   silent! execute '!see ' fileName ' &'
 endfunction

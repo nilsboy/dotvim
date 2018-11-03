@@ -93,6 +93,12 @@ snippet j "join" w
 JOIN 
 endsnippet
 
+snippet jon "join" w
+JOIN $1 ON (1
+  AND $1.${VISUAL}$0
+)
+endsnippet
+
 snippet lj "left join" w
 LEFT JOIN 
 endsnippet
@@ -135,4 +141,9 @@ endsnippet
 
 snippet h "having" w
 HAVING
+endsnippet
+
+snippet w "where" w
+WHERE 1
+AND
 endsnippet

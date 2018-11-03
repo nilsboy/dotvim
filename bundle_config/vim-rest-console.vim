@@ -19,22 +19,28 @@ let g:vrc_debug = 0
 let g:vrc_show_command = 1
 
 let g:vrc_horizontal_split = 1
-
 let g:vrc_set_default_mapping = 0
+let g:vrc_syntax_highlight_response = 0
 
 " let g:vrc_connect_timeout = 1
 " deprecated
 " let g:vrc_max_time = 1
 
 " be quiet and only show errors
+" note --insecure causes: curl: (7) Couldn't connect to server
 let g:vrc_curl_opts = {
-      \ '-s' : '',
-      \ '-S' : '',
       \ '-i' : '',
       \ '-L' : '',
+      \ '-S' : '',
+      \ '-s' : '',
       \ '--connect-timeout' : '1',
+      \ '--max-time' : '3',
       \ '--insecure' : '1',
       \}
+
+      " always generates 'curl: (7) Couldn't connect to server'
+      " as first line in the output:
+      " \ '--insecure' : '1',
 
 " Sorts the JSON keys
 let g:vrc_auto_format_response_enabled = 0
@@ -44,7 +50,7 @@ function! MyRestConsoleCall(...) abort
 
   " VrcQuery messes up current buffer position
   let b:winview = winsaveview()
-  call VrcQuery()
+  keepjumps call VrcQuery()
   if(exists('b:winview')) | call winrestview(b:winview) | endif
 
   only
@@ -52,22 +58,28 @@ function! MyRestConsoleCall(...) abort
   let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
   let fileName = '/tmp/rest-call.' . g:MyRestConsoleResultId . '.restresult'
 
-  silent execute 'edit ' . b:vrc_output_buffer_name
+  silent execute 'keepjumps edit ' . b:vrc_output_buffer_name
   set buftype=
-  silent! execute 'saveas! ' . fileName
-
-  setlocal filetype=restresult
-
-  let is_json = search('json', 'n')
+  silent! execute 'keepjumps saveas! ' . fileName
 
   set modifiable
-  normal G%kgcgg
-  normal! G%k"adgg
 
+  let is_json = search('json', 'n')
   if is_json
-    Neoformat
+    keepjumps Neoformat! json
   endif
 
-  normal! gg"aP
-  normal! G%k
+  " NOTE: % is very slow on big bodies:
+  " keepjumps normal G%kgcgg
+  " keepjumps normal! G%k"adgg
+
+  " setlocal filetype=restresult
+
+  setlocal nowrap
+  setlocal filetype=json
+  keepjumps normal gggcip
+  normal! gg
+
+  " keepjumps normal! gg"aP
+  " keepjumps normal! G%k
 endfunction

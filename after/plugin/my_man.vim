@@ -21,9 +21,9 @@ function! Man(cmd) abort
     setlocal noreadonly
     setlocal modifiable
     let &l:buftype = ''
-    normal ggdG
+    keepjumps normal ggdG
     silent execute 'r!SHORT=1 man-multi-lookup' cmd
-    normal! ggdd
+    keepjumps normal! ggdd
     " normal! /^---
     update
     call setpos('.', saved_cursor)
@@ -43,6 +43,7 @@ function! Man(cmd) abort
 
     " keywordprg only works for external apps
     nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>
-    let &l:filetype = 'man'
+    " Triggers the build-in man ftplugin
+    " setlocal filetype=man
 endfunction
 command! -nargs=1 Man call Man("<args>")

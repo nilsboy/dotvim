@@ -76,7 +76,7 @@ augroup END
 " highlight the whole file not just the window - slower but more accurate.
 augroup MyColorsAugroupHighlightWholeBuffer
   autocmd!
-  autocmd BufEnter * :syntax sync fromstart
+  autocmd BufEnter * :if &syn | syntax sync fromstart | endif
 augroup END
 
 function! MyColorsShowSyntaxGroups() abort
@@ -91,7 +91,7 @@ command! MyColorsShowCurrentColors :source $VIMRUNTIME/syntax/hitest.vim
 
 augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd!
-  autocmd! BufAdd * if &syntax == '' | setlocal syntax=txt | endif
+  autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
 
 " load colorscheme last to ensure own settings have priority
