@@ -39,7 +39,7 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-execute "source " . g:vim.etc.dir . '/helpers.vim'
+execute "source " . g:vim.etc.dir . '/plugin/helpers.vim'
 
 call Mkdir(g:vim.dir, "p")
 call Mkdir(g:vim.etc.dir, "p")
@@ -52,7 +52,7 @@ autocmd!
 set all&
 
 set packpath^=~/.vim
-execute "source " . g:vim.etc.dir . '/minpac-setup.vim'
+execute "source " . g:vim.etc.dir . '/plugin/minpac-setup.vim'
 
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
