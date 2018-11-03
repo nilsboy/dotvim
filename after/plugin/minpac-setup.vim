@@ -1,3 +1,10 @@
+if exists("g:MyMinpacSetupPluginLoaded")
+    finish
+endif
+let g:MyMinpacSetupPluginLoaded = 1
+
+let g:MyMinpacSetupMissingPlugin = 0
+
 " Install a plugin as optional and load it directly.
 " This allows before and after configs for a plugin in the same contained config file.
 " This also prevents plugins to be loadded implicitly just by being installed.
@@ -6,7 +13,8 @@ function! PackAdd(url) abort
   call minpac#add(a:url, {'type': 'opt'})
   let dir = $HOME . '/.vim/pack/minpac/opt/' . package
   if ! isdirectory(dir)
-    echo 'Missing plugin: ' . package . ' - install with :PluginsUpdate'
+    " echo 'Missing plugin: ' . package . ' - install with :PluginsUpdate'
+    let g:MyMinpacSetupMissingPlugin = 1
   else
     execute 'packadd ' . package
   endif
@@ -23,10 +31,13 @@ if ! len(glob('~/.vim/pack/minpac/opt/minpac/README.md')) > 0
 endif
 
 packadd minpac
-call minpac#init()
+call minpac#init({'status_open': 'horizontal'})
 
 " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
 call minpac#add('k-takata/minpac', {'type': 'opt'})
 
 command! -nargs=* PluginsUpdate call minpac#update()
 command! -nargs=* PluginsStatus call minpac#status()
+
+nnoremap <silent> <leader>vps :PluginsStatus \| only<cr>
+nnoremap <silent> <leader>vpu :PluginsUpdate<cr>

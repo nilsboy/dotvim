@@ -1,3 +1,5 @@
+" SEE ALSO: mustache plugin
+
 " let &l:comments = 's1://'
 " let &l:commentstring = '// %s'
 

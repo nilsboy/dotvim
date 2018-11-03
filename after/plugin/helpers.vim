@@ -1,3 +1,8 @@
+if exists("g:MyHelpersPluginLoaded")
+    finish
+endif
+let g:MyHelpersPluginLoaded = 1
+
 " VimL Helper Libraries
 " - l9.vim
 " - https://github.com/LucHermitte/lh-vim-lib

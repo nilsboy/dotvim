@@ -125,10 +125,6 @@ snippet pluginadd "Description" b
 PackAdd ${VISUAL}$0
 endsnippet
 
-snippet pluginafter "do something after plugin is loaded" b
-" TODO packloadall
-endsnippet
-
 snippet ifneo "if is neovim" b
 if IsNeoVim()
   ${VISUAL}$0
@@ -371,11 +367,19 @@ snippet replace "replace" w
 let $1 = substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
 endsnippet
 
-snippet if_already_loaded "ftplugin_done" b
+snippet loadedftplugin "ftplugin_done" b
 if exists("b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded")
     finish
 endif
 let b:`!p snip.rv = fncc(snip.basename)`FtpluginLoaded = 1
+$0
+endsnippet
+
+snippet loadedplugin "plugin_done" b
+if exists("b:`!p snip.rv = fncc(snip.basename)`PluginLoaded")
+    finish
+endif
+let b:`!p snip.rv = fncc(snip.basename)`PluginLoaded = 1
 $0
 endsnippet
 

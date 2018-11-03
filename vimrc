@@ -1,5 +1,11 @@
 set nocompatible
 
+" Remove all existing autocommands on vimrc reload
+autocmd!
+
+" reset everything to their defaults
+set all&
+
 if empty($XDG_CONFIG_HOME)
   let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
 endif
@@ -39,20 +45,21 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-execute "source " . g:vim.etc.dir . '/after/plugin/helpers.vim'
+" Make helpgrep find vim's own help files before plugin help files
+let &runtimepath = '/usr/share/nvim/runtime,'
+      \ . &runtimepath
+
+execute "set runtimepath+=" . g:vim.etc.dir
+execute "set runtimepath+=" . g:vim.after.dir
+
+runtime after/plugin/helpers.vim
 
 call Mkdir(g:vim.dir, "p")
 call Mkdir(g:vim.etc.dir, "p")
 call Mkdir(g:vim.var.dir, "p")
 
-" Remove all existing autocommands on vimrc reload
-autocmd!
-
-" reset everything to their defaults
-set all&
-
 set packpath^=~/.vim
-execute "source " . g:vim.etc.dir . '/after/plugin/minpac-setup.vim'
+runtime after/plugin/minpac-setup.vim
 
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
@@ -69,13 +76,6 @@ call Mkdir(&undodir, "p")
 " augroup END
 
 set path=.,,
-
-" Make helpgrep find vim's own help files before plugin help files
-let &runtimepath = '/usr/share/nvim/runtime,'
-      \ . &runtimepath
-
-execute "set runtimepath+=" . g:vim.etc.dir
-execute "set runtimepath+=" . g:vim.after.dir
 
 let $PATH = $PATH . ':' . g:vim.etc.dir . '/contrib/bin'
 let $MY_VIM_DIR = g:vim.etc.dir

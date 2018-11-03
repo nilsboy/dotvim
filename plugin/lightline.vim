@@ -1,5 +1,4 @@
 " A light and configurable statusline/tabline
-" PackAdd itchyny/lightline.vim
 PackAdd itchyny/lightline.vim
 
 " NOTE: dummy is used to make sure an inactive statusline is rendered
