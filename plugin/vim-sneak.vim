@@ -1,5 +1,4 @@
 " The missing motion for Vim
-PackAdd justinmk/vim-sneak
 " TAGS: motion search
 
 let g:sneak#prompt = 'sneak> '
@@ -38,10 +37,24 @@ let g:sneak#label = 1
 nmap s <Plug>SneakLabel_s
 nmap S <Plug>SneakLabel_S
 
-" Example: Configure "f" to trigger label-mode:
+" let g:sneak#label = 1
+" nmap s <Plug>Sneak_s
+" nmap S <Plug>Sneak_S
+
+" Configure "f" to trigger label-mode:
 nnoremap <silent> f :<C-U>call sneak#wrap('',           1, 0, 1, 1)<CR>
 nnoremap <silent> F :<C-U>call sneak#wrap('',           1, 1, 1, 1)<CR>
 xnoremap <silent> f :<C-U>call sneak#wrap(visualmode(), 1, 0, 1, 1)<CR>
 xnoremap <silent> F :<C-U>call sneak#wrap(visualmode(), 1, 1, 1, 1)<CR>
 onoremap <silent> f :<C-U>call sneak#wrap(v:operator,   1, 0, 1, 1)<CR>
 onoremap <silent> F :<C-U>call sneak#wrap(v:operator,   1, 1, 1, 1)<CR>
+
+" Configure "s" to wait for 3 characters:
+nnoremap <silent> s :<C-U>call sneak#wrap('',           3, 0, 2, 1)<CR>
+nnoremap <silent> S :<C-U>call sneak#wrap('',           3, 1, 2, 1)<CR>
+xnoremap <silent> s :<C-U>call sneak#wrap(visualmode(), 3, 0, 2, 1)<CR>
+xnoremap <silent> S :<C-U>call sneak#wrap(visualmode(), 3, 1, 2, 1)<CR>
+onoremap <silent> s :<C-U>call sneak#wrap(v:operator,   3, 0, 2, 1)<CR>
+onoremap <silent> S :<C-U>call sneak#wrap(v:operator,   3, 1, 2, 1)<CR>
+
+PackAdd justinmk/vim-sneak

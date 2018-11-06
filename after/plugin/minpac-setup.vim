@@ -8,9 +8,12 @@ let g:MyMinpacSetupMissingPlugin = 0
 " Install a plugin as optional and load it directly.
 " This allows before and after configs for a plugin in the same contained config file.
 " This also prevents plugins to be loadded implicitly just by being installed.
-function! PackAdd(url) abort
-  let package = substitute(a:url, '.*/', '', 'g')
-  call minpac#add(a:url, {'type': 'opt'})
+function! PackAdd(...) abort
+  let url = get(a:000, '0')
+  let options = get(a:000, '1', {})
+  let package = substitute(url, '.*/', '', 'g')
+  call extend(options, {'type': 'opt'})
+  call minpac#add(url, options)
   let dir = $HOME . '/.vim/pack/minpac/opt/' . package
   if ! isdirectory(dir)
     " echo 'Missing plugin: ' . package . ' - install with :PluginsUpdate'

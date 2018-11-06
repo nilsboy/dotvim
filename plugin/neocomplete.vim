@@ -1,6 +1,7 @@
 finish
 " Next generation completion framework
 PackAdd Shougo/neocomplete.vim
+" TAGS: completion
 
 " https://www.reddit.com/r/vim/comments/50rjde/finally_i_got_neocomplete_and_ultisnips_to_play/
 

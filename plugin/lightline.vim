@@ -44,6 +44,9 @@ let g:lightline = {
       \     'tags': '(MyLightlineTags() != "")',
       \     'quickfix_title': '(exists("w:quickfix_title") != 0)',
       \   },
+      \   'component_function': {
+      \     'cocstatus': 'coc#status'
+      \   },
       \ }
 
       " \   'component_expand': {

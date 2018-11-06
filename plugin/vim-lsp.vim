@@ -1,3 +1,4 @@
+finish
 " async language server protocol plugin
 " NOTE: ~/.vim/bundle/vim-lsp/minimal.vimrc
 " NOTE: normal mode changes are only refreshed on LSP side when buffer is saved manually.

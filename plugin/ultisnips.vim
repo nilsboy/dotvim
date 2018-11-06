@@ -1,3 +1,4 @@
+finish
 " The ultimate snippet solution for Vim.
 PackAdd SirVer/ultisnips
 

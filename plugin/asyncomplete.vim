@@ -1,5 +1,7 @@
+finish
 " async completion in pure vim script
 " NOTE: endless loop when used with formatoptions and UltiSnips.
+" TAGS: completion
 PackAdd prabirshrestha/asyncomplete.vim
 PackAdd prabirshrestha/async.vim
 PackAdd prabirshrestha/asyncomplete-lsp.vim

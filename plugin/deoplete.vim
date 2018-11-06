@@ -2,6 +2,7 @@ finish
 PackAdd Shougo/deoplete.nvim
 " tags: complete
 " TODO: checkout maralla/completor.vim
+" TAGS: completion
 
 " pip3 install --user neovim
 " pip3 install --upgrade --user neovim

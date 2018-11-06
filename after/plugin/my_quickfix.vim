@@ -363,31 +363,35 @@ function! MyLoclistDump(...) abort
   call DUMP(getloclist(0))
 endfunction
 
+" can not use the helpers version from an autocommand
+function! BufferIsLoclist(...) abort
+  let bufnr = bufnr('%')
+  if a:0 != 0
+    let bufnr = a:1
+  endif
+  return bufnr == GetLoclistBufferNumber()
+endfunction
+
+" can not use the helpers version from an autocommand
+function! GetLoclistBufferNumber() abort
+  for winnr in range(1, winnr('$'))
+    let qflist = filter(getwininfo(), 'v:val.quickfix && v:val.loclist')
+    if len(qflist) == 0
+      return 0
+    endif
+    return qflist[0].bufnr
+  endfor
+endfunction
+
 " setqflist() has a fixed display format so it can not be used for formatting.
 " This function only formats and *must* not delete entries - use a different
 " function for that.
 function! MyQuickfixFormatAsSimple() abort
-  " When defining an autocommand in a script, it will be able to call functions
-  " local to the script and use mappings local to the script.  When the event is
-  " triggered and the command executed, it will run in the context of the script
-  " it was defined in.  This matters if |<SID>| is used in a command.
-  " TODO: use BufferIsLoclist() instead somehow?
-
-  " let loclistBufNr = 0
-  " for winnr in range(1, winnr('$'))
-  "   let qflist = filter(getwininfo(), 'v:val.quickfix && v:val.loclist')
-  "   if len(qflist) == 0
-  "     let loclistBufNr = -1
-  "     break
-  "   endif
-  "   let loclistBufNr = qflist[0].bufnr
-  "   break
-  " endfor
-  " if bufnr('%') == loclistBufNr
-  "   return
-  " endif
-
-  let qflist = getqflist()
+  if BufferIsLoclist()
+    let qflist = getloclist(0)
+  else
+    let qflist = getqflist()
+  endif
   setlocal modifiable
   %delete _
   let maxFilenameLength = 0
@@ -440,6 +444,9 @@ function! MyQuickfixFormatAsSimple() abort
     endif
     let text .= substitute(entry.text, '\v^\s*', '', 'g')
     let text = substitute(text, '\v[\r]*$', '', 'g')
+    if text == ''
+      let text = filename
+    endif
     call add(texts, text)
   endfor
   " a lot faster to add all lines in a list sometimes (umlauts problem?)

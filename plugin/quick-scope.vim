@@ -1,14 +1,9 @@
 finish
-" highlights 
-" TODO try again - does not seem to do anything"
 " Lightning fast left-right movement in Vim 
 PackAdd unblevable/quick-scope
 
-let g:qs_first_occurrence_highlight_color = '#afff5f' " gui vim
-let g:qs_first_occurrence_highlight_color = 26 " terminal vim
-
-" let g:qs_second_occurrence_highlight_color = '#5fffff'  " gui vim
-" let g:qs_second_occurrence_highlight_color = 20 " terminal vim
-
-" Trigger a highlight in the appropriate direction when pressing these keys:
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary ctermfg=196 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary ctermfg=110 cterm=underline
+augroup END
