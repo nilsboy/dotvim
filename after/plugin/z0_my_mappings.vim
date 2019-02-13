@@ -1,5 +1,11 @@
 " For a list of vim's internal mappings see:
 " :h index
+"
+" Good mappings tutorial:
+" https://old.reddit.com/r/vim/comments/a4fg63/for_mappings_and_a_tutorial_vimways_824/
+"
+" Retain an existing mapping:
+" :h maparg
 
 " Potentially reassignable keys for normal mode:
 " s, S, Q, Z, <bs>, M, m, r, R, <space>, Y
@@ -163,7 +169,7 @@ nnoremap <leader>vm :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappi
 nnoremap <silent> <leader>vt :execute ':edit ' 
   \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 
-" Show all <leader> mappings
+" Show all mappings
 nnoremap <leader>vM :Verbose cmap <bar> map<cr> :only<cr>
 
 " Show all <leader> search mappings

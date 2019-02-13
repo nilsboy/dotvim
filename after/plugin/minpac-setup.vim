@@ -1,12 +1,13 @@
 if exists("g:MyMinpacSetupPluginLoaded")
-    finish
+  finish
 endif
 let g:MyMinpacSetupPluginLoaded = 1
 
 let g:MyMinpacSetupMissingPlugin = 0
 
 " Install a plugin as optional and load it directly.
-" This allows before and after configs for a plugin in the same contained config file.
+" This allows before and after configs for a plugin in the same contained
+" config file.
 " This also prevents plugins to be loadded implicitly just by being installed.
 function! PackAdd(...) abort
   let url = get(a:000, '0')
@@ -42,5 +43,3 @@ call minpac#add('k-takata/minpac', {'type': 'opt'})
 command! -nargs=* PluginsUpdate call minpac#update()
 command! -nargs=* PluginsStatus call minpac#status()
 
-nnoremap <silent> <leader>vps :PluginsStatus \| only<cr>
-nnoremap <silent> <leader>vpu :PluginsUpdate<cr>

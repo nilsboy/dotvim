@@ -1,4 +1,3 @@
-finish
 " The ultimate snippet solution for Vim.
 PackAdd SirVer/ultisnips
 
@@ -9,6 +8,7 @@ nnoremap <leader>sa :execute ":edit " . g:vim.etc.dir .
       \ "UltiSnips/all.snippets"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0
+finish
 
 " The expand trigger has to be mapped for $VISUAL to work.
 " This mappes the key globally for insert mode.
@@ -40,3 +40,4 @@ function! MyUltisnipsJump() abort
   endif
   return "\<esc>"
 endfunction
+

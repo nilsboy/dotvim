@@ -1,10 +1,9 @@
 {
-  // Use ":CocConfig" to edit coc-settings.json
   // Run ":CocInstall coc-json" to get completion support.
   "coc.preferences.autoTrigger": "always",
   "coc.preferences.snippets.enable": true,
   // only used when autoTrigger is always
-  "coc.preferences.triggerAfterInsertEnter": false,
+  "coc.preferences.triggerAfterInsertEnter": true,
   "coc.preferences.minTriggerInputLength": 1,
   "coc.preferences.acceptSuggestionOnCommitCharacter": false,
   "coc.preferences.customSources": ["include"],
@@ -53,14 +52,14 @@
   "coc.source.omni.shortcut": "O",
   "coc.source.omni.priority": 3,
   "coc.source.omni.filetypes": [],
-  "coc.source.tag.enable": true,
+  "coc.source.tag.enable": false,
   "coc.source.tag.shortcut": "T",
   "coc.source.tag.priority": 3,
   // Words from google 10000 english repo.
   "coc.source.word.enable": false,
   "coc.source.word.shortcut": "10k",
   "coc.source.word.priority": 1,
-  "coc.source.ultisnips.enable": true,
+  "coc.source.ultisnips.enable": false,
   "coc.source.ultisnips.priority": 99,
   "coc.source.ultisnips.shortcut": "US",
   "coc.source.neosnippet.enable": false,
@@ -72,6 +71,7 @@
   "coc.source.neco.filetypes": ["vim"],
   "coc.source.neco.triggerCharacters": [":", "&"],
   "coc.source.neco.firstMatch": true,
+  // TODO:
   "coc.source.languageclient.filetypes": [],
   "coc.source.gocode.enable": false,
   "coc.source.gocode.filetypes": ["go"],

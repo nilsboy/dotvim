@@ -80,3 +80,19 @@ endsnippet
 snippet s "string" w
 $1 = "$0"
 endsnippet
+
+snippet fileExtension "fileExtension" w
+filename=$(basename -- "$file")
+if [[ $file =~ \. ]] ; then
+  extension=."${filename##*.}"
+fi
+filename="${filename%.*}"
+endsnippet
+
+# TODO: test
+snippet replace "replace" w
+if [[ $filename =~ (.+)(_v[[:digit:]]{8}_[[:digit:]]{6}$) ]] ; then
+  filename=${BASH_REMATCH[1]}
+fi
+echo ${BASH_REMATCH[*]}
+endsnippet
