@@ -3,8 +3,6 @@ if exists("g:MyMinpacSetupPluginLoaded")
 endif
 let g:MyMinpacSetupPluginLoaded = 1
 
-let g:MyMinpacSetupMissingPlugin = 0
-
 " Install a plugin as optional and load it directly.
 " This allows before and after configs for a plugin in the same contained
 " config file.
@@ -15,13 +13,25 @@ function! PackAdd(...) abort
   let package = substitute(url, '.*/', '', 'g')
   call extend(options, {'type': 'opt'})
   call minpac#add(url, options)
-  let dir = $HOME . '/.vim/pack/minpac/opt/' . package
+  let pluginfo = g:minpac#pluglist[package]
+  let dir = pluginfo.dir
   if ! isdirectory(dir)
-    " echo 'Missing plugin: ' . package . ' - install with :PluginsUpdate'
-    let g:MyMinpacSetupMissingPlugin = 1
-  else
-    execute 'packadd ' . package
+    echo 'Installing missing plugin: ' . package
+    " this is async so does not work with my sequential plugin config files
+    " system:
+    " call minpac#update(package, {'do': 'packadd ' . package})
+    execute '!git clone --quiet ' . pluginfo.url . ' ' . pluginfo.dir
+          \ . ' --no-single-branch --depth=1'
+    if type(pluginfo.do) == v:t_func
+      call INFO('Running post hook for ' . package)
+      let pwd = getcwd()
+      let cdcmd = haslocaldir() ? 'lcd' : 'cd'
+      noautocmd execute cdcmd fnameescape(pluginfo.dir)
+      call call(pluginfo.do, [])
+      noautocmd execute cdcmd fnameescape(pwd)
+    endif
   endif
+    execute 'packadd ' . package
 endfunction
 command! -nargs=* PackAdd call PackAdd(<f-args>)
 

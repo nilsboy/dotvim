@@ -59,7 +59,7 @@
   "coc.source.word.enable": false,
   "coc.source.word.shortcut": "10k",
   "coc.source.word.priority": 1,
-  "coc.source.ultisnips.enable": false,
+  "coc.source.ultisnips.enable": true,
   "coc.source.ultisnips.priority": 99,
   "coc.source.ultisnips.shortcut": "US",
   "coc.source.neosnippet.enable": false,

@@ -4,15 +4,12 @@
 
 MyInstall yarn !npm install -g yarn
 
-call minpac#add('neoclide/coc.nvim', {'type': 'opt',
-      \ 'do': {-> coc#util#install()}})
+function! MyCocInstall(...) abort
+  !yarn install
+  !yarn add coc-ultisnips coc-tsserver coc-json coc-java --ignore-engines
+endfunction
 
-packadd coc.nvim
-" CocInstall coc-ultisnips
-
-" :CocInstall coc-java
-" :CocInstall coc-tsserver
-" :CocInstall coc-json
+call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 
 nmap <leader>ld <Plug>(coc-definition)
 nmap <leader>lt <Plug>(coc-type-definition)

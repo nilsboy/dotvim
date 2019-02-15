@@ -45,12 +45,13 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-" Make helpgrep find vim's own help files before plugin help files
-let &runtimepath = '/usr/share/nvim/runtime,'
-      \ . &runtimepath
-
 execute "set runtimepath+=" . g:vim.etc.dir
 execute "set runtimepath+=" . g:vim.after.dir
+
+" Make sure configs are not source twice due to links between .vim and .config
+" dirs
+execute 'set rtp-=$HOME/.config/nvim'
+execute 'set rtp-=$HOME/.config/nvim/after'
 
 runtime after/plugin/helpers.vim
 
