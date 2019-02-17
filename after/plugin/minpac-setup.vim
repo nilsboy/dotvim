@@ -16,7 +16,7 @@ function! PackAdd(...) abort
   let pluginfo = g:minpac#pluglist[package]
   let dir = pluginfo.dir
   if ! isdirectory(dir)
-    echo 'Installing missing plugin: ' . package
+    echom 'Installing missing plugin: ' . package
     " this is async so does not work with my sequential plugin config files
     " system:
     " call minpac#update(package, {'do': 'packadd ' . package})
@@ -29,6 +29,10 @@ function! PackAdd(...) abort
       noautocmd execute cdcmd fnameescape(pluginfo.dir)
       call call(pluginfo.do, [])
       noautocmd execute cdcmd fnameescape(pwd)
+    endif
+    if isdirectory(pluginfo.dir . '/doc')
+      echom 'Generating help tags for ' . package
+      execute 'helptags ' . pluginfo.dir . '/doc'
     endif
   endif
     execute 'packadd ' . package
