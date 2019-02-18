@@ -10,7 +10,8 @@ setlocal iskeyword+=-
 
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
-let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|const\s+|async\s|\s\w+\(.+\{|module\.exports)'
+let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
+let b:outline = '\v(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|^\s*it\s*\('
 
 setlocal path+=node_modules,~/src/node/lib
 
@@ -89,14 +90,14 @@ let g:neomake_run_maker = {
 " \ 'postprocess':
 " function('MyJavascriptFixCoreFileLocationInQuickfix')
 
-" mocha first
-let test#runners = {'JavaScript': ["Mocha", "Intern", "TAP",
-      \ "Karma", "Lab", "Jasmine", "Jest"] }
+let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
+      \ "Karma", "Lab", "Jasmine"] }
 
 "### Linter
 
 let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
 " let g:ale_linters['javascript'] = ['flow']
+" let g:ale_linters['javascript'] = ['eslint']
 " " let g:ale_javascript_eslint_executable = 'babel-eslint'
 " " let g:ale_javascript_eslint_use_global = 1
 

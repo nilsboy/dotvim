@@ -2,7 +2,7 @@
 " :h index
 
 " Potentially reassignable keys for normal mode:
-" s, S, Q, Z, <bs>, M, m, r, R, <space>, Y
+" s, S, Q, Z, <bs>, M, m, r, R, <space>, Y, -, +
 " <cr> is used in quickfix etc for jumping
 " Maybe use r as secondary leader?
 
@@ -31,6 +31,10 @@ vmap <leader> <nop>
 
 nnoremap <leader>vE :call VimEnvironment()<cr><esc>
 nnoremap <leader>veg :call DUMP(g:)<cr>
+
+function! VimEnvironment() abort
+  Verbose autocmd
+endfunction
 
 " nnoremap <silent><c-z> :silent wall<cr><c-z>
 " inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
@@ -268,4 +272,9 @@ sunmap m
 
 nnoremap gd [<c-d>
 
+" format json no matter the filetype
 nnoremap <silent> <leader>X :Neoformat! json<cr>
+
+cnoremap <expr> %% fnameescape(expand('%'))
+" cnoremap <expr> <space><space>% fnameescape(expand('%'))
+cnoremap <expr> :: fnameescape(expand('%:p:h')) . '/'

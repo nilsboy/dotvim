@@ -127,7 +127,7 @@
       1
     ],
     "object-curly-newline": [
-      1, {
+      0, {
         "minProperties": 1
       }
     ],

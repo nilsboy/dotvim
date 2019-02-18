@@ -1,4 +1,4 @@
-priority -2
+priority 0
 
 ### global snippets
 
@@ -109,7 +109,7 @@ snippet degree "Degree sign" i
 °
 endsnippet
 
-priority -1
+priority 1
 
 # snippet '(\d+)' "(\d+)" r
 # `!p snip.rv = int(match.group(1)) + 1`
@@ -309,9 +309,9 @@ snippet uu "unter Umstaenden" w
 u. U.
 endsnippet
 
-snippet ( "(" w
-(${VISUAL}$0)
-endsnippet
+# snippet ( "(" w
+# (${VISUAL}$0)
+# endsnippet
 
 snippet { "{" w
 {
@@ -319,9 +319,9 @@ snippet { "{" w
 }
 endsnippet
 
-snippet [ "[" w
-[${VISUAL}$0]
-endsnippet
+# snippet [ "[" w
+# [${VISUAL}$0]
+# endsnippet
 
 snippet internalip "internalip" w
 `internalip`
@@ -329,4 +329,16 @@ endsnippet
 
 snippet localhost "internalip" w
 `internalip`
+endsnippet
+
+# snippet "\(" "(" rA
+# (${VISUAL}$1)$0
+# endsnippet
+
+snippet "ae" "aa" rA
+ä
+endsnippet
+
+snippet eg "eg" w
+e.g.
 endsnippet

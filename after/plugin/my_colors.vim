@@ -80,7 +80,7 @@ augroup MyColorsAugroupHighlightWholeBuffer
 augroup END
 
 function! MyColorsShowSyntaxGroups() abort
-  echo map(synstack(line('.'), col('.')),
+	echo map(synstack(line('.'), col('.')),
         \ 'synIDattr(v:val, "name")')
 endfunction
 nnoremap <leader>gs :call MyColorsShowSyntaxGroups()<cr>

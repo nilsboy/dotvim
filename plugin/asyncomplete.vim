@@ -2,7 +2,7 @@
 " NOTE: endless loop when used with formatoptions and UltiSnips.
 PackAdd prabirshrestha/asyncomplete.vim
 PackAdd prabirshrestha/async.vim
-PackAdd prabirshrestha/asyncomplete-lsp.vim
+" PackAdd prabirshrestha/asyncomplete-lsp.vim
 
 " let g:lsp_async_completion = 1
 
@@ -15,7 +15,7 @@ PackAdd prabirshrestha/asyncomplete-lsp.vim
 " let g:asyncomplete_remove_duplicates = 1
 set completeopt+=preview
 
-" let g:asyncomplete_force_refresh_on_context_changed = 1
+let g:asyncomplete_auto_popup = 0
 
 imap <c-space> <Plug>(asyncomplete_force_refresh)
 

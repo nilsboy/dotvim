@@ -9,8 +9,6 @@ if ! IsNeoVim()
   finish
 endif
 
-PackAdd w0rp/ale
-
 " supress error message about this var (2017-05-28)
 let g:ale_change_sign_column_color = 0
 
@@ -28,3 +26,4 @@ let g:ale_emit_conflict_warnings = 0
 " TODO: run formatter first?
 " let g:ale_lint_delay = 1000
 
+PackAdd w0rp/ale

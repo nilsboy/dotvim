@@ -318,6 +318,7 @@ function! DUMP(input) abort
 endfunction
 
 " dump any vim structure to json
+" TODO: see string()
 function! _DUMP(input) abort
   let json = ''
   if type(a:input) == type({})

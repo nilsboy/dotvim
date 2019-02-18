@@ -15,4 +15,5 @@ setlocal shiftwidth=2
 " function! lsp#ui#vim#references() abort
   " ^\s*fu\%[nction][! ]\s*\%(s:\)\=
 
-let &l:define = '^\s*fu\%[nction][! ]|augroup\s*'
+" let &l:define = '^\s*fu\%[nction][! ]|augroup\s*'
+let b:outline = '^\s*fun\w*[! ]+'

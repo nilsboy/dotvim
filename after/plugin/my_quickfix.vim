@@ -155,12 +155,10 @@ function! MyQuickfixSearch(options) abort
   endif
 
   let grepprg = g:MyQuickfixGrepCommand
+  let grepprg .= ' --no-ignore --iglob "!.git" '
 
   if useIgnoreFile
     let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
-    " let grepprg .= ' --path-to-agignore ' . g:MyQuickfixIgnoreFile
-  else
-    let grepprg .= ' --no-ignore --iglob "!.git" '
   endif
 
   if hidden
@@ -181,7 +179,7 @@ function! MyQuickfixSearch(options) abort
         \ . ' ' . fnameescape(path)
 
   if filenameTerm != ''
-    let findprg .= ' | rg --ignore-case --pcre2 ' . shellescape(filenameTerm)
+    let findprg .= ' | rg --follow --ignore-case --pcre2 ' . shellescape(filenameTerm)
   endif
 
   if orderBy == 'recent'
@@ -189,9 +187,12 @@ function! MyQuickfixSearch(options) abort
   else
     let findprg .= ''
           \ . ' | sort'
-          \ . ' | sort-by-path-depth'
           \ . ' | head-warn' . limit
+
+          " \ . ' | sort-by-path-depth'
   endif
+
+  " echo 'findprg:' . findprg
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' | head-warn' . limit
@@ -256,7 +257,7 @@ endfunction
 let g:MyQuickfixAllSearchOptions = []
 function! MyQuickfixAddMappings(key, options) abort
   let options = [
-        \ { 'key': 'f' , 'title': '<all files>', 'grep': 0,},
+        \ { 'key': 'f', 'title': '<all files>', 'grep': 0,},
         \ { 'key': 'i', 'ask': 1, },
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
@@ -308,24 +309,22 @@ call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1, 'useIgnoreFile': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
-call MyQuickfixAddMappings('fvp', { 'path': g:vim.bundle.dir })
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/<cr>
 
-nnoremap <silent> <leader>vph :execute 'help ' . expand('%:t:r')<cr>
+nnoremap <silent> <leader>vph :execute 'edit ' . stdpath('config') . '/pack/minpac/opt/' . expand('%:t:r') . '/README.md'<cr>
 
 function! MyQuickfixOutline(location) abort
   silent wall
   cclose
   " let pcreDefine = substitute(&define, '^\\v', '', 'g')
-  if exists('b:define')
-    let pcreDefine = b:define
-  else
-    let pcreDefine = RegexToPcre(&define)
+  if ! exists('b:outline')
+    return
   endif
+  let pcreDefine = RegexToPcre(b:outline)
   if a:location == 'bufferOnly'
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
   else
@@ -341,6 +340,7 @@ function! MyQuickfixRun(...) abort
   let cmd = join(a:000)
   let &l:makeprg = cmd
   let &l:errorformat = '%f:%l:%c:%m,%f'
+  let &l:errorformat = '%m'
   let g:lastCommand = &l:makeprg
   silent wall
   silent! make!
@@ -373,21 +373,12 @@ function! MyQuickfixFormatAsSimple() abort
   " it was defined in.  This matters if |<SID>| is used in a command.
   " TODO: use BufferIsLoclist() instead somehow?
 
-  " let loclistBufNr = 0
-  " for winnr in range(1, winnr('$'))
-  "   let qflist = filter(getwininfo(), 'v:val.quickfix && v:val.loclist')
-  "   if len(qflist) == 0
-  "     let loclistBufNr = -1
-  "     break
-  "   endif
-  "   let loclistBufNr = qflist[0].bufnr
-  "   break
-  " endfor
-  " if bufnr('%') == loclistBufNr
-  "   return
-  " endif
+  if BufferIsLoclist()
+    let qflist = getloclist(0)
+  else
+    let qflist = getqflist()
+  endif
 
-  let qflist = getqflist()
   setlocal modifiable
   %delete _
   let maxFilenameLength = 0
@@ -414,7 +405,8 @@ function! MyQuickfixFormatAsSimple() abort
     if lastFilename != filename
       let singleFilename = 0
     endif
-    let filenameLength = len(filename)
+    " let filenameLength = len(filename)
+    let filenameLength = len(path)
     if filenameLength > maxFilenameLength
       let maxFilenameLength = filenameLength
     endif
@@ -429,17 +421,35 @@ function! MyQuickfixFormatAsSimple() abort
     else
       let dir .= '/'
     endif
-    let filename = dir . basename
-    let text = ''
-    if ! singleFilename
-      let text = filename
+    " let filename = dir . basename
+    let filename = path
+    let text = filename
+    " if ! singleFilename
+      " if entry.valid
+      "   if entry.text == ''
+      "     let text = filename
+      "   endif
+      " endif
       if maxTextLength > 0
-        let text = printf('%-' . maxFilenameLength . 's', filename)
+        let text = printf('%-' . maxFilenameLength . 's', text)
         let text .= ' │ '
       endif
+    " endif
+    if entry.valid
+      " if entry.text != ''
+      " if maxTextLength > 0
+        " let text .= '❭ '
+        " let text .= '❱ '
+        " let text .= '⚠ '
+      " else
+        let text = '❱ ' . text
+      " endif
+    else
+        let text = '  ' . text
     endif
-    let text .= substitute(entry.text, '\v^\s*', '', 'g')
-    let text = substitute(text, '\v[\r]*$', '', 'g')
+    " let text .= substitute(entry.text, '\v^\s*', '', 'g')
+    let text .= entry.text
+    let text = substitute(text, '\v[\n\r]', '', 'g')
     call add(texts, text)
   endfor
   " a lot faster to add all lines in a list sometimes (umlauts problem?)
@@ -485,6 +495,31 @@ endfunction
 
 function! MyQuickfixSetTitle(title) abort
   call setqflist([], 'a', { 'title' : a:title })
+endfunction
+
+" TODO: keep cursor in qf
+" nnoremap <silent> <cmd> 5 {-> execute('pedit ' . MyQuickfixGetCurrent().filename)}
+" nnoremap <silent> <cmd> 5 execute 'pedit ' . MyQuickfixGetCurrent().filename<cr>
+" nnoremap <leader>5 :call MyQuickfixPreview()<cr>
+function! MyQuickfixPreview() abort
+  let filename = MyQuickfixGetCurrent().filename
+  " cclose
+  execute 'pedit ' . filename
+  " copen
+endfunction
+
+function! MyQuickfixGetCurrent() abort
+  let [bufnum, lnum, col, off] = getpos('.')
+  let qflist = getqflist()
+  let qflnum = 0
+  for entry in qflist
+    let qflnum = qflnum + 1
+    if qflnum == lnum
+      let entry.filename = bufname(entry.bufnr)
+      return entry
+    endif
+  endfor
+  return {}
 endfunction
 
 function! MyQuickfixRemoveInvalid() abort
@@ -537,3 +572,18 @@ endfunction
 function! MyLoclistGetErrorCount() abort
   return len(filter(getloclist(0), 'v:val.valid'))
 endfunction
+
+function! MyQuickfixIsError() abort
+  echo getqflist()[getcurpos()[1]-1].valid
+endfunction
+
+" TODO: split by \r and add new entries to the quickfix
+" Vars are stored with <00> in vim and don't result in new lines when printed
+function! MyQuickfixFixNewlines() abort
+  let qflist = getqflist()
+  for entry in qflist
+    let entry.text = substitute(entry.text, '\%u00', '\r', 'g')
+  endfor
+  call setqflist(qflist)
+endfunction
+

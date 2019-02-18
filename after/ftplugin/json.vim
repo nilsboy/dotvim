@@ -2,6 +2,7 @@
 " let &l:comments = 's1:[",ex:"]'
 " let &l:commentstring = '["%s"]'
 
+setlocal wrap
 let &l:commentstring = '// %s'
 
 let &l:define = '\v^\s\s"\w.+[\{\[]+'

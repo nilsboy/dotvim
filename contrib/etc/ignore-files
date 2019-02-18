@@ -3,3 +3,9 @@ bower_components/
 package-lock.json
 build/
 .git/
+package-lock.json
+yarn.lock
+coverage
+test-report.xml
+.scannerwork
+pack

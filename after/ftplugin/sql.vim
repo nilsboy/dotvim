@@ -16,4 +16,5 @@ let g:formatdef_sqlformatter = '"sql-format"'
 
 " TODO npm sqlite3 seems to have a good formatter
 
-let &l:define = '\v^#+\ .+$'
+" let b:outline = '\v^(##+\ .+|select|insert).+$'
+let b:outline = '\v^(##+\ ).+$'

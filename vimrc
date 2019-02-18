@@ -45,12 +45,12 @@ let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
 let g:vim.config = {}
 let g:vim.config.dir = g:vim.etc.dir . "config/"
 
-" Make helpgrep find vim's own help files before plugin help files
-let &runtimepath = '/usr/share/nvim/runtime,'
-      \ . &runtimepath
+" " Make helpgrep find vim's own help files before plugin help files
+" let &runtimepath = '/usr/share/nvim/runtime,'
+"       \ . &runtimepath
 
-execute "set runtimepath+=" . g:vim.etc.dir
-execute "set runtimepath+=" . g:vim.after.dir
+" execute "set runtimepath+=" . g:vim.etc.dir
+" execute "set runtimepath+=" . g:vim.after.dir
 
 runtime after/plugin/helpers.vim
 
@@ -97,4 +97,3 @@ Redir echo &rtp
 %s/,/\r/g
 endfunction
 nnoremap <silent> <leader>rp :call MyVimrcRtp()<cr>
-
