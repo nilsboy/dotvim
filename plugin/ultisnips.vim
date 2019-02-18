@@ -8,21 +8,28 @@ nnoremap <leader>sa :execute ":edit " . g:vim.etc.dir .
       \ "UltiSnips/all.snippets"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0
-finish
 
 " The expand trigger has to be mapped for $VISUAL to work.
 " This mappes the key globally for insert mode.
 " These have to be diffent otherwise UltiSnips maps a different function and
 " $VISUAL does not work.
-let g:UltiSnipsExpandTrigger = "<NOP>x"
-let g:UltiSnipsJumpForwardTrigger = "<NOP>y"
+" let g:UltiSnipsExpandTrigger = "<NOP>x"
+" let g:UltiSnipsJumpForwardTrigger = "<NOP>y"
 
-inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
-inoremap <tab> <c-r>=MyUltisnipsJump()<cr>
+" inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
+inoremap silent <tab> <c-r>=MyUltisnipsJump()<cr>
+let g:UltiSnipsExpandTrigger = '<c-space>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-execute 'vmap <silent> <tab> ' . g:UltiSnipsExpandTrigger
+" let g:UltiSnipsListSnippets = '<c-space>'
+
+" vnoremap <silent> <tab> <c-r>=UltiSnips#JumpForwards()<cr>
+" vnoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 
 function! MyUltisnipsJump() abort
+  if pumvisible()
+    return "\<C-y>"
+  endif
   call UltiSnips#JumpForwards()
   if g:ulti_jump_forwards_res == 1
     return ''

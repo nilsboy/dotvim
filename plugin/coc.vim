@@ -1,12 +1,12 @@
 " Intellisense engine for neovim, featured language server support as VSCode
 " TAGS: completion
-" See also: ./coc-settings.json
-
-MyInstall yarn !npm install -g yarn
+" SEE ALSO: ./coc-settings.json
+" SEE ALSO: Additional sources: https://github.com/neoclide/coc-sources
 
 function! MyCocInstall(...) abort
+  MyInstall yarn !npm install -g yarn
   !yarn install
-  !yarn add coc-ultisnips coc-tsserver coc-json coc-java --ignore-engines
+  !yarn add coc-ultisnips coc-tsserver coc-json coc-java coc-yaml --ignore-engines
 endfunction
 
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
@@ -35,6 +35,5 @@ autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'

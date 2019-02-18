@@ -204,7 +204,8 @@ nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<
 nnoremap v m`v
 nnoremap V m`V
 nnoremap <C-v> m`<C-v>
-vnoremap <esc> <esc>``
+" this interfers with coc select mode
+" vnoremap <esc> <esc>``
 vnoremap y y``
 
 function! MyZ0MyMappingsMessages() abort
