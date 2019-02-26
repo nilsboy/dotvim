@@ -1,6 +1,6 @@
 " Use for: linting, makeing, testing, formatting, finding stuff
 
-MyInstall rg !cd /tmp ; wget https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb ; sudo dpkg -i ripgrep*.deb  
+MyInstall rg apt-get install ripgrep
 
 " Always show signs column
 sign define MyQuickfixSignEmpty
@@ -24,23 +24,6 @@ endfunction
 
 " NOTE: to ignore files not in .gitignore use a .agignore file
 let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
-" let g:MyQuickfixGrepCommand = 'grep -inHR --exclude-from ' .
-"       \  g:MyQuickfixIgnoreFile
-
-" rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
-" its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
-
-" ag gives the wrong result for (it returns empty lines as well):
-" let b:define = '^[[:upper:]]+[[:upper:][:space:]]+$'
-
-" ack is to complicated to install and has wontfix bugs pre ack3.
-
-let g:MyQuickfixGrepCommand = 'rg --pcre2 --vimgrep'
-" if executable('ag')
-" let g:MyQuickfixGrepCommand = 'ag -f --nogroup --nocolor --column '
-"       \ . ' --all-text'
-"       \ . ' --ignore-case --all-text'
-" endif
 
 let g:MyQuickfixSearchLimit = '500'
 
@@ -154,7 +137,8 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = g:MyQuickfixGrepCommand
+  let grepprg = 'rg --pcre2 --vimgrep'
+
   " let grepprg .= ' --no-ignore --iglob "!.git" '
 
   if useIgnoreFile
@@ -195,8 +179,6 @@ function! MyQuickfixSearch(options) abort
           " \ . ' | sort-by-path-depth'
   endif
 
-  " echo 'findprg:' . findprg
-
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
         \ . ' | head-warn' . limit
 
@@ -216,8 +198,6 @@ function! MyQuickfixSearch(options) abort
   let g:MyQuickfixFindPrg = findprg
   let g:MyQuickfixGrepPrg = grepprg
 
-  " call INFO('grepprg:', grepprg)
-  " call INFO('findprg:', findprg)
   if find
     call system(findprg . '>> ' . tempfile)
   endif
@@ -321,7 +301,9 @@ call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/<cr>
 
-nnoremap <silent> <leader>vph :execute 'edit ' . stdpath('config') . '/pack/minpac/opt/' . expand('%:t:r') . '/README.md'<cr>
+nnoremap <silent> <leader>vph :execute 'edit '
+      \ . stdpath('config') . '/pack/minpac/opt/'
+      \ . expand('%:t:r') . '/README.md'<cr>
 
 function! MyQuickfixOutline(location) abort
   silent wall
