@@ -55,7 +55,3 @@ call minpac#add('k-takata/minpac', {'type': 'opt'})
 
 command! -nargs=* PluginsUpdate call minpac#update()
 command! -nargs=* PluginsStatus call minpac#status()
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/work

@@ -54,6 +54,9 @@ let g:vim.config.dir = g:vim.etc.dir . "config/"
 execute 'set rtp-=$HOME/.config/nvim'
 execute 'set rtp-=$HOME/.config/nvim/after'
 
+execute "set runtimepath+=" . g:vim.etc.dir
+execute "set runtimepath+=" . g:vim.after.dir
+
 runtime after/plugin/helpers.vim
 
 call Mkdir(g:vim.dir, "p")
