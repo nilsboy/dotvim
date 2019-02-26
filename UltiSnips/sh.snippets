@@ -96,3 +96,7 @@ if [[ $filename =~ (.+)(_v[[:digit:]]{8}_[[:digit:]]{6}$) ]] ; then
 fi
 echo ${BASH_REMATCH[*]}
 endsnippet
+
+snippet uppercase "uppercase" w
+\${${VISUAL}$0^^}
+endsnippet

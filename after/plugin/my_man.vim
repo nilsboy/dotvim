@@ -3,7 +3,6 @@ let s:cache_dir = $XDG_CACHE_DIR . "/vim-normal-buffer-man"
 call Mkdir(s:cache_dir, "p")
 
 function! Man(cmd) abort
-
     let cmd = a:cmd
 
     if empty(cmd)
@@ -17,14 +16,19 @@ function! Man(cmd) abort
     " Cannot setlocal filetype=man because it messes with the filename
     " Needs ! to supress error from /usr/share/nvim/runtime/syntax/man.vim
     silent! execute 'edit ' . file_name
+
+    " keywordprg only works for external apps
+    nmap <buffer><silent>K :call Man(expand("<cword>"))<cr>
+
     let saved_cursor = getcurpos()
     setlocal noreadonly
     setlocal modifiable
     let &l:buftype = ''
-    keepjumps normal ggdG
+    keepjumps normal gg"_dG
     silent execute 'r!SHORT=1 man-multi-lookup' cmd
-    keepjumps normal! ggdd
-    " normal! /^---
+    keepjumps normal! gg"_dd
+    " setlocal buftype=nowrite
+    " needs to be written to keep position within file
     update
     call setpos('.', saved_cursor)
 
@@ -41,9 +45,7 @@ function! Man(cmd) abort
     highlight default link manReference      PreProc
     highlight default link manSubHeading     Function
 
-    " keywordprg only works for external apps
-    nmap <buffer><silent>K :call Man(expand("<cword>"))<cr><cr>
-    " Triggers the build-in man ftplugin
+    " Triggers the "misbehaving" build-in man ftplugin
     " setlocal filetype=man
 endfunction
 command! -nargs=1 Man call Man("<args>")

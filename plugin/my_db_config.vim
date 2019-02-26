@@ -131,7 +131,10 @@ function! MyDbInfos() abort
   normal! o
   normal! o### SQLs
   execute 'r! ls -t ' . $REMOTE_HOME . '/src/sql/*.sql'
-  normal! 5gg
+  normal! o
+  normal! o### Mappings
+  RedirAppend map \\d
+  normal! 8gg0
 endfunction
 
 nnoremap <leader>dK mayiw:call MyDbConfigKillProcess(@")<cr>

@@ -318,6 +318,7 @@ function! DUMP(input) abort
 endfunction
 
 " dump any vim structure to json
+" TODO: see string()
 function! _DUMP(input) abort
   let json = ''
   if type(a:input) == type({})
@@ -595,7 +596,7 @@ endfunction
 " TODO: remap
 nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
-  let fileName = substitute(expand('%:p'), '/txt/org', '/org', 'g')
+  let fileName = substitute(expand('%:p'), '/txt/', '/org/', 'g')
   let fileName = substitute(fileName, '\.txt', '', 'g')
   silent! execute '!see ' fileName ' &'
 endfunction
@@ -745,4 +746,10 @@ function! MyHelpersShortenPath(str, max) abort
     let newStr = printf('%-' . max . 's', newStr)
   endif
   return newStr
+endfunction
+
+let g:my_debug_id = 0
+function! DebugId() abort
+  let g:my_debug_id = g:my_debug_id + 1
+  return g:my_debug_id
 endfunction

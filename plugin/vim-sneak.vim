@@ -30,8 +30,9 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
-autocmd ColorScheme * hi! link Sneak TabLineSel
-" autocmd ColorScheme * hi! link SneakLabel TabLineSel
+" autocmd ColorScheme * hi! link Sneak TabLineSel
+autocmd ColorScheme * hi! link Sneak NONE
+autocmd ColorScheme * hi link SneakLabel TabLineSel
 
 let g:sneak#label = 1
 nmap s <Plug>SneakLabel_s

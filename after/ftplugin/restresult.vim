@@ -1,5 +1,5 @@
 " Used by vim-rest-console
 
-setlocal nowrap
+setlocal wrap
 setlocal modifiable
 setlocal syntax=json

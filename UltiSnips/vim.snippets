@@ -474,10 +474,22 @@ snippet "\\s" "\s" r
 [:space:]
 endsnippet
 
+snippet "\(\?i\)" "ignore case" r
+\c
+endsnippet
+
 snippet lamda "lamda" w
 { $1 -> $0 }
 endsnippet
 
 snippet k "k" w
 keepjumps
+endsnippet
+
+snippet .* "errorformat .*" w
+%.%#
+endsnippet
+
+snippet [ "errorformat [] errorformat" w
+%*[${VISUAL}$0]
 endsnippet

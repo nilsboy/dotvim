@@ -34,9 +34,10 @@ let g:vrc_curl_opts = {
       \ '-S' : '',
       \ '-s' : '',
       \ '--connect-timeout' : '1',
-      \ '--max-time' : '3',
       \ '--insecure' : '1',
+      \ '--trace-time': '',
       \}
+      " \ '--max-time' : '3',
 
       " always generates 'curl: (7) Couldn't connect to server'
       " as first line in the output:
@@ -48,6 +49,10 @@ let g:vrc_auto_format_response_enabled = 0
 let g:MyRestConsoleResultId = 0
 function! MyRestConsoleCall(...) abort
 
+  let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
+  let fileName = '/tmp/rest-call.' . g:MyRestConsoleResultId . '.restresult'
+  let b:vrc_output_buffer_name = fileName
+
   " VrcQuery messes up current buffer position
   let b:winview = winsaveview()
   keepjumps call VrcQuery()
@@ -55,18 +60,21 @@ function! MyRestConsoleCall(...) abort
 
   only
 
-  let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
-  let fileName = '/tmp/rest-call.' . g:MyRestConsoleResultId . '.restresult'
+  execute 'keepjumps edit ' . b:vrc_output_buffer_name
 
-  silent execute 'keepjumps edit ' . b:vrc_output_buffer_name
   set buftype=
-  silent! execute 'keepjumps saveas! ' . fileName
-
   set modifiable
+  setlocal nowrap
+  setlocal filetype=json
+  silent! keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
+  silent! keepjumps g/^HTTP/ :normal gcip
+  " keepjumps normal gggcip
 
   let is_json = search('json', 'n')
   if is_json
+    " keepjumps normal! gg"adap
     keepjumps Neoformat! json
+    " keepjumps normal! gg"aP
   endif
 
   " NOTE: % is very slow on big bodies:
@@ -75,11 +83,7 @@ function! MyRestConsoleCall(...) abort
 
   " setlocal filetype=restresult
 
-  setlocal nowrap
-  setlocal filetype=json
-  keepjumps normal gggcip
-  normal! gg
-
   " keepjumps normal! gg"aP
   " keepjumps normal! G%k
+  keepjumps normal! gg
 endfunction

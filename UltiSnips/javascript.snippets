@@ -1,4 +1,4 @@
-priority 0
+priority 2
 
 global !p
 
@@ -29,6 +29,9 @@ def className():
   v = snip.basename[0:1].upper()
   v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
   return v
+
+def escape(v):
+  return re.sub(r'`', r'\`', v)
 
 endglobal
 
@@ -72,8 +75,24 @@ snippet req "require" b
 const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)
 endsnippet
 
+snippet newreq "new" b
+const `!p snip.rv = toMethodCase(t[1])` = new (require(\`$1\`))()
+endsnippet
+
 snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)
+endsnippet
+
+snippet rek "rekuire" w
+const `!p snip.rv = toMethodCase(t[1])` = require(\`rekuire\`)(\`${VISUAL}$1\`)
+endsnippet
+
+snippet rekc "rekuire class" w
+const `!p snip.rv = toCamelCase(t[1])` = require(\`rekuire\`)(\`$1\`)
+endsnippet
+
+snippet import "import" b
+import * as `!p snip.rv = toCamelCase(t[1])` from \`$1\`
 endsnippet
 
 snippet i "import" b
@@ -282,23 +301,20 @@ snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
 
-snippet class "class" b
-import Initializer from "../initializer"
+snippet class6 "class" b
+export default class `!p snip.rv = className()` {
+  ${VISUAL}$0
+}
+endsnippet
 
-export default class `!p snip.rv = className()` extends Initializer {
+snippet class "class" b
+module.exports = class `!p snip.rv = className()` {
   ${VISUAL}$0
 }
 endsnippet
 
 snippet con "constructor" w
-constructor(properties = {}) {
-  Object.assign(
-    this,
-    _.defaults(properties, {
-      ${0:defaults}
-    })
-  )
-}
+constructor({$0}) {
 }
 endsnippet
 
@@ -475,7 +491,7 @@ snippet paths "xdg default paths" b
 const xdgPaths = require(\`env-paths\`)(${1:appName})${2:.log}
 endsnippet
 
-snippet tilde "expand tilde in filenames" b
+snippet tilde "expand tilde in filenames" w
 const expandTilde = require(\`expand-tilde\`)
 ${1:file} = expandTilde($1)
 endsnippet
@@ -668,14 +684,6 @@ snippet "\.done$" "done()" r
 })$0
 endsnippet
 
-priority -1
-
-# snippet "(\.\w+)$" ".+" r
-# `!p snip.rv = match.group(1)`($0)
-# endsnippet
-
-priority 0
-
 snippet inst "inst" b
 if($1 instanceof ${VISUAL}$2) {
   $0
@@ -734,6 +742,8 @@ endsnippet
 
 snippet yaml "yaml import" b
 const yaml = require(\`js-yaml\`)
+const expandTilde = require(\`expand-tilde\`)
+const doc = yaml.safeLoad(fs.readFileSync(expandTilde(\`$1\`)))
 endsnippet
 
 snippet toyaml "toYaml" w
@@ -753,52 +763,35 @@ const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
 
-snippet ee "print to stderr with variable" w
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+snippet jj "here"
+
+console.error('### jj`!v DebugId()` ${VISUAL} $1$0:', ${VISUAL:"" + }$1)
+
 endsnippet
 
-snippet ej "print to stderr with json to variable" w
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, JSON.stringify(${VISUAL}$1$0, \` \`, 2))
+snippet jjj "seperator"
+
+console.error(\`\n################################################################jj`!v DebugId()`\n\`)
+
 endsnippet
 
-snippet eo "print to stderr" w
-console.error(\`### ${VISUAL}$0\`)
-endsnippet
+snippet jt "print to stderr with variable and trace" w
 
-snippet et "print to stderr with variable and trace" w
 console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+
 endsnippet
 
-snippet xx "here"
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### HERE`!v line('.')`$0\`)
+snippet jd "dump" w
+
+console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/, \`[\`) + \`\n### jj`!v DebugId()`\`)
+
 endsnippet
-
-# TODO
-# let dump = require(`circular-json`).stringify
-# console.error(`### node: \n`, dump(node, null, '  '))
-
-# TODO: snippet
-# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
-# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
-snippet dump "dump a var" b
-require(\`fs\`).writeFileSync(\`/tmp/dumpjs\`, require(\`util\`).inspect($1, {depth: 3}))
-endsnippet
-
-# snippet dump "dump" b
-# const cycle = require(`cycle`)
-# const util = require(`util`)
-# function dump(x) {
-#   return util.inspect(cycle.decycle(x), {
-#     depth: null
-#   })
-# }
-# endsnippet
 
 snippet tempFileName "tempFileName" b
 const fileName = require('tmp').fileSync().name
 endsnippet
 
-snippet multiline "(?m) multiline" w
+snippet regexmultiline "(?m) multiline" w
 [\s\S]*
 endsnippet
 
@@ -887,6 +880,16 @@ snippet containses5 ".contains" w
 indexOf($0) !== -1
 endsnippet
 
-snippet echo "echo" w
-console.log($0)
+snippet cl "echo" w
+console.log(${VISUAL}$0)
+endsnippet
+
+snippet test "test" b
+test(\`$1\`, async() => {
+	${VISUAL}$0
+})
+endsnippet
+
+snippet .toj "toJSON()" i
+.toJSON()
 endsnippet
