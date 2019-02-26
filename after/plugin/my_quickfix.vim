@@ -155,7 +155,7 @@ function! MyQuickfixSearch(options) abort
   endif
 
   let grepprg = g:MyQuickfixGrepCommand
-  let grepprg .= ' --no-ignore --iglob "!.git" '
+  " let grepprg .= ' --no-ignore --iglob "!.git" '
 
   if useIgnoreFile
     let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
@@ -209,6 +209,9 @@ function! MyQuickfixSearch(options) abort
       call writefile(['/dev/null:0:0:grepprg: ' . grepprg], tempfile, 'a')
     endif
   endif
+
+  let g:MyQuickfixFindPrg = findprg
+  let g:MyQuickfixGrepPrg = grepprg
 
   " call INFO('grepprg:', grepprg)
   " call INFO('findprg:', findprg)
@@ -324,7 +327,8 @@ function! MyQuickfixOutline(location) abort
   if ! exists('b:outline')
     return
   endif
-  let pcreDefine = RegexToPcre(b:outline)
+  " let pcreDefine = RegexToPcre(b:outline)
+  let pcreDefine = b:outline
   if a:location == 'bufferOnly'
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
   else

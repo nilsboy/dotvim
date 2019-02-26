@@ -763,62 +763,27 @@ const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
 
-# snippet ee "print to stderr with variable" w
-# console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, ${VISUAL}$1$0)
-# endsnippet
+snippet jj "here"
 
-snippet ee "print to stderr with variable" w
-console.error(\`### jj`!v line('.')` ${VISUAL}$1:\`, ${VISUAL}$1$0)
+console.error('### jj`!v DebugId()` ${VISUAL} $1$0:', ${VISUAL:"" + }$1)
+
 endsnippet
 
-snippet ej "print to stderr with json to variable" w
-console.error(\``!v expand('%:p') . ':' . line('.')`:0:### ${VISUAL}$1:\`, JSON.stringify(${VISUAL}$1$0, \` \`, 2))
+snippet jjj "seperator"
+
+console.error(\`\n################################################################jj`!v DebugId()`\n\`)
+
 endsnippet
 
-snippet eo "print to stderr" w
-console.error(\`### ${VISUAL}$0\`)
-endsnippet
+snippet jt "print to stderr with variable and trace" w
 
-snippet et "print to stderr with variable and trace" w
 console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
+
 endsnippet
 
-# snippet xx "here"
-# console.error(\``!v expand('%:p') . ':' . line('.')`:0:### jj`!v line('.')`$0\`)
-# endsnippet
+snippet jd "dump" w
 
-snippet xx "here"
-console.error(\`### jj`!v line('.')`\`)
-endsnippet
-
-snippet xxx "seperator"
-console.error(\`\n################################################################\n\`)
-endsnippet
-
-# TODO
-# let dump = require(`circular-json`).stringify
-# console.error(`### node: \n`, dump(node, null, '  '))
-
-# TODO: snippet
-# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
-# console.error(\`### $1:\n\`, require(\`util\`).inspect($1))
-# snippet dump "dump a var" b
-# require(\`fs\`).writeFileSync(\`/tmp/dumpjs\`, require(\`util\`).inspect($1, {depth: 3}))
-# endsnippet
-
-# snippet dump "dump" b
-# const cycle = require(`cycle`)
-# const util = require(`util`)
-# function dump(x) {
-#   return util.inspect(cycle.decycle(x), {
-#     depth: null
-#   })
-# }
-# endsnippet
-
-snippet dump "dump" w
-
-console.log(\`### jj`!v line('.')` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/, \`[\`) + \`\n### jj`!v line('.')`\`)
+console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/, \`[\`) + \`\n### jj`!v DebugId()`\`)
 
 endsnippet
 
