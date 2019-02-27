@@ -59,12 +59,21 @@ execute "set runtimepath+=" . g:vim.after.dir
 
 runtime after/plugin/helpers.vim
 
+" For vim compatibility
+" Vim complains if the directory already exists (2017-02-20)
+function! Mkdir(dir, ...) abort
+  if glob(a:dir) != ''
+    return
+  endif
+  call mkdir(a:dir, 'p')
+endfunction
+
 call Mkdir(g:vim.dir, "p")
 call Mkdir(g:vim.etc.dir, "p")
 call Mkdir(g:vim.var.dir, "p")
 
 set packpath^=~/.vim
-runtime after/plugin/minpac-setup.vim
+" runtime after/plugin/minpac-setup.vim
 
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
