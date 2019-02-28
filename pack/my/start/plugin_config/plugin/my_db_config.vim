@@ -127,10 +127,10 @@ function! MyDbInfos() abort
   normal! o
   normal! o
   normal! i### Table Data Excerpts
-  execute 'normal! o' . $REMOTE_HOME . '/src/table-data-excerpt/README.md'
+  execute 'normal! o' . $HOME . '/src/table-data-excerpt/README.md'
   normal! o
   normal! o### SQLs
-  execute 'r! ls -t ' . $REMOTE_HOME . '/src/sql/*.sql'
+  execute 'r! ls -t ' . $HOME . '/src/sql/*.sql'
   normal! o
   normal! o### Mappings
   RedirAppend map \\d

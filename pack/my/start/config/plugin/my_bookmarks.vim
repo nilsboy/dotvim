@@ -1,10 +1,10 @@
 " Manually create bookmarks for files
 " SEE ALSO: https://github.com/MattesGroeger/vim-bookmarks
 
-let g:MyBookmarksDir = $XDG_DATA_HOME . '/nilsboy_bookmarks'
+let g:MyBookmarksDir = stdpath("data") . '/nilsboy_bookmarks'
 let g:MyBookmarksFile = g:MyBookmarksDir . '/bookmarks'
 
-call helpers#touch(g:MyBookmarksFile)
+call nb#touch(g:MyBookmarksFile)
 
 function! MyBookmarksAdd(file) abort
     if empty(a:file)

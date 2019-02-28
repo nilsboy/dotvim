@@ -95,7 +95,7 @@ let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
 
 "### Linter
 
-let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc.json'
+let g:ale_javascript_eslint_options = ' -c ' . $CONTRIB_ETC . '/eslintrc.json'
 " let g:ale_linters['javascript'] = ['flow']
 " let g:ale_linters['javascript'] = ['eslint']
 " " let g:ale_javascript_eslint_executable = 'babel-eslint'
@@ -110,7 +110,7 @@ let g:ale_javascript_eslint_options = ' -c ' . g:vim.contrib.etc.dir . 'eslintrc
 let g:neoformat_javascript_eslint = {
       \ 'exe': 'eslint'
       \ ,'args': ['--fix', '--quiet', '-c'
-      \ , g:vim.contrib.etc.dir . 'eslintrc-format.yml']
+      \ , $CONTRIB_ETC . '/eslintrc-format.yml']
       \ , 'replace': 1
       \ }
 MyInstall eslint !npm install -g eslint
@@ -130,7 +130,7 @@ let g:neoformat_javascript_prettier_eslint = {
 
 let g:neoformat_enabled_javascript = [ 'my_formatter' ]
 let g:neoformat_javascript_my_formatter = {
-      \ 'exe': g:vim.contrib.bin.dir . 'my_javascript_formatter'
+      \ 'exe': 'my_javascript_formatter'
       \ }
 
 nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>

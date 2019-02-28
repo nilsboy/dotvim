@@ -1,4 +1,5 @@
-if filereadable(g:vim.rc_local)
-  execute "source " . g:vim.rc_local
+let s:localrc  = $HOME . "/.vimrc.local"
+if filereadable(s:localrc)
+  execute "source " . s:localrc
 endif
 

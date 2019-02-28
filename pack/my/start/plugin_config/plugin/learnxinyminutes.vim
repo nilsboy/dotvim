@@ -1,3 +1,4 @@
+finish
 " Code documentation written as code!
 PackAdd adambard/learnxinyminutes-docs
 
@@ -7,7 +8,7 @@ function! HelpLearnXInMinutes(topic) abort
         let l:file = a:topic
     endif
 
-    let l:file = g:vim.bundle.dir . '/learnxinyminutes-docs/' 
+    let l:file = 'FIXME' . '/learnxinyminutes-docs/' 
                 \ . l:file . '.html.markdown'
 
     if !filereadable(l:file)

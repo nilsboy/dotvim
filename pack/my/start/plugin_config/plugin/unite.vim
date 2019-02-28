@@ -40,7 +40,7 @@ let g:unite_no_default_keymappings = 1
 if neobundle#tap('unite.vim') 
     function! neobundle#hooks.on_post_source(bundle)
 
-let g:unite_data_directory = $XDG_CACHE_DIR . "/unite"
+let g:unite_data_directory = stdpath("cache") . "/unite"
 " let g:unite_enable_auto_select = 0
 
 " Probably does not work with volatile sources
@@ -141,14 +141,6 @@ function! FindWord_Unite() abort
     call CdProjectRoot()
     :UniteWithCursorWord
         \ -buffer-name=find-word-unite
-        \ script-file:find-and
-endfunction
-
-nnoremap <silent> <leader>vp :call FindVimPlugins_Unite()<cr><esc>
-function! FindVimPlugins_Unite() abort
-    execute 'lcd ' . g:vim.bundle.dir
-    :Unite
-        \ -buffer-name=find-vim-plugins-unite
         \ script-file:find-and
 endfunction
 

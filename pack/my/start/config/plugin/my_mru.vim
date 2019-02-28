@@ -1,7 +1,7 @@
 " List recent edited or viewed files
 " tags: recent
 
-let g:MyMrudir = $XDG_DATA_HOME . '/nilsboy_mru/'
+let g:MyMrudir = stdpath("data") . '/nilsboy_mru/'
 let g:MruFiles = g:MyMrudir . 'mru_files'
 let g:MruFilesWritten = g:MyMrudir . 'mru_files_written'
 
@@ -15,7 +15,7 @@ augroup MyNilsboyMruAugroupWrittenFiles
   autocmd BufWritePost * :let b:nilsboy_mru_written = 1
 augroup END
 
-call helpers#touch(g:MruFiles)
+call nb#touch(g:MruFiles)
 
 function! MyMruAddFile(file) abort
     if ! IsNeoVim()

@@ -279,7 +279,7 @@ function! EditFileInBufferDir(...) abort
 endfunction
 command! -nargs=* E call EditFileInBufferDir(<f-args>)
 
-function! helpers#touch(path) abort
+function! nb#touch(path) abort
   if empty(a:path)
     throw "Specify non empty path to create"
   endif
@@ -386,16 +386,16 @@ function! Uniq (...) range
   call append(a:firstline-1, uniq_lines)
 endfunction
 
-function! helpers#createUniqueSignId() abort
+function! nb#createUniqueSignId() abort
   let id = localtime()
   return id
 endfunction
 
 sign define BlinkLine linehl=Todo
-function! helpers#blinkLine() abort
+function! nb#blinkLine() abort
   let cursorline = &cursorline
   let count = 1
-  let signId = helpers#createUniqueSignId()
+  let signId = nb#createUniqueSignId()
   let i = 0
   while i <= count
     let i = i + 1
@@ -423,13 +423,13 @@ endfunction
 "     redraw
 " endfunction
 
-function! helpers#random(n) abort
+function! nb#random(n) abort
   let rnd = localtime() % 0x10000
   let rnd = (rnd * 31421 + 6927) % 0x10000
   return rnd * a:n / 0x10000
 endfunction
 
-function! helpers#surroundings() abort
+function! nb#surroundings() abort
   return split(get(b:, 'commentary_format', substitute(substitute(
         \ &commentstring, '\S\zs%s',' %s','') ,'%s\ze\S', '%s ', '')), '%s', 1)
 endfunction

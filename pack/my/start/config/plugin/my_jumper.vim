@@ -6,10 +6,10 @@ finish
 
 " TODO: There are a lot more signs than marks - use them instead?
 
-let g:MyJumperDir = $XDG_DATA_HOME . '/jumper'
+let g:MyJumperDir = stdpath("data") . '/jumper'
 let g:MyJumperFile = g:MyJumperDir . '/jumps'
 
-call helpers#touch(g:MyJumperFile)
+call nb#touch(g:MyJumperFile)
 
 augroup MyJumperAugroup
   autocmd!
@@ -233,7 +233,7 @@ function! MyJumperJump(direction, movement_type) abort
   endwhile
 
   if ! len(candidates)
-    call helpers#blinkLine()
+    call nb#blinkLine()
     return
   endif
 

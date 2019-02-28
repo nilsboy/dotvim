@@ -6,74 +6,25 @@ autocmd!
 " reset everything to their defaults
 set all&
 
-if empty($XDG_CONFIG_HOME)
-  let $XDG_CONFIG_HOME = $REMOTE_HOME . "/.config"
-endif
-
-if empty($XDG_DATA_HOME)
-  let $XDG_DATA_HOME = $REMOTE_HOME . "/.local/share"
-endif
-
-if empty($XDG_CACHE_DIR)
-  let $XDG_CACHE_DIR = $REMOTE_HOME . "/.cache"
-endif
-
 " TODO: replace with stdpath()
-" vars
 let g:vim           = {}
-let g:vim.dir       = $REMOTE_HOME . "/.vim/"
+let g:vim.dir       = $HOME . "/.vim/"
 let g:vim['etc']    = { 'dir' : g:vim.dir }
-let g:vim['after']  = { 'dir' : g:vim.etc.dir . "after/" }
-let g:vim.rc        = g:vim.etc.dir . "vimrc"
-let g:vim.rc_local  = $REMOTE_HOME . "/.vimrc.local"
-let g:vim['var']    = { 'dir' : $XDG_DATA_HOME . '/vim/' }
-let g:vim['plugin'] = { 'dir' : g:vim.etc.dir . "plugin/" }
-let g:vim['cache']  = { 'dir' : $XDG_CACHE_DIR . '/vim/' }
+" g:vim.after.dir
 
-let g:vim['contrib']  = { 'dir' : g:vim.etc.dir . '/contrib/' }
-let g:vim.contrib['etc']  = { 'dir' : g:vim.contrib.dir . '/etc/' }
-let g:vim.contrib['bin']  = { 'dir' : g:vim.contrib.dir . '/bin/' }
+let $CONTRIB = g:vim.etc.dir . '/contrib/'
+let $CONTRIB_ETC = g:vim.etc.dir . '/contrib/etc'
 
-let $MYVIMRC = g:vim.rc
+let $HOME = $REMOTE_HOME
 
-let g:vim.bundle = {}
-let g:vim.bundle.dir =  g:vim.dir . "bundle/"
-let g:vim.bundle.settings = {}
-let g:vim.bundle.settings.dir = g:vim.etc.dir . "bundle_config/"
-let $_VIM_BUNDLE_DIR = g:vim.bundle.dir
+" Make sure configs are not source twice due to links between .vim and
+" .config/nvim dirs
+execute 'set runtimepath-=$HOME/.config/nvim'
+execute 'set runtimepath-=$HOME/.config/nvim/after'
 
-let g:vim.config = {}
-let g:vim.config.dir = g:vim.etc.dir . "config/"
-
-" " Make helpgrep find vim's own help files before plugin help files
-" let &runtimepath = '/usr/share/nvim/runtime,'
-"       \ . &runtimepath
-
-" Make sure configs are not source twice due to links between .vim and .config
-" dirs
-execute 'set rtp-=$HOME/.config/nvim'
-execute 'set rtp-=$HOME/.config/nvim/after'
-
-execute "set runtimepath+=" . g:vim.etc.dir
-execute "set runtimepath+=" . g:vim.after.dir
-
-runtime after/plugin/helpers.vim
-
-" For vim compatibility
-" Vim complains if the directory already exists (2017-02-20)
-function! Mkdir(dir, ...) abort
-  if glob(a:dir) != ''
-    return
-  endif
-  call mkdir(a:dir, 'p')
-endfunction
-
-call Mkdir(g:vim.dir, "p")
-call Mkdir(g:vim.etc.dir, "p")
-call Mkdir(g:vim.var.dir, "p")
+call mkdir(stdpath("data"), "p")
 
 set packpath^=~/.vim
-" runtime after/plugin/minpac-setup.vim
 
 " Search the web by default instead of manpages
 let &keywordprg = ':WebWithFiletype'
@@ -81,18 +32,11 @@ nnoremap <silent> <leader>gK :execute 'WebWithFiletype ' . expand('<cword>')<cr>
 
 " Keep undo history after closing a file
 set undofile
-let &undodir = g:vim.var.dir . "undo"
-call Mkdir(&undodir, "p")
-
-" augroup MyVimrcAugroupOnlySetCurrentDirAsPath
-"   autocmd!
-"   autocmd VimEnter * set path=.,,
-" augroup END
+let &undodir = stdpath("data") . "/undo"
+call mkdir(&undodir, "p")
 
 set path=.,,
-
-let $PATH = $PATH . ':' . g:vim.etc.dir . '/contrib/bin'
-let $MY_VIM_DIR = g:vim.etc.dir
+let $PATH = $PATH . ':' . $CONTRIB
 
 " Detect filetypes and run filetype plugins
 filetype on
@@ -103,11 +47,3 @@ filetype indent on
 
 " set verbosefile=/tmp/vim-debug.log
 " set verbose=13
-
-nnoremap <silent> <leader>sn :Redir scriptnames<cr>
-
-function! MyVimrcRtp() abort
-Redir echo &rtp
-%s/,/\r/g
-endfunction
-nnoremap <silent> <leader>rp :call MyVimrcRtp()<cr>

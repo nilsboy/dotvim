@@ -57,9 +57,9 @@ let g:dbext_default_buffer_lines = 20
 " Debug
 " let g:dbext_default_delete_temp_file = 1
 
-let g:dbext_default_login_script_dir = g:vim.var.dir . 'dbext/login_scripts/'
+let g:dbext_default_login_script_dir = stdpath("data") . '/dbext/login_scripts/'
 
-let g:dbext_default_history_file = g:vim.var.dir . 'dbext/history.dbext'
+let g:dbext_default_history_file = stdpath("data") . '/dbext/history.dbext'
 let g:dbext_default_history_size = 9999
 
 " Remove max single statement history entry size of 4K
@@ -117,10 +117,10 @@ function! MyDbextInfos() abort
   1,$d
   silent! only
   normal! i### Database profiles
-  execute 'normal! o' . $REMOTE_HOME . '/etc/db_profiles_dbext.vim'
+  execute 'normal! o' . $HOME . '/etc/db_profiles_dbext.vim'
   normal! o
   normal! o### SQLs
-  execute 'r! ls -t ' . $REMOTE_HOME . '/src/sql/*.sql'
+  execute 'r! ls -t ' . $HOME . '/src/sql/*.sql'
   normal! 5gg
 endfunction
 
@@ -183,8 +183,8 @@ function! MyDbextAfter(name) abort
   normal! GddggP
 endfunction
 
-if filereadable($REMOTE_HOME . "/etc/db_profiles_dbext.vim")
-    execute "source " . $REMOTE_HOME . "/etc/db_profiles_dbext.vim"
+if filereadable($HOME . "/etc/db_profiles_dbext.vim")
+    execute "source " . $HOME . "/etc/db_profiles_dbext.vim"
 endif
 
 " let g:ftplugin_sql_omni_key = "<leader>so"

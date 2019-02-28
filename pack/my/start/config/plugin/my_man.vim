@@ -1,4 +1,4 @@
-let s:cache_dir = $XDG_CACHE_DIR . "/vim-normal-buffer-man"
+let s:cache_dir = stdpath("cache") . "/vim-normal-buffer-man"
 
 call Mkdir(s:cache_dir, "p")
 

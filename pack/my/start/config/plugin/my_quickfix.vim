@@ -23,7 +23,7 @@ function! MyQuickfixBufferDir() abort
 endfunction
 
 " NOTE: to ignore files not in .gitignore use a .agignore file
-let g:MyQuickfixIgnoreFile = g:vim.contrib.etc.dir . 'ignore-files'
+let g:MyQuickfixIgnoreFile = $CONTRIB_ETC . '/ignore-files'
 
 let g:MyQuickfixSearchLimit = '500'
 
@@ -294,7 +294,6 @@ call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1, 'useIgnoreFile': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
-call MyQuickfixAddMappings('fv', { 'path': g:vim.etc.dir })
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 

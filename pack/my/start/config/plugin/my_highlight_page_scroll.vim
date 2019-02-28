@@ -10,7 +10,7 @@ finish
 " function! s:start() abort
 "   if ! exists("s:signName")
 "     let s:signName = get(s:, 'signName', 'SearchStart')
-"     " let s:signId = get(s:, 'signId', helpers#random(1000))
+"     " let s:signId = get(s:, 'signId', nb#random(1000))
 "     let s:signId = 2000001
 "     execute 'sign define ' . s:signName . ' linehl=Todo'
 "   endif

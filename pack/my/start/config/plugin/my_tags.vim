@@ -4,7 +4,6 @@
 " NOTE: see gutentags
 " NOTE: alternative to ctags: https://www.gnu.org/software/global/
 
-" let g:vim['tags']   = g:vim.var.dir . "tags"
 let &tags = '.git/tags'
 set showfulltag
 set cpoptions=+d

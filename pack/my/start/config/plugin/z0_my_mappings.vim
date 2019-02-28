@@ -167,7 +167,6 @@ nnoremap gV `[v`]
 " nnoremap <expr> n 'Nn'[v:searchforward]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
-nnoremap <leader>vr :execute "edit " . g:vim.etc.dir . "/README.md"<cr>
 nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "vimrc"<cr>
 nnoremap <leader>vm :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappings.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' 
@@ -285,3 +284,11 @@ nnoremap <silent> <leader>X :Neoformat! json<cr>
 cnoremap <expr> %% fnameescape(expand('%'))
 " cnoremap <expr> <space><space>% fnameescape(expand('%'))
 cnoremap <expr> :: fnameescape(expand('%:p:h')) . '/'
+
+nnoremap <silent> <leader>vs :Redir scriptnames<cr>
+
+function! MyVimrcRtp() abort
+  Redir echo &runtimepath
+  %s/,/\r/g
+endfunction
+nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>

@@ -50,7 +50,7 @@ let g:neoformat_html_clean_html = {
 let g:neoformat_enabled_html = ['tidy']
 let g:neoformat_html_tidy = {
       \ 'exe': 'tidy'
-      \ ,'args': [ '-quiet -config ' . g:vim.contrib.etc.dir . 'tidyrc-html']
+      \ ,'args': [ '-quiet -config ' . $CONTRIB_ETC . '/tidyrc-html']
       \ }
 
 " incrementally indent html when using "="

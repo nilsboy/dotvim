@@ -1,2 +1,2 @@
 # helper to set own ctags location
-ctags --options=$MY_VIM_DIR/contrib/etc/ctags.conf
+ctags --options=$CONTRIB_ETC/ctags.conf

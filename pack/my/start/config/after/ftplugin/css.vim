@@ -11,7 +11,7 @@ MyInstall csscomb
 let g:neoformat_enabled_css = [ 'csscomb' ]
 let g:neoformat_css_csscomb = {
       \ 'exe': 'csscomb',
-      \ 'args': ['-c ' . g:vim.contrib.etc.dir . 'csscombrc'],
+      \ 'args': ['-c ' . $CONTRIB_ETC . '/csscombrc'],
       \ 'replace': 1
       \ }
 

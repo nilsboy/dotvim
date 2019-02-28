@@ -5,7 +5,7 @@ NeoBundleLazy 'Shougo/vimshell.vim',
 
 let g:vimshell_editor_command='vim'
 let g:vimshell_right_prompt='getcwd()'
-let g:vimshell_data_directory=$XDG_CACHE_DIR . '/vimshell'
+let g:vimshell_data_directory=stdpath("cache") . '/vimshell'
 let g:vimshell_vimshrc_path=g:vim.dir . 'vimshrc'
 
 " nnoremap <leader>c  :VimShell -split<cr>

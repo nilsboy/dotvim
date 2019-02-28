@@ -176,15 +176,15 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 endsnippet
 
 snippet / "comment" b
-`!v helpers#surroundings()[0]`${VISUAL}$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`${VISUAL}$0`!v  nb#surroundings()[1]`
 endsnippet
 
 # snippet todo "TODO" w
-# `!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
+# `!v nb#surroundings()[0]`TODO:$0`!v  nb#surroundings()[1]`
 # endsnippet
 
 snippet '(^\s*).*todo' "TODO" r
-`!p snip.rv = match.group(1)``!v helpers#surroundings()[0]`TODO:$0`!v  helpers#surroundings()[1]`
+`!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TODO:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet "(TODO|DONE)+" "TODO|DONE toggle" r
@@ -192,27 +192,27 @@ snippet "(TODO|DONE)+" "TODO|DONE toggle" r
 endsnippet
 
 snippet '(.*\s*).*note' "NOTE" r
-`!v helpers#surroundings()[0]`NOTE:$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`NOTE:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '.*tag' "TAGS" r
-`!v helpers#surroundings()[0]`TAGS:$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`TAGS:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '.*fix' "FIX" r
-`!v helpers#surroundings()[0]`FIX:$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`FIX:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '.*deb' "DEBUG" r
-`!v helpers#surroundings()[0]`DEBUG:$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`DEBUG:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '(^\s*).*check' "check out" r
-`!v helpers#surroundings()[0]`TODO: check out: $0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`TODO: check out: $0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '(^\s*).*see' "see also" r
-`!v helpers#surroundings()[0]`SEE ALSO:$0`!v  helpers#surroundings()[1]`
+`!v nb#surroundings()[0]`SEE ALSO:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet password "generate a secure password" w

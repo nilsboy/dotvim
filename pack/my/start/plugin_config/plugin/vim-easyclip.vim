@@ -15,7 +15,7 @@ nmap Y <Plug>MoveMotionPlug
 xmap Y <Plug>MoveMotionXPlug
 nmap YY <Plug>MoveMotionLinePlug
 
-let g:EasyClipShareYanksDirectory = g:vim.var.dir . "/easyclip"
+let g:EasyClipShareYanksDirectory = stdpath("data") . "/easyclip"
 let g:EasyClipShareYanksFile = "shared-yanks"
 call Mkdir(g:EasyClipShareYanksDirectory, 'p')
 let g:EasyClipShareYanks = 1
