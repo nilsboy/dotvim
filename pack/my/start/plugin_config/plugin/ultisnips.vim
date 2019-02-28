@@ -2,9 +2,9 @@
 PackAdd SirVer/ultisnips
 
 nnoremap <silent><leader>se :execute ":edit "
-      \ . g:vim.etc.dir . "UltiSnips/" . &filetype
+      \ . stdpath('config') . "UltiSnips/" . &filetype
       \ . ".snippets"<cr>
-nnoremap <leader>sa :execute ":edit " . g:vim.etc.dir .
+nnoremap <leader>sa :execute ":edit " . stdpath('config') .
       \ "UltiSnips/all.snippets"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0

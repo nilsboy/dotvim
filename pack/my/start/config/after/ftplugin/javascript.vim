@@ -95,7 +95,7 @@ let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
 
 "### Linter
 
-let g:ale_javascript_eslint_options = ' -c ' . $CONTRIB_ETC . '/eslintrc.json'
+let g:ale_javascript_eslint_options = ' -c ' . $CONTRIB . '/eslintrc.json'
 " let g:ale_linters['javascript'] = ['flow']
 " let g:ale_linters['javascript'] = ['eslint']
 " " let g:ale_javascript_eslint_executable = 'babel-eslint'
@@ -110,7 +110,7 @@ let g:ale_javascript_eslint_options = ' -c ' . $CONTRIB_ETC . '/eslintrc.json'
 let g:neoformat_javascript_eslint = {
       \ 'exe': 'eslint'
       \ ,'args': ['--fix', '--quiet', '-c'
-      \ , $CONTRIB_ETC . '/eslintrc-format.yml']
+      \ , $CONTRIB . '/eslintrc-format.yml']
       \ , 'replace': 1
       \ }
 MyInstall eslint !npm install -g eslint

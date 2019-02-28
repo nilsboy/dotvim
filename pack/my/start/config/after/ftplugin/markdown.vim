@@ -22,7 +22,7 @@ let b:MyMarkdownFtpluginLoaded = 1
 " let g:neoformat_markdown_myremark = {
 "   \ 'exe': 'remark',
 "   \ 'args': ['--no-color', '--silent',
-"   \   '--rc-path', $CONTRIB_ETC . '/remark.json',
+"   \   '--rc-path', $CONTRIB . '/remark.json',
 "   \ ],
 "   \ 'stdin': 1,
 "   \ }

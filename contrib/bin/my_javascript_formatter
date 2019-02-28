@@ -15,7 +15,7 @@ eslint \
   # --debug \
   --no-color \
   --fix \
-  -c $CONTRIB_ETC/eslintrc-format.json \
+  -c $CONTRIB/eslintrc-format.json \
   $out \
 1>&2
 

@@ -23,7 +23,7 @@ function! MyQuickfixBufferDir() abort
 endfunction
 
 " NOTE: to ignore files not in .gitignore use a .agignore file
-let g:MyQuickfixIgnoreFile = $CONTRIB_ETC . '/ignore-files'
+let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 
 let g:MyQuickfixSearchLimit = '500'
 

@@ -711,6 +711,11 @@ function! Web(...) abort
   silent execute '!firefox https://duckduckgo.com/?q=' . shellescape(query)
 endfunction
 " SEE ALSO: https://github.com/kabbamine/zeavim.vim
+" Search the web by default instead of manpages
+
+let &keywordprg = ':WebWithFiletype'
+nnoremap <silent> <leader>gK :execute 'WebWithFiletype '
+      \ . expand('<cword>')<cr>
 
 " https://stackoverflow.com/a/1534347
 function! MyHelpersGetVisualSelection()

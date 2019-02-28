@@ -167,8 +167,9 @@ nnoremap gV `[v`]
 " nnoremap <expr> n 'Nn'[v:searchforward]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
-nnoremap <leader>vv :execute "edit " . g:vim.etc.dir . "vimrc"<cr>
-nnoremap <leader>vm :execute "edit " . g:vim.etc.dir . "after/plugin/z0_my_mappings.vim"<cr>
+nnoremap <leader>vv :execute "edit " . stdpath('config') . "/init.vim"<cr>
+" TODO:
+nnoremap <leader>vm :execute "edit " . stdpath('config') . "/after/plugin/z0_my_mappings.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' 
   \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
 

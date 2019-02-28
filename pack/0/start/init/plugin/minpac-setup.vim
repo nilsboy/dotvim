@@ -40,11 +40,11 @@ endfunction
 command! -nargs=* PackAdd call PackAdd(<f-args>)
 
 " Bootstrap minpac
-if ! len(glob('~/.vim/pack/minpac/opt/minpac/README.md')) > 0
+if ! len(glob(stdpath('config') . '/pack/minpac/opt/minpac/README.md')) > 0
   echo "Installing plugin manager minpac..."
   echo ""
   execute "!git clone --depth=1 https://github.com/k-takata/minpac.git "
-        \ "~/.vim/pack/minpac/opt/minpac"
+        \ stdpath('config') . "/pack/minpac/opt/minpac"
 endif
 
 packadd minpac

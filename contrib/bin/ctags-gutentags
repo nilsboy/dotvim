@@ -1,2 +1,2 @@
 # helper to set own ctags location
-ctags --options=$CONTRIB_ETC/ctags.conf
+ctags --options=$CONTRIB/ctags.conf
