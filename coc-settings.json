@@ -1,4 +1,0 @@
-// Run ":CocInstall coc-json" to get completion support.
-// SEE ALSO: ./pack/minpac/opt/coc.nvim/data/schema.json
-{
-}

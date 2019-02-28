@@ -16,8 +16,6 @@ autocmd BufRead,BufNewFile *.sqlresult setlocal filetype=sqlresult
 
 autocmd BufRead,BufNewFile *.handlebars setlocal filetype=handlebars
 
-autocmd BufRead,BufNewFile pm2.json setlocal filetype=javascript
-
 autocmd BufRead,BufNewFile *.rest setlocal filetype=rest
 
 " default filetype last

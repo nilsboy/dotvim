@@ -54,6 +54,7 @@ non-offical function as a workaround.
 * commands must start with an uppercase letter. Rest can be uppercase letters,
   lowercase letters or digits.
 * augroup names must not contain space
+> TODO: autoload is only possible for the script#function naming
 
 ### Result
 
