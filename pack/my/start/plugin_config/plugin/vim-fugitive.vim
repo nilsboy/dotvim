@@ -1,4 +1,5 @@
 " A Git wrapper so awesome, it should be illegal
+" TAGS: git
 PackAdd tpope/vim-fugitive
 
 nnoremap <silent> <leader>gs :Gstatus<CR>

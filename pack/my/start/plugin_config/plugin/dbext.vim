@@ -2,6 +2,8 @@ finish
 " NOTE: using my_db_config.vim now
 " 
 " Provides database access to many dbms
+"
+" NOTE: Needs modeline to be set even though it uses its own parser.
 " Note: Does not work in neovim because it needs if_perl
 " :h dbext
 " :h sql

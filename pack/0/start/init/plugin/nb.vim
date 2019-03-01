@@ -758,3 +758,8 @@ function! DebugId() abort
   let g:my_debug_id = g:my_debug_id + 1
   return g:my_debug_id
 endfunction
+
+command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
+command! -nargs=* RemoveNewlineBlocks
+      \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g
+      \ | :silent %s/\n*\%$//g
