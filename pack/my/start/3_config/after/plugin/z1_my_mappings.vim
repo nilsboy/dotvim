@@ -160,11 +160,11 @@ nnoremap gV `[v`]
 " nnoremap <expr> n 'Nn'[v:searchforward]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
-nnoremap <leader>vv :execute "edit " . stdpath('config') . "/init.vim"<cr>
-" TODO:
-nnoremap <leader>vm :execute "edit " . stdpath('config') . "/after/plugin/z0_my_mappings.vim"<cr>
-nnoremap <silent> <leader>vt :execute ':edit ' 
-  \ . fnameescape(g:vim.after.dir . 'ftplugin/' . &filetype . '.vim')<cr>
+nnoremap <silent> <leader>vv :execute "edit " . stdpath('config') . "/init.vim"<cr>
+nnoremap <silent> <leader>vm :execute "edit " . stdpath('config')
+  \ . "/pack/my/start/3_config/after/plugin/z1_my_mappings.vim"<cr>
+nnoremap <silent> <leader>vt :execute ':edit ' . stdpath('config')
+  \ . '/pack/my/start/3_config/after/ftplugin/' . &filetype . '.vim'<cr>
 
 " Show all mappings
 nnoremap <leader>vM :Verbose cmap <bar> map<cr> :only<cr>

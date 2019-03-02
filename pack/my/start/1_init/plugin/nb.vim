@@ -40,7 +40,6 @@ function! BufferClose() abort
   let wasQfOpen = MyHelpersQuickfixIsOpen()
   if wasQfOpen
     cclose
-    " TODO: test
     return
   endif
   if BufferIsUnnamed() == 1
@@ -49,8 +48,13 @@ function! BufferClose() abort
   endif
   lclose
   if BufferIsLast() == 1
-    return
-    silent! q!
+    if BufferIsUnnamed() == 1
+      return
+    else
+      new | only
+      silent! edit #
+    endif
+    " silent! q!
   endif
   " Netrw leaves its buffers in a weired state
   if BufferIsNetrw() == 1
