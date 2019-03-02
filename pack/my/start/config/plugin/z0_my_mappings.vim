@@ -35,13 +35,6 @@ vmap <leader> <nop>
 
 " also use <space> for custom text-objects - i.e. see: vim-textobj-lastpat.vim
 
-nnoremap <leader>vE :call VimEnvironment()<cr><esc>
-nnoremap <leader>veg :call DUMP(g:)<cr>
-
-function! VimEnvironment() abort
-  Verbose autocmd
-endfunction
-
 " nnoremap <silent><c-z> :silent wall<cr><c-z>
 " inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
 

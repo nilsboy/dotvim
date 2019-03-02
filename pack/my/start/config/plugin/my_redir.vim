@@ -13,12 +13,12 @@ function! Redir(cmd, append)
     only
     setlocal buftype=nowrite
   endif
-  normal! GO
+  normal! Go
 	call append('.', "########## " . a:cmd)
   normal! G
 	call append('.', split(output, "\n"))
   if !a:append
-    normal! ggdd
+    normal! ggdddd
   endif
 endfunction
 

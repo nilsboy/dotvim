@@ -763,3 +763,37 @@ command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks
       \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g
       \ | :silent %s/\n*\%$//g
+
+augroup MyVimrcAugroupMaximizeHelp
+  autocmd!
+  autocmd BufEnter * :if &buftype == 'help' | only | endif
+augroup END
+
+" augroup MyVimrcAugroupListAllBuffers
+"   autocmd!
+"   autocmd BufEnter * :setlocal buflisted
+" augroup END
+
+function! MyZ0MyrcEnv() abort
+  Redir verbose map
+  setlocal filetype=vim
+  setlocal nowrap
+  RedirAppend verbose map!
+  RedirAppend verbose command
+  RedirAppend verbose autocmd
+  RedirAppend verbose messages
+  RedirAppend verbose set
+  RedirAppend verbose let
+  RedirAppend verbose function
+  normal! gg0
+endfunction
+nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
+
+function! Map(...) abort
+  Redir verbose map a:000
+  RedirAppend verbose map! a:000
+  setlocal filetype=vim
+  setlocal nowrap
+  normal! gg0
+endfunction
+command! -nargs=* Map call Map (<f-args>)

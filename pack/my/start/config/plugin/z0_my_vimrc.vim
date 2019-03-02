@@ -95,26 +95,3 @@ set suffixesadd=.txt,.md
 " don't echo make output to screen
 let &shellpipe = '&>'
 
-augroup MyVimrcAugroupMaximizeHelp
-  autocmd!
-  autocmd BufEnter * :if &buftype == 'help' | only | endif
-augroup END
-
-" augroup MyVimrcAugroupListAllBuffers
-"   autocmd!
-"   autocmd BufEnter * :setlocal buflisted
-" augroup END
-
-function! MyZ0MyrcEnv() abort
-  :Redir verbose map | verbose map!
-  setlocal filetype=vim
-  setlocal nowrap
-  :RedirAppend verbose command
-  :RedirAppend verbose autocmd
-  :RedirAppend verbose messages
-  :RedirAppend verbose set
-  :RedirAppend verbose let
-  normal! gg0
-endfunction
-nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
-

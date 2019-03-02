@@ -89,7 +89,7 @@ fi
 filename="${filename%.*}"
 endsnippet
 
-# TODO: test
+# needs to be tested
 snippet replace "replace" w
 if [[ $filename =~ (.+)(_v[[:digit:]]{8}_[[:digit:]]{6}$) ]] ; then
   filename=${BASH_REMATCH[1]}
