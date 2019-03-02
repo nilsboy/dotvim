@@ -67,7 +67,7 @@ vmap <c-l> <esc><c-l>
 vmap <c-j> <esc><c-j>
 vmap <c-k> <esc><c-k>
 
-nnoremap <silent> <leader>go :only<cr>
+nnoremap <silent> <leader>jo :only<cr>
 
 " Never use formatprg (it's global) and doesn't fallback to vim's default
 set formatprg=false
@@ -75,7 +75,7 @@ set formatprg=false
 " Nicer redo
 " tags: undo
 nnoremap U <c-r>
-nnoremap <leader>gu U
+nnoremap <leader>ju U
 
 " Dont use Q for Ex mode
 nnoremap Q :xa<cr>
@@ -195,7 +195,7 @@ nnoremap <leader>/t gg/TODO<cr>
 " nnoremap ]] /{<cr>
 
 " Make gf work with relative file names and non existent files
-nnoremap <leader>gf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
+nnoremap <leader>jf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
 
 " Restore cursor position after visual selection
 nnoremap v m`v
@@ -215,7 +215,7 @@ function! MyZ0MyMappingsMessages() abort
   silent! %s/\v\<00\>/\r/g
   echom ''
 endfunction
-nnoremap <silent> <leader>gm :call MyZ0MyMappingsMessages()<cr><cr>
+nnoremap <silent> <leader>jm :call MyZ0MyMappingsMessages()<cr><cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn

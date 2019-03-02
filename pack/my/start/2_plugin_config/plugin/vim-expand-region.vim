@@ -2,7 +2,7 @@
 PackAdd terryma/vim-expand-region
 " TAGS: textobj
 
-map <cr> <Plug>(expand_region_expand)
+nmap <cr> <Plug>(expand_region_expand)
 vmap <bs> <Plug>(expand_region_shrink)
 
 let g:expand_region_text_objects = {

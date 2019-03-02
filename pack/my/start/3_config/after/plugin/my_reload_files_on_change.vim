@@ -4,7 +4,7 @@ augroup MyReloadFilesOnChange
   autocmd FocusLost,BufLeave,WinLeave,QuickFixCmdPre,CursorHold * :silent! wall
   autocmd FocusGained,BufEnter,WinEnter,CursorMoved * silent! checktime
 augroup end
-noremap <silent> <c-z> :suspend<cr>:checktime<cr>
+nnoremap <silent> <c-z> :suspend<cr>:checktime<cr>
 
 finish
 " vim tip from

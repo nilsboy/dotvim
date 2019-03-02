@@ -1,10 +1,10 @@
 " The ultimate snippet solution for Vim.
 PackAdd SirVer/ultisnips
 
-nnoremap <silent><leader>se :execute ":edit "
+nnoremap <silent><leader>js :execute ":edit "
       \ . stdpath('config') . "/UltiSnips/" . &filetype
       \ . ".snippets"<cr>
-nnoremap <leader>sa :execute ":edit " . stdpath('config') .
+nnoremap <leader>jS :execute ":edit " . stdpath('config') .
       \ "/UltiSnips/all.snippets"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0

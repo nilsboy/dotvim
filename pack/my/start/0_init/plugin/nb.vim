@@ -714,7 +714,7 @@ endfunction
 " Search the web by default instead of manpages
 
 let &keywordprg = ':WebWithFiletype'
-nnoremap <silent> <leader>gK :execute 'WebWithFiletype '
+nnoremap <silent> gK :execute 'WebWithFiletype '
       \ . expand('<cword>')<cr>
 
 " https://stackoverflow.com/a/1534347
@@ -775,23 +775,29 @@ augroup END
 " augroup END
 
 function! MyZ0MyrcEnv() abort
-  Redir verbose map
+  Map
   setlocal filetype=vim
   setlocal nowrap
-  RedirAppend verbose map!
-  RedirAppend verbose command
-  RedirAppend verbose autocmd
-  RedirAppend verbose messages
-  RedirAppend verbose set
-  RedirAppend verbose let
-  RedirAppend verbose function
+  RedirAppendv verbose command
+  RedirAppendv verbose autocmd
+  RedirAppendv verbose messages
+  RedirAppendv verbose set
+  RedirAppendv verbose let
+  RedirAppendv verbose function
   normal! gg0
 endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
-  Redir verbose map a:000
-  RedirAppend verbose map! a:000
+  execute 'Redir map ' . join(a:000, ' ')
+  execute 'RedirAppend map! ' . join(a:000, ' ')
+  execute 'RedirAppend map  <leader>' . join(a:000, ' ')
+  execute 'RedirAppend map! <leader>' . join(a:000, ' ')
+  sort u
+  g/no mapping found/ normal! dd
+  g/^$/ normal! dd
+  normal! ggO
+  normal! gg0i########## map 
   setlocal filetype=vim
   setlocal nowrap
   normal! gg0
