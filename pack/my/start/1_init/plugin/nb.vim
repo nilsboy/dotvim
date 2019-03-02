@@ -22,7 +22,7 @@ endfunction
 function! BufferClose() abort
   silent! wincmd P
   if &previewwindow
-    bwipe
+    bwipeout
     return
   endif
   if BufferIsCommandLine() == 1

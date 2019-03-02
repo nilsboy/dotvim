@@ -1,4 +1,5 @@
 finish
+" Search suggestions auto complete
 " https://www.reddit.com/r/vim/comments/8bguck/tip_search_suggestions_auto_complete/
 
 function! s:search_mode_start()

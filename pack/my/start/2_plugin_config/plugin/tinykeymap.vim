@@ -19,7 +19,6 @@ let g:tinykeymaps_default = []
 " ### help ###################################################################
 
 " call tinykeymap#EnterMap('help', '<leader>h', {'name': 'help'})
-" call tinykeymap#Map("help", "m", ':execute ":edit ' . g:vim.bundle.settings.dir . '/tinykeymap.vim"', {'exit': 1})
 " call tinykeymap#Map("help", "e", ':call VimEnvironment()', {'exit': 1})
 
 " ### buffers ################################################################

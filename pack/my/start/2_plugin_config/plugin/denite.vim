@@ -44,7 +44,6 @@ call denite#custom#source('file_mru/project',
 
 nnoremap <silent> <leader>ff :call _Denite('project_files', 'file_rec', 'project', '')<cr>
 nnoremap <silent> <leader>fd :call _Denite('buffer_dir', 'file_rec', 'buffer_dir', '')<cr>
-nnoremap <silent> <leader>vp :call _Denite('plugin_dir', 'file_rec', g:vim.bundle.dir, '')<cr>
 nnoremap <silent> <leader>fw :call _Denite('project_file_word', 'file_rec', 'project', 'cword')<cr>
 
 nnoremap <silent> <leader>gi :call _Denite('project_grep', 'grep', 'project', '')<cr>

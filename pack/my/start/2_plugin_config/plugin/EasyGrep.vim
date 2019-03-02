@@ -9,7 +9,7 @@ let g:EasyGrepIgnoreCase=1
 let g:EasyGrepFilesToExclude=".git"
 let g:EasyGrepFileAssociationsInExplorer=1
 let g:EasyGrepSearchCurrentBufferDir=1
-let g:EasyGrepFileAssociations= g:vim.config.dir . "EasyGrepFileAssociations"
+let g:EasyGrepFileAssociations= stdpath('config') . "/EasyGrepFileAssociations"
 
 " TODO
 let g:EasyGrepJumpToMatch=0
