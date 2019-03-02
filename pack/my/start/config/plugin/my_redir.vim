@@ -9,10 +9,17 @@ function! Redir(cmd, append)
 		redir END
 	endif
   if ! a:append
-    	new
-      only
+    new
+    only
+    setlocal buftype=nowrite
   endif
+  normal! GO
+	call append('.', "########## " . a:cmd)
+  normal! G
 	call append('.', split(output, "\n"))
+  if !a:append
+    normal! ggdd
+  endif
 endfunction
 
 command! -nargs=1 -complete=command Redir silent call Redir(<f-args>, 0)

@@ -2,10 +2,10 @@
 PackAdd SirVer/ultisnips
 
 nnoremap <silent><leader>se :execute ":edit "
-      \ . stdpath('config') . "UltiSnips/" . &filetype
+      \ . stdpath('config') . "/UltiSnips/" . &filetype
       \ . ".snippets"<cr>
 nnoremap <leader>sa :execute ":edit " . stdpath('config') .
-      \ "UltiSnips/all.snippets"<cr>
+      \ "/UltiSnips/all.snippets"<cr>
 
 let g:UltiSnipsEnableSnipMate = 0
 
@@ -17,7 +17,7 @@ let g:UltiSnipsEnableSnipMate = 0
 " let g:UltiSnipsJumpForwardTrigger = "<NOP>y"
 
 " inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
-inoremap silent <tab> <c-r>=MyUltisnipsJump()<cr>
+inoremap <tab> <c-r>=MyUltisnipsJump()<cr>
 let g:UltiSnipsExpandTrigger = '<c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
