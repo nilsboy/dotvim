@@ -49,6 +49,7 @@ function! BufferClose() abort
   endif
   lclose
   if BufferIsLast() == 1
+    return
     silent! q!
   endif
   " Netrw leaves its buffers in a weired state
