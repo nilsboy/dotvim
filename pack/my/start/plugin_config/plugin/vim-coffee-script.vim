@@ -1,3 +1,3 @@
 finish
 " CoffeeScript support for vim
-NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
+PackAdd kchmck/vim-coffee-script

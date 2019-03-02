@@ -4,9 +4,6 @@ finish
 " ctrlp-funky: Navigate and jump to function defs
 PackAdd ctrlpvim/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky }
 
-if neobundle#tap('ctrlp.vim')
-  function! neobundle#hooks.on_source(bundle)
-
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
       \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir', 'funky']
 
@@ -74,7 +71,3 @@ let g:ctrlp_map = '<tab>'
     \ }
 
 nnoremap <leader>rr :CtrlPMRUFiles<cr>
-
-  endfunction
-  call neobundle#untap()
-endif

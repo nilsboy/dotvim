@@ -6,9 +6,6 @@ PackAdd tomtom/tinykeymap_vim
 
 "### config ####################################################################
 
-if neobundle#tap('tinykeymap')
-    function! neobundle#hooks.on_source(bundle)
-
 " no timeout
 let g:tinykeymap#timeout = 0
 
@@ -139,9 +136,3 @@ call tinykeymap#Map("location", "k", "lnfile")
 " Change to older location list results
 call tinykeymap#Map("location", "o", "lnewer")
 call tinykeymap#Map("location", "i", "lolder")
-
-" ### End ######################################################################
-
-  endfunction
-  call neobundle#untap()
-endif

@@ -5,10 +5,4 @@ finish
 " NOTE: does not work with javascript
 PackAdd andymass/vim-matchup', { 'name': 'vim-matchup }
 
-" does not work with neovim:
-" if neobundle#tap('vim-matchup') 
-"   function! neobundle#hooks.on_source(bundle) abort
-"     let g:loaded_matchit = 0
-"   endfunction
-"   call neobundle#untap()
-" endif
+" let g:loaded_matchit = 0

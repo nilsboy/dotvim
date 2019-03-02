@@ -516,27 +516,6 @@ endfunction
 command! -bang -nargs=1 -complete=file QFilter call
       \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
 
-" map _  <Plug>(operator-adjust)
-" call operator#user#define('adjust', 'Op_adjust_window_height')
-" function! Op_adjust_window_height(motion_wiseness)
-"   execute (line("']") - line("'[") + 1) 'wincmd' '_'
-"   normal! `[zt
-" endfunction
-
-" if neobundle#tap('vim-operator-user')
-"   function! neobundle#hooks.on_post_source(bundle) abort
-"     call operator#user#define('grep', 'MyQuickfixOpGrep')
-"     function! MyQuickfixOpGrep(motion_wise)
-"       let v = operator#user#visual_command_from_wise_name(a:motion_wise)
-"       execute 'normal!' '`[' . v . '`]"xy'
-"       " call INFO('X: ', getreg(operator#user#register()))
-"       call MyQuickfixSearch({'term': @x})
-"     endfunction
-"   endfunction
-"   call neobundle#untap()
-" endif
-" map x  <Plug>(operator-grep)
-
 " augroup MyQuickfixAugroupTodo
 "     " QuickFixCmd* Does not match :ltag
 "     autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>

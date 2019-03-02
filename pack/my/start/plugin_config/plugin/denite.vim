@@ -12,30 +12,27 @@ PackAdd Shougo/neomru.vim
 
 let g:neomru#file_mru_limit=3000
 
-if neobundle#tap('denite') 
-    function! neobundle#hooks.on_post_source(bundle)
+" outline source for unite.vim
+PackAdd Shougo/unite-outline
 
-    " outline source for unite.vim
-    PackAdd Shougo/unite-outline
+let g:unite_source_outline_filetype_options = {
+    \ '*': {
+    \   'auto_update': 1,
+    \   'auto_update_event': 'hold',
+    \ },
+    \ 'java': {
+    \   'ignore_types': ['package'],
+    \ },
+    \ 'perl': {
+    \   'ignore_types': ['package'],
+    \ },
+\}
 
-    let g:unite_source_outline_filetype_options = {
-        \ '*': {
-        \   'auto_update': 1,
-        \   'auto_update_event': 'hold',
-        \ },
-        \ 'java': {
-        \   'ignore_types': ['package'],
-        \ },
-        \ 'perl': {
-        \   'ignore_types': ['package'],
-        \ },
-    \}
+call denite#custom#option('default', 'prompt', '>')
 
-    call denite#custom#option('default', 'prompt', '>')
+nnoremap <silent> <tab> :Denite -resume<cr>
 
-    nnoremap <silent> <tab> :Denite -resume<cr>
-
-    " call denite#custom#map("normal", "x", "suspend")
+" call denite#custom#map("normal", "x", "suspend")
 
 nnoremap <silent> <leader>rg :call _Denite('mru', 'file_mru', '', '')<cr>
 nnoremap <silent> <leader>rd :call _Denite('mru_dirs', 'unite:neomru/directory', 'project', '')<cr>
@@ -64,10 +61,6 @@ nnoremap <silent><leader>vh :call _Denite('vim_help', 'help', '', '')<cr>
 
 nnoremap <silent> <Leader>bb :call _Denite('bookmarks', 'unite:bookmark', '', '')<cr>
 nnoremap <silent> <Leader>ba :UniteBookmarkAdd<cr><esc>
-
-  endfunction
-  call neobundle#untap()
-endif
 
 " ### quickfix ###############################################################
 

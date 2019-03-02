@@ -336,22 +336,6 @@ snippet buf "buf" w
 <buffer>
 endsnippet
 
-# getreg(operator#user#register())
-snippet operator "operator" b
-if neobundle#tap('vim-operator-user') 
-  function! neobundle#hooks.on_post_source(bundle) abort
-    call operator#user#define('${1:name}', '${3:Op`!p snip.rv = toCamelCase(t[1])`$2}')
-    function! $3(motion_wise) abort
-      let v = operator#user#visual_command_from_wise_name(a:motion_wise)
-      execute 'normal!' '\`[' . v . '\`]"xy'
-      ${6:execute "echo '" . @x . "'"}$0
-    endfunction
-  endfunction
-  call neobundle#untap()
-endif
-map <leader>${5:mapping} <Plug>(operator-$1)
-endsnippet
-
 snippet setl "set local" b
 let &l:$1 = $0
 endsnippet

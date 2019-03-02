@@ -37,9 +37,6 @@ let g:unite_no_default_keymappings = 1
 " help source for unite.vim
 " PackAdd Shougo/unite-help
 
-if neobundle#tap('unite.vim') 
-    function! neobundle#hooks.on_post_source(bundle)
-
 let g:unite_data_directory = stdpath("cache") . "/unite"
 " let g:unite_enable_auto_select = 0
 
@@ -328,96 +325,3 @@ function s:ReplaceQuickfixWithUnite()
         \ qf
 endfunction
 
-
-"### end #######################################################################
-
-  endfunction
-  call neobundle#untap()
-endif
-
-"### experiments ###############################################################
-
-" let g:unite_open = 0
-
-" augroup UniteSetOpen
-"     autocmd!
-"     autocmd BufCreate,BufAdd,BufEnter * call UniteSetOpen()
-" augroup END
-" function! UniteSetOpen()
-"     if &filetype == "unite"
-"         let g:unite_open = 1
-"     endif
-" endfunction
-
-" augroup UniteSetClosed
-"     autocmd!
-"     autocmd BufLeave * call UniteSetClosed()
-" augroup END
-" function! UniteSetClosed()
-"     let l:buffer = bufnr(expand("<abuf>"))
-"     let l:type = getbufvar(l:buffer, "&filetype")
-"     if &filetype == "unite"
-"         let g:unite_open = 0
-"     endif
-" endfunction
-
-" augroup UniteSetClosed
-"     autocmd!
-"     autocmd BufHidden,BufLeave * call UniteSetClosed()
-" augroup END
-" function! UniteSetClosed()
-"     if &filetype == "unite"
-"         let g:unite_open = 0
-"     endif
-" endfunction
-
-" augroup SingleWindowMode
-"     autocmd!
-"     " autocmd FileType * call SingleWindowMode()
-"     autocmd BufEnter * call SingleWindowMode()
-" augroup END
-" function! SingleWindowMode()
-"     if &filetype == "unitexx"
-"         return
-"     endif
-"     if g:unite_open == 0
-"         " call unite#view#_quit(0)
-"         " only
-"         resize
-"     endif
-" endfunction
-
-" Does not work
-" Use file source on first resume invocation if no unite buffer exists jet.
-" nnoremap <silent><tab> :call UniteResumeWithoutSource()<cr><esc>
-" function! UniteResumeWithoutSource()
-"     if bufname("unite") != ""
-"         :UniteResume
-"     else
-"         :Unite
-"             \ -buffer-name=files-unite
-"             \ script-file:abs=1\ find-and
-"     endif
-" endfunction
-
-" " https://github.com/Shougo/unite.vim/issues/278#issuecomment-52061459
-" " Wipe unite window - stops :UniteResume from working
-" augroup unite_wipe_nosplit
-"     autocmd!
-"     autocmd BufLeave *
-"         \ if &filetype ==# 'unite' |
-"         \   setlocal bufhidden=wipe |
-"         \ endif
-" augroup END
-
-
-"### mru on vim startup if no file is opened ###################################
-
-" autocmd StdinReadPre * let s:std_in=1
-" augroup vimEnter_mru
-"     autocmd!
-"     autocmd VimEnter *
-"         \ if argc() == 0 && exists("s:std_in") == 0 && empty($VIM_HAS_ARGS) == 1
-"         \ | :call MyUniteMru()
-"         \ | endif
-" augroup END

@@ -1,4 +1,4 @@
 finish
 " Syntax Highlighting for Stylus
-NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
+PackAdd wavded/vim-stylus
 " TAGS: css

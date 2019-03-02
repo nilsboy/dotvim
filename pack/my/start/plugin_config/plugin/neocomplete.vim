@@ -83,11 +83,4 @@ endif
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
-if neobundle#tap('neocomplete.vim')
-  function! neobundle#hooks.on_post_source(bundle)
-
-    " call neocomplete#custom#source('_', 'disabled', 1)
-
-  endfunction
-  call neobundle#untap()
-endif
+" call neocomplete#custom#source('_', 'disabled', 1)
