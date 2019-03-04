@@ -25,27 +25,17 @@ function! Man(cmd) abort
     setlocal modifiable
     let &l:buftype = ''
     keepjumps normal gg"_dG
-    silent execute 'r!SHORT=1 man-multi-lookup' cmd
+    " silent execute 'r!SHORT=1 man-multi-lookup' cmd
+    silent execute 'r!man-multi-lookup' cmd
     keepjumps normal! gg"_dd
     " setlocal buftype=nowrite
     " needs to be written to keep position within file
     update
     call setpos('.', saved_cursor)
 
-    syntax case  ignore
-    syntax match manReference      display '[^()[:space:]]\+([0-9nx][a-z]*)'
-    syntax match manSectionHeading display '^\S.*$'
-    syntax match manTitle          display '^\%1l.*$'
-    syntax match manSubHeading     display '^ \{3\}\S.*$'
-    syntax match manOptionDesc     display '^\s\+\%(+\|-\)\S\+'
-
-    highlight default link manTitle          Title
-    highlight default link manSectionHeading Statement
-    highlight default link manOptionDesc     Constant
-    highlight default link manReference      PreProc
-    highlight default link manSubHeading     Function
-
-    " Triggers the "misbehaving" build-in man ftplugin
-    " setlocal filetype=man
+    " Not using filetype=man here because it triggers the
+    " "misbehaving" build-in man ftplugin
+    setlocal filetype=myman
+    setlocal syntax=man
 endfunction
 command! -nargs=1 Man call Man("<args>")

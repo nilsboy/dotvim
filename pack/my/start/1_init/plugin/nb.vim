@@ -317,7 +317,7 @@ endfunction
 function! DUMP(input) abort
   Verbose echo _DUMP(a:input)
   silent! only
-  normal ggdd
+  normal! gg"_dd
   setlocal filetype=json
   Neoformat
 endfunction
@@ -799,8 +799,8 @@ function! Map(...) abort
   execute 'RedirAppend map  <leader>' . join(a:000, ' ')
   execute 'RedirAppend map! <leader>' . join(a:000, ' ')
   sort u
-  g/no mapping found/ normal! dd
-  g/^$/ normal! dd
+  g/no mapping found/ normal! "_dd
+  g/^$/ normal! "_dd
   normal! ggO
   normal! gg0i########## map 
   setlocal filetype=vim
