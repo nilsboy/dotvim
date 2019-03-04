@@ -2,3 +2,4 @@
 nnoremap <buffer><silent>K :call Man(expand("<cword>"))<cr>
 
 let &l:define = '\v^(##+\s|function|alias)'
+let b:outline = '^(##+\s|function|alias)'
