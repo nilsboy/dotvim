@@ -4,6 +4,7 @@ setlocal formatoptions=
 setlocal conceallevel=0
 
 let &l:define = '\v#+\s+'
+let b:outline = '#+\s+'
 
 if exists("b:MyMarkdownFtpluginLoaded")
     finish

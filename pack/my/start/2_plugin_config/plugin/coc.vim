@@ -1,7 +1,9 @@
 " Intellisense engine for neovim, featured language server support as VSCode
 " TAGS: completion
+" SEE ALSO: ./coc-settings.json
 " SEE ALSO: Additional sources: https://github.com/neoclide/coc-sources
 " SEE ALSO: ./pack/minpac/opt/coc.nvim/data/schema.json
+" SEE ALSO: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
 
 function! MyCocInstall(...) abort
   MyInstall yarn !npm install -g yarn

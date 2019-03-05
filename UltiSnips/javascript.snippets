@@ -893,3 +893,12 @@ endsnippet
 snippet .toj "toJSON()" i
 .toJSON()
 endsnippet
+
+snippet httperrors "http errors" b
+const errors = require(\`feathers-errors\`)
+endsnippet
+
+snippet httpnotfound "notfound" w
+throw new errors.NotFound()
+endsnippet
+
