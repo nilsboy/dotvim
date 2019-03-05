@@ -55,6 +55,7 @@ function! MyQuickfixSearch(options) abort
   let strict = 0
   let path = get(options, 'path', '')
   let ignoreCase = get(options, 'ignoreCase', 1)
+  let type = get(options, 'type', 0)
 
   if selection
     let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g')
@@ -137,7 +138,7 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = 'rg --pcre2 --vimgrep'
+  let grepprg = "rg --pcre2 --vimgrep --type-add 'javascript:*.js'"
 
   " let grepprg .= ' --no-ignore --iglob "!.git" '
 
@@ -154,6 +155,10 @@ function! MyQuickfixSearch(options) abort
 
   if ignoreCase
     let grepprg .= ' --ignore-case'
+  endif
+
+  if type
+    let grepprg .= ' -t ' . &filetype
   endif
 
   let limit = ''
@@ -279,7 +284,7 @@ function! MyQuickfixAddMappings(key, options) abort
 endfunction
 nnoremap <silent> <leader>f <nop>
 
-nnoremap <silent> <leader>ft :call MyQuickfixSearch({ 'term': 'todo' })<cr>
+nnoremap <silent> <leader>fT :call MyQuickfixSearch({ 'term': 'todo' })<cr>
 
 function! MyQuickfixFindInBuffer() abort
   return { 'find': 0, 'path': expand('%:p') }
@@ -296,6 +301,7 @@ call MyQuickfixAddMappings('fh', { 'hidden': 1, 'useIgnoreFile': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
+call MyQuickfixAddMappings('ft', { 'type': 1 })
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/<cr>

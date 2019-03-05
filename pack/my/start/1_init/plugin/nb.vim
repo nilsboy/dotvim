@@ -44,7 +44,7 @@ function! BufferClose() abort
   endif
   if BufferIsUnnamed() == 1
   elseif &write
-    silent update
+    update
   endif
   lclose
   if BufferIsLast() == 1

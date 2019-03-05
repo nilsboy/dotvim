@@ -4,3 +4,5 @@ setlocal buflisted
 " only
 
 let &l:define = '\v^(\S.+\ *~$|\*[\d+\.]{2,}\*\s+\w+)'
+let b:outline = '^\d+\.'
+

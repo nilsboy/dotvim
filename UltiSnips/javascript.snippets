@@ -902,3 +902,9 @@ snippet httpnotfound "notfound" w
 throw new errors.NotFound()
 endsnippet
 
+snippet describe "describe" b
+describe(\`$1\`, () => {$0
+${VISUAL}
+})
+endsnippet
+

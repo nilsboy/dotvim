@@ -16,15 +16,17 @@ let g:UltiSnipsEnableSnipMate = 0
 " let g:UltiSnipsExpandTrigger = "<NOP>x"
 " let g:UltiSnipsJumpForwardTrigger = "<NOP>y"
 
-" inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
-inoremap <tab> <c-r>=MyUltisnipsJump()<cr>
+inoremap <silent> <tab> <c-r>=MyUltisnipsJump()<cr>
 let g:UltiSnipsExpandTrigger = '<c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " let g:UltiSnipsListSnippets = '<c-space>'
 
+" inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
 " vnoremap <silent> <tab> <c-r>=UltiSnips#JumpForwards()<cr>
 " vnoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
+
+" call UltiSnips#RefreshSnippets()
 
 function! MyUltisnipsJump() abort
   if pumvisible()
