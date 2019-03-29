@@ -91,6 +91,9 @@ snippet rekc "rekuire class" w
 const `!p snip.rv = toCamelCase(t[1])` = require(\`rekuire\`)(\`$1\`)
 endsnippet
 
+snippet requirefresh "requirefresh" b
+const importFresh = require(\`import-fresh\`)
+endsnippet
 snippet import "import" b
 import * as `!p snip.rv = toCamelCase(t[1])` from \`$1\`
 endsnippet
@@ -117,7 +120,11 @@ module.exports = $1
 endsnippet
 
 snippet stdout "stdout"
-process.stdout
+process.stdout.write(${VISUAL}$0)
+endsnippet
+
+snippet stderr "stderr"
+process.stderr.write(${VISUAL}$0)
 endsnippet
 
 snippet exec "exec" b
@@ -151,7 +158,7 @@ endsnippet
 
 snippet csvReader "CSV reader" b
 $0const csv = require(\`ya-csv\`)
-const file = process.argv[2] || \`my.csv\`
+const [ , , file = \`my.csv\` ] = process.argv
 const options = {
   'separator': \`,\`,
   'quote': \`"\`,
@@ -207,10 +214,6 @@ endsnippet
 
 snippet error "Error" w
 ERROR(\`$1\`)
-endsnippet
-
-snippet d "Interpolated var" w
-\$\{${VISUAL}$1\}$0
 endsnippet
 
 snippet l "let" w
@@ -284,7 +287,7 @@ process.exit(1$0)
 endsnippet
 
 snippet log "logging" b
-const LogDwim = require(\`log-dwim\`)
+const LogDwim = require(\`@nilsboy/log-dwim\`)
 const logger = new LogDwim()
 const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logger
 endsnippet
@@ -765,7 +768,7 @@ endsnippet
 
 snippet jj "here"
 
-console.error('### jj`!v DebugId()` ${VISUAL} $1$0:', ${VISUAL:"" + }$1)
+console.error('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
 
 endsnippet
 
@@ -781,10 +784,16 @@ console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
 
 endsnippet
 
+# NOTE: does not seem to show node internals written in c - try util.ispect()
+# for that?
 snippet jd "dump" w
 
-console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/, \`[\`) + \`\n### jj`!v DebugId()`\`)
+console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
 
+endsnippet
+
+snippet dump "dump" w
+require(\`pretty-format\`)(${VISUAL}$1$0)
 endsnippet
 
 snippet tempFileName "tempFileName" b
@@ -898,8 +907,8 @@ snippet httperrors "http errors" b
 const errors = require(\`feathers-errors\`)
 endsnippet
 
-snippet httpnotfound "notfound" w
-throw new errors.NotFound()
+snippet 404 "notfound" w
+throw new errors.NotFound(\`$0\`)
 endsnippet
 
 snippet describe "describe" b
@@ -908,3 +917,41 @@ ${VISUAL}
 })
 endsnippet
 
+priority -1
+snippet d "Interpolated var" i
+\$\{${VISUAL}$1\}$0
+endsnippet
+
+snippet streamexample "streamexample" b
+# see also: from2, merge2
+#!/usr/bin/env node
+
+const execa = require(\`execa\`)
+const byLine = require(\`byline\`)
+const through2 = require(\`through2\`)
+
+async function main() {
+  // TODO: error check
+  const hosts = [\`dev1\`]
+  for (const host of hosts) {
+    // const e = execa(\`ssh\`, [host, \`pm2\`, \`log\`], {
+    const e = execa(\`ssh\`, [host, \`tail\`, \`-f\`, \`/etc/hosts\`], {
+      // stdio: \`inherit\`
+      // , reject: false
+      // , buffer: false
+    })
+
+    e.stdout
+      .pipe(byLine.createStream())
+      .pipe(
+        through2(function(chunk, enc, callback) {
+          this.push(\`${host} ${chunk}\n\`)
+          callback()
+        })
+      )
+      .pipe(process.stdout)
+  }
+}
+
+main()
+endsnippet

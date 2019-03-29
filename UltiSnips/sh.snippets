@@ -100,3 +100,39 @@ endsnippet
 snippet uppercase "uppercase" w
 \${${VISUAL}$0^^}
 endsnippet
+
+snippet for "for" b
+for $1 in $($2) ; do
+  ${VISUAL}$0
+done
+endsnippet
+
+snippet fori "fori" b
+for i in $(seq $1) ; do
+  ${VISUAL}$0
+done
+endsnippet
+
+snippet killchildprocesses "killchildprocesses" b
+# kill all processes in current process group (child processes)
+trap "kill -9 0" SIGINT
+endsnippet
+
+snippet runbackgroundjobs "runbackgroundjobs" b
+# kill all processes in current process group (child processes)
+trap "kill -9 0" SIGINT
+(
+  $1 &
+  $2 &
+) | cat -
+endsnippet
+
+# https://stackoverflow.com/questions/4412238/what-is-the-cleanest-way-to-ssh-and-run-multiple-commands-in-bash
+# https://unix.stackexchange.com/a/210356
+snippet ssh "ssh" b
+# kill all processes in current process group (child processes)
+trap "kill 0" SIGINT
+ssh -tt ${1:host} '/bin/sh -O huponexit' <<EOF
+  ${VISUAL}$0
+EOF
+endsnippet

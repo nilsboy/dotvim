@@ -1,5 +1,3 @@
-" Used by vim-rest-console
-
-setlocal wrap
+setlocal filetype=json
+setlocal nowrap
 setlocal modifiable
-setlocal syntax=json

@@ -1,3 +1,5 @@
+" SEE ALSO: https://old.reddit.com/r/vim/comments/azzvmu/unified_bulletproof_colorscheme_template_anyone/
+
 " syntax has to be enabled before using it
 if &t_Co > 1
   if !exists('g:syntax_on')

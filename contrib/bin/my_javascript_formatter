@@ -4,11 +4,12 @@
 
 source bash-helpers
 
-out=`mktemp`
+out=`mktemp`.js
+out2=$out.2.js
 
-# prettier-eslint "$@" 2>/dev/null
+cat "$@" > $out
 
-prettier "$@" > $out
+prettier $out > $out2
 
 eslint \
   --quiet \
@@ -16,7 +17,7 @@ eslint \
   --no-color \
   --fix \
   -c $CONTRIB/eslintrc-format.json \
-  $out \
+  $out2 \
 1>&2
 
-cat "$out"
+cat "$out2"

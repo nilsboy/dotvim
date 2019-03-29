@@ -21,5 +21,4 @@ let b:outline = '\v^\s*".+"\s*\:\s*[{\[]+\s*$'
 
 finish
 let b:syntastic_checkers=['']
-setlocal syntax=txt
 

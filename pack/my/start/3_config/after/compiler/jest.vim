@@ -13,8 +13,9 @@ let &errorformat .= '%C,'
 
 " ignore all lines containing a pipe (source code output) - this can not be
 " prefiltered with a %-G!
-" let &errorformat .= '%C%.%#\|%.%#,'
 let &errorformat .= '%-G%.%#\|%.%#,'
+
+" let &errorformat .= '%C%.%#\|%.%#,'
 " let &errorformat .= '%C%.%#node_modules%.%#,'
 
 " let &errorformat .= '%Aerror:%\s%#%m,'

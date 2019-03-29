@@ -11,7 +11,7 @@ setlocal iskeyword+=-
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
 let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
-let b:outline = '\v(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|^\s*it\s*\('
+let b:outline = '(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|^\s*it\s*\('
 
 setlocal path+=node_modules,~/src/node/lib
 
@@ -33,8 +33,7 @@ set includeexpr=MyJavascriptIncluedExpr()
 
 " setlocal omnifunc=lsp#omni#complete
 
-nnoremap <buffer> <leader>lI :terminal npm install<cr>
-nnoremap <buffer> <silent><leader>li yi`:execute 'terminal npm install ' . @"<cr>
+nnoremap <buffer> <silent><leader>lI yi`:execute 'terminal npm install ' . @"<cr>
 
 " edit module documention
 nnoremap <buffer> <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>

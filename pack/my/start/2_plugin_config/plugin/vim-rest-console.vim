@@ -55,6 +55,7 @@ function! MyRestConsoleCall(...) abort
 
   " VrcQuery messes up current buffer position
   let b:winview = winsaveview()
+  let cliptext = getreg('"')
   keepjumps call VrcQuery()
   if(exists('b:winview')) | call winrestview(b:winview) | endif
 
@@ -65,25 +66,15 @@ function! MyRestConsoleCall(...) abort
   set buftype=
   set modifiable
   setlocal nowrap
-  setlocal filetype=json
+  setlocal filetype=restresult
   silent! keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
   silent! keepjumps g/^HTTP/ :normal gcip
-  " keepjumps normal gggcip
 
   let is_json = search('json', 'n')
   if is_json
-    " keepjumps normal! gg"adap
     keepjumps Neoformat! json
-    " keepjumps normal! gg"aP
   endif
 
-  " NOTE: % is very slow on big bodies:
-  " keepjumps normal G%kgcgg
-  " keepjumps normal! G%k"adgg
-
-  " setlocal filetype=restresult
-
-  " keepjumps normal! gg"aP
-  " keepjumps normal! G%k
   keepjumps normal! gg
+  call setreg('"', cliptext)
 endfunction

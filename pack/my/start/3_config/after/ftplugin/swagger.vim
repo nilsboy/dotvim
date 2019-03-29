@@ -1,7 +1,3 @@
-setlocal syntax=yaml
-
-nnoremap <buffer> <leader>bl :silent! call MySwaggerLint()<cr>
-
 augroup MySwaggerAugroupLint
   autocmd!
   " TODO: TextChanged stops UltiSnips snippet expansion
@@ -10,14 +6,8 @@ augroup MySwaggerAugroupLint
 augroup END
 
 let &l:define = '\v^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
+let b:outline = '^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
 
-if exists("b:did_ftplugin_swagger")
-    finish
-endif
-let b:did_ftplugin_swagger = 1
-
-" Only create once _globally_ - otherwise the autocmd stops working when opening
-" a second file
 if exists("g:did_ftplugin_swagger")
     finish
 endif
