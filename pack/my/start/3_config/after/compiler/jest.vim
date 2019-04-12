@@ -9,52 +9,54 @@ let &makeprg = 'jest $*'
 let &errorformat  = ''
 
 " ignore empty lines
-let &errorformat .= '%C,'
+" let &errorformat .= '%C,'
 
-" ignore all lines containing a pipe (source code output) - this can not be
-" prefiltered with a %-G!
+" remove trailing stat lines etc.
+let &errorformat .= '%-ATest Suites%.%#,'
+let &errorformat .= '%C%.%#,'
+
+" remove lines containing a pipe (source code output)
 let &errorformat .= '%-G%.%#\|%.%#,'
 
-" let &errorformat .= '%C%.%#\|%.%#,'
-" let &errorformat .= '%C%.%#node_modules%.%#,'
+let &errorformat .= '%-G%\s%#● %.%#,'
+let &errorformat .= '%-G%.%#node_modules/%.%#,'
 
-" let &errorformat .= '%Aerror:%\s%#%m,'
-" let &errorformat .= '%A%\s%#%\w%\+error:%*[ ]%m,'
-" let &errorformat .= '%A%m,'
-" let &errorformat .= '%Z%\s%#at %.%# (%f:%l:%c),'
-" let &errorformat .= '%Z%\s%#at %f:%l:%c,'
+let &errorformat .= '     %m (%f:%l:%c),'
 
-" let &errorformat .= '%A%\s%#console.%.%#,'
-" let &errorformat .= '%Z%\s%#%f:%l:%c:%m,'
+" let &errorformat .= '%-A,'
+" let &errorformat .= '%Z,'
 
-let &errorformat .= '%\s%#console.%\w%\+ %f:%l,'
-
-let &errorformat .= '%A%\s%#● %.%#,'
-let &errorformat .= '%Z%\s%#at %.%# (%f:%l:%c),'
-let &errorformat .= '%Z%\s%#at %f:%l:%c,'
-" let &errorformat .= '%C%\s%#%m,'
-
-let &errorformat .= '%\s%#at %.%# (%f:%l:%c),'
-let &errorformat .= '%\s%#at %f:%l:%c,'
+" let &errorformat = '%m'
 
 finish
-  ● not a valid error
+  console.log node_modules/database.js:19
+    #### Using database on host: undefined
 
-  ● 'resource' service › create esim
+ FAIL  test/services/resource-v1.test.js
+  'resource' service
+    ✕ create bundle (425ms)
+    ○ skipped 15 tests
 
-    Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.
+  ● 'resource' service › create bundle
 
-      19 |   })
-      20 | 
-    > 21 |   test(`create esim`, async() => {
-         |   ^
-      22 |     const fixture = require(`../fixture/esim`)
-      23 |     await service.create(fixture.db)
-      24 |   })
+    BadRequest: Error
 
-      at new Spec (node_modules/jest-jasmine2/build/jasmine/Spec.js:85:20)
-      at Suite.test (test/services/resource.test.js:21:3)
-      at Object.describe (test/services/resource.test.js:4:1)
+      77 |     if (e.isJoi) {
+    > 78 |       throw new errors.BadRequest(e.details)
+         |             ^
+      79 |     } else {
+      80 | 
+      81 | 
 
-  console.log test/services/resource.test.js:8
-  ### HERE8 foo
+      at new BadRequest (node_modules/@feathersjs/errors/lib/index.js:86:17)
+      at Object.validate (src/services/resource-v1/resource-v1.hooks.js:78:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 15 skipped, 16 total
+Snapshots:   0 total
+Time:        2.342s
+Ran all test suites matching /test\/services\/resource-v1.test.js/i with tests matching "^'resource' service create bundle$".
+debug: error app.service('v1/resources').create()
+error: BadRequest: Error
+    at Object.validate (src/services/resource-v1/resource-v1.hooks.js:78:13)
+    at <anonymous>

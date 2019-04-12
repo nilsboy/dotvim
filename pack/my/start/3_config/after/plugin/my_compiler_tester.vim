@@ -1,6 +1,6 @@
 " For testing &errorformats.
 " For an example see compiler/jest.vim
-" Run this when on a compiler file.
+" Run this on a compiler file.
 " - set errorformat
 " - put error output after finish
 "

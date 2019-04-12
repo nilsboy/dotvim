@@ -6,6 +6,8 @@ setlocal wrap
 let &l:commentstring = '// %s'
 
 let &l:define = '\v^\s\s"\w.+[\{\[]+'
+" let b:outline = '^\s{2,4}"\w.+[\{\[]+'
+let b:outline = '\w+.*[\{\[]+'
 
 let g:MyJsonStrict = 1
 
@@ -32,7 +34,6 @@ call MyJsonStrict()
 MyInstall prettier
 
 MyInstall json2yaml
-nnoremap <buffer> <silent> <leader>gc :silent call MyJsonToYaml()<cr>
 function! MyJsonToYaml() abort
   silent wall
   silent !cat % | json2yaml > %:r.yaml

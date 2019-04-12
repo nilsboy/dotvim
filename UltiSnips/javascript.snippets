@@ -132,6 +132,11 @@ const exec = require(\`child_process\`).execSync
 const stdout = exec(\`${1:cmd}\`)
 endsnippet
 
+snippet execa "execa" b
+const execa = require(\`execa\`)
+const e = execa(\`${VISUAL}$0\`)
+endsnippet
+
 snippet lodash "require lodash" b
 const _ = require(\`lodash\`)
 endsnippet
@@ -954,4 +959,8 @@ async function main() {
 }
 
 main()
+endsnippet
+
+snippet assert "assert" b
+assert($0, \`$1\`)
 endsnippet

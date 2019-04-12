@@ -8,7 +8,8 @@
 function! MyCocInstall(...) abort
   MyInstall yarn !npm install -g yarn
   !yarn install
-  !yarn add coc-ultisnips coc-tsserver coc-json coc-java coc-yaml --ignore-engines
+  " !yarn add coc-ultisnips coc-tsserver coc-json coc-java coc-yaml --ignore-engines
+  !yarn add coc-tsserver coc-json coc-java coc-yaml --ignore-engines
 endfunction
 
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})

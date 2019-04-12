@@ -1,4 +1,3 @@
-finish
 " Code documentation written as code!
 PackAdd adambard/learnxinyminutes-docs
 
@@ -8,8 +7,8 @@ function! HelpLearnXInMinutes(topic) abort
         let l:file = a:topic
     endif
 
-    let l:file = 'FIXME' . '/learnxinyminutes-docs/' 
-                \ . l:file . '.html.markdown'
+    let l:file =  stdpath('config') . '/pack/minpac/opt/learnxinyminutes-docs/'
+        \ . l:file . '.html.markdown'
 
     if !filereadable(l:file)
         let l:file = fnamemodify(l:file, ":h")

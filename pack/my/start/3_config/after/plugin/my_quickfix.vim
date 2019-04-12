@@ -117,6 +117,10 @@ function! MyQuickfixSearch(options) abort
     let term = '\Q' . term . '\E'
   endif
 
+  if !strict
+    let term = substitute(term, '\v\s+', '.*', 'g')
+  endif
+
   if wordBoundary && isWordBoundable
     let term = '(\b|_)' . term . '(\b|_)'
   endif
@@ -377,7 +381,12 @@ function! MyQuickfixFormatAsSimple() abort
     if textLength > maxTextLength
       let maxTextLength = textLength
     endif
-    let path = fnamemodify(bufname(entry.bufnr), ':.')
+    if entry.bufnr == 0
+      let bufname = ''
+    else
+      let bufname = bufname(entry.bufnr) 
+    endif
+    let path = fnamemodify(bufname, ':.')
     let basename = fnamemodify(path, ':t')
     let dir = fnamemodify(path, ':h:t')
     if dir == '.'
@@ -400,7 +409,12 @@ function! MyQuickfixFormatAsSimple() abort
   endfor
   let texts = []
   for entry in qflist
-    let path = fnamemodify(bufname(entry.bufnr), ':.')
+    if entry.bufnr == 0
+      let bufname = ''
+    else
+      let bufname = bufname(entry.bufnr)
+    endif
+    let path = fnamemodify(bufname, ':.')
     let basename = fnamemodify(path, ':t')
     let dir = fnamemodify(path, ':h:t')
     if dir == '.'

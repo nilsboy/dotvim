@@ -18,6 +18,7 @@ function! MyTestStrategy(cmd)
   let arguments = join(cmds[1:])
   let compiler = fnamemodify(path, ':t')
   execute 'compiler! ' . compiler
+  " call INFO('arguments:', arguments)
   execute 'silent make!' . arguments
   execute 'cd ' . cwd
   " call MyQuickfixRemoveWhitspace()
