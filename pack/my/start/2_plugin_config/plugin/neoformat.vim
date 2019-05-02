@@ -15,13 +15,6 @@ let g:neoformat_basic_format_retab = 1
 " Enable trimmming of trailing whitespace
 let g:neoformat_basic_format_trim = 1
 
-" augroup ConfigNeoformat
-"   autocmd!
-"   autocmd TextChanged * Neoformat
-" augroup END
-"
-" autocmd InsertLeave * :Neoformat eslint \| :Neoformat eswraplines<cr>
-
 nnoremap <silent> <leader>x :Neoformat<cr>
 
 " function! AutoCmdNeoFormat() abort
@@ -34,7 +27,6 @@ nnoremap <silent> <leader>x :Neoformat<cr>
 " endfunction
 
 nnoremap <silent> <leader>X :let b:MyNeoformatAutoFormatEnabled = 1<cr>
-
 augroup MyNeoformatAugroupFormat
   autocmd!
   " CursorHoldI does not work in combination with ale or nvim-completion-manager

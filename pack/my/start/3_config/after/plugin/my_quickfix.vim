@@ -22,7 +22,6 @@ function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
 endfunction
 
-" NOTE: to ignore files not in .gitignore use a .agignore file
 let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 
 let g:MyQuickfixSearchLimit = '500'
@@ -144,17 +143,17 @@ function! MyQuickfixSearch(options) abort
 
   let grepprg = "rg --pcre2 --vimgrep --type-add 'javascript:*.js'"
 
-  " let grepprg .= ' --no-ignore --iglob "!.git" '
+  " don't search for ignore files
+  " let grepprg .= ' --no-ignore --iglob "!.git"'
 
   if useIgnoreFile
     let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
-    " let grepprg .= ' --path-to-agignore ' . g:MyQuickfixIgnoreFile
   else
-    let grepprg .= ' --no-ignore --iglob "!.git" '
+    let grepprg .= ' --no-ignore'
   endif
 
   if hidden
-    let grepprg .= ' --hidden '
+    let grepprg .= ' --hidden'
   endif
 
   if ignoreCase
@@ -165,13 +164,15 @@ function! MyQuickfixSearch(options) abort
     let grepprg .= ' -t ' . &filetype
   endif
 
+  let grepprg .= ' --iglob "!.git"'
+
   let limit = ''
   if g:MyQuickfixSearchLimit
     let limit = ' -' . g:MyQuickfixSearchLimit
   endif
 
   let findprg = grepprg
-        \ . ' --files '
+        \ . ' --files'
         \ . ' ' . fnameescape(path)
 
   if filenameTerm != ''
@@ -179,7 +180,7 @@ function! MyQuickfixSearch(options) abort
   endif
 
   if orderBy == 'recent'
-    let findprg .= ' | sort-by-file-modification | tac '
+    let findprg .= ' | sort-by-file-modification | tac'
   else
     let findprg .= ''
           \ . ' | sort'
@@ -301,7 +302,7 @@ endfunction
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
-call MyQuickfixAddMappings('fh', { 'hidden': 1, 'useIgnoreFile': 1 })
+call MyQuickfixAddMappings('fh', { 'hidden': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })

@@ -1,7 +1,5 @@
 compiler perl
 
-nnoremap <buffer> <silent> <Leader>x :call PerlTidy()<CR><CR>
-
 " setlocal keywordprg=!perldoc .expand
 nnoremap <buffer> <silent> K :call Man(expand("<cword>"))<cr><cr>
 
@@ -13,16 +11,18 @@ setlocal makeprg=perl\ -c\ %
 
 setlocal errorformat+=\ %m\ at\ %f\ line\ %l
 
+let b:outline = '^\s*sub'
+
 if exists("b:did_ftplugin_perl")
-    finish
+  finish
 endif
 let b:did_ftplugin_perl = 1
 
-let g:syntastic_perl_perlcritic_post_args = '--exclude=strict'
+MyInstall perltidy !sudo apt-get install perltidy
 
-" :au CursorHold <buffer>  echo 'hold'
-" augroup perl_tidy
-"     autocmd!
-"     autocmd InsertLeave <buffer>
-"                 \ call PerlTidy()
-" augroup END
+let g:neoformat_perl_my_formatter = {
+      \ 'exe': 'perltidy',
+      \ 'args': ['-pro=' . $CONTRIB . '/perltidyrc'],
+      \ 'stdin': 1,
+      \ }
+let g:neoformat_enabled_perl = [ 'my_formatter' ]

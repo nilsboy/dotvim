@@ -1,33 +1,37 @@
-let &makeprg = 'jest $*'
-      " \ . ' 2>&1'
-      " \ . ' \| perl -ne "print if ! /^\s+((>\s\d+\|\d+)\s\\|.+$\|\\|\s+\^$)/i"'
-      " \ . ' \| perl -007 -pe "s/^FAIL.*//gms"'
+" let &makeprg = 'myjest'
+let &makeprg = 'jest'
 
 " --testLocationInResults
 " --useStderr
 
 let &errorformat  = ''
 
-" ignore empty lines
-" let &errorformat .= '%C,'
-
-" remove trailing stat lines etc.
-let &errorformat .= '%-ATest Suites%.%#,'
-let &errorformat .= '%C%.%#,'
+" " remove trailing stat lines etc.
+" let &errorformat .= '%-ATest Suites%.%#,'
+" let &errorformat .= '%C%.%#,'
 
 " remove lines containing a pipe (source code output)
-let &errorformat .= '%-G%.%#\|%.%#,'
+" let &errorformat .= '%-G%.%#\|%.%#,'
 
 let &errorformat .= '%-G%\s%#● %.%#,'
 let &errorformat .= '%-G%.%#node_modules/%.%#,'
 
-let &errorformat .= '     %m (%f:%l:%c),'
+let &errorformat .= '%\s%#%m (%f:%l:%c),'
 
-" let &errorformat .= '%-A,'
-" let &errorformat .= '%Z,'
+" let &errorformat  = ''
+" let &errorformat .= '%E%\s%#FAIL %f,'
+" let &errorformat .= '%C\s%#,'
+" let &errorformat .= '%C%m,'
+" let &errorformat .= '%C%\s%#●,'
+" let &errorformat .= '%Z%m,'
 
-" let &errorformat = '%m'
+" let &errorformat .= '%C%\s%#> %l,'
+" let &errorformat .= '%Z%\s%#|%p^,'
 
+" let &errorformat  = '%m'
+" let &errorformat  = '%f:%l:%c:%m'
+
+let &errorformat = substitute(&errorformat, '\v,$', '', '')
 finish
   console.log node_modules/database.js:19
     #### Using database on host: undefined

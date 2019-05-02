@@ -1,0 +1,12 @@
+--backup-and-modify-in-place
+--standard-error-output
+--indent-columns=2
+--continuation-indentation=2
+--maximum-line-length=80
+--paren-tightness=2
+--no-outdent-long-quotes
+--quiet
+
+## we always want to break BEFORE operators
+# -wbb="+ - * / x != == >= <= =~ !~ < > | & >= <"
+# -wbb="= **= += *= &= <<= &&= -= /= |= >>= ||= .= %= ^= x="
