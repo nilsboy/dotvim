@@ -6,7 +6,7 @@ let g:MyMinpacSetupPluginLoaded = 1
 " Install a plugin as optional and load it directly.
 " This allows before and after configs for a plugin in the same contained
 " config file.
-" This also prevents plugins to be loadded implicitly just by being installed.
+" This also prevents plugins to be loaded implicitly just by being installed.
 function! PackAdd(...) abort
   let url = get(a:000, '0')
   let options = get(a:000, '1', {})
@@ -17,9 +17,11 @@ function! PackAdd(...) abort
   let dir = pluginfo.dir
   if ! isdirectory(dir)
     echom 'Installing missing plugin: ' . package
+
     " this is async so does not work with my sequential plugin config files
     " system:
     " call minpac#update(package, {'do': 'packadd ' . package})
+    " Synchronous version of minpac#update:
     execute '!git clone --quiet ' . pluginfo.url . ' ' . pluginfo.dir
           \ . ' --no-single-branch --depth=1'
     if type(pluginfo.do) == v:t_func
@@ -35,7 +37,8 @@ function! PackAdd(...) abort
       execute 'helptags ' . pluginfo.dir . '/doc'
     endif
   endif
-    execute 'packadd ' . package
+
+  execute 'packadd ' . package
 endfunction
 command! -nargs=* PackAdd call PackAdd(<f-args>)
 
