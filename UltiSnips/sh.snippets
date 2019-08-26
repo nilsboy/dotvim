@@ -18,8 +18,15 @@ endsnippet
 
 snippet fun "function" b
 function $1() {
-	$0
+	${VISUAL}$0
 }
+endsnippet
+
+snippet main "function" b
+function main() {
+	${VISUAL}$0
+}
+main()
 endsnippet
 
 snippet argv "ask for missing option" w
@@ -89,12 +96,16 @@ fi
 filename="${filename%.*}"
 endsnippet
 
-# needs to be tested
-snippet replace "replace" w
-if [[ $filename =~ (.+)(_v[[:digit:]]{8}_[[:digit:]]{6}$) ]] ; then
-  filename=${BASH_REMATCH[1]}
-fi
-echo ${BASH_REMATCH[*]}
+# # needs to be tested
+# snippet replace "replace" w
+# if [[ $filename =~ (.+)(_v[[:digit:]]{8}_[[:digit:]]{6}$) ]] ; then
+#   filename=${BASH_REMATCH[1]}
+# fi
+# echo ${BASH_REMATCH[*]}
+# endsnippet
+
+snippet replace "replace" b
+$1=${$1/${2:search}/${3:replace$0}}
 endsnippet
 
 snippet uppercase "uppercase" w
@@ -135,4 +146,14 @@ trap "kill 0" SIGINT
 ssh -tt ${1:host} '/bin/sh -O huponexit' <<EOF
   ${VISUAL}$0
 EOF
+endsnippet
+
+snippet here "here document" b
+cat << EOF >> ${1:filename}
+${VISUAL}$0
+EOF
+endsnippet
+
+snippet jj "jj" b
+echo ${VISUAL}$0
 endsnippet

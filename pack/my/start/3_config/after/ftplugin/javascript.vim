@@ -11,7 +11,7 @@ setlocal iskeyword+=-
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
 let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
-let b:outline = '(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|^\s*\w+\s*\([a-zA-Z, ]*?\)\s*\{\s*$'
+let b:outline = '(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|\s*it\s*\(|^\s*\w+\s*\([a-zA-Z, ]*?\)\s*\{\s*$'
 " let b:outline = '^\s*\w+\s*\([a-zA-Z, ]*?\)\s*\{\s*$'
 " let b:outline = '^\s*\w+\s*\([a-zA-Z,\s]*?\)\s*\{'
   " renderJson(templateName, data) {

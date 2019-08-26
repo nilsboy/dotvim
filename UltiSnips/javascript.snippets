@@ -83,12 +83,16 @@ snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)
 endsnippet
 
+snippet rekk "rekuire" w
+const rekuire = require(\`rekuire\`)
+endsnippet
+
 snippet rek "rekuire" w
-const `!p snip.rv = toMethodCase(t[1])` = require(\`rekuire\`)(\`${VISUAL}$1\`)
+const `!p snip.rv = toMethodCase(t[1])` = rekuire(\`${VISUAL}$1\`)
 endsnippet
 
 snippet rekc "rekuire class" w
-const `!p snip.rv = toCamelCase(t[1])` = require(\`rekuire\`)(\`$1\`)
+const `!p snip.rv = toCamelCase(t[1])` = rekuire(\`$1\`)
 endsnippet
 
 snippet requirefresh "requirefresh" b
@@ -223,14 +227,6 @@ endsnippet
 
 snippet l "let" w
 let $1 = ${2:\`$3\`}
-endsnippet
-
-snippet toString "stringify to JSON" w
-JSON.stringify(${VISUAL}$0, \` \`, 2)
-endsnippet
-
-snippet parse "parse json" w
-JSON.parse(${VISUAL}$0)
 endsnippet
 
 snippet eq "equals" w
@@ -771,6 +767,10 @@ const neodoc = require(\`neodoc\`)
 const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
 endsnippet
 
+snippet j "j" b
+console.error(\`${VISUAL}$0\`)
+endsnippet
+
 snippet jj "here"
 
 console.error('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
@@ -779,7 +779,7 @@ endsnippet
 
 snippet jjj "seperator"
 
-console.error(\`\n################################################################jj`!v DebugId()`\n\`)
+console.error(\`\n################################################################jj`!v DebugId()`$0\n\`)
 
 endsnippet
 
@@ -791,9 +791,21 @@ endsnippet
 
 # NOTE: does not seem to show node internals written in c - try util.ispect()
 # for that?
-snippet jd "dump" w
+snippet jd2 "dump" w
 
 console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
+
+endsnippet
+
+snippet jd "dump" w
+
+console.error(\`### jj`!v DebugId()` %s:\n%o\n### jj`!v DebugId()`\`, \``!p snip.rv = escape(t[1])`\`, ${VISUAL}$1$0)
+
+endsnippet
+
+snippet jdd "dump" w
+
+console.log(require(\`util\`).inspect(${VISUAL}$0, {depth: null}))
 
 endsnippet
 
@@ -860,7 +872,7 @@ while($1) {
 }
 endsnippet
 
-snippet uuid "uuid" w
+snippet uuidmodule "uuid" w
 const uuid = require(\`uuid/v1\`)
 uuid()
 endsnippet
@@ -879,7 +891,24 @@ endsnippet
 
 snippet jsonRelaxedParser "jsonRelaxedParser" b
 const relaxedJson = require(\`relaxed-json\`)
-const $0 = relaxedJson.parse($1)
+const $0 = relaxedJson.parse(${VISUAL}$1)
+endsnippet
+
+snippet jsonReadRelaxedFile "jsonRelaxedParser" b
+const relaxedJson = require(\`relaxed-json\`)
+const $0 = relaxedJson.parse(fs.readFileSync(rekuire.path(\`${VISUAL}$1\`)).toString())
+endsnippet
+
+snippet tojson "toJSON" w
+JSON.stringify(${VISUAL}$0, null, 2)
+endsnippet
+
+snippet jsonparse "parse json" w
+JSON.parse(${VISUAL}$0)
+endsnippet
+
+snippet .toj "toJSON()" i
+.toJSON()
 endsnippet
 
 snippet clone "clone" w
@@ -902,10 +931,6 @@ snippet test "test" b
 test(\`$1\`, async() => {
 	${VISUAL}$0
 })
-endsnippet
-
-snippet .toj "toJSON()" i
-.toJSON()
 endsnippet
 
 snippet httperrors "http errors" b
@@ -963,4 +988,12 @@ endsnippet
 
 snippet assert "assert" b
 assert($0, \`$1\`)
+endsnippet
+
+snippet clone "clone" b
+_.merge({}, ${VISUAL}$0)
+endsnippet
+
+snippet cloneHard "clone" b
+_.clone(${VISUAL}$0)
 endsnippet

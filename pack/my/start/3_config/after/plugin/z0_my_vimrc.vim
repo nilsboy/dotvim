@@ -26,6 +26,7 @@ set scrolloff=999
 
 set iskeyword+=_,$,@,%,#,-
 set isfname-==
+set isfname+=@-@ 
 
 " Don't make noise
 set noerrorbells
@@ -95,3 +96,4 @@ set suffixesadd=.txt,.md
 " don't echo make output to screen
 let &shellpipe = '&>'
 
+set diffopt=filler,internal,algorithm:histogram,indent-heuristic

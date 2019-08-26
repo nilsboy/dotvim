@@ -12,7 +12,7 @@ cat "$@" > $out
 prettier $out > $out2
 
 eslint \
-  --quiet \
+  # --quiet \
   # --debug \
   --no-color \
   --fix \

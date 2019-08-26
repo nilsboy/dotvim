@@ -1,8 +1,6 @@
 " A (Neo)vim plugin for formatting code.
 PackAdd sbdchd/neoformat
 
-" TODO: use formatprg?: https://github.com/sbdchd/neoformat/issues/36
-
 " let g:neoformat_verbose = 1
 let g:neoformat_only_msg_on_error = 1
 
@@ -18,9 +16,9 @@ let g:neoformat_basic_format_trim = 1
 nnoremap <silent> <leader>x :Neoformat<cr>
 
 " function! AutoCmdNeoFormat() abort
-"   let ha = 'neoformat#formatters#' . &filetype . '#'
+"   let foo = 'neoformat#formatters#' . &filetype . '#'
 "   if !exists('neoformat#formatters#' . &filetype . '#')
-"     echo "No formatter found for filetype: " . ha
+"     echo "No formatter found for filetype: " . foo
 "     return
 "   endif
 "   Neoformat

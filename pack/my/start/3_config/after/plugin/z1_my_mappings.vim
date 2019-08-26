@@ -117,8 +117,8 @@ nnoremap <leader>k q:i<esc>k
 nnoremap <leader>A q:i<esc>kA
 
 augroup MyVimrcAugroupAdjustWindowSizes
-  autocmd VimEnter,VimResized * :let &previewheight = &lines / 3
-  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3
+  autocmd VimEnter,VimResized * :let &previewheight = &lines / 2
+  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 2
   autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
   autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
   autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
@@ -197,13 +197,13 @@ nnoremap <leader>/t gg/TODO<cr>
 " Make gf work with relative file names and non existent files
 nnoremap <leader>jf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
 
-" Restore cursor position after visual selection
-nnoremap v m`v
-nnoremap V m`V
-nnoremap <C-v> m`<C-v>
-" this interfers with coc select mode
-" vnoremap <esc> <esc>``
-vnoremap y y``
+" " Restore cursor position after visual selection
+" nnoremap v m`v
+" nnoremap V m`V
+" nnoremap <C-v> m`<C-v>
+" " this interfers with coc select mode
+" " vnoremap <esc> <esc>``
+" vnoremap y y``
 
 function! MyZ0MyMappingsMessages() abort
   echom '=== Messages until ' . strftime("%H:%M:%S") . ' ======================='

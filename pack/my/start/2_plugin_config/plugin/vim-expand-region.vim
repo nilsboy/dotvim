@@ -1,9 +1,11 @@
+finish
 " visually select increasingly larger regions
 PackAdd terryma/vim-expand-region
 " TAGS: textobj
 
-nmap <cr> <Plug>(expand_region_expand)
-vmap <bs> <Plug>(expand_region_shrink)
+" TODO: find sensible mapping?
+" nmap <cr> <Plug>(expand_region_expand)
+" vmap <bs> <Plug>(expand_region_shrink)
 
 let g:expand_region_text_objects = {
   \ 'iw'  :1,

@@ -5,6 +5,9 @@
 " SEE ALSO: ./pack/minpac/opt/coc.nvim/data/schema.json
 " SEE ALSO: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
 
+" TODO: use add_extension instead:
+" call coc#add_extension( \ 'coc-json', \ 'coc-tsserver', \ ... \)
+" (https://old.reddit.com/r/vim/comments/cde9s8/dipping_into_cocvim_and_before_i_fall_into_the/)
 function! MyCocInstall(...) abort
   MyInstall yarn !npm install -g yarn
   !yarn install
@@ -26,7 +29,6 @@ vmap <leader>lf <Plug>(coc-format-selected)
 nmap <leader>lf <Plug>(coc-format-selected)
 nmap <leader>lF :call CocAction('format')<cr>
 vmap <leader>la <Plug>(coc-codeaction-selected)
-nmap <leader>la <Plug>(coc-codeaction-selected)
 nmap <leader>lA <Plug>(coc-codeaction)
 nmap <leader>lD :call CocAction('fold', <f-args>)<cr>
 nnoremap <silent> <leader>lh :call CocAction('doHover')<cr>

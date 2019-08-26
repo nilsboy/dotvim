@@ -5,8 +5,16 @@ augroup MySwaggerAugroupLint
   autocmd BufWritePost <buffer> :silent! call MySwaggerLint()
 augroup END
 
-let &l:define = '\v^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
+" let &l:define = '\v^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
 let b:outline = '^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
+let b:outline = '^(\s\s[/\w]|\w).+$'
+
+let g:neoformat_swagger_prettier = {
+      \ 'exe': 'prettier'
+      \ ,'args': ['--prose-wrap=always'] 
+      \ }
+
+let g:neoformat_enabled_swagger = [ 'prettier' ]
 
 if exists("g:did_ftplugin_swagger")
     finish

@@ -308,6 +308,9 @@ call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 call MyQuickfixAddMappings('ft', { 'type': 1 })
 
+nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
+nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr>
+
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/<cr>
 

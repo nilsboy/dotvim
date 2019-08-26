@@ -7,7 +7,7 @@ let g:rooter_disable_map = 1
 " Don't echo the project directory
 let g:rooter_silent_chdir = 1
 
-let g:rooter_patterns = ['package.json', '.git', '.git/']
+let g:rooter_patterns = ['.force-project-root', 'package.json', '.git', '.git/']
 
 " let g:rooter_change_directory_for_non_project_files = 'current'
 

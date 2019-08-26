@@ -67,8 +67,8 @@ function! MyRestConsoleCall(...) abort
   set modifiable
   setlocal nowrap
   setlocal filetype=restresult
-  silent! keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
-  silent! keepjumps g/^HTTP/ :normal gcip
+  silent! keeppatterns keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
+  silent! keeppatterns keepjumps g/^HTTP/ :normal gcip
 
   let is_json = search('json', 'n')
   if is_json

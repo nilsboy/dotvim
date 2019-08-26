@@ -79,3 +79,24 @@ endsnippet
 snippet null "null" w
 nil
 endsnippet
+
+snippet jjj "jj" b
+
+print("\n\njj`!v DebugId()` ##############################################################\n\n")
+
+endsnippet
+
+snippet jj "jj" b
+
+print("\n\n########## jj`!v DebugId()` $1: " .. $1 .. "\n\n")
+
+endsnippet
+
+# git clone https://github.com/stevedonovan/Penlight Penlight
+# mv Penlight/lua/pl/ .
+# or install via luarocks
+snippet jd "jd" b
+
+print("\n\n########## jj`!v DebugId()` $1:\n" .. require 'pl.pretty'.write($1) .. "\n########## jj`!v LastDebugId()`\n\n")
+
+endsnippet

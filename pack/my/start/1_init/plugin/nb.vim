@@ -764,6 +764,10 @@ function! DebugId() abort
   return g:my_debug_id
 endfunction
 
+function! LastDebugId() abort
+  return g:my_debug_id
+endfunction
+
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks
       \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g

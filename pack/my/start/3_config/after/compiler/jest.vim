@@ -11,10 +11,12 @@ let &errorformat  = ''
 " let &errorformat .= '%C%.%#,'
 
 " remove lines containing a pipe (source code output)
-" let &errorformat .= '%-G%.%#\|%.%#,'
+let &errorformat .= '%-G%.%#\|%.%#,'
 
 let &errorformat .= '%-G%\s%#● %.%#,'
-let &errorformat .= '%-G%.%#node_modules/%.%#,'
+" let &errorformat .= '%-G%.%#node_modules/%.%#,'
+let &errorformat .= '%-G%.%#○ skipped%.%#,'
+let &errorformat .= '%-G%.%##### Using database%.%#,'
 
 let &errorformat .= '%\s%#%m (%f:%l:%c),'
 
@@ -28,10 +30,12 @@ let &errorformat .= '%\s%#%m (%f:%l:%c),'
 " let &errorformat .= '%C%\s%#> %l,'
 " let &errorformat .= '%Z%\s%#|%p^,'
 
-" let &errorformat  = '%m'
 " let &errorformat  = '%f:%l:%c:%m'
 
 let &errorformat = substitute(&errorformat, '\v,$', '', '')
+
+" let &errorformat  = '%m'
+
 finish
   console.log node_modules/database.js:19
     #### Using database on host: undefined

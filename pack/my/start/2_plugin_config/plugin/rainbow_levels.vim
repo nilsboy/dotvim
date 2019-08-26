@@ -1,7 +1,8 @@
+finish
 " A different approach to code highlighting.
 PackAdd thiagoalessio/rainbow_levels.vim
 
-nnoremap <silent> gl :RainbowLevelsToggle<cr>
+nnoremap <silent> <leader>jr :RainbowLevelsToggle<cr>
 
 augroup MyRainbowLevelsActivate
   autocmd!

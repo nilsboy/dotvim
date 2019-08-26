@@ -12,6 +12,9 @@ set synmaxcol=200
 " Prefer light version of a colorscheme
 set background=light
 
+" use gui colors for colorschemes
+" set termguicolors
+
 " augroup MyColorsAugroupTrailingWhitespace
 "   autocmd!
 "   autocmd InsertEnter * syn clear MyColorsEolColor
@@ -35,7 +38,7 @@ set background=light
 match Todo /\ctodo/
 
 function! MyColorsColorschemeCleanup() abort
-  highlight Normal ctermbg=NONE
+  highlight Normal ctermbg=NONE guibg=NONE
   highlight SignColumn ctermbg=254
 
   highlight TabLine      ctermbg=249 ctermfg=240 cterm=NONE

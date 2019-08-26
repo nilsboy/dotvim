@@ -5,7 +5,7 @@ autocmd BufRead,BufNewFile *vim*/doc/*.txt setlocal filetype=help
 autocmd BufRead,BufNewFile *.{json} setlocal filetype=json
 
 autocmd BufRead,BufNewFile .tern-project setlocal filetype=json
-" autocmd BufRead,BufNewFile *swagger.{yaml,json} setlocal filetype=swagger
+autocmd BufRead,BufNewFile *.swagger.{yaml,json} setlocal filetype=swagger
 
 autocmd BufRead,BufNewFile *.docopt setlocal filetype=docopt
 autocmd BufRead,BufNewFile .babelrc setlocal filetype=json
