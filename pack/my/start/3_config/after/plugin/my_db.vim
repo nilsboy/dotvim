@@ -48,6 +48,7 @@ nnoremap <leader>di     :call MyDbInfos()<cr>
 nnoremap <leader>dp     :call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 
 nnoremap <leader>dd  mayip:call MyDbExecSql(@", '[query]')<cr>
+nnoremap <leader>dD  mayip:call MyDbExecSql(@", '[query]', '', 1)<cr>
 
 nnoremap <leader>dtt    :call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
 nnoremap <leader>dtc mayiw:call MyDbExecSql('SHOW CREATE TABLE ' . @", @" . '.[create_table]', '--yaml')<cr>
@@ -76,7 +77,8 @@ let g:MyDbConfigQueryId = 0
 function! MyDbExecSql(...) abort
   let sql = get(a:000, 0, '')
   let name = get(a:000, 1, '')
-  let options = get(a:000, 2, '')
+  let cmd_options = get(a:000, 2, '')
+  let print_query = get(a:000, 3, '')
 
   " TODO: hack
   " Restore cursor position - `normal y` moves cursor - in manual mode prevented
@@ -96,19 +98,27 @@ function! MyDbExecSql(...) abort
   if filereadable(fileName)
     call delete(fileName)
   endif
+
 	silent execute 'edit ' . fileName
-  " silent 1,$d
+
+  if print_query
+    call append(0, ['### Query:', '', sql, '', '### Result:', ''])
+    %s/\%x00/\r/ge
+  endif
+
 	let cmd = 'NODE_CONFIG_DIR=' . g:MyDbConfigConfigDir
         \ . ' dbquery' 
         \ . ' --profile ' . g:MyDbConfigProfileName
         \ . limit
         \ . g:MyDbConfigOptions 
-        \ . options 
+        \ . cmd_options 
 
   " call INFO('cmd:', cmd)
 
 	let a = systemlist(cmd, sql, 1)
-	call append(0, a)
+	call append('$', a)
+  silent 1"_d
+
   silent update
 	normal! gg
 endfunction

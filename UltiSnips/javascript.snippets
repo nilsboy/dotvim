@@ -688,7 +688,7 @@ snippet "\.done$" "done()" r
 })$0
 endsnippet
 
-snippet inst "inst" b
+snippet instanceof "instanceof" b
 if($1 instanceof ${VISUAL}$2) {
   $0
 }
@@ -866,6 +866,14 @@ $0
 }
 endsnippet
 
+snippet catchclass "catchclass" b
+if (e instanceof $1) {
+	$0
+} else {
+	throw e
+}
+endsnippet
+
 snippet while "while" w
 while($1) {
 	$0
@@ -912,7 +920,7 @@ snippet .toj "toJSON()" i
 endsnippet
 
 snippet clone "clone" w
-const ${2:dst}$0 = Object.assign({}, ${1:src})
+_.merge({}, ${0:src})
 endsnippet
 
 snippet contains ".contains" w
@@ -996,4 +1004,24 @@ endsnippet
 
 snippet cloneHard "clone" b
 _.clone(${VISUAL}$0)
+endsnippet
+
+snippet joiString "joiString" w
+Joi.string().valid(${VISUAL}$0).required()
+endsnippet
+
+snippet error "custom error" b
+class $1Error extends Error {
+  constructor(...params) {
+    // Pass remaining arguments (including vendor specific ones) to parent constructor
+    super(...params)
+
+    // Maintains proper stack trace for where our error was thrown (only available on V8)
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, CustomError)
+    }
+
+    this.name = '$1Error'
+  }
+}
 endsnippet

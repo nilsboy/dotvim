@@ -11,10 +11,10 @@ setlocal iskeyword+=-
 setlocal suffixesadd=.js,.node,.json
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
 let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
-let b:outline = '(class|\s*function\s*\(|Object\.defineProperty|\.prototype\.|async\s|\s*test\s*\()|\s*it\s*\(|^\s*\w+\s*\([a-zA-Z, ]*?\)\s*\{\s*$'
-" let b:outline = '^\s*\w+\s*\([a-zA-Z, ]*?\)\s*\{\s*$'
-" let b:outline = '^\s*\w+\s*\([a-zA-Z,\s]*?\)\s*\{'
-  " renderJson(templateName, data) {
+let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\s*\(.+\{|^\s*(static)*\s*(async)*\s*\w+\s*\(.+\{|^[\w\.]+\s*\=)'
+" let b:outline = '^\s*(?!if)\s*(static)*\s*(async)*\s*\w+\s*\(.+\{'
+" const deactivateBundleItem = async(item) => {
+let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static)\b)*\s*\w+\s*\(.+\{$|\s*class\s+\w+\b|[\w\.]+\s*=)'
 
 setlocal path+=node_modules,~/src/node/lib
 

@@ -37,6 +37,10 @@ Grep through the source to find more notes.
 This setting makes Vim echo the autocommands as it executes them.
 `:set verbose=9`
 
+
+### Start with only one plugin enable
+`vim -u NORC -N +":set runtimepath+=~/path/to/vim-sneak/" +":runtime plugin/sneak.vim"`
+
 ## Naming conventions (WIP)
 
 Goal: Use one consistent style for all identifiers.

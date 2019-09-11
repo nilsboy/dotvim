@@ -286,3 +286,8 @@ function! MyVimrcRtp() abort
   %s/,/\r/g
 endfunction
 nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
+
+" nnoremap <leader>jj :w !npx -q json<space>
+" example: !jq '.data[].id'
+" TODO: use jsonpath instead
+nnoremap <leader>jj :w !jq<space>

@@ -1,4 +1,4 @@
-" Use for: linting, makeing, testing, formatting, finding stuff
+" Search in file names and contents and some quickfix tweaks.
 
 MyInstall rg apt-get install ripgrep
 
