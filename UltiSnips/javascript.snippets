@@ -783,20 +783,6 @@ console.error(\`\n##############################################################
 
 endsnippet
 
-snippet jt "print to stderr with variable and trace" w
-
-console.trace(\`### ${VISUAL}$1:\`, ${VISUAL}$1$0)
-
-endsnippet
-
-# NOTE: does not seem to show node internals written in c - try util.ispect()
-# for that?
-snippet jd2 "dump" w
-
-console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
-
-endsnippet
-
 snippet jd "dump" w
 
 console.error(\`### jj`!v DebugId()` %s:\n%o\n### jj`!v DebugId()`\`, \``!p snip.rv = escape(t[1])`\`, ${VISUAL}$1$0)
@@ -811,6 +797,20 @@ endsnippet
 
 snippet dump "dump" w
 require(\`pretty-format\`)(${VISUAL}$1$0)
+endsnippet
+
+# NOTE: does not seem to show node internals written in c - try util.ispect()
+# for that?
+snippet jd2 "dump" w
+
+console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
+
+endsnippet
+
+snippet jt "print to stderr with variable and trace" w
+
+console.trace(\`### jj`!v DebugId()` ${VISUAL}$1:\`, ${VISUAL}$1$0)
+
 endsnippet
 
 snippet tempFileName "tempFileName" b

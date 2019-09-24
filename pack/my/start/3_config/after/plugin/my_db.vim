@@ -100,6 +100,7 @@ function! MyDbExecSql(...) abort
   endif
 
 	silent execute 'edit ' . fileName
+  silent! normal! 1,$"_dd
 
   if print_query
     call append(0, ['### Query:', '', sql, '', '### Result:', ''])
@@ -117,10 +118,10 @@ function! MyDbExecSql(...) abort
 
 	let a = systemlist(cmd, sql, 1)
 	call append('$', a)
-  silent 1"_d
 
   silent update
-	normal! gg
+	keepjumps normal! G"_dd
+	keepjumps normal! gg"_dd
 endfunction
 
 " # vimex: MyDbConfigSetProfile pidb-db-dev
@@ -131,9 +132,10 @@ endfunction
 
 function! MyDbInfos() abort
   edit /tmp/database_infos.txt
-  1,$d
+  1,$"_d
   normal! i### Database profiles
   execute 'normal! o' . g:MyDbConfigConfigDir . '/default.yaml'
+  execute 'normal! o' . $HOME . '/src/myconf/README.md'
   normal! o
   normal! o
   normal! i### Table Data Excerpts

@@ -197,13 +197,13 @@ nnoremap <leader>/t gg/TODO<cr>
 " Make gf work with relative file names and non existent files
 nnoremap <leader>jf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
 
-" " Restore cursor position after visual selection
-" nnoremap v m`v
-" nnoremap V m`V
-" nnoremap <C-v> m`<C-v>
-" " this interfers with coc select mode
-" " vnoremap <esc> <esc>``
-" vnoremap y y``
+" Restore cursor position after visual selection
+nnoremap v m`v
+nnoremap V m`V
+nnoremap <C-v> m`<C-v>
+" this interfers with coc select mode
+vnoremap <esc> <esc>``
+vnoremap y y``
 
 function! MyZ0MyMappingsMessages() abort
   echom '=== Messages until ' . strftime("%H:%M:%S") . ' ======================='
@@ -236,6 +236,8 @@ nnoremap gs :%s//g<Left><Left>
 xnoremap gs y:%s/<C-r>"//g<Left><Left>
 nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>/g<left><left>
 xnoremap gS :%s/<C-r>"/<c-r>"/g<left><left>
+
+nnoremap gsw "zyiw:%s/\c\<<c-r>z\\>//g<Left><Left>
 
 " Quickly jump to buffers
 nnoremap gb :ls<cr>:buffer<space>

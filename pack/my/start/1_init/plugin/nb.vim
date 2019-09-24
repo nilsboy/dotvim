@@ -315,30 +315,11 @@ function! INFO(...) abort
 endfunction
 
 function! DUMP(input) abort
-  Verbose echo _DUMP(a:input)
+  Verbose echo json_encode(a:input)
   silent! only
   normal! gg"_dd
   setlocal filetype=json
   Neoformat
-endfunction
-
-" dump any vim structure to json
-" TODO: see string()
-function! _DUMP(input) abort
-  let json = ''
-  if type(a:input) == type({})
-    let parts = copy(a:input)
-    call map(parts, '"\"" . escape(v:key, "\"") . "\":" . _DUMP(v:val)')
-    let json .= "{" . join(values(parts), ",") . "}"
-  elseif type(a:input) == type([])
-    let parts = map(copy(a:input), '_DUMP(v:val)')
-    let json .= "[" . join(parts, ",") . "]"
-  elseif type(a:input) == 2
-    " TODO: how to convert funcrefs to string?
-  else
-    let json .= '"'.escape(a:input, '"').'"'
-  endif
-  return json
 endfunction
 
 " Vim's writefile does not support the append (a) flag (2017-02-21)

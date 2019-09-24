@@ -1,4 +1,6 @@
 {
   // https://github.com/Microsoft/vscode/issues/47299
-  "javascript.suggestionActions.enabled": false
+  "javascript.suggestionActions.enabled": false,
+  "javascript.showUnused": false,
+  "javascript.suggest.enabled": false
 }

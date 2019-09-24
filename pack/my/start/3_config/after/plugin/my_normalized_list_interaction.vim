@@ -1,3 +1,4 @@
+finish
 " from: https://gist.github.com/romainl/047aca21e338df7ccf771f96858edb86
 
 " make list-like commands more intuitive

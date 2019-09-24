@@ -14,7 +14,7 @@ let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^
 let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\s*\(.+\{|^\s*(static)*\s*(async)*\s*\w+\s*\(.+\{|^[\w\.]+\s*\=)'
 " let b:outline = '^\s*(?!if)\s*(static)*\s*(async)*\s*\w+\s*\(.+\{'
 " const deactivateBundleItem = async(item) => {
-let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static)\b)*\s*\w+\s*\(.+\{$|\s*class\s+\w+\b|[\w\.]+\s*=)'
+let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static|function)\b)*\s*\w+\s*\(.+\{$|\s*class\s+\w+\b|[\w\.]+\s*=)'
 
 setlocal path+=node_modules,~/src/node/lib
 

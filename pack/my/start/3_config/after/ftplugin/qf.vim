@@ -20,7 +20,7 @@ if BufferIsQuickfix()
   nmap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
   augroup MyQfAugroupBufferLeave
     autocmd!
-    autocmd BufLeave <buffer> :cclose
+    autocmd BufLeave <buffer> :silent! cclose
   augroup END
 else
   nnoremap <silent> <c-n> :silent! keepjumps lnext<cr>
@@ -30,10 +30,12 @@ else
   nmap <buffer><silent> L :silent! lnewer<cr>
   nmap <buffer><silent> H :silent! lolder<cr>
   nmap <buffer><silent> <cr> :call MyQfIsLocListError()<cr>
-  augroup MyQfAugroupBufferLeave
-    autocmd!
-    autocmd BufLeave <buffer> :lclose
-  augroup END
+  " produces E924 when pressing the above <cr>-mapping - unlike with quickfix
+  " list.
+  " augroup MyQfAugroupBufferLeave
+  "   autocmd!
+  "   autocmd BufLeave <buffer> :silent! lclose
+  " augroup END
 endif
 
 if exists("b:MyQfFtpluginLoaded")
@@ -43,7 +45,7 @@ let b:MyQfFtpluginLoaded = 1
 
 function! MyQfIsQfListError() abort
   if getqflist()[getcurpos()[1]-1].valid 
-    keepjumps .cc
+    execute 'keepjumps cc ' getcurpos()[1]
     cclose
   else
     call INFO('No valid error on current line.')
@@ -51,9 +53,9 @@ function! MyQfIsQfListError() abort
 endfunction
 
 function! MyQfIsLocListError() abort
-  if getqflist()[getcurpos()[1]-1].valid 
-    .cc
-    cclose
+  if getloclist(0)[getcurpos()[1]-1].valid
+    execute 'll ' . getcurpos()[1]
+    lclose
   else
     call INFO('No valid error on current line.')
   endif

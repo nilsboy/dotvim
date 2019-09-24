@@ -1,12 +1,9 @@
 " let &makeprg = 'myjest'
 let &makeprg = 'jest'
 
-" --testLocationInResults
-" --useStderr
-
 let &errorformat  = ''
 
-" " remove trailing stat lines etc.
+"  remove trailing stat lines etc.
 " let &errorformat .= '%-ATest Suites%.%#,'
 " let &errorformat .= '%C%.%#,'
 
@@ -14,7 +11,7 @@ let &errorformat  = ''
 let &errorformat .= '%-G%.%#\|%.%#,'
 
 let &errorformat .= '%-G%\s%#● %.%#,'
-" let &errorformat .= '%-G%.%#node_modules/%.%#,'
+let &errorformat .= '%-G%.%#node_modules/%.%#,'
 let &errorformat .= '%-G%.%#○ skipped%.%#,'
 let &errorformat .= '%-G%.%##### Using database%.%#,'
 
@@ -34,7 +31,18 @@ let &errorformat .= '%\s%#%m (%f:%l:%c),'
 
 let &errorformat = substitute(&errorformat, '\v,$', '', '')
 
-" let &errorformat  = '%m'
+let &errorformat  = ''
+" let &errorformat .= '%-G%.%#node_modules/%.%#,'
+
+let &errorformat .= '%E%\s%#● %.%#›\s%#%m,'
+let &errorformat .= '%-C%.%#node_modules/%.%#,'
+let &errorformat .= '%-C%.%#|%.%#,'
+let &errorformat .= '%-C\s%#,'
+let &errorformat .= '%Z%\s%#at %.%# (%f:%l:%c),'
+let &errorformat .= '%+C\s%#%.%#,'
+
+let &errorformat .= '%W\s%#%m (%f:%l:%c),'
+let &errorformat .= '%-G%.%#,'
 
 finish
   console.log node_modules/database.js:19

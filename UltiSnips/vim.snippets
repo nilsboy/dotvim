@@ -241,8 +241,12 @@ snippet nop "<nop>" w
 <nop>
 endsnippet
 
+snippet jj ""
+call INFO('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
+endsnippet
+
 snippet xx "here"
-call INFO('### HERE`!v
+call INFO('### jj`!v
   line('.')
   ` `!v
   expand('%:t') . ':' . line('.')
@@ -250,7 +254,7 @@ call INFO('### HERE`!v
 endsnippet
 
 snippet xxx "here"
-call INFO('### HERE`!v
+call INFO('### jj`!v
   line('.')
   ` `!v
   expand('%:t') . ':' . line('.')
@@ -473,4 +477,8 @@ endsnippet
 
 snippet [ "errorformat [] errorformat" w
 %*[${VISUAL}$0]
+endsnippet
+
+snippet ? "non-greedy match" i
+{-}
 endsnippet
