@@ -12,8 +12,8 @@ nmap <buffer> <c-o> <esc><c-o>
 nmap <buffer> <leader>x :set modifiable \| :keepjumps %s/\\%u00/\\r/g<cr>
 
 if BufferIsQuickfix()
-  nnoremap <silent> <c-n> :silent! keepjumps cnext<cr>
-  nnoremap <silent> <c-p> :silent! keepjumps cprevious<cr>
+  nnoremap <silent> <c-n> :silent! keepjumps cnext \| call MySetErrorMarkers()<cr>
+  nnoremap <silent> <c-p> :silent! keepjumps cprevious \| call MySetErrorMarkers()<cr>
   nmap <buffer><silent> <tab> :cclose<cr>
   nmap <buffer><silent> L :silent! cnewer<cr>
   nmap <buffer><silent> H :silent! colder<cr>
@@ -23,8 +23,8 @@ if BufferIsQuickfix()
     autocmd BufLeave <buffer> :silent! cclose
   augroup END
 else
-  nnoremap <silent> <c-n> :silent! keepjumps lnext<cr>
-  nnoremap <silent> <c-p> :silent! keepjumps lprevious<cr>
+  nnoremap <silent> <c-n> :silent! keepjumps lnext \| call MySetErrorMarkers()<cr>
+  nnoremap <silent> <c-p> :silent! keepjumps lprevious \| call MySetErrorMarkers()<cr>
   nmap <buffer><silent> <s-tab> :lclose<cr>
   nmap <buffer><silent> <tab> :lclose<cr>
   nmap <buffer><silent> L :silent! lnewer<cr>
@@ -37,6 +37,11 @@ else
   "   autocmd BufLeave <buffer> :silent! lclose
   " augroup END
 endif
+
+" RemoveErrorMarkers 
+" call MySetErrorMarkers()
+
+set cursorline
 
 if exists("b:MyQfFtpluginLoaded")
     finish
@@ -60,4 +65,3 @@ function! MyQfIsLocListError() abort
     call INFO('No valid error on current line.')
   endif
 endfunction
-

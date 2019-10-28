@@ -118,7 +118,7 @@ nnoremap <leader>A q:i<esc>kA
 
 augroup MyVimrcAugroupAdjustWindowSizes
   autocmd VimEnter,VimResized * :let &previewheight = &lines / 2
-  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 2
+  autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3 * 2
   autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
   autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
   autocmd VimEnter,VimResized * :execute 'nnoremap rj ' . (&lines / 2 - 3) . 'j'
@@ -160,14 +160,13 @@ nnoremap gV `[v`]
 " nnoremap <expr> n 'Nn'[v:searchforward]
 " nnoremap <expr> N 'nN'[v:searchforward]
 
-nnoremap <silent> <leader>vv :execute "edit " . stdpath('config') . "/init.vim"<cr>
-nnoremap <silent> <leader>vm :execute "edit " . stdpath('config')
+nnoremap <silent> <leader>vv :execute "edit " . stdpath('config')
   \ . "/pack/my/start/3_config/after/plugin/z1_my_mappings.vim"<cr>
 nnoremap <silent> <leader>vt :execute ':edit ' . stdpath('config')
   \ . '/pack/my/start/3_config/after/ftplugin/' . &filetype . '.vim'<cr>
 
 " Show all mappings
-nnoremap <leader>vM :Verbose cmap <bar> map<cr> :only<cr>
+nnoremap <leader>vem :Verbose cmap <bar> map<cr> :only<cr>
 
 " Show all <leader> search mappings
 nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
@@ -179,6 +178,10 @@ nnoremap <leader>// q/k
 " vnoremap <leader>// y:execute '/' . @"<cr>
 vnoremap <leader>// y:/\V<c-r>"<cr>
 nnoremap <leader>/C /\v^\s*[/"#]+<cr>
+
+" search for character under cursor
+nnoremap <leader>/c "zyl/<c-r>z<cr>
+
 " nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/b /^.*{.*$<cr>
 nnoremap <leader>/S /^\S\+<cr>
@@ -215,7 +218,7 @@ function! MyZ0MyMappingsMessages() abort
   silent! %s/\v\<00\>/\r/g
   echom ''
 endfunction
-nnoremap <silent> <leader>jm :call MyZ0MyMappingsMessages()<cr><cr>
+nnoremap <silent> <leader>vm :call MyZ0MyMappingsMessages()<cr><cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn

@@ -11,14 +11,12 @@
 - checkout quickfixsigns for resetting the signes on :colder etc
 - use winsaveview to prevent window resizing on copen
 - always close buffer of preview window - is there a plugin for that?
-- add description to quickfix window title
-- don't jump if the current quickfix entry is invalid
 - operator for searching
 - stacktrace vs error message line
 - add "exclude file containing" search?:
   https://www.reddit.com/r/vim/comments/8f5fsf/how_do_you_search_through_all_files_that_contain/
 - optionally only show one match per file
-- persist quickfix lists:
+- persist quickfix lists?
   https://old.reddit.com/r/vim/comments/9iwr41/store_quickfix_list_as_a_file_and_load_it/e6n0qmi/
 
 ## Help

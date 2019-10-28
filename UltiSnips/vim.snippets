@@ -245,21 +245,8 @@ snippet jj ""
 call INFO('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
 endsnippet
 
-snippet xx "here"
-call INFO('### jj`!v
-  line('.')
-  ` `!v
-  expand('%:t') . ':' . line('.')
-  ` ' . strftime("%F %T"))
-endsnippet
-
-snippet xxx "here"
-call INFO('### jj`!v
-  line('.')
-  ` `!v
-  expand('%:t') . ':' . line('.')
-(`!v strftime("%F")`)
-  `')
+snippet jjj "here"
+call INFO('##################################### jj`!v DebugId()`$0')
 endsnippet
 
 snippet fileexists "check if a file exists" b
@@ -481,4 +468,8 @@ endsnippet
 
 snippet ? "non-greedy match" i
 {-}
+endsnippet
+
+snippet datevim "datevim" w
+strftime("%FT%H:%M:%S%z")
 endsnippet

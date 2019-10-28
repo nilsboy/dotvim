@@ -14,9 +14,19 @@ nmap #  <Plug>(incsearch-nohl-#)
 nmap g* <Plug>(incsearch-nohl-g*)
 nmap g# <Plug>(incsearch-nohl-g#)
 
-
 let g:incsearch#do_not_save_error_message_history = 1
-let g:incsearch#magic = '\M' " nomagic
-" let g:incsearch#magic = '\v' " very magic
-" let g:incsearch#emacs_like_keymap = 1
 " let g:incsearch#separate_highlight = 1
+
+" nomagic 
+let g:incsearch#magic = '\M'
+
+augroup incsearch-keymap
+  autocmd!
+  autocmd VimEnter * call s:incsearch_keymap()
+augroup END
+function! s:incsearch_keymap()
+  IncSearchNoreMap <Tab> <Over>(buffer-complete)
+  IncSearchNoreMap <S-Tab> <Over>(buffer-complete-prev)
+  IncSearchNoreMap <c-g> <Over>(incsearch-next)
+  IncSearchNoreMap <c-t> <Over>(incsearch-prev)
+endfunction

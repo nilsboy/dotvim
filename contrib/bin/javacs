@@ -7,7 +7,7 @@
 
 source bash-helpers
 
-cd /home/nilsb/tmp/vscode-javac/out/
+cd $HOME/tmp/vscode-javac/out/
 
 > /tmp/LanguageClient.log
 > /tmp/LanguageServer.log

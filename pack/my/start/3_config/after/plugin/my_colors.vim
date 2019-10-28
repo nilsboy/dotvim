@@ -1,19 +1,9 @@
-" SEE ALSO: https://old.reddit.com/r/vim/comments/azzvmu/unified_bulletproof_colorscheme_template_anyone/
+" :so $VIMRUNTIME/syntax/hitest.vim
 
-" syntax has to be enabled before using it
-if &t_Co > 1
-  if !exists('g:syntax_on')
-    syntax enable
-  endif
-endif
+set termguicolors
 
-set synmaxcol=200
-
-" Prefer light version of a colorscheme
 set background=light
-
-" use gui colors for colorschemes
-" set termguicolors
+set synmaxcol=200
 
 " augroup MyColorsAugroupTrailingWhitespace
 "   autocmd!
@@ -35,48 +25,24 @@ set background=light
 " set colorcolumn=81
 " highlight ColorColumn ctermfg=red ctermbg=NONE
 
-match Todo /\ctodo/
+match Todo /\ctodo|\ctbd/
 
 function! MyColorsColorschemeCleanup() abort
-  highlight Normal ctermbg=NONE guibg=NONE
-  highlight SignColumn ctermbg=254
-
-  highlight TabLine      ctermbg=249 ctermfg=240 cterm=NONE
-  highlight TabLineFill  ctermbg=249 ctermfg=240 cterm=NONE
-  highlight TabLineSel   ctermfg=238 ctermbg=153 cterm=NONE
-
-  highlight QuickFixLine ctermfg=238 ctermbg=153 cterm=NONE
-  highlight qfFileName   ctermfg=240 cterm=NONE
-  highlight qfSeparator  ctermfg=238 ctermbg=NONE
-  highlight qfLineNr     ctermfg=238 ctermbg=NONE
-  " highlight qfError      ctermfg=NONE ctermbg=153
-
-  highlight CursorLine   ctermbg=254 ctermfg=NONE
-
-  highlight StatusLine   ctermbg=249 ctermfg=240 cterm=NONE
-  highlight StatusLineNC ctermbg=249 ctermfg=240 cterm=NONE
-
+  highlight Normal ctermbg=NONE guibg=NONE gui=NONE
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
-
-  highlight clear Folded
-  highlight Folded ctermfg=249
-  highlight FoldColumn cterm=NONE ctermbg=NONE
-
-  highlight MyColorsEolColor ctermbg=red
+  " highlight MyColorsEolColor ctermbg=red
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!
   autocmd ColorScheme,Syntax,FileType * call MyColorsColorschemeCleanup()
 augroup END
 
-augroup MyColorsAugroupCursorline
-  autocmd!
-  autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
-  autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
-  " Neomake does not seem to send the BufEnter event:
-  autocmd Filetype qf set cursorline
-augroup END
+" augroup MyColorsAugroupCursorline
+"   autocmd!
+"   autocmd InsertLeave,WinEnter,BufEnter,FocusGained * setlocal cursorline
+"   autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
+" augroup END
 
 " highlight the whole file not just the window - slower but more accurate.
 augroup MyColorsAugroupHighlightWholeBuffer
@@ -86,11 +52,11 @@ augroup END
 
 function! MyColorsShowSyntaxGroups() abort
 	echo map(synstack(line('.'), col('.')),
-        \ 'synIDattr(v:val, "name")')
+    \ 'synIDattr(v:val, "name")')
 endfunction
 nnoremap <leader>vS :call MyColorsShowSyntaxGroups()<cr>
 command! -nargs=* MyColorsShowSyntaxGroups
-      \ call MyColorsShowSyntaxGroups (<f-args>)
+    \ call MyColorsShowSyntaxGroups (<f-args>)
 
 command! MyColorsShowCurrentColors :source $VIMRUNTIME/syntax/hitest.vim
 
@@ -99,9 +65,11 @@ augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
 
+if &t_Co > 1
+  " if !exists('g:syntax_on')
+    syntax enable
+  " endif
+endif
+
 " load colorscheme last to ensure own settings have priority
-try
-  colorscheme lucius
-catch /find/
-  " nothing
-endtry
+colorscheme mine

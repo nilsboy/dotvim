@@ -1,3 +1,4 @@
+finish
 " Asynchronous Lint Engine
 " NOTE: For diagnostics run
 "   :ALEInfo

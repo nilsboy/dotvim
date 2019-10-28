@@ -5,7 +5,7 @@ PackAdd janko-m/vim-test
 " from outside of project dir
 let g:MyTestCwd = ''
 let g:MyTestLast = ''
-function! MyTestStrategy(cmd)
+function! MyTestStrategy(cmd, type)
   silent! wall
   if g:MyTestLast != 1 " || ! g:MyTestCwd
     let g:MyTestCwd = getcwd()
@@ -17,6 +17,9 @@ function! MyTestStrategy(cmd)
   let path = cmds[0]
   let arguments = join(cmds[1:])
   let compiler = fnamemodify(path, ':t')
+  " if a:type == 'near'
+  "   let compiler = compiler . '-near'
+  " endif
   execute 'compiler! ' . compiler
   " call INFO('arguments:', arguments)
   execute 'silent make!' . arguments
@@ -26,18 +29,23 @@ function! MyTestStrategy(cmd)
   " cwindow
 endfunction
 
-let g:test#custom_strategies = {'MyTestStrategy': function('MyTestStrategy')}
-let g:test#strategy = 'MyTestStrategy'
+function! MyTestStrategyFile(cmd)
+  call MyTestStrategy(a:cmd, 'file')
+endfunction
 
-" let test#strategy = "neomake"
-" let test#strategy = "make"
+function! MyTestStrategyNear(cmd)
+  call MyTestStrategy(a:cmd, 'near')
+endfunction
 
-" let g:test#preserve_screen = 1
-" let test#filename_modifier = ':.'
+let g:test#custom_strategies = {
+      \ 'MyTestStrategyFile': function('MyTestStrategyFile'),
+      \ 'MyTestStrategyNear': function('MyTestStrategyNear'),
+      \ }
 
-nmap <silent> <leader>tf :TestFile<CR>
+" test: :TestFile -strategy=neovim
+nmap <silent> <leader>tf :TestFile -strategy=MyTestStrategyFile<CR>
+nmap <silent> <leader>tn :TestNearest -strategy=MyTestStrategyNear<CR>
 nmap <silent> <leader>ta :TestSuite<CR>
-nmap <silent> <leader>tn :TestNearest<CR>
 nmap <silent> <leader>tt :let g:MyTestLast = 1 \| TestLast<CR>
 nmap <silent> <leader>tv :execute 'cd ' . g:MyTestCwd \| TestVisit<CR>
 " nmap <silent> <leader>te :execute 'edit ' . b:testFile<cr>

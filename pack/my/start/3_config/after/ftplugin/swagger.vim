@@ -25,7 +25,6 @@ function! MySwaggerLint() abort
   silent wall
   setlocal errorformat=%m
   let &l:makeprg="swagger-tools validate " . expand('%:p')
-  " Neomake!
   silent lmake!
   lclose
   lwindow

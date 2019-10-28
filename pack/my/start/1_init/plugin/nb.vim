@@ -325,10 +325,7 @@ endfunction
 " Vim's writefile does not support the append (a) flag (2017-02-21)
 " Vim's mkdir complains if directory alread exists (2017-02-21)
 function! IsNeoVim() abort
-  redir => s
-  silent! version
-  redir END
-  return matchstr(s, 'NVIM') == 'NVIM'
+  return has("nvim-0.2.1")
 endfunction
 
 " For vim compatibility
@@ -793,3 +790,18 @@ function! Map(...) abort
   normal! gg0
 endfunction
 command! -nargs=* Map call Map (<f-args>)
+
+function! nb#findScriptId(path) abort
+  let scripts = filter(split(execute('scriptnames'), "\n"), 'v:val =~ "' . a:path . '"')
+  if len(scripts) > 1
+    throw 'Too many matches.'
+  endif
+  let sid = split(scripts[0], ":")[0]
+  let sid = substitute(sid, '\v\s+', '', 'g')
+  return sid
+endfunction
+
+function! nb#getScriptFunction(scriptPath, name) abort
+  let s:sid = nb#findScriptId(a:scriptPath)
+  return function('<SNR>' . s:sid . '_' . a:name)
+endfunction

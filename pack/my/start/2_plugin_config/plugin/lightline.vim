@@ -1,3 +1,4 @@
+finish
 " A light and configurable statusline/tabline
 PackAdd itchyny/lightline.vim
 
@@ -29,9 +30,8 @@ let g:lightline = {
 		  \     'lineinfo': '%3l,%-2v',
       \     'dummy': '',
       \     'empty': ' ',
-      \     'tags': '%{MyLightlineTags()}',
-      \     'errors': '%{MyQuickfixGetErrorCount() > 0 ? MyQuickfixGetErrorCount() : ""}',
-      \     'warnings': '%{MyLoclistGetErrorCount() > 0 ? MyLoclistGetErrorCount() : ""}',
+      \     'errors': '%{MyQuickfixGetErrors("qf")}',
+      \     'warnings': '%{MyQuickfixGetErrors("loclist")}',
       \     'paste': '%{&paste == 1 ? "paste" : ""}',
       \     'quickfix_title': '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
       \   },
@@ -39,13 +39,7 @@ let g:lightline = {
       \     'fileencoding': '&fenc',
       \     'fileformat': '&ff',
       \     'paste': '(&paste == 1)',
-      \     'errors': '(MyQuickfixGetErrorCount() != 0)',
-      \     'warnings': '(MyLoclistGetErrorCount() != 0)',
-      \     'tags': '(MyLightlineTags() != "")',
       \     'quickfix_title': '(exists("w:quickfix_title") != 0)',
-      \   },
-      \   'component_function': {
-      \     'cocstatus': 'coc#status'
       \   },
       \ }
 
@@ -60,6 +54,26 @@ let g:lightline = {
       " \     'left': [['bufferline']],
       " \     'right': [[]],
       " \   },
+
+function! MyQuickfixGetErrors(listType) abort
+  if a:listType == 'qf'
+    let list = getqflist()
+  else
+    let list = getloclist(0)
+  endif
+  let e = len(filter(copy(list), 'v:val.type == "e"'))
+  let w = len(filter(copy(list), 'v:val.type == "w"'))
+  if w > 0
+    let w = '/' . w
+  else
+    let w = ''
+  endif
+  let label = e . w
+  if label == '0'
+    return ""
+  endif
+  return label
+endfunction
 
 function! MyLightlineTags() abort
   return ''
@@ -80,11 +94,11 @@ function! MyLightlineDir() abort
 endfunction
 
 " let s:p.{mode}.{where} = [ [ {guifg}, {guibg}, {cuifg}, {cuibg} ], ... ]
-let s:grey = [ '', '',  240, 249 ]
-let s:red =  [ '', '',  238, 208 ]
-let s:blue =  [ '', '',  238, 153 ]
-let s:blue2 = [ '', '',  238, 81 ]
-let s:orange = [ '', '',  238, 221 ]
+let s:grey = [ '#444444', '#E2E3E5',  240, 249 ]
+let s:red =  [ '#444444', '#F8D7DA',  238, 208 ]
+let s:blue =  [ '#444444', '#0963B1',  238, 153 ]
+let s:blue2 = [ '#444444', '#008787',  238, 81 ]
+let s:orange = [ '#444444', '#FFF3CD',  238, 221 ]
 
 let s:info = s:blue
 let s:warn = s:orange

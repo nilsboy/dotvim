@@ -1,5 +1,12 @@
 " Sometimes, it's useful to line up text.
+" TAGS: align
 PackAdd godlygeek/tabular
+
+" To align by spaces use :Tabularize multiple_spaces
+
+AddTabularPipeline multiple_spaces / \{2,}/
+  \ map(a:lines, "substitute(v:val, ' \{2,}', '  ', 'g')")
+  \   | tabular#TabularizeStrings(a:lines, '  ', 'l0')
 
 " needs no mappings
 " nmap <Leader>a& :Tabularize /&<CR>

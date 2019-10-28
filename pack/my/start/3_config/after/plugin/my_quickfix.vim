@@ -2,18 +2,20 @@
 
 MyInstall rg apt-get install ripgrep
 
-" Always show signs column
-sign define MyQuickfixSignEmpty
-augroup MyQuickfixAugroupPersistentSignsColumn
-  autocmd!
-  autocmd BufEnter * call MyQuickfixShowSignsColumn()
-  autocmd FileType qf call MyQuickfixShowSignsColumn()
-augroup END
+" " Always show signs column
+" sign define MyQuickfixSignEmpty
+" augroup MyQuickfixAugroupPersistentSignsColumn
+"   autocmd!
+"   autocmd BufEnter * call MyQuickfixShowSignsColumn()
+"   autocmd FileType qf call MyQuickfixShowSignsColumn()
+" augroup END
 
-function! MyQuickfixShowSignsColumn() abort
-  execute 'execute ":sign place 9999 line=1
-        \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
-endfunction
+" function! MyQuickfixShowSignsColumn() abort
+"   execute 'execute ":sign place 9999 line=1
+"         \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
+" endfunction
+
+let &signcolumn = 'no'
 
 nnoremap <silent> <tab> :copen<cr>
 nnoremap <silent> <s-tab> :lopen<cr>
@@ -24,7 +26,7 @@ endfunction
 
 let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 
-let g:MyQuickfixSearchLimit = '500'
+let g:MyQuickfixSearchLimit = '5000'
 
 command! -bang -nargs=1 Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
@@ -68,7 +70,7 @@ function! MyQuickfixSearch(options) abort
     let strict = 1
   endif
 
-  " apparently you can not work-bind non-word characters
+  " apparently you can not word-bind non-word characters
   let isWordBoundable = 0
   if term =~ '\v^\w' && term =~ '\v\w$'
     let isWordBoundable = 1
@@ -189,8 +191,11 @@ function! MyQuickfixSearch(options) abort
           " \ . ' | sort-by-path-depth'
   endif
 
+  let findprg .= " | errorformatregex 'n/^()(.+)()()$/gm'"
+
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
-        \ . ' | head-warn' . limit
+  let grepprg .= " | errorformatregex 'n/^()(.+?)\\:(\\d+)\\:(\\d+)\\:/gm'"
+  let grepprg .= ' | head-warn' . limit
 
   let tempfile = tempname()
   call writefile([], tempfile)
@@ -226,9 +231,7 @@ function! MyQuickfixSearch(options) abort
     let title = 'Search for: ' . title
   endif
 
-  " let &l:errorformat = '%f:%l:%c:%m,%f:%l%m,%f  %l%m,%f'
-  let &l:errorformat = '%f:%l:%c:%m,%f,%m'
-  " let &l:errorformat = '%m'
+  let &l:errorformat = '%f:%l:%c:%t:%m,%f'
   execute 'cgetfile ' . tempfile
   if line
     call MyQuickfixSetDefaultPos(line, column)
@@ -338,20 +341,20 @@ nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 
 let g:lastCommand = 'echo "Specify command"'
 function! MyQuickfixRun(...) abort
-  let saved_cursor = getcurpos()
+  " let saved_cursor = getcurpos()
   let cmd = join(a:000)
   let &l:makeprg = cmd
-  let &l:errorformat = '%f:%l:%c:%m,%f'
-  let &l:errorformat = '%m'
+  let &l:errorformat = '%f:%l:%c:%t:%m'
+  " let &l:errorformat = '%m'
   let g:lastCommand = &l:makeprg
   silent wall
   silent! make!
   copen
-  call setpos('.', saved_cursor)
+  " call setpos('.', saved_cursor)
 endfunction
-command! -bang -nargs=1 Run call MyQuickfixRun(<f-args>)
-nnoremap <silent> <leader>ef :call MyQuickfixRun(expand('%:p'))<cr>
-nnoremap <silent> <leader>ei :call MyQuickfixRun(input('Command: '))<cr>
+command! -bang -nargs=* Run call MyQuickfixRun(<f-args>)
+nnoremap <leader>ef :call MyQuickfixRun(expand('%:p'))<left>
+nnoremap <leader>ei :Run<space>
 nnoremap <silent> <leader>el :call MyQuickfixRun(substitute(getline('.'), '\v^["#/ ]+', "", ""))<cr>
 nnoremap <silent> <leader>ee :call MyQuickfixRun(g:lastCommand)<cr>
 
@@ -447,13 +450,39 @@ function! MyQuickfixFormatAsSimple() abort
         " let text .= '❱ '
         " let text .= '⚠ '
       " else
-        let text = '❱ ' . text
+        " let text = '❱ ' . text
       " endif
     else
-        let text = '  ' . text
+        " let text = '  ' . text
     endif
     " let text .= substitute(entry.text, '\v^\s*', '', 'g')
     let text .= entry.text
+    let text = substitute(text, '\v[\n\r]', '', 'g')
+    call add(texts, text)
+  endfor
+  " a lot faster to add all lines in a list sometimes (umlauts problem?)
+  call append(line('$'), texts)
+  keepjumps normal! "_dd
+  setlocal nomodifiable
+  setlocal nomodified
+endfunction
+
+function! MyQuickfixFormatAsNoFile() abort
+  if BufferIsLoclist()
+    let qflist = getloclist(0)
+  else
+    let qflist = getqflist()
+  endif
+  setlocal modifiable
+  %delete _
+  let texts = []
+  for entry in qflist
+    let text = entry.text
+    " if entry.valid
+    "     let text = '❱ ' . text
+    " else
+    "     let text = '  ' . text
+    " endif
     let text = substitute(text, '\v[\n\r]', '', 'g')
     call add(texts, text)
   endfor
@@ -540,6 +569,12 @@ endfunction
 command! -bang -nargs=1 -complete=file QFilter call
       \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
 
+function! MyQuickfixHideWarnings()
+  call setqflist(filter(getqflist(), "v:val['type'] == 'E'"))
+endfunction
+command! -bang -nargs=* -complete=file QFwarnings call
+      \ MyQuickfixHideWarnings()
+
 " augroup MyQuickfixAugroupTodo
 "     " QuickFixCmd* Does not match :ltag
 "     autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
@@ -548,14 +583,6 @@ command! -bang -nargs=1 -complete=file QFilter call
 "     autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
 "     autocmd QuickFixCmdPost    l* botright lopen
 " augroup END
-
-function! MyQuickfixGetErrorCount() abort
-  return len(filter(getqflist(), 'v:val.valid'))
-endfunction
-
-function! MyLoclistGetErrorCount() abort
-  return len(filter(getloclist(0), 'v:val.valid'))
-endfunction
 
 function! MyQuickfixIsError() abort
   echo getqflist()[getcurpos()[1]-1].valid
@@ -570,4 +597,3 @@ function! MyQuickfixFixNewlines() abort
   endfor
   call setqflist(qflist)
 endfunction
-
