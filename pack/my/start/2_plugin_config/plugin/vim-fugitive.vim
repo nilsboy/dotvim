@@ -1,5 +1,6 @@
 " A Git wrapper so awesome, it should be illegal
 " TAGS: git
+" TBD: checkout vim-flog
 PackAdd tpope/vim-fugitive
 
 nnoremap <silent> <leader>gs :Gstatus<cr>

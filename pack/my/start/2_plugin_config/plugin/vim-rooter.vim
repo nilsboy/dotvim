@@ -9,25 +9,22 @@ let g:rooter_silent_chdir = 1
 
 let g:rooter_patterns = ['.force-project-root', 'package.json', '.git', '.git/']
 
-" let g:rooter_change_directory_for_non_project_files = 'current'
+" Make parent dir the root
+nnoremap <silent> <leader>vR :call MyRooterCd()<cr>
+function! MyRooterCd() abort
+  let rootDir = getbufvar('%', 'rootDir')
+  if rootDir == ''
+    let rootDir = getcwd()
+  endif
+  let rootDir = fnamemodify(rootDir, ':h')
+  call setbufvar('%', 'rootDir', rootDir)
+  Rooter
+endfunction
 
-" Needed otherwise the preview window changes the pwd of the current buffer
-let g:rooter_use_lcd = 1
+let g:rooter_change_directory_for_non_project_files = 'current'
 
-" let g:rooter_manual_only = 1
-
-" augroup MyRooterAugroupChdir
-"   autocmd!
-"   autocmd User RooterChDir call MyRooterChdir()
-" augroup END
-
-" function! MyRooterChdir() abort
-"   call INFO('getcwd():', getcwd())
-"   return
-"   let dir = expand('%:p:h')
-"   if dir =~ "/tmp"
-"     return
-"   endif
-"   call INFO('rooting to ' . dir)
-"   Rooter
-" endfunction
+" overwrite function to also change dir for help buffers
+let s:sid = nb#findScriptId('vim-rooter/plugin/rooter.vim')
+function! <SNR>{s:sid}_ChangeDirectoryForBuffer()
+  return 1
+endfunction

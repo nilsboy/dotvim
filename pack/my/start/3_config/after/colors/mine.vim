@@ -1,4 +1,4 @@
-" Only care about RGB environments - otherwise any default scheme is fine.
+" Only care about RGB environments - otherwise any default colorscheme is fine.
 if !&termguicolors && !has('gui_running')
   finish
 endif

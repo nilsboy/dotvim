@@ -83,23 +83,28 @@ let &statusline .= '%#MoreMsg#'
 let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type == \"i\"")), "^0$", "", "g")} %)'
 let &statusline .= '%#StatusLine#'
 
+let &statusline .= '%#Cursorline#'
+let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")} %)'
+let &statusline .= '%#StatusLine#'
+
+"
+
 let &statusline .= ' %{&filetype} '
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%{exists("b:region_filetype") ? ">" . b:region_filetype : ""}'
+let &statusline .= '%( %{exists("b:region_filetype") ? ">" . b:region_filetype : ""} %)'
 let &statusline .= '%#StatusLine#'
-let &statusline .= ' '
 
 let &statusline .= '%#ErrorMsg#'
 let &statusline .= '%( %{substitute(substitute(&paste, "1", "PASTE", "g"), "0", "", "g")} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%(%{substitute(&enc, "utf-8", "", "g")} %)'
+let &statusline .= '%( %{substitute(&enc, "utf-8", "", "g")} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%(%{substitute(&ff, "unix", "", "g")} %)'
+let &statusline .= '%( %{substitute(&ff, "unix", "", "g")} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= ' %3l,%-02c %P '

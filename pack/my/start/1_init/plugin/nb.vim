@@ -801,7 +801,11 @@ function! nb#findScriptId(path) abort
   return sid
 endfunction
 
-function! nb#getScriptFunction(scriptPath, name) abort
+function! nb#getScriptFunctionName(scriptPath, name) abort
   let s:sid = nb#findScriptId(a:scriptPath)
-  return function('<SNR>' . s:sid . '_' . a:name)
+  return '<SNR>' . s:sid . '_' . a:name
+endfunction
+
+function! nb#getScriptFunction(scriptPath, name) abort
+  return function(nb#getScriptFunctionName(a:scriptPath, a:name))
 endfunction

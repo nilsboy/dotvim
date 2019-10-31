@@ -1,6 +1,7 @@
 " Search in file names and contents and some quickfix tweaks.
 
 MyInstall rg apt-get install ripgrep
+MyInstall errorformatregex !npm install -g @nilsboy/errorformatregex
 
 " " Always show signs column
 " sign define MyQuickfixSignEmpty
@@ -166,7 +167,7 @@ function! MyQuickfixSearch(options) abort
     let grepprg .= ' -t ' . &filetype
   endif
 
-  let grepprg .= ' --iglob "!.git"'
+  let grepprg .= ' --iglob ''!.git'''
 
   let limit = ''
   if g:MyQuickfixSearchLimit
@@ -191,10 +192,8 @@ function! MyQuickfixSearch(options) abort
           " \ . ' | sort-by-path-depth'
   endif
 
-  let findprg .= " | errorformatregex 'n/^()(.+)()()$/gm'"
-
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
-  let grepprg .= " | errorformatregex 'n/^()(.+?)\\:(\\d+)\\:(\\d+)\\:/gm'"
+  let grepprg .= " | errorformatregex 'n/^()(.+?)\\:(\\d+)\\:(\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
   let tempfile = tempname()
@@ -263,7 +262,7 @@ function! MyQuickfixAddMappings(key, options) abort
         \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1, },
         \ { 'key': 'l', 'expand': '<cword>', },
         \ { 'key': 'L', 'expand': '<cWORD>', },
-        \ { 'key': 'r', 'orderBy': 'recent', },
+        \ { 'key': 'r', 'orderBy': 'recent', 'grep': 0, },
         \ { 'key': 'F', 'expand': '%:t', },
         \ { 'key': 'B', 'expand': '%:t:r', },
         \ ]
@@ -378,7 +377,7 @@ function! MyQuickfixFormatAsSimple() abort
     let qflist = getqflist()
   endif
   setlocal modifiable
-  %delete _
+  silent! %delete _
   let maxFilenameLength = 0
   let maxTextLength = 0
   let singleFilename = 1

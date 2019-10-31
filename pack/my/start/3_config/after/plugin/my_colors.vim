@@ -1,5 +1,9 @@
 " :so $VIMRUNTIME/syntax/hitest.vim
 
+if &t_Co <= 1
+  finish
+endif
+
 set termguicolors
 
 set background=light
@@ -44,12 +48,6 @@ augroup END
 "   autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
 " augroup END
 
-" highlight the whole file not just the window - slower but more accurate.
-augroup MyColorsAugroupHighlightWholeBuffer
-  autocmd!
-  autocmd BufEnter * :if &syn | syntax sync fromstart | endif
-augroup END
-
 function! MyColorsShowSyntaxGroups() abort
 	echo map(synstack(line('.'), col('.')),
     \ 'synIDattr(v:val, "name")')
@@ -65,11 +63,7 @@ augroup MyVimrcAugroupFallbackToTexthighlight
   autocmd! BufEnter * if &syntax == '' | setlocal syntax=txt | endif
 augroup END
 
-if &t_Co > 1
-  " if !exists('g:syntax_on')
-    syntax enable
-  " endif
-endif
+" syntax enable
 
 " load colorscheme last to ensure own settings have priority
 colorscheme mine

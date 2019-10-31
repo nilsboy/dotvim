@@ -250,6 +250,7 @@ nnoremap gb :ls<cr>:buffer<space>
 " inoremap <c-space> <c-x><c-o>
 
 " select last pasted text
+" select last pasted text
 nnoremap vi<space>p `[v`]
 
 command! -nargs=* EditInBufferDir
