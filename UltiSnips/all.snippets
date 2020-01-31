@@ -159,7 +159,7 @@ snippet date "YYYY-MM-DD" w
 (`!v strftime("%F")`)
 endsnippet
 
-snippet diso "ISO format datetime" w
+snippet datetime "ISO format datetime" w
 `!v strftime("%FT%H:%M:%S%z")`
 endsnippet
 
@@ -167,7 +167,7 @@ snippet time "hh:mm" w
 `!v strftime("%H:%M")`
 endsnippet
 
-snippet datetime "YYYY-MM-DD hh:mm" w
+snippet datetimeSimple "YYYY-MM-DD hh:mm" w
 `!v strftime("%Y-%m-%d %H:%M")`
 endsnippet
 
@@ -237,6 +237,10 @@ endsnippet
 
 snippet file "file" w
 `!v expand('%:t')`
+endsnippet
+
+snippet base "base" w
+`!v expand('%:t:r')`
 endsnippet
 
 snippet home "home" w

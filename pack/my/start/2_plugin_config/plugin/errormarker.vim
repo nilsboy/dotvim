@@ -1,6 +1,3 @@
-function! MySetErrorMarkers() abort
-endfunction
-
 finish
 " Highlights and sets error markers for lines with compile errors
 

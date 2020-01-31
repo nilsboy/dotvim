@@ -1,6 +1,21 @@
-jest test/services/resource-v1.test.js 2>&1 \
-  | errorformatregex '/\s*(●).+[\s\S]*?at .+ \((.+?)\:(\d+)\:(\d+)\).*/gm'
+# --runInBand: Run all tests serially in the current process
+# --forceExit                   Force Jest to exit after all tests have
+#                               completed running. This is useful when resources
 
-# echo "$@"
+# NOTE: sed to strip colors
+
+# jest --useStderr --verbose "$@" 2>&1
+
+jest --useStderr "$@" 2>&1 \
+  | sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g" \
+  | errorformatregex 'e/^\s*()FAIL (\S+)()().*$/gm' 'i/^\s*(at)\s*.+?\((.+?):(\d+):(\d+)\)/gm' 'i/()(\S+)\:(\d+)/gm' \
+  | grep -v 'node_modules/jest' \
+  | cat -
+
+  # | grep -v jest \
+  # | grep -v node_modules \
+
+  # | errorformatregex 'e/^\s*(●).+[\s\S]*?at .+ \((.+?)\:(\d+)\:(\d+)\).*/gm' 'i/^\s*(at)\s*.+?\((.+?):(\d+):(\d+)\)/gm' \
+
 # jest "$@" 2>&1 \
   # | perl -007 -ne 'print "$1:$3:" . length($4) . ":" . $2 . "\n" if /FAIL\s+(.+?)\n+.*?●.+?\n+\s*(.+?)\n.*?\n\s*>\s+(\d+).*?\n\s+\|(\s+\^)/ism'

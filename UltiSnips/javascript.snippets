@@ -240,9 +240,8 @@ if($1) {
 endsnippet
 
 snippet else "else"
-else {
+} else {
   ${VISUAL}$0
-}
 endsnippet
 
 snippet foreachkeyjs5 "foreachkeyjs5" b
@@ -791,7 +790,7 @@ endsnippet
 
 snippet jdd "dump" w
 
-console.log(require(\`util\`).inspect(${VISUAL}$0, {depth: null}))
+console.log(\`### jj`!v DebugId()`\`, require(\`util\`).inspect(${VISUAL}$0, {depth: null}))
 
 endsnippet
 
@@ -862,6 +861,14 @@ snippet try "try" b
 try {
   ${VISUAL}
 } catch (e) {
+$0
+}
+endsnippet
+
+snippet finally "finally" b
+try {
+  ${VISUAL}
+} finally {
 $0
 }
 endsnippet
@@ -1025,3 +1032,18 @@ class $1Error extends Error {
   }
 }
 endsnippet
+
+snippet promisethrow "promisethrow" b
+process.on(\`unhandledRejection\`, (e) => {
+  throw e
+})
+endsnippet
+
+snippet mongotransaction "mongotransaction" b
+const session = await this.client.startSession()
+await session.withTransaction(async() => {
+	${VISUAL}
+	await this.$0(session,)
+})
+endsnippet
+

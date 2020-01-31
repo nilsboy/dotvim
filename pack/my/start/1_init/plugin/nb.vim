@@ -60,7 +60,7 @@ function! BufferClose() abort
   if BufferIsNetrw() == 1
     silent! bwipeout!
   else
-    " Using bwipe prevents the current position mark from being saved - so
+    " Using bwipeout prevents the current position mark from being saved - so
     " the file position can not be restored when loading the file again.
     silent! bdelete!
   endif
@@ -310,13 +310,14 @@ function! INFO(...) abort
   if $DEBUG
     silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
-    unsilent echom "INFO > " . join(a:000, ' ')
+    echohl MoreMsg | unsilent echom "INFO > " . join(a:000, ' ') | echohl None
   endif
 endfunction
 
 function! DUMP(input) abort
   Verbose echo json_encode(a:input)
-  silent! only
+  wincmd _
+  " silent! only
   normal! gg"_dd
   setlocal filetype=json
   Neoformat
@@ -751,10 +752,10 @@ command! -nargs=* RemoveNewlineBlocks
       \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g
       \ | :silent %s/\n*\%$//g
 
-augroup MyVimrcAugroupMaximizeHelp
-  autocmd!
-  autocmd BufEnter * :if &buftype == 'help' | only | endif
-augroup END
+" augroup MyVimrcAugroupMaximizeHelp
+"   autocmd!
+"   autocmd BufEnter * :if &buftype == 'help' | only | endif
+" augroup END
 
 " augroup MyVimrcAugroupListAllBuffers
 "   autocmd!

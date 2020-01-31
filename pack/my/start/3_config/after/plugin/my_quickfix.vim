@@ -3,21 +3,6 @@
 MyInstall rg apt-get install ripgrep
 MyInstall errorformatregex !npm install -g @nilsboy/errorformatregex
 
-" " Always show signs column
-" sign define MyQuickfixSignEmpty
-" augroup MyQuickfixAugroupPersistentSignsColumn
-"   autocmd!
-"   autocmd BufEnter * call MyQuickfixShowSignsColumn()
-"   autocmd FileType qf call MyQuickfixShowSignsColumn()
-" augroup END
-
-" function! MyQuickfixShowSignsColumn() abort
-"   execute 'execute ":sign place 9999 line=1
-"         \ name=MyQuickfixSignEmpty buffer=".bufnr("")'
-" endfunction
-
-let &signcolumn = 'no'
-
 nnoremap <silent> <tab> :copen<cr>
 nnoremap <silent> <s-tab> :lopen<cr>
 
@@ -36,7 +21,7 @@ function! MyQuickfixSearch(options) abort
   call extend(options, a:options)
 
   let functionRef = get(a:options, 'function', '')
-  echo functionRef
+  " echo functionRef
   if functionRef != ''
     call extend(options, {functionRef}())
   endif
@@ -45,7 +30,7 @@ function! MyQuickfixSearch(options) abort
   let term = get(options, 'term', '')
   let find = get(options, 'find', '1')
   let grep = get(options, 'grep', '1')
-  let matchFilenameOnly = get(options, 'matchFilenameOnly', '1')
+  let matchFilenameOnly = get(options, 'matchFilenameOnly', '0')
   let orderBy = get(options, 'orderBy', '')
   let useIgnoreFile = get(options, 'useIgnoreFile', 1)
   let hidden = get(options, 'hidden', 1)
@@ -138,7 +123,8 @@ function! MyQuickfixSearch(options) abort
 
   let filenameTerm = term
   if matchFilenameOnly
-    let filenameTerm = '/.*' . term . '[^/]*$'
+    " let filenameTerm = '/.*' . term . '[^/]*$'
+    let filenameTerm = '.*' . term . '.*$'
   else
     " exclude current path from file match
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
@@ -216,7 +202,9 @@ function! MyQuickfixSearch(options) abort
     call system(findprg . '>> ' . tempfile)
   endif
   if grep
-    call system(grepprg . '>> ' . tempfile)
+    if matchFilenameOnly != 1
+      call system(grepprg . '>> ' . tempfile)
+    endif
   endif
 
   " NOTE: semicolon seem to trigger a redirect into a vim tempfile.
@@ -230,7 +218,7 @@ function! MyQuickfixSearch(options) abort
     let title = 'Search for: ' . title
   endif
 
-  let &l:errorformat = '%f:%l:%c:%t:%m,%f'
+  let &l:errorformat = 'errorformatregex:%f:%l:%c:%t:%m,errorformatregex:%f,%f'
   execute 'cgetfile ' . tempfile
   if line
     call MyQuickfixSetDefaultPos(line, column)
@@ -307,8 +295,9 @@ call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
-call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
+" call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 call MyQuickfixAddMappings('ft', { 'type': 1 })
+call MyQuickfixAddMappings('fn', { 'matchFilenameOnly': '1', })
 
 nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
 nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr>
@@ -574,15 +563,6 @@ endfunction
 command! -bang -nargs=* -complete=file QFwarnings call
       \ MyQuickfixHideWarnings()
 
-" augroup MyQuickfixAugroupTodo
-"     " QuickFixCmd* Does not match :ltag
-"     autocmd QuickFixCmdPost [^l]* nnoremap <tab> :copen<cr>
-"     autocmd QuickFixCmdPost [^l]* botright copen
-"     autocmd QuickFixCmdPost [^l]* let b:isQuickfix = 1
-"     autocmd QuickFixCmdPost    l* nnoremap <tab> :lopen<cr>
-"     autocmd QuickFixCmdPost    l* botright lopen
-" augroup END
-
 function! MyQuickfixIsError() abort
   echo getqflist()[getcurpos()[1]-1].valid
 endfunction
@@ -595,4 +575,8 @@ function! MyQuickfixFixNewlines() abort
     let entry.text = substitute(entry.text, '\%u00', '\r', 'g')
   endfor
   call setqflist(qflist)
+endfunction
+
+function! MyQlistVars() abort
+  silent Verbose set include? define? includeexpr? suffixesadd?
 endfunction

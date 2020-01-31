@@ -7,7 +7,7 @@ if exists('syntax_on')
   syntax reset
 endif
 
-let colors_name = 'mine'
+let colors_name = 'my_colors'
 
 set background=light
 
@@ -94,7 +94,7 @@ execute  'hi VertSplit     guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi WildMenu      guibg='s:greenLight' guifg='s:none' gui='s:none
 
 execute  'hi Function      guibg='s:none' guifg='s:green' gui='s:bold
-execute  'hi Title         guibg='s:greenLight' guifg='s:green' gui='s:none
+execute  'hi Title         guibg='s:greenLight' guifg='s:green' gui='s:bold
 
 execute  'hi DiffAdd       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi DiffChange    guibg='s:yellowLight' guifg='s:none' gui='s:none

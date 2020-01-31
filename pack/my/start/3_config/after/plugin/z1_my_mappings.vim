@@ -1,3 +1,4 @@
+" set verbose=13
 " For a list of vim's internal mappings see:
 " :h index
 "
@@ -66,8 +67,6 @@ vmap <c-h> <esc><c-h>
 vmap <c-l> <esc><c-l>
 vmap <c-j> <esc><c-j>
 vmap <c-k> <esc><c-k>
-
-nnoremap <silent> <leader>jo :only<cr>
 
 " Never use formatprg (it's global) and doesn't fallback to vim's default
 set formatprg=false
@@ -166,10 +165,10 @@ nnoremap <silent> <leader>vt :execute ':edit ' . stdpath('config')
   \ . '/pack/my/start/3_config/after/ftplugin/' . &filetype . '.vim'<cr>
 
 " Show all mappings
-nnoremap <leader>vem :Verbose cmap <bar> map<cr> :only<cr>
+nnoremap <leader>vem :Verbose cmap <bar> map<cr>
 
 " Show all <leader> search mappings
-nnoremap <leader>/? :Verbose map <leader>/<cr> <bar> :only<cr>
+nnoremap <leader>/? :Verbose map <leader>/<cr> <bar>
 
 " open search history and select last entry
 nnoremap <leader>// q/k
@@ -211,7 +210,7 @@ vnoremap y y``
 function! MyZ0MyMappingsMessages() abort
   echom '=== Messages until ' . strftime("%H:%M:%S") . ' ======================='
   silent Verbose messages
-  silent only
+  " silent only
   normal G
   setlocal syntax=txt
   silent! %s/\v\<09\>/\t/g
@@ -268,13 +267,13 @@ cnoremap <tab> <C-L><C-D>
 " Marks:
 " switch lower case marks with uppercase ones
 " https://www.reddit.com/r/vim/comments/3g5v2m/is_there_any_way_to_use_lowercase_marks_instead/ctv5k6s/
-noremap <silent> <expr> ' "`".toupper(nr2char(getchar()))
+noremap <silent> <expr> ' "'".toupper(nr2char(getchar()))
 noremap <silent> <expr> m "m".toupper(nr2char(getchar()))
 sunmap '
 sunmap m
+
 " nnoremap ' `
 " nnoremap ` '
-" nnoremap M '
 
 nnoremap gd [<c-d>
 

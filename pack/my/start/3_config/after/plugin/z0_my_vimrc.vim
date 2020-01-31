@@ -94,6 +94,14 @@ set updatetime=1000
 set suffixesadd=.txt,.md
 
 " don't echo make output to screen
-let &shellpipe = '&>'
+" let &shellpipe = '&>'
 
-set diffopt=filler,internal,algorithm:histogram,indent-heuristic
+" set diffopt=filler,internal,algorithm:histogram,indent-heuristic
+" TODO: possible to use word-diff like git?: git diff --word-diff-regex=[^[:space:]]
+set diffopt+=algorithm:patience,indent-heuristic,iwhiteall,iblank
+
+" set verbose=10
+" set diffexpr=MyDiff()
+" function MyDiff()
+"     " execute "!git --no-pager diff --no-prefix --no-color " . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
+" endfunction

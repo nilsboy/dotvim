@@ -81,23 +81,14 @@ non-offical function as a workaround.
 ## TODO
 
 * checkout g@
-* checkout Titlecase plugin
-* see `:h runtime` for directory structure
 * Backup to git before write?: BufWritePre
 * input() history nnoremap q@ :echo input('')<CR><C-F>"
   (https://www.reddit.com/r/vim/comments/4wwkk1/binding_for_input_history/)
-* spell inside of comments and txt files - camel case / snail case
 
 ### Plugins to checkout
 
-* https://github.com/mattboehm/vim-unstack (for the parsing code see:
-  https://github.com/mattboehm/vim-unstack/blob/master/autoload/unstack/extractors.vim)
-* vim-es6
-* vimagit
-* Vdebug
+* https://github.com/wellle/context.vim
 * JavaScript-Context-Coloring
 * "Define your own operator easily" (https://github.com/kana/vim-operator-user)
 * "Alter built-in Ex commands by your own ones"
   (https://github.com/kana/vim-altercmd) (TAGS: alias)
-* A lot of interesting stuff: https://github.com/kana
-* https://github.com/idbrii/vim-renamer

@@ -6,6 +6,7 @@ let g:rooter_disable_map = 1
 
 " Don't echo the project directory
 let g:rooter_silent_chdir = 1
+let g:rooter_use_lcd = 1
 
 let g:rooter_patterns = ['.force-project-root', 'package.json', '.git', '.git/']
 
@@ -23,8 +24,8 @@ endfunction
 
 let g:rooter_change_directory_for_non_project_files = 'current'
 
-" overwrite function to also change dir for help buffers
-let s:sid = nb#findScriptId('vim-rooter/plugin/rooter.vim')
-function! <SNR>{s:sid}_ChangeDirectoryForBuffer()
-  return 1
-endfunction
+" " overwrite function to also change dir for help buffers
+" let s:sid = nb#findScriptId('vim-rooter/plugin/rooter.vim')
+" function! <SNR>{s:sid}_ChangeDirectoryForBuffer()
+"   return 1
+" endfunction

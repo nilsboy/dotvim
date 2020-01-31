@@ -1,8 +1,9 @@
-finish
 " even better % navigate and highlight
-" NOTE: breaks status line
-" NOTE: needs to be loaded before matchit plugin which neovim loads by default
-" NOTE: does not work with javascript
-PackAdd andymass/vim-matchup', { 'name': 'vim-matchup }
+" TAGS: matchit
+PackAdd andymass/vim-matchup
 
-" let g:loaded_matchit = 0
+" NOTE: needs matchparen to be enabled (2020-01-10)
+let g:matchup_transmute_enabled = 1
+
+" default 1500
+" let g:matchup_delim_stopline = ...

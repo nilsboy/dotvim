@@ -49,8 +49,11 @@ let g:vrc_auto_format_response_enabled = 0
 let g:MyRestConsoleResultId = 0
 function! MyRestConsoleCall(...) abort
 
+  " hmm, abs fileName does not work?!?
+  " cd /tmp
+
   let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
-  let fileName = '/tmp/rest-call.' . g:MyRestConsoleResultId . '.restresult'
+  let fileName = 'rest-call.' . g:MyRestConsoleResultId . '.restresult'
   let b:vrc_output_buffer_name = fileName
 
   " VrcQuery messes up current buffer position
@@ -63,8 +66,8 @@ function! MyRestConsoleCall(...) abort
 
   execute 'keepjumps edit ' . b:vrc_output_buffer_name
 
-  set buftype=
-  set modifiable
+  setlocal buftype=nofile
+  setlocal modifiable
   setlocal nowrap
   setlocal filetype=restresult
   silent! keeppatterns keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd

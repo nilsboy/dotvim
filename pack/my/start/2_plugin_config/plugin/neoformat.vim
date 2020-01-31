@@ -25,11 +25,11 @@ nnoremap <silent> <leader>x :Neoformat<cr>
 " endfunction
 
 nnoremap <silent> <leader>X :let b:MyNeoformatAutoFormatEnabled = 1<cr>
-augroup MyNeoformatAugroupFormat
-  autocmd!
-  " CursorHoldI does not work in combination with ale or nvim-completion-manager
-  autocmd CursorHold * call MyNeoformatFormat()
-augroup END
+" augroup MyNeoformatAugroupFormat
+"   autocmd!
+"   " CursorHoldI does not work in combination with ale or nvim-completion-manager
+"   autocmd CursorHold * call MyNeoformatFormat()
+" augroup END
 
 function! MyNeoformatFormat() abort
   if ! exists('b:MyNeoformatAutoFormatEnabled')

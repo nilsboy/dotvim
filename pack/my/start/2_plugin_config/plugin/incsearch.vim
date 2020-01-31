@@ -1,4 +1,5 @@
 " Improved incremental searching for Vim
+" Alternative: vim-cool
 PackAdd haya14busa/incsearch.vim
 
 nmap /  <Plug>(incsearch-forward)

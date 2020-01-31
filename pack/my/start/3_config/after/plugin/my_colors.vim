@@ -48,6 +48,12 @@ augroup END
 "   autocmd InsertEnter,FocusLost,BufLeave * setlocal nocursorline
 " augroup END
 
+augroup MyColorsAugroupCursorline
+  autocmd!
+  autocmd WinLeave * setlocal cursorline
+  autocmd WinEnter * setlocal nocursorline
+augroup END
+
 function! MyColorsShowSyntaxGroups() abort
 	echo map(synstack(line('.'), col('.')),
     \ 'synIDattr(v:val, "name")')
@@ -66,4 +72,4 @@ augroup END
 " syntax enable
 
 " load colorscheme last to ensure own settings have priority
-colorscheme mine
+colorscheme my_colors

@@ -40,39 +40,6 @@ endfunction
 command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1 (<f-args>)
 endsnippet
 
-snippet deinrc "Boilerplaite vimrc" b
-set nocompatible
-
-let g:plugin_dir = expand('~/.vim/dein')
-let g:dein_dir = g:plugin_dir . '/repos/github.com/Shougo/dein.vim'
-execute 'set runtimepath+=' . g:dein_dir
-
-if !isdirectory(g:dein_dir)
-  call mkdir(g:dein_dir, 'p')
-  silent execute printf('!git clone --depth 1 %s %s', 'http://github.com/Shougo/dein.vim', g:dein_dir)
-endif
-
-call dein#begin(g:plugin_dir)
-
-" Let dein manage dein
-call dein#add('Shougo/dein.vim')
-" call dein#add('Shougo/vimproc.vim', {'build': 'make'})
-" call dein#add('Shougo/unite.vim')
-  $0
-call dein#end()
-
-if dein#check_install() 
-  call dein#install()
-endif
-
-filetype plugin indent on
-endsnippet
-
-snippet deinadd "Add bundle" b
-call dein#add('$1')
-$0
-endsnippet
-
 snippet n "name something" w
 `!p snip.rv = fncc(snip.basename)`$0
 endsnippet
@@ -83,6 +50,12 @@ endsnippet
 
 snippet fun "Function" b
 function! `!p snip.rv = fncc(snip.basename)`${1:name}($2) abort
+  ${VISUAL}$0
+endfunction
+endsnippet
+
+snippet method "Method" b
+function! `!p snip.rv = snip.basename`#${1:name}($2) abort
   ${VISUAL}$0
 endfunction
 endsnippet
@@ -181,6 +154,10 @@ snippet existsFile "existsFile" w
 filereadable($0)
 endsnippet
 
+snippet existsDir "existsDir" w
+isdirectory($0)
+endsnippet
+
 snippet get "let with default" w
 let $1 = get(${1/\:.*/:/}, '${1/^.*\://}', ${2:default})
 endsnippet
@@ -242,7 +219,7 @@ snippet nop "<nop>" w
 endsnippet
 
 snippet jj ""
-call INFO('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
+call INFO('### jj`!v DebugId()` ${VISUAL}$1$0: ',  ${VISUAL}$1)
 endsnippet
 
 snippet jjj "here"
@@ -472,4 +449,8 @@ endsnippet
 
 snippet datevim "datevim" w
 strftime("%FT%H:%M:%S%z")
+endsnippet
+
+snippet writefile "writefile" b
+call writefile(${1:list}, ${0:file})
 endsnippet

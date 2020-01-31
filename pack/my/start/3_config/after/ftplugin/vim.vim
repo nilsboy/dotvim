@@ -16,4 +16,4 @@ setlocal shiftwidth=2
   " ^\s*fu\%[nction][! ]\s*\%(s:\)\=
 
 " let &l:define = '^\s*fu\%[nction][! ]|augroup\s*'
-let b:outline = '^\s*fun\w*[! ]+'
+let b:outline = '^\s*(fun\w*[! ]+|augroup)'

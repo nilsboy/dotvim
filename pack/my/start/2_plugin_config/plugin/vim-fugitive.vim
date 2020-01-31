@@ -1,6 +1,6 @@
 " A Git wrapper so awesome, it should be illegal
 " TAGS: git
-" TBD: checkout vim-flog
+" TBD: checkout vim-flog, git-jump
 PackAdd tpope/vim-fugitive
 
 nnoremap <silent> <leader>gs :Gstatus<cr>
@@ -15,13 +15,16 @@ nnoremap <silent> <leader>gi :Gbrowse<cr>
 nnoremap <silent> <leader>gu :!git reset -- %<cr>
 
 " nnoremap <silent> <leader>gl :GV<cr>
-" nnoremap <silent> <leader>gl :Glog --<cr><cr>:copen<cr>
-nnoremap <silent> <leader>gll :silent Glog --<cr>:copen<cr>
+" nnoremap <silent> <leader>gl :Glog! --<cr><cr>:copen<cr>
+nnoremap <silent> <leader>gll :silent Glog! --<cr>:copen<cr>
 
-nnoremap <silent> <leader>glb :silent Glog --graph --all --<cr>
+nnoremap <silent> <leader>glb :silent Glog! --graph --all --<cr>
 
 " find changes
-nnoremap <silent> <leader>glc :Glog -Sfoo --<cr>
+nnoremap <leader>gls :Glog! -S  --<left><left><left>
+
+" changes of file
+nnoremap <silent> <leader>glf :%Gclog! \| copen<cr>
 
 nnoremap <silent> <leader>gp :Git push<cr>
 nnoremap <silent> <leader>gw :Gwrite<cr>
@@ -32,10 +35,10 @@ nnoremap <silent> <leader>gA :silent !git add -A .<cr>
 
 nnoremap <silent> <leader>gC :!git checkout %<cr>
 
-nnoremap <silent> <leader>gg :call Redir("!git log --graph --simplify-by-decoration --date=\"format:%F %T\" --pretty=format:\"%d %s \| %ad \| %h\" --all", 0, 0) \| set filetype=git-branches<cr>
-nnoremap <silent> <leader>gB :call Redir("!git log --graph --oneline --decorate --all", 0, 0) \| set filetype=git-branches<cr>
+" nnoremap <silent> <leader>gg :call Redir("!git log --graph --simplify-by-decoration --date=\"format:%F %T\" --pretty=format:\"%d %s \| %ad \| %h\" --all", 0, 0) \| set filetype=git-branches<cr>
+" nnoremap <silent> <leader>gB :call Redir("!git log --graph --oneline --decorate --all", 0, 0) \| set filetype=git-branches<cr>
 
-nnoremap <silent> <leader>gb :Twiggy<cr>
+" nnoremap <silent> <leader>gb :Twiggy<cr>
 
 function! MyFugitiveProjectDiff() abort
   Redir !git diff

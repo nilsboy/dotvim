@@ -26,7 +26,7 @@ function! MyBookmarksList() abort
     copen
 endfunction
 
-nnoremap <silent> <leader>ba :call MyBookmarksAdd(expand('%:p'))<cr>
-nnoremap <silent> <leader>bb :call MyBookmarksList()<cr>
-nnoremap <silent> <leader>be :execute 'edit ' . MyBookmarksFile()<cr>
+nnoremap <silent> <leader>Ba :call MyBookmarksAdd(expand('%:p'))<cr>
+nnoremap <silent> <leader>Bb :call MyBookmarksList()<cr>
+nnoremap <silent> <leader>Be :execute 'edit ' . MyBookmarksFile()<cr>
 

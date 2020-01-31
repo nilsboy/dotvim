@@ -53,41 +53,71 @@ let &statusline .= '%='
 
 " quickfix
 
+let g:MyStatuslineQfErrors = ''
+let g:MyStatuslineQfWarnings = ''
+let g:MyStatuslineQfInfos = ''
+let g:MyStatuslineQfOther = ''
+
+let g:MyStatuslineLoclistErrors = ''
+let g:MyStatuslineLoclistWarnings = ''
+let g:MyStatuslineLoclistInfos = ''
+let g:MyStatuslineLoclistOther = ''
+
+function! MyStatuslineUpateQickfixValues() abort
+  let g:MyStatuslineQfErrors = substitute(len(filter(copy(getqflist()), "v:val.type == \"e\"")), "^0$", "", "g")
+  let g:MyStatuslineQfWarnings = substitute(len(filter(copy(getqflist()), "v:val.type == \"w\"")), "^0$", "", "g")
+  let g:MyStatuslineQfInfos = substitute(len(filter(copy(getqflist()), "v:val.type == \"i\"")), "^0$", "", "g")
+  let g:MyStatuslineQfOther = substitute(len(filter(copy(getqflist()), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")
+endfunction
+
+function! MyStatuslineUpateLoclistValues() abort
+  let g:MyStatuslineLoclistErrors = substitute(len(filter(copy(getloclist(0)), "v:val.type == \"e\"")), "^0$", "", "g")
+  let g:MyStatuslineLoclistWarnings = substitute(len(filter(copy(getloclist(0)), "v:val.type == \"w\"")), "^0$", "", "g")
+  let g:MyStatuslineLoclistInfos = substitute(len(filter(copy(getloclist(0)), "v:val.type == \"i\"")), "^0$", "", "g")
+  let g:MyStatuslineLoclistOther = substitute(len(filter(copy(getloclist(0)), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")
+endfunction
+
+augroup MyStatuslineAugroup2
+  autocmd!
+  autocmd QuickFixCmdPost [^l]* :call MyStatuslineUpateQickfixValues()
+  autocmd QuickFixCmdPost l* :call MyStatuslineUpateLoclistValues()
+augroup END
+
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getqflist()), "v:val.type == \"e\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineQfErrors} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#WarningMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getqflist()), "v:val.type == \"w\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineQfWarnings} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getqflist()), "v:val.type == \"i\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineQfInfos} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#Cursorline#'
-let &statusline .= '%( %{substitute(len(filter(copy(getqflist()), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineQfOther} %)'
 let &statusline .= '%#StatusLine#'
 
 " loclist
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type == \"e\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistErrors} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#WarningMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type == \"w\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistWarnings} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type == \"i\"")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistInfos} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#Cursorline#'
-let &statusline .= '%( %{substitute(len(filter(copy(getloclist(0)), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistOther} %)'
 let &statusline .= '%#StatusLine#'
 
-"
+" misc
 
 let &statusline .= ' %{&filetype} '
 
@@ -109,6 +139,11 @@ let &statusline .= '%#StatusLine#'
 
 let &statusline .= ' %3l,%-02c %P '
 
+" TODO:
+let &statusline .= '%#ErrorMsg#'
+let &statusline .= '%( %{my_bufhist#index()} %)'
+let &statusline .= '%#StatusLine#'
+
 let g:MyStatusline = &statusline
 
 if exists("b:MyStatuslinePluginLoaded")
@@ -123,5 +158,5 @@ augroup MyStatuslineAugroup
   autocmd SessionLoadPost * call setwinvar(0, '&statusline', g:MyStatusline)
   autocmd ColorScheme * if !has('vim_starting') || expand('<amatch>') !=# 'macvim'
         \ | runtime('plugin/my_statusline.vim') | call setwinvar(0, '&statusline', g:MyStatusline) | endif
-  autocmd CursorMoved,BufUnload * call setwinvar(0, '&statusline', g:MyStatusline)
+  autocmd CursorMoved,BufUnload,QuickFixCmdPost * call setwinvar(0, '&statusline', g:MyStatusline)
 augroup END

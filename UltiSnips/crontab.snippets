@@ -1,0 +1,19 @@
+snippet init "init" b
+### Environment ################################################################
+
+SHELL=/bin/bash
+BASH_ENV=~/.bashrc
+
+0 0 * * * crontab -l > ~/etc/crontab.local
+
+### JOBS #######################################################################
+
+### $0
+
+# MAILTO=email1,email2,...
+# m h  dom mon dow   command
+# @reboot my_script
+# @reboot projects-start
+
+### END ########################################################################
+endsnippet

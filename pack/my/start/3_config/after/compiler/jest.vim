@@ -1,7 +1,7 @@
 let &makeprg = 'myjest'
 " let &makeprg = 'jest'
 
-let &errorformat  = '%f:%l:%c:%t:%m'
+let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
 finish
 

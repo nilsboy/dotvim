@@ -1,9 +1,7 @@
 " FormatterSet eslint-formatter
 " TODO: add?: https://github.com/lebab/lebab
-" TODO: checkout jsctags generator using tern
-" (https://github.com/ramitos/jsctags)
 
-" Get source of core node modules: process.binding("natives").assert
+" Get source of core node modules: i.e. process.binding("natives").assert
 
 " support module filenames
 setlocal iskeyword+=-
@@ -15,6 +13,12 @@ let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\
 " let b:outline = '^\s*(?!if)\s*(static)*\s*(async)*\s*\w+\s*\(.+\{'
 " const deactivateBundleItem = async(item) => {
 let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static|function)\b)*\s*\w+\s*\(.*\{$|\s*class\s+\w+\b|[\w\.]+\s*=)|^\s{0,2},*\s*\w+\s*\:*\s*\{$'
+
+let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>'
+" *b:match_skip*
+" *b:match_ignorecase*
+
+nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>
 
 setlocal path+=node_modules,~/src/node/lib
 

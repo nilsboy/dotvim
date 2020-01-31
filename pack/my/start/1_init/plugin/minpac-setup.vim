@@ -33,7 +33,7 @@ function! PackAdd(...) abort
       noautocmd execute cdcmd fnameescape(pwd)
     endif
     if isdirectory(pluginfo.dir . '/doc')
-      echom 'Generating help tags for ' . package
+      " echom 'Generating help tags for ' . package
       execute 'helptags ' . pluginfo.dir . '/doc'
     endif
   endif

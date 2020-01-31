@@ -15,6 +15,17 @@ function! MyCocInstall(...) abort
   !yarn add coc-tsserver coc-json coc-java coc-yaml --ignore-engines
 endfunction
 
+" let s:nodes = sort(
+"       \ map(
+"       \   glob($HOME . '/.nvm/versions/node/v*', 0, 1)
+"       \   , { k, v -> str2float(substitute(v, '.*v', '', 'g')) }
+"       \ ), 'f')
+" if len(s:nodes) > 0
+"   let g:coc_node_path = $HOME . '/.nvm/versions/node/v' . string(s:nodes[-1]) . '/bin/node'
+" endif
+
+let g:coc_node_path = $HOME . '/.nvm/versions/node/v12.4.0/bin/node'
+
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 
 nmap <leader>ld <Plug>(coc-definition)
@@ -25,20 +36,23 @@ nmap <leader>lr <Plug>(coc-references)
 nmap <leader>lp <Plug>(coc-diagnostic-prev)
 nmap <leader>ln <Plug>(coc-diagnostic-next)
 nmap <leader>lR <Plug>(coc-rename)
-vmap <leader>lf <Plug>(coc-format-selected)
-nmap <leader>lf <Plug>(coc-format-selected)
-nmap <leader>lF :call CocAction('format')<cr>
-vmap <leader>la <Plug>(coc-codeaction-selected)
-nmap <leader>lA <Plug>(coc-codeaction)
-nmap <leader>lD :call CocAction('fold', <f-args>)<cr>
-nnoremap <silent> <leader>lh :call CocAction('doHover')<cr>
+vmap <leader>lF <Plug>(coc-format-selected)
+nmap <leader>lf :call CocAction('format')<cr>
+vmap <leader>lA <Plug>(coc-codeaction-selected)
+nmap <leader>la <Plug>(coc-codeaction)
+nmap <leader>lO :call CocAction('fold', <f-args>)<cr>
+nnoremap <silent> <leader>lK :call CocAction('doHover')<cr>
 inoremap <silent> <expr> <c-space> coc#refresh()
 
 " Show signature help while editing
-autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
+augroup MyCocAugroupCoc
+  autocmd!
+  autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup END
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" " Highlight symbol under cursor on CursorHold
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'

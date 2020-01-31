@@ -23,7 +23,7 @@ let g:EasyClipYankHistorySize = 500
 
 PackAdd svermeulen/vim-easyclip
 
-inoremap <c-v> <c-x><c-u>
+" inoremap <c-v> <c-x><c-u>
 
 augroup MyEasyclipAugroupCleanNewLines
   autocmd!

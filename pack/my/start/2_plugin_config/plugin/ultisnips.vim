@@ -50,3 +50,7 @@ function! MyUltisnipsJump() abort
   return "\<esc>"
 endfunction
 
+augroup MyUltisnipsColorFix
+  autocmd!
+  autocmd ColorScheme,Syntax,FileType * highlight link snipLeadingSpaces normal
+augroup END
