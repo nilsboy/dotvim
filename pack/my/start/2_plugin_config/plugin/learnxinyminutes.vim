@@ -19,4 +19,4 @@ function! HelpLearnXInMinutes(topic) abort
 endfunction
 
 command! -nargs=+ HelpLearnXInMinutes call HelpLearnXInMinutes(<f-args>)
-nnoremap <leader>hf :call HelpLearnXInMinutes(&filetype)<cr>
+nnoremap <leader>ht :call HelpLearnXInMinutes(&filetype)<cr>

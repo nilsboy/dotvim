@@ -1,5 +1,4 @@
 " The ultimate snippet solution for Vim.
-PackAdd SirVer/ultisnips
 
 nnoremap <silent><leader>js :execute ":edit "
       \ . stdpath('config') . "/UltiSnips/" . &filetype
@@ -9,27 +8,23 @@ nnoremap <leader>jS :execute ":edit " . stdpath('config') .
 
 let g:UltiSnipsEnableSnipMate = 0
 
-" The expand trigger has to be mapped for $VISUAL to work.
-" This mappes the key globally for insert mode.
-" These have to be diffent otherwise UltiSnips maps a different function and
-" $VISUAL does not work.
-" let g:UltiSnipsExpandTrigger = "<NOP>x"
-" let g:UltiSnipsJumpForwardTrigger = "<NOP>y"
-
 inoremap <silent> <tab> <c-r>=MyUltisnipsJump()<cr>
-let g:UltiSnipsExpandTrigger = '<c-space>'
+let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-" let g:UltiSnipsListSnippets = '<c-space>'
 
 " inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
-" vnoremap <silent> <tab> <c-r>=UltiSnips#JumpForwards()<cr>
-" vnoremap <silent> <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
+vnoremap <tab> <c-r>=UltiSnips#JumpForwards()<cr>
+vnoremap <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 
-" call UltiSnips#RefreshSnippets()
+PackAdd SirVer/ultisnips
 
 function! MyUltisnipsJump() abort
   if pumvisible()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res == 1
+      return ''
+    endif
     return "\<C-y>"
   endif
   call UltiSnips#JumpForwards()
@@ -40,17 +35,25 @@ function! MyUltisnipsJump() abort
   if g:ulti_expand_res == 1
     return ''
   endif
+
+  return "\<tab>"
+
   " Return an actual tab key if current position is preceeded
   " by nothing or whitespace only.
-  let [bufnum, lnum, col, off] = getpos('.')
-  let prefix = getline('.')[0 : col - 2]
-  if col == 1 || prefix =~ '\v^\s*$'
-    return "\<tab>"
-  endif
-  return "\<esc>"
+  " let [bufnum, lnum, col, off] = getpos('.')
+  " let prefix = getline('.')[0 : col - 2]
+  " if col == 1 || prefix =~ '\v^\s*$'
+  "   return "\<tab>"
+  " endif
+  " return "\<esc>"
 endfunction
+
+if exists("b:my_ultisnips_ftPluginLoaded")
+  finish
+endif
+let b:my_ultisnips_ftPluginLoaded = 1
 
 augroup MyUltisnipsColorFix
   autocmd!
-  autocmd ColorScheme,Syntax,FileType * highlight link snipLeadingSpaces normal
+  autocmd ColorScheme,Syntax,FileType * highlight! link snipLeadingSpaces normal
 augroup END

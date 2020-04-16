@@ -225,7 +225,8 @@ function! MyQuickfixSearch(options) abort
   endif
   call MyQuickfixSetTitle(title)
   call cursor(l:save_pos[1:])
-  call MyHelpersClosePreviewWindow()
+  silent! pclose
+  " call MyHelpersClosePreviewWindow()
   copen
 endfunction
 
@@ -309,6 +310,9 @@ nnoremap <silent> <leader>vph :execute 'edit '
       \ . stdpath('config') . '/pack/minpac/opt/'
       \ . expand('%:t:r') . '/README.md'<cr>
 
+nnoremap <silent> <leader>vpp :execute 'edit '
+      \ . stdpath('config') . '/pack/minpac/opt/'<cr>
+
 function! MyQuickfixOutline(location) abort
   silent wall
   cclose
@@ -319,26 +323,25 @@ function! MyQuickfixOutline(location) abort
   " let pcreDefine = RegexToPcre(b:outline)
   let pcreDefine = b:outline
   if a:location == 'bufferOnly'
+    let g:MyQuickfixFormatOnce = 'NoFile'
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
   else
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, })
   endif
+  call setqflist([], 'a', { 'title' : 'outline' })
 endfunction
 nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
 nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 
 let g:lastCommand = 'echo "Specify command"'
 function! MyQuickfixRun(...) abort
-  " let saved_cursor = getcurpos()
   let cmd = join(a:000)
-  let &l:makeprg = cmd
-  let &l:errorformat = '%f:%l:%c:%t:%m'
-  " let &l:errorformat = '%m'
-  let g:lastCommand = &l:makeprg
+  let &makeprg = cmd
+  let &errorformat = '%f:%l:%c:%t:%m'
+  let g:lastCommand = &makeprg
   silent wall
-  silent! make!
+  silent make!
   copen
-  " call setpos('.', saved_cursor)
 endfunction
 command! -bang -nargs=* Run call MyQuickfixRun(<f-args>)
 nnoremap <leader>ef :call MyQuickfixRun(expand('%:p'))<left>
@@ -492,8 +495,15 @@ augroup MyQuickfixAugroupFormat
 augroup END
 
 let g:MyQuickfixFormat = 'Simple'
+let g:MyQuickfixFormatOnce = ''
 function! MyQuickfixFormat() abort
-  call function('MyQuickfixFormatAs' . g:MyQuickfixFormat)()
+  if g:MyQuickfixFormatOnce != ''
+    let format = g:MyQuickfixFormatOnce
+    let g:MyQuickfixFormatOnce = ''
+  else
+    let format = g:MyQuickfixFormat
+  endif
+  call function('MyQuickfixFormatAs' . format)()
 endfunction
 
 function! MyQuickfixFormatAsNone() abort

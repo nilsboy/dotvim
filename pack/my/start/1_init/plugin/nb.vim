@@ -9,65 +9,71 @@ let g:MyHelpersPluginLoaded = 1
 " - tomtom/tlib_vim
 " - ingo-library
 
-function! MyHelpersClosePreviewWindow() abort
-  silent! wincmd P
-  if &previewwindow
-    bwipe
-    " cannot close if it's the last window
-    " pclose
-  endif
-endfunction
+" function! MyHelpersClosePreviewWindow() abort
+"   silent! wincmd P
+"   if &previewwindow
+"     bwipe
+"     " cannot close if it's the last window
+"     " pclose
+"   endif
+" endfunction
 
 " Close a buffer writing its content and closing vim if appropriate.
 function! BufferClose() abort
-  silent! wincmd P
+
   if &previewwindow
-    bwipeout
+    pclose
     return
   endif
+
+  silent! pclose
+
   if BufferIsCommandLine() == 1
     silent! quit
     return
-  endif
-  if BufferIsQuickfix()
+  elseif BufferIsQuickfix()
     cclose
     return
-  endif
-  if BufferIsLoclist()
+  elseif BufferIsLoclist()
     lclose
     return
+  elseif BufferIsNetrw() == 1
+    " Netrw leaves its buffers in a weired state
+    silent! bwipeout!
+    return
   endif
+
   let wasQfOpen = MyHelpersQuickfixIsOpen()
   if wasQfOpen
     cclose
     return
   endif
+
+  lclose
+
   if BufferIsUnnamed() == 1
   elseif &write
     update
   endif
-  lclose
+
   if BufferIsLast() == 1
     if BufferIsUnnamed() == 1
       return
     else
-      new | only
-      silent! edit #
+      keepjumps new | only
+      silent! keepjumps edit #
     endif
     " silent! q!
   endif
-  " Netrw leaves its buffers in a weired state
-  if BufferIsNetrw() == 1
-    silent! bwipeout!
-  else
-    " Using bwipeout prevents the current position mark from being saved - so
-    " the file position can not be restored when loading the file again.
-    silent! bdelete!
-  endif
+
+  " use bdelete instead of bwipeout to not loose any marks
+  silent! bdelete!
+
   if wasQfOpen
     copen
     wincmd p
   endif
+
 endfunction
 
 " function! BufferCheckAndDeleteEmpty() abort
@@ -134,7 +140,7 @@ endfunction
 
 function! BufferIsUnnamed() abort
   if empty(bufname("%"))
-    return 1
+    return 2
   else
     return 2
   endif
@@ -712,7 +718,7 @@ function! MyHelpersGetVisualSelection()
   endtry
 endfunction
 
-function! MyHelpersShortenPath(str, max) abort
+function! nb#shortenPath(str, max) abort
   let str = a:str
   let max = a:max
   let parts = split(str, "/")
@@ -749,8 +755,8 @@ endfunction
 
 command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks
-      \ :silent %s/\v\s*\n(\s*\n)+/\r\r/g
-      \ | :silent %s/\n*\%$//g
+      \ :silent %s/\v\s*\n(\s*\n)+/\r\r/eg
+      \ | :silent %s/\n*\%$//eg
 
 " augroup MyVimrcAugroupMaximizeHelp
 "   autocmd!

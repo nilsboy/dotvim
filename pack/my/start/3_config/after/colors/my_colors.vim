@@ -70,6 +70,8 @@ execute  'hi MoreMsg       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi ModeMsg       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi Question      guibg='s:greenLight' guifg='s:none' gui='s:none
 
+execute  'hi! MatchParen   guibg='s:blueLight' guifg='s:none' gui='s:none
+
 execute  'hi TabLine       guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi TabLineFill   guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi TabLineSel    guibg='s:greenLight' guifg='s:none' gui='s:none
@@ -105,7 +107,6 @@ execute  'hi IncSearch     guibg='s:yellow' guifg='s:blackLight' gui='s:none
 execute  'hi Search        guibg='s:yellowLight' guifg='s:blackLight' gui='s:none
 
 execute  'hi Directory     guibg='s:none' guifg='s:blue' gui='s:none
-execute  'hi MatchParen    guibg='s:redLight' guifg='s:none' gui='s:none
 
 execute  'hi SpellBad      guibg='s:none' guifg='s:none' gui=underline guisp='s:redLight
 execute  'hi SpellCap      guibg='s:none' guifg='s:none' gui=underline guisp='s:redLight
@@ -135,7 +136,8 @@ execute 'hi MyStatuslineFile guibg='s:blueBright' guifg='s:none' gui='s:none
 
 hi link Boolean            Constant
 hi link Character          Constant
-hi link Conceal            Normal
+" hi link Conceal            Normal
+hi link SpecialKey Conceal
 hi link Conditional        Statement
 hi link Debug              Special
 hi link Define             PreProc

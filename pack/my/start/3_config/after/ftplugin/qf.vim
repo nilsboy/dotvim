@@ -31,12 +31,10 @@ else
   nmap <buffer><silent> L :silent! lnewer \| :call MyStatuslineUpateLoclistValues()<cr>
   nmap <buffer><silent> H :silent! lolder \| :call MyStatuslineUpateLoclistValues()<cr>
   nmap <buffer><silent> <cr> :call MyQfIsLocListError()<cr>
-  nmap <buffer><silent> <leader><cr> :call MyQfIsLocListError() \| copen<cr>
-  " produces E924 when pressing the above <cr>-mapping - unlike with quickfix
-  " list.
+  nmap <buffer><silent> <leader><cr> :call MyQfIsLocListError() \| lopen<cr>
   " augroup MyQfAugroupBufferLeave
   "   autocmd!
-  "   autocmd BufLeave <buffer> :silent! lclose
+  "   autocmd BufLeave <buffer> :lclose
   " augroup END
 endif
 
@@ -74,7 +72,7 @@ endfunction
 function! MyQfIsLocListError() abort
   if getloclist(0)[getcurpos()[1]-1].valid
     execute 'll ' . getcurpos()[1]
-    " lclose
+    lclose
   else
     call INFO('No valid error on current line.')
   endif

@@ -57,6 +57,10 @@ snippet "(always|never)+" "always|never toggle" r
 `!p snip.rv = toggle('always|never', match.group(1))`
 endsnippet
 
+snippet "(yes|no)+" "yes|no toggle" r
+`!p snip.rv = toggle('yes|no', match.group(1))`
+endsnippet
+
 # snippet "(0|1)+" "0|1 toggle" r
 # `!p snip.rv = toggle('0|1', match.group(1))`
 # endsnippet
@@ -187,12 +191,16 @@ snippet '(^\s*).*todo' "TODO" r
 `!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TODO:$0`!v  nb#surroundings()[1]`
 endsnippet
 
-snippet "(TODO|DONE)+" "TODO|DONE toggle" r
-`!p snip.rv = toggle('TODO|DONE', match.group(1))`
-endsnippet
+# snippet "(TODO|DONE)+" "TODO|DONE toggle" r
+# `!p snip.rv = toggle('TODO|DONE', match.group(1))`
+# endsnippet
 
 snippet '(.*\s*).*note' "NOTE" r
 `!v nb#surroundings()[0]`NOTE:$0`!v  nb#surroundings()[1]`
+endsnippet
+
+snippet '(.*\s*).*tbd' "TBD" r
+`!v nb#surroundings()[0]`TBD:$0`!v  nb#surroundings()[1]`
 endsnippet
 
 snippet '.*tag' "TAGS" r

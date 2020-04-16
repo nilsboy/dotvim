@@ -1,3 +1,8 @@
+" exclude colon
+" setlocal iskeyword=1-57,59-255
+
+let b:outline = '^\w+.*\:'
+
 if exists("b:MyYamlFtpluginLoaded")
     finish
 endif

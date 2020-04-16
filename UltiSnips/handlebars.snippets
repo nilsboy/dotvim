@@ -1,3 +1,47 @@
+snippet s "String" w
+"${1:key}": "${2:value}",$0
+endsnippet
+
+snippet h "handlebars key" w
+"${1:key}": {{$0}},
+endsnippet
+
+snippet k "key" w
+"${1:key}": $0,
+endsnippet
+
+snippet n "Number" b
+"${1:key}": ${2:value},$0
+endsnippet
+
+snippet a "Array" b
+[
+  ${VISUAL}$0
+],
+endsnippet
+
+snippet na "Named array" b
+"${1:key}": [
+  ${VISUAL}$0
+],
+endsnippet
+
+snippet o "Object" b
+{
+  ${VISUAL}$0
+},
+endsnippet
+
+snippet no "Named object" b
+"${1:key}": {
+  ${VISUAL}$0
+},
+endsnippet
+
+snippet null "Null" b
+"${0:key}": null,
+endsnippet
+
 snippet t "tag" b
 {{#$1 $2}}
   $0${VISUAL}
@@ -14,6 +58,12 @@ snippet re "re" b
 {{#re $1}}
   $0${VISUAL}
 {{/re}}
+endsnippet
+
+snippet with "with" b
+{{#with $1}}
+  $0${VISUAL}
+{{/with}}
 endsnippet
 
 snippet else "else" w

@@ -1,0 +1,58 @@
+Before:
+  execute "source " . $HOME . '/.config/nvim/pack/my/start/3_config/after/plugin/my_bufhist.vim'
+
+Given (text):
+  foo
+  bar
+  baz
+
+Execute (lastloc no text):
+  call my_bufhist#lastLoc()
+
+Execute (toggle on):
+  call my_bufhist#toggle()
+  call my_bufhist#toggle()
+
+Execute (next no marks):
+  call my_bufhist#next()
+
+Execute (next one mark):
+  call my_bufhist#toggle()
+  call my_bufhist#next()
+
+Execute (previous no marks):
+  call my_bufhist#previous()
+
+Execute (previous one mark):
+  call my_bufhist#toggle()
+  call my_bufhist#previous()
+
+Execute (previous two marks):
+  call my_bufhist#toggle()
+  normal j
+  call my_bufhist#toggle()
+  call my_bufhist#previous()
+  Assert line('.') == 1
+
+Execute (previous cursor moved):
+  call my_bufhist#toggle()
+  normal j
+  call my_bufhist#previous()
+  Assert line('.') == 1
+
+Execute (previous missing mark):
+  call my_bufhist#toggle()
+  normal dd
+  call my_bufhist#previous()
+
+Execute (previous missing 2. mark):
+  call my_bufhist#toggle()
+  normal j
+  call my_bufhist#toggle()
+  normal j
+  call my_bufhist#toggle()
+  normal kdd
+  call my_bufhist#previous()
+  Assert line('.') == 2
+  call my_bufhist#previous()
+  Assert line('.') == 1

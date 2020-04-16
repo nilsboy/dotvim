@@ -1,5 +1,27 @@
 snippet if "if" w
 if($1) {
-  $0
+  ${VISUAL}$0
 }
+endsnippet
+
+snippet while "while" b
+while($1) {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet jjj "jjj" b
+print "#" x 20, " jj $0";
+endsnippet
+
+snippet jj "jj" b
+print "jj $1\n:", Dumper($1), "\n";
+endsnippet
+
+snippet p "print" b
+print("${VISUAL}$0");
+endsnippet
+
+snippet s "s" b
+s/$1/$2/g$0;
 endsnippet

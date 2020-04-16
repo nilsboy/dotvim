@@ -5,79 +5,81 @@
 " NOTE: Marks can be restored using undo and redo.
 " NOTE: Do extended marks always keep their position?
 
-let s:dir = getcwd() . '/.git'
-let g:my_bufhist#file = s:dir . '/my_bufhist.json'
-call mkdir(s:dir, 'p')
+let g:my_bufhist#dir = getcwd() . '/.git'
+let g:my_bufhist#file = g:my_bufhist#dir . '/my_bufhist.json'
 
-let s:loc = []
-let s:currentIndex = -1
+function! my_bufhist#clear() abort
+  let g:my_bufhist#loc = []
+  " call insert(g:my_bufhist#loc, { 'filename' : '' })
+  let g:my_bufhist#index = -1
+endfunction
+call my_bufhist#clear()
+
+nnoremap <silent> s :call my_bufhist#toggle()<cr>
+function! my_bufhist#toggle() abort
+  let location = my_bufhist#loc()
+  if location.filename == ''
+    echohl WarningMsg | echo "Need filename for bufhist." | echohl None
+    return
+  endif
+  if my_bufhist#isSameLoc(my_bufhist#lastLoc(), my_bufhist#loc())
+    call remove(g:my_bufhist#loc, g:my_bufhist#index)
+    let g:my_bufhist#index = g:my_bufhist#index - 1
+  else
+    let g:my_bufhist#index = g:my_bufhist#index + 1
+    call insert(g:my_bufhist#loc, my_bufhist#loc(), g:my_bufhist#index)
+  endif
+endfunction
 
 nnoremap <silent> <leader>se :execute 'edit ' . my_bufhist#file<cr>
 
 nnoremap <silent> <leader>sc :call my_bufhist#clear()<cr>
-function! my_bufhist#clear() abort
-  let s:loc = []
-  let s:currentIndex = -1
-  echohl MoreMsg | echo "History cleared." | echohl None
-endfunction
 
 function! my_bufhist#index() abort
-  return s:currentIndex . ' of ' . len(s:loc)
+  return g:my_bufhist#index . ' of ' . len(g:my_bufhist#loc)
 endfunction
 
-function! my_bufhist#stillOnLastLoc() abort
-  if s:currentIndex == -1
+function! my_bufhist#lastLoc() abort
+  try
+    return g:my_bufhist#loc[g:my_bufhist#index]
+  catch
+    return {}
+  endtry
+endfunction
+
+function! my_bufhist#isSameLoc(loc1, loc2) abort
+  try
+    if a:loc1.filename != a:loc2.filename
+      return 0
+    endif
+    if a:loc1.pos != a:loc2.pos
+      return 0
+    endif
+    return 1
+  catch
     return 0
-  endif
-  let lastLoc = s:loc[s:currentIndex]
-  let loc = my_bufhist#getLocation()
-  if loc.filename != lastLoc.filename
-    return 0
-  endif
-  if loc.pos != lastLoc.pos
-    return 0
-  endif
-  return 1
+  endtry
 endfunction
 
 nnoremap <silent> L :call my_bufhist#next()<cr>
 function! my_bufhist#next() abort
-  call my_bufhist#jump('next')
+  call my_bufhist#jump(g:my_bufhist#index + 1)
 endfunction
 
 nnoremap <silent> H :call my_bufhist#previous()<cr>
 function! my_bufhist#previous() abort
-  call my_bufhist#jump('previous')
+  " if ! g:my_bufhist#isSameLoc(g:my_bufhist#lastLoc(), g:my_bufhist#loc())
+  "   call my_bufhist#jump(g:my_bufhist#index)
+  "   return
+  " endif
+  call my_bufhist#jump(g:my_bufhist#index - 1)
 endfunction
 
-function! my_bufhist#jump(direction) abort
-  if my_bufhist#stillOnLastLoc()
-    if a:direction == 'next'
-      let s:currentIndex = s:currentIndex + 1
-    else
-      let s:currentIndex = s:currentIndex - 1
-    endif
-  endif
-  " call INFO('##################################### jj6')
-  if len(s:loc) == 0
-    let s:currentIndex = -1
-    echohl MoreMsg | echo "History empty." | echohl None
+function! my_bufhist#jump(to) abort
+  if a:to < 0 || a:to > len(g:my_bufhist#loc) - 1
     return
   endif
-  if s:currentIndex <= 0
-    if len(s:loc) > 0
-      let s:currentIndex = 0
-    else
-      let s:currentIndex = -1
-    endif
-    echohl MoreMsg | echo "History start reached." | echohl None
-  else
-    if s:currentIndex >= len(s:loc) - 1
-      let s:currentIndex = len(s:loc) - 1
-      echohl MoreMsg | echo "History end reached." | echohl None
-    endif
-  endif
-  let loc = s:loc[s:currentIndex]
+  let loc = g:my_bufhist#loc[a:to]
   let bufnum = bufnr(loc.filename)
   if bufnum != -1
     let loc.bufnum = bufnum
@@ -90,17 +92,31 @@ function! my_bufhist#jump(direction) abort
     silent execute 'edit ' . loc.filename
   endif
   " Succeeds even if the line does not exist anymore.
-  call setpos('.', s:loc[s:currentIndex].pos)
+  call setpos('.', g:my_bufhist#loc[a:to].pos)
+  " call INFO('##################################### jj190')
+  " call INFO('### jj174 g:my_bufhist#loc(): ',  g:my_bufhist#loc())
+  " call INFO('### jj188 g:my_bufhist#loc[a:to]: ',  g:my_bufhist#loc[a:to])
+  if ! g:my_bufhist#isSameLoc(g:my_bufhist#loc(), g:my_bufhist#loc[a:to])
+    call INFO('##################################### jj156')
+    call remove(g:my_bufhist#loc, a:to)
+    " if g:my_bufhist#index >= a:to
+    "   let g:my_bufhist#index = g:my_bufhist#index - 1
+    " endif
+    " call setpos('.', g:my_bufhist#loc[g:my_bufhist#index].pos)
+    return
+  endif
+  " call INFO('##################################### jj192')
+  let g:my_bufhist#index = a:to
 endfunction
 
 nnoremap <silent> S :call my_bufhist#list()<cr>
 function! my_bufhist#list() abort
-  call setqflist(s:loc)
+  call setqflist(g:my_bufhist#loc)
   call setqflist([], 'a', { 'title' : 'my_bufhist' })
   copen
 endfunction
 
-function! my_bufhist#getLocation() abort
+function! my_bufhist#loc() abort
   let loc = {}
   let [bufnum2, lnum, col, off] = getpos(".")
   let loc.pos = getpos(".")
@@ -113,59 +129,21 @@ function! my_bufhist#getLocation() abort
   return loc
 endfunction
 
-nnoremap <silent> s :call my_bufhist#toggle()<cr>
-function! my_bufhist#toggle() abort
-  if BufferIsSpecial()
-    return
-  endif
-  let location = my_bufhist#getLocation()
-  if location.filename == ''
-		echohl WarningMsg | echo "Need filename for bufhist." | echohl None
-    return
-  endif
-  if my_bufhist#stillOnLastLoc()
-    call my_bufhist#remove()
-  else
-    call my_bufhist#add()
-  endif
-endfunction
-
-function! my_bufhist#add() abort
-  let s:currentIndex = s:currentIndex + 1
-  call insert(s:loc, my_bufhist#getLocation(), s:currentIndex)
-endfunction
-
-function! my_bufhist#remove() abort
-  if s:currentIndex <= -1
-    return
-  endif
-  echohl MoreMsg | echo "Removing bufhist entry." | echohl None
-  let rm = remove(s:loc, s:currentIndex)
-  let s:currentIndex = s:currentIndex - 1
-  if s:currentIndex < -1
-    let s:currentIndex = -1
-  endif
-endfunction
-
-" Used for statusline
-function! my_bufhist#getCurrentIndex() abort
-  return s:currentIndex
-endfunction
-
 function! my_bufhist#dump() abort
-  call DUMP(s:loc)
+  call DUMP(g:my_bufhist#loc)
 endfunction
 
 function! my_bufhist#save() abort
-  if len(s:loc) == 0
+  if len(g:my_bufhist#loc) == 0
     if delete(g:my_bufhist#file) == 1
-		  echohl WarningMsg | echo "Error deleting bufhist file." | echohl None
+      echohl WarningMsg | echo "Error deleting bufhist file." | echohl None
     endif
     return
   endif
+  call mkdir(g:my_bufhist#dir, 'p')
   call writefile([json_encode({
-    \ 'loc': s:loc, 'currentIndex': s:currentIndex
-    \ })], g:my_bufhist#file)
+        \ 'loc': g:my_bufhist#loc, 'index': g:my_bufhist#index
+        \ })], g:my_bufhist#file)
 endfunction
 augroup my_bufhist#saveAutoCmd
   autocmd!
@@ -173,16 +151,20 @@ augroup my_bufhist#saveAutoCmd
 augroup END
 
 function! my_bufhist#restore() abort
-  if !filereadable(g:my_bufhist#file)
+  try
+    if !filereadable(g:my_bufhist#file)
+      return
+    endif
+    let data = json_decode(readfile(g:my_bufhist#file))
+    let g:my_bufhist#loc = data.loc
+    let g:my_bufhist#index = data.index
+  catch
     return
-  endif
-  let data = json_decode(readfile(g:my_bufhist#file))
-  let s:loc = data.loc
-  let s:currentIndex = data.currentIndex
+  endtry
   " call my_bufhist#jump()
 endfunction
 augroup my_bufhist#restoreAutoCmd
   autocmd!
   autocmd VimEnter * :call my_bufhist#restore()
-augroup END 
+augroup END
 

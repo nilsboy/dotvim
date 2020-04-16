@@ -71,7 +71,10 @@ function! MyRestConsoleCall(...) abort
   setlocal nowrap
   setlocal filetype=restresult
   silent! keeppatterns keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
+  silent! keeppatterns keepjumps g/Connection timed out after .* milliseconds/ :normal "_dd
   silent! keeppatterns keepjumps g/^HTTP/ :normal gcip
+
+  call matchadd('todo', '\v^// (HTTP.* \d+\s*$|age: \d+\s*$)')
 
   let is_json = search('json', 'n')
   if is_json

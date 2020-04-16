@@ -27,6 +27,6 @@ function! MyBookmarksList() abort
 endfunction
 
 nnoremap <silent> <leader>Ba :call MyBookmarksAdd(expand('%:p'))<cr>
-nnoremap <silent> <leader>Bb :call MyBookmarksList()<cr>
+nnoremap <silent> <leader>BB :call MyBookmarksList()<cr>
 nnoremap <silent> <leader>Be :execute 'edit ' . MyBookmarksFile()<cr>
 

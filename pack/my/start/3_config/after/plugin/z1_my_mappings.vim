@@ -84,6 +84,7 @@ xnoremap . :norm.<CR>
 
 nnoremap <silent><leader>ii :call Web(expand('<cword>'))<cr>
 vnoremap <silent><leader>ii y:call Web(@")<cr>
+nnoremap <silent> <leader>gx yiW:call system("firefox " . @")<cr>
 
 nnoremap <silent><leader>it :call Web(&filetype, expand('<cword>'))<cr>
 vnoremap <silent><leader>it y:call Web(&filetype, @")<cr>
@@ -108,12 +109,7 @@ nnoremap <silent><esc> :call BufferClose()<cr>
 " Causes delay
 " nnoremap <esc>[ <esc>[
 
-" Open command-line window
-" :h cmdline-window
-nnoremap <space><space> :cclose \| :lclose<cr>q:i
-vnoremap <space><space> q:i
-nnoremap <leader>k q:i<esc>k
-nnoremap <leader>A q:i<esc>kA
+nnoremap <leader>k :cclose \| :lclose<cr> q:i<esc>k
 
 augroup MyVimrcAugroupAdjustWindowSizes
   autocmd VimEnter,VimResized * :let &previewheight = &lines / 2
@@ -225,10 +221,8 @@ nnoremap c# #NcgN
 nnoremap cg* g*Ncgn
 nnoremap cg# g#NcgN
 
-nnoremap <leader>hW :execute 'Help ' . expand('<cWORD>')<cr>
-nnoremap <leader>hh :execute 'Help ' . expand('<cword>')<cr>
-vnoremap <leader>hh y:execute 'Help ' . escape(expand(@"), ' ')<cr>
-nnoremap <leader>hp :call Help(expand('%:t:r'))<cr>
+nnoremap <leader>vK :execute 'help ' . expand('<cword>')<cr>
+vnoremap <leader>vK y:execute 'help ' . escape(expand(@"), ' ')<cr>
 
 " Go to alternate file
 nnoremap <bs> <c-^>
@@ -249,25 +243,24 @@ nnoremap gb :ls<cr>:buffer<space>
 " inoremap <c-space> <c-x><c-o>
 
 " select last pasted text
-" select last pasted text
 nnoremap vi<space>p `[v`]
 
 command! -nargs=* EditInBufferDir
       \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
 
 " Toggle highlighting current matches
-nmap <silent><c-c> :silent set hlsearch! hlsearch?<CR>
+nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
 
 " prevents statusline from being rendered
 " set nowildmenu
 
-set nomore
+" set nomore
 cnoremap <tab> <C-L><C-D>
 
 " Marks:
 " switch lower case marks with uppercase ones
 " https://www.reddit.com/r/vim/comments/3g5v2m/is_there_any_way_to_use_lowercase_marks_instead/ctv5k6s/
-noremap <silent> <expr> ' "'".toupper(nr2char(getchar()))
+noremap <silent> <expr> ' "`".toupper(nr2char(getchar()))
 noremap <silent> <expr> m "m".toupper(nr2char(getchar()))
 sunmap '
 sunmap m
@@ -275,13 +268,18 @@ sunmap m
 " nnoremap ' `
 " nnoremap ` '
 
+augroup z1_my_mappings#augroupClearCmdLine
+  autocmd!
+  autocmd CursorHold * :echo
+augroup END
+
 nnoremap gd [<c-d>
 
 " format json no matter the filetype
 nnoremap <silent> <leader>X :Neoformat! json<cr>
 
 cnoremap <expr> %% fnameescape(expand('%'))
-" cnoremap <expr> <space><space>% fnameescape(expand('%'))
+cnoremap <expr> %b fnameescape(expand('%:t'))
 cnoremap <expr> :: fnameescape(expand('%:p:h')) . '/'
 
 nnoremap <silent> <leader>vs :Redir scriptnames<cr>
@@ -295,4 +293,9 @@ nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
 " nnoremap <leader>jj :w !npx -q json<space>
 " example: !jq '.data[].id'
 " TODO: use jsonpath instead
-nnoremap <leader>jj :w !jq<space>
+" nnoremap <leader>jj :w !jq<space>
+
+nnoremap <silent> { :keepjumps normal! {<cr>
+nnoremap <silent> } :keepjumps normal! }<cr>
+
+" nnoremap s /\\V

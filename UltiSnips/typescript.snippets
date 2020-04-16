@@ -226,11 +226,11 @@ ERROR(\`$1\`)
 endsnippet
 
 snippet l "let" w
-let ${1:var} = ${2:\`$3\`}
+let $1 = ${2:\`$3\`}
 endsnippet
 
 snippet eq "equals" w
-= \`${VISUAL}$0\`
+= \`$1\`
 endsnippet
 
 snippet if "if"
@@ -914,7 +914,7 @@ const relaxedJson = require(\`relaxed-json\`)
 const $0 = relaxedJson.parse(fs.readFileSync(rekuire.path(\`${VISUAL}$1\`)).toString())
 endsnippet
 
-snippet tojson "toJSON" w
+snippet jsonToString "toJSON" w
 JSON.stringify(${VISUAL}$0, null, 2)
 endsnippet
 
@@ -1047,20 +1047,3 @@ await session.withTransaction(async() => {
 })
 endsnippet
 
-snippet express.middleware "expressm" b
-app.use((req, res, next) => {
-	$0
-	return next()
-})
-endsnippet
-
-snippet express.get "express.get" b
-app.get(\`/$1\`, (req, res) => {
-  res.header(\`Content-Type\`, \`text/html\`)
-  return res.send(\`$0\`)
-})
-endsnippet
-
-snippet s "s" w
-\`${VISUAL}$0\`
-endsnippet

@@ -11,8 +11,8 @@ function! Paste(regname, pasteType, pastecmd)
   execute 'normal "'.a:regname . a:pastecmd
   call setreg(a:regname, reg_content, reg_type)
 endfunction
-nmap gPl :call Paste(v:register, "l", "P")<CR>
-nmap gpl :call Paste(v:register, "l", "p")<CR>
-nmap gPc :call Paste(v:register, "v", "P")<CR>
-nmap gpc :call Paste(v:register, "v", "p")<CR>
+nmap <silent> gPl :call Paste(v:register, "l", "P")<CR>
+nmap <silent> gpl :call Paste(v:register, "l", "p")<CR>
+nmap <silent> gPc :call Paste(v:register, "v", "P")<CR>
+nmap <silent> gpc :call Paste(v:register, "v", "p")<CR>
 

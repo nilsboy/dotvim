@@ -1,8 +1,11 @@
 " Remove all existing autocommands on vimrc reload
 autocmd!
 
+" Causes neovim to fallback to default terminal size and not respect the
+" actual size (2020-04-02 - neovim 0.5.0. 0.2.2 the ubuntu 18.04 default does
+" not seem to bei affected):
 " Reset all settings to their defaults
-set all&
+" set all&
 
 " prevent some builtin plugins from loading
 " see vim-dirvish

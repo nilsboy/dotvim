@@ -26,7 +26,8 @@ set scrolloff=999
 
 set iskeyword+=_,$,@,%,#,-
 set isfname-==
-set isfname+=@-@ 
+" allow the @ symbol in file names
+" set isfname+=@-@ 
 
 " Don't make noise
 set noerrorbells
@@ -66,6 +67,9 @@ set nrformats-=octal
 " Alacritty does not have this problem.
 " Newer gnome-terminal supposedly fixes this - currently running: 3.6.2.
 set guicursor=
+
+" turn off cursor blinking
+set guicursor=n:blinkon0
 
 set undofile
 

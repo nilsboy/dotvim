@@ -18,3 +18,5 @@ autocmd BufRead,BufNewFile *proxy*/*.conf* setlocal filetype=nginx
 autocmd BufRead,BufNewFile pm2.json setlocal filetype=pm2
 autocmd BufRead,BufNewFile *.class setlocal filetype=class
 
+" autocmd BufRead,BufNewFile serverless.yml setlocal filetype=serverless
+

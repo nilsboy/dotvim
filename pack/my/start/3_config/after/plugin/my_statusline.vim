@@ -77,12 +77,6 @@ function! MyStatuslineUpateLoclistValues() abort
   let g:MyStatuslineLoclistOther = substitute(len(filter(copy(getloclist(0)), "v:val.type !~? \"i\" && v:val.type !~? \"w\" && v:val.type !~? \"e\" && v:val.valid == 1")), "^0$", "", "g")
 endfunction
 
-augroup MyStatuslineAugroup2
-  autocmd!
-  autocmd QuickFixCmdPost [^l]* :call MyStatuslineUpateQickfixValues()
-  autocmd QuickFixCmdPost l* :call MyStatuslineUpateLoclistValues()
-augroup END
-
 let &statusline .= '%#ErrorMsg#'
 let &statusline .= '%( %{g:MyStatuslineQfErrors} %)'
 let &statusline .= '%#StatusLine#'
@@ -160,3 +154,10 @@ augroup MyStatuslineAugroup
         \ | runtime('plugin/my_statusline.vim') | call setwinvar(0, '&statusline', g:MyStatusline) | endif
   autocmd CursorMoved,BufUnload,QuickFixCmdPost * call setwinvar(0, '&statusline', g:MyStatusline)
 augroup END
+
+augroup MyStatuslineAugroupQuickfix
+  autocmd!
+  autocmd QuickFixCmdPost [^l]* :call MyStatuslineUpateQickfixValues()
+  autocmd QuickFixCmdPost l* :call MyStatuslineUpateLoclistValues()
+augroup END
+

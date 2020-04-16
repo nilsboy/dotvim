@@ -29,13 +29,14 @@ set synmaxcol=200
 " set colorcolumn=81
 " highlight ColorColumn ctermfg=red ctermbg=NONE
 
-match Todo /\ctodo|\ctbd/
-
 function! MyColorsColorschemeCleanup() abort
   highlight Normal ctermbg=NONE guibg=NONE gui=NONE
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
   " highlight MyColorsEolColor ctermbg=red
+
+  match Todo /\v\ctodo|tbd|note/
+
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!

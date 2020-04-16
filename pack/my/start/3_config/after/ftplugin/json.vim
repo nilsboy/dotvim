@@ -11,6 +11,9 @@ let b:outline = '\w+.*[\{\[]+'
 
 let g:MyJsonStrict = 1
 
+" exclude quotes
+setlocal iskeyword=1-33,35-255
+
 if exists("b:MyJsonFtpluginLoaded")
   finish
 endif
@@ -36,7 +39,7 @@ MyInstall prettier
 MyInstall json2yaml
 function! MyJsonToYaml() abort
   silent wall
-  silent !cat % | json2yaml > %:r.yaml
+  silent !cat % | json2yaml - > %:r.yaml
   silent edit %:r.yaml
 
   " Fix broken output

@@ -14,7 +14,7 @@ let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\
 " const deactivateBundleItem = async(item) => {
 let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static|function)\b)*\s*\w+\s*\(.*\{$|\s*class\s+\w+\b|[\w\.]+\s*=)|^\s{0,2},*\s*\w+\s*\:*\s*\{$'
 
-let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>'
+let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>'
 " *b:match_skip*
 " *b:match_ignorecase*
 
