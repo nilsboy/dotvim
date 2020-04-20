@@ -698,7 +698,7 @@ command! -nargs=* Web call Web (<f-args>)
 command! -nargs=* WebWithFiletype call Web (&filetype, <f-args>)
 function! Web(...) abort
   let query = join(a:000, ' ')
-  silent execute '!firefox https://duckduckgo.com/?q=' . shellescape(query)
+  silent execute '!xdg-open https://duckduckgo.com/?q=' . shellescape(query)
 endfunction
 " SEE ALSO: https://github.com/kabbamine/zeavim.vim
 " Search the web by default instead of manpages

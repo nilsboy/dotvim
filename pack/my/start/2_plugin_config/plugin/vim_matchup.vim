@@ -1,5 +1,5 @@
 " even better % navigate and highlight
-" TAGS: matchit
+" TAGS: matchit parens
 PackAdd andymass/vim-matchup
 
 " NOTE: needs matchparen to be enabled (2020-01-10)
@@ -21,4 +21,10 @@ augroup vim_matchup#augroupHighlight
   autocmd!
   autocmd CursorHold * :call vim_matchup#clear()  
   autocmd CursorHold * :call matchup#matchparen#highlight_surrounding()  
+augroup END
+
+" Remove CursorMoved autocmds for speed up.
+" Open ticket?
+augroup matchup_matchparen
+  autocmd!
 augroup END

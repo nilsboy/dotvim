@@ -34,10 +34,7 @@ vmap <space> <leader>
 nmap <leader> <nop>
 vmap <leader> <nop>
 
-" also use <space> for custom text-objects - i.e. see: vim-textobj-lastpat.vim
-
-" nnoremap <silent><c-z> :silent wall<cr><c-z>
-" inoremap <silent><c-z> <esc>:silent wall<cr><c-z>
+inoremap <c-z> <esc><c-z>
 
 " Save file as root
 command! -nargs=* WriteWithSudo :SudoWrite
@@ -82,18 +79,19 @@ nnoremap Q :xa<cr>
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
+nnoremap <silent> <leader>gx "zyiW:call system("xdg-open " . @z)<cr>
+
 nnoremap <silent><leader>ii :call Web(expand('<cword>'))<cr>
-vnoremap <silent><leader>ii y:call Web(@")<cr>
-nnoremap <silent> <leader>gx yiW:call system("firefox " . @")<cr>
+vnoremap <silent><leader>ii "zy:call Web(@z)<cr>
 
 nnoremap <silent><leader>it :call Web(&filetype, expand('<cword>'))<cr>
-vnoremap <silent><leader>it y:call Web(&filetype, @")<cr>
+vnoremap <silent><leader>it "zy:call Web(&filetype, @z)<cr>
 
 nnoremap <silent><leader>is :call Web(
       \ 'site:stackoverflow.com',
       \ expand('<cword>'))<cr>
-vnoremap <silent><leader>is y:call Web(
-      \ 'site:stackoverflow.com', @")<cr>
+vnoremap <silent><leader>is "zy:call Web(
+      \ 'site:stackoverflow.com', @z)<cr>
 
 " Don't wait after escape in insert mode
 " Breaks curser keys etc. (apparently not in Neovim)

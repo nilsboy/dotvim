@@ -146,7 +146,7 @@ endif
 let b:MyStatuslinePluginLoaded = 1
 
 " Borrowed from lightline
-augroup MyStatuslineAugroup
+augroup my_statusline#autogroup
   autocmd!
   autocmd WinEnter,BufWinEnter,FileType,SessionLoadPost * call setwinvar(0, '&statusline', g:MyStatusline)
   autocmd SessionLoadPost * call setwinvar(0, '&statusline', g:MyStatusline)
@@ -155,7 +155,7 @@ augroup MyStatuslineAugroup
   autocmd CursorMoved,BufUnload,QuickFixCmdPost * call setwinvar(0, '&statusline', g:MyStatusline)
 augroup END
 
-augroup MyStatuslineAugroupQuickfix
+augroup my_statusline#autogroupQuickfix
   autocmd!
   autocmd QuickFixCmdPost [^l]* :call MyStatuslineUpateQickfixValues()
   autocmd QuickFixCmdPost l* :call MyStatuslineUpateLoclistValues()

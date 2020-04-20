@@ -109,7 +109,7 @@ call tinykeymap#Map("moves", "i", "", {'exit': 1})
 call tinykeymap#EnterMap('quickfix', '<leader>x', {'name': 'quickfix'})
 call tinykeymap#Map("quickfix", "q", ":copen", {'exit': 1})
 call tinykeymap#Map("quickfix", "X", ":RunIntoBuffer", {'exit': 1 })
-call tinykeymap#Map("quickfix", "x", ":update | :make | :cwindow", {'exit': 1})
+call tinykeymap#Map("quickfix", "x", ":update | :make! | :copen", {'exit': 1})
 call tinykeymap#Map("quickfix", "h", ":cprevious")
 call tinykeymap#Map("quickfix", "l", ":cnext")
 

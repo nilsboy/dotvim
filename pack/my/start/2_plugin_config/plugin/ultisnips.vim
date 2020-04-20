@@ -9,7 +9,7 @@ nnoremap <leader>jS :execute ":edit " . stdpath('config') .
 let g:UltiSnipsEnableSnipMate = 0
 
 inoremap <silent> <tab> <c-r>=MyUltisnipsJump()<cr>
-let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsExpandTrigger = '<c-space>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 

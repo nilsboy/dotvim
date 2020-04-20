@@ -72,7 +72,7 @@ snippet null "Null" b
 endsnippet
 
 snippet req "require" b
-const `!p snip.rv = toMethodCase(t[1])` = require(\`$1\`)
+const ${2:`!p snip.rv = toMethodCase(t[1])`} = require(\`$1\`)
 endsnippet
 
 snippet newreq "new" b
@@ -1064,3 +1064,16 @@ endsnippet
 snippet s "s" w
 \`${VISUAL}$0\`
 endsnippet
+
+snippet matchallglobal "matchglobal" b
+const $1 = [
+  ...matchAll(movieRes.data, /$2/g$0)
+].map((match) => {
+  return match[1]
+})
+endsnippet
+
+snippet uniq "uniq" w
+_.uniq($0)
+endsnippet
+

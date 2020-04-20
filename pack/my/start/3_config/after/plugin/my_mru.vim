@@ -43,18 +43,18 @@ endfunction
 
 function! MyMruListFiles(file) abort
     cclose
-    let &l:makeprg='tac ' . a:file . ' | grep -v "^/tmp/" | head -1001 | uniq-unsorted'
+    let &l:makeprg='tac ' . a:file . ' \| grep -v "^/tmp/" \| head -1001 \| uniq-unsorted'
     setlocal errorformat=%f
-    Neomake!
+    silent make!
     copen
 endfunction
 
 nnoremap <silent> <leader>rr :call 
       \ MyMruListFiles(MyMruFilesWritten())<cr>
-nnoremap <silent> <leader>rer :silent! execute 'silent! edit ' . 
+nnoremap <silent> <leader>rer :silent execute 'edit ' . 
       \ MyMruFilesWritten()<cr>
 
 nnoremap <silent> <leader>ro :call 
       \ MyMruListFiles(MyMruFiles())<cr>
-nnoremap <silent> <leader>reo :silent! execute 'silent! edit ' . 
+nnoremap <silent> <leader>reo :silent execute 'edit ' .
       \ MyMruFiles()<cr>

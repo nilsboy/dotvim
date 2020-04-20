@@ -20,9 +20,9 @@ function! MyBookmarksFile() abort
 endfunction
 
 function! MyBookmarksList() abort
-    let &l:makeprg='tac ' . MyBookmarksFile() . ' | head -1001'
+    let &l:makeprg='tac ' . MyBookmarksFile() . ' \| head -1001'
     setlocal errorformat=%f
-    Neomake!
+    silent make!
     copen
 endfunction
 

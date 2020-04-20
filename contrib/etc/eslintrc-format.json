@@ -28,6 +28,7 @@
       1,
       "property"
     ],
+    // does not work with backticks (2017-04-25)
     "dot-notation": [
       1
     ],
@@ -205,7 +206,7 @@
       1
     ],
     "prefer-arrow-callback": [
-      1
+      0
     ],
     "prefer-const": [
       1

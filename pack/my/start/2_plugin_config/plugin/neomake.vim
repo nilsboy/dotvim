@@ -1,3 +1,4 @@
+finish
 " A plugin for asynchronous :make using Neovim's job-control functionality
 PackAdd neomake/neomake
 " TODO: checkout neomake-vim-autoformat.vim

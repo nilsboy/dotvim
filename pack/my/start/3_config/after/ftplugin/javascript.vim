@@ -86,15 +86,15 @@ let g:MyJavascriptErrorformat .= '%f:%l:%c:%m,'
 " Ignore everything else
 " let g:MyJavascriptErrorformat .= '%-G%.%#,'
 
-let g:neomake_run_maker = {
-      \ 'exe': 'node',
-      \ 'args': ['--harmony', '%:p'],
-      \ 'errorformat': '%m',
-      \ 'output_stream': 'both',
-      \ }
-" \ 'errorformat': g:MyJavascriptErrorformat,
-" \ 'postprocess':
-" function('MyJavascriptFixCoreFileLocationInQuickfix')
+" let g:neomake_run_maker = {
+"       \ 'exe': 'node',
+"       \ 'args': ['--harmony', '%:p'],
+"       \ 'errorformat': '%m',
+"       \ 'output_stream': 'both',
+"       \ }
+" " \ 'errorformat': g:MyJavascriptErrorformat,
+" " \ 'postprocess':
+" " function('MyJavascriptFixCoreFileLocationInQuickfix')
 
 let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
       \ "Karma", "Lab", "Jasmine"] }

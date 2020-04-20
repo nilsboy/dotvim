@@ -1,21 +1,20 @@
 " Intellisense engine for neovim, featured language server support as VSCode
 " TAGS: completion
+"
 " SEE ALSO: ./coc-settings.json
-" SEE ALSO: Additional sources: https://github.com/neoclide/coc-sources
 " SEE ALSO: ./pack/minpac/opt/coc.nvim/data/schema.json
-" SEE ALSO: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+"
+" SEE ALSO: https://github.com/neoclide/coc-sources
+" SEE ALSO: https://www.npmjs.com/search?q=coc-
 
-" TODO: use add_extension instead:
-" call coc#add_extension( \ 'coc-json', \ 'coc-tsserver', \ ... \)
-" (https://old.reddit.com/r/vim/comments/cde9s8/dipping_into_cocvim_and_before_i_fall_into_the/)
 function! MyCocInstall(...) abort
   MyInstall yarn !npm install -g yarn
-  !yarn install
-  " coc-json messes up vim (2020-04-12)
-  !yarn add coc-tsserver coc-java coc-yaml --ignore-engines
+  !yarn install --frozen-lockfile
 endfunction
 
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
+call coc#add_extension('coc-tsserver')
+call coc#add_extension('coc-ultisnips')
 
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
