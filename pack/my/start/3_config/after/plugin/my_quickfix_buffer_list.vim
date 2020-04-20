@@ -10,7 +10,7 @@ function! my_quickfix_buffer_list#list() abort
           \ map(
             \ filter(
               \ range(1, bufnr('$')),
-              \ 'buflisted(v:val) && !nb#isBufferEmpty(v:val)'
+              \ 'buflisted(v:val) && (nb#buffer#isNamed(v:val) || !nb#buffer#isEmpty(v:val))'
             \ ),
             \ function('my_quickfix_buffer_list#buildEntry')
           \ ),
@@ -21,6 +21,7 @@ function! my_quickfix_buffer_list#list() abort
     return
   endif
   let i = 0
+  let currentFileLine = 0
   for entry in list
     let i = i + 1
     if entry.bufnr == currentBufnr
@@ -30,19 +31,23 @@ function! my_quickfix_buffer_list#list() abort
   endfor
   let g:MyQuickfixFormatOnce = 'NoFile'
   call setqflist(list)
-  execute 'keepjumps cc ' currentFileLine
+  " current file may not be in the listed
+  if currentFileLine != 0
+    execute 'silent keepjumps cc ' currentFileLine
+  endif
   call setqflist([], 'a', { 'title' : 'buffers' })
   copen
 endfunction
 
 function! my_quickfix_buffer_list#buildEntry(key, bufnr) abort
   let basename = fnamemodify(bufname(a:bufnr), ":t")
+  let bufname = bufname(a:bufnr) != '' ? bufname(a:bufnr) : '[No Name]'
   return {
         \ "bufnr": a:bufnr,
         \ "valid": 1,
         \ "filename": bufname(a:bufnr),
         \ "basename": basename,
-        \ "text": basename,
+        \ "text": bufname,
   \ }
 endfunction
 

@@ -1,13 +1,13 @@
-if exists("g:MyHelpersPluginLoaded")
-    finish
-endif
-let g:MyHelpersPluginLoaded = 1
-
 " VimL Helper Libraries
 " - l9.vim
 " - https://github.com/LucHermitte/lh-vim-lib
 " - tomtom/tlib_vim
 " - ingo-library
+
+if exists("g:MyHelpersPluginLoaded")
+    finish
+endif
+let g:MyHelpersPluginLoaded = 1
 
 " function! MyHelpersClosePreviewWindow() abort
 "   silent! wincmd P
@@ -51,13 +51,20 @@ function! BufferClose() abort
 
   lclose
 
-  if nb#isBufferUnnamed() == 1
-  elseif &write
-    update
+  if nb#buffer#isNamed('%')
+    if &write
+      update
+    endif
+  else
+    if !nb#buffer#isEmpty('%')
+      call nb#warn('Buffer has no name.')
+      return
+    endif
   endif
 
-  if BufferIsLast() == 1
-    if nb#isBufferUnnamed() == 1
+  if BufferIsLast()
+    if !nb#buffer#isNamed('%')
+      call INFO('Last buffer.')
       return
     else
       keepjumps new | only
@@ -111,22 +118,6 @@ function! BufferIsNetrw() abort
     return 1
   endif
   return 0
-endfunction
-
-function! nb#isBufferUnnamed() abort
-  if empty(bufname("%"))
-    return 2
-  else
-    return 2
-  endif
-endfunction
-
-function! nb#isBufferEmpty(bufnr) abort
-  if getbufline(a:bufnr, 1, "$") == ['']
-    return 1
-  else
-    return 0
-  endif
 endfunction
 
 function! BufferCanWrite() abort
@@ -292,6 +283,14 @@ function! INFO(...) abort
     silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
     echohl MoreMsg | unsilent echom join(a:000, ' ') | echohl None
+  endif
+endfunction
+
+function! nb#warn(...) abort
+  if $DEBUG
+    silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+  else
+    echohl WarningMsg | unsilent echom join(a:000, ' ') | echohl None
   endif
 endfunction
 
