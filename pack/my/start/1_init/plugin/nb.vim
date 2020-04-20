@@ -51,13 +51,13 @@ function! BufferClose() abort
 
   lclose
 
-  if BufferIsUnnamed() == 1
+  if nb#isBufferUnnamed() == 1
   elseif &write
     update
   endif
 
   if BufferIsLast() == 1
-    if BufferIsUnnamed() == 1
+    if nb#isBufferUnnamed() == 1
       return
     else
       keepjumps new | only
@@ -75,31 +75,6 @@ function! BufferClose() abort
   endif
 
 endfunction
-
-" function! BufferCheckAndDeleteEmpty() abort
-"     if bufname('%') == ''
-"       return
-"     endif
-"     if BufferIsSpecial()
-"       return
-"     endif
-"     " call INFO('BufferIsSpecial(): ', BufferIsSpecial() . bufname('%'))
-"     bufdo :call BufferDeleteEmpty()
-" endfunction
-" function! BufferDeleteEmpty() abort
-"     if BufferIsSpecial()
-"       return
-"     endif
-"     if BufferIsEmpty() == 1 && BufferIsUnnamed() == 1
-"         silent bdelete!
-"     endif
-" endfunction
-" augroup s:BufferDeleteEmpty
-"     " autocmd BufReadPost * :call BufferCheckAndDeleteEmpty()
-"     " autocmd BufReadPost * :call BufferListedCount()
-"     autocmd BufReadPost * :bufdo call INFO('bn: '. bufname('%'))
-"     " autocmd BufReadPost * :call BufferDeleteEmpty()
-" augroup END
 
 function! BufferListedCount() abort
   let lastBuffer = bufnr('$')
@@ -138,7 +113,7 @@ function! BufferIsNetrw() abort
   return 0
 endfunction
 
-function! BufferIsUnnamed() abort
+function! nb#isBufferUnnamed() abort
   if empty(bufname("%"))
     return 2
   else
@@ -146,8 +121,8 @@ function! BufferIsUnnamed() abort
   endif
 endfunction
 
-function! BufferIsEmpty() abort
-  if line('$') == 1 && getline(1) == ''
+function! nb#isBufferEmpty(bufnr) abort
+  if getbufline(a:bufnr, 1, "$") == ['']
     return 1
   else
     return 0
@@ -316,7 +291,7 @@ function! INFO(...) abort
   if $DEBUG
     silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
-    echohl MoreMsg | unsilent echom "INFO > " . join(a:000, ' ') | echohl None
+    echohl MoreMsg | unsilent echom join(a:000, ' ') | echohl None
   endif
 endfunction
 

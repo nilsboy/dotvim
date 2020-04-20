@@ -9,7 +9,7 @@
 " :h maparg
 
 " Potentially reassignable keys for normal mode:
-" s, S, Q, Z, <bs>, M, m, r, R, <space>, Y, -, +
+" s, S, Q, Z, <bs>, M, r, R, <space>, Y, -, +
 " <cr> is used in quickfix etc for jumping
 " Maybe use r as secondary leader?
 
@@ -202,7 +202,9 @@ vnoremap <esc> <esc>``
 vnoremap y y``
 
 function! MyZ0MyMappingsMessages() abort
-  echom '=== Messages until ' . strftime("%H:%M:%S") . ' ======================='
+  echom '=== Messages until '
+        \ . strftime("%H:%M:%S")
+        \ . ' ======================='
   silent Verbose messages
   " silent only
   normal G
@@ -236,10 +238,6 @@ nnoremap gsw "zyiw:%s/\c\<<c-r>z\\>//g<Left><Left>
 " Quickly jump to buffers
 nnoremap gb :ls<cr>:buffer<space>
 
-" nnoremap <cr> :b<space>
-" nnoremap <cr> :ls<cr>:buffer<space>
-" inoremap <c-space> <c-x><c-o>
-
 " select last pasted text
 nnoremap vi<space>p `[v`]
 
@@ -252,7 +250,7 @@ nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
 " prevents statusline from being rendered
 " set nowildmenu
 
-" set nomore
+set nomore
 cnoremap <tab> <C-L><C-D>
 
 " Marks:

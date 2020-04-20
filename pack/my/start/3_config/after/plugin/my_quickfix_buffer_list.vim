@@ -10,12 +10,16 @@ function! my_quickfix_buffer_list#list() abort
           \ map(
             \ filter(
               \ range(1, bufnr('$')),
-              \ 'buflisted(v:val)'
+              \ 'buflisted(v:val) && !nb#isBufferEmpty(v:val)'
             \ ),
             \ function('my_quickfix_buffer_list#buildEntry')
           \ ),
           \ 'my_quickfix_buffer_list#cmp'
         \ )
+  if len(list) == 0
+    call INFO('No open files.')
+    return
+  endif
   let i = 0
   for entry in list
     let i = i + 1
@@ -47,5 +51,5 @@ function! my_quickfix_buffer_list#cmp(e1, e2) abort
         \ : a:e1.basename > a:e2.basename ? 1 : -1
 endfunction
 
-nnoremap <silent><space><space> :call my_quickfix_buffer_list#list()<CR>
-vnoremap <silent><space><space> :call my_quickfix_buffer_list#list()<CR>
+nnoremap <silent><cr> :call my_quickfix_buffer_list#list()<CR>
+vnoremap <silent><cr> :call my_quickfix_buffer_list#list()<CR>
