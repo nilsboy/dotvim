@@ -64,7 +64,7 @@ function! BufferClose() abort
 
   if BufferIsLast()
     if !nb#buffer#isNamed('%')
-      call INFO('Last buffer.')
+      call nb#info('Last buffer.')
       return
     else
       keepjumps new | only
@@ -278,7 +278,7 @@ function! DEBUG(...) abort
   endif
 endfunction
 
-function! INFO(...) abort
+function! nb#info(...) abort
   if $DEBUG
     silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
@@ -572,7 +572,7 @@ function! MyInstall(app, ...) abort
     let cmd = '!npm install -g ' . a:app
   endif
   if !executable(a:app)
-    call INFO('Installing ' . a:app . " via: " . cmd)
+    call nb#info('Installing ' . a:app . " via: " . cmd)
     silent execute cmd
   endif
 endfunction
@@ -752,7 +752,7 @@ function! MyZ0MyrcEnv() abort
   RedirAppendv verbose set
   RedirAppendv verbose let
   RedirAppendv verbose function
-  normal! gg0
+  keepjumps normal! gg0
 endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
@@ -762,13 +762,13 @@ function! Map(...) abort
   execute 'RedirAppend map  <leader>' . join(a:000, ' ')
   execute 'RedirAppend map! <leader>' . join(a:000, ' ')
   sort u
-  g/no mapping found/ normal! "_dd
-  g/^$/ normal! "_dd
-  normal! ggO
-  normal! gg0i########## map 
+  keepjumps g/no mapping found/ normal! "_dd
+  keepjumps g/^$/ normal! "_dd
+  keepjumps normal! ggO
+  keepjumps normal! gg0i########## map
   setlocal filetype=vim
   setlocal nowrap
-  normal! gg0
+  keepjumps normal! gg0
 endfunction
 command! -nargs=* Map call Map (<f-args>)
 

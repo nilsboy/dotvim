@@ -197,7 +197,6 @@ nnoremap <leader>jf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<
 nnoremap v m`v
 nnoremap V m`V
 nnoremap <C-v> m`<C-v>
-" this interfers with coc select mode
 vnoremap <esc> <esc>``
 vnoremap y y``
 
@@ -205,8 +204,7 @@ function! MyZ0MyMappingsMessages() abort
   echom '=== Messages until '
         \ . strftime("%H:%M:%S")
         \ . ' ======================='
-  silent Verbose messages
-  " silent only
+  Redir messages
   normal G
   setlocal syntax=txt
   silent! %s/\v\<09\>/\t/g

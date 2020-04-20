@@ -25,7 +25,7 @@ function! PackAdd(...) abort
     execute '!git clone --quiet ' . pluginfo.url . ' ' . pluginfo.dir
           \ . ' --no-single-branch --depth=1'
     if type(pluginfo.do) == v:t_func
-      call INFO('Running post hook for ' . package)
+      call nb#info('Running post hook for ' . package)
       let pwd = getcwd()
       let cdcmd = haslocaldir() ? 'lcd' : 'cd'
       noautocmd execute cdcmd fnameescape(pluginfo.dir)

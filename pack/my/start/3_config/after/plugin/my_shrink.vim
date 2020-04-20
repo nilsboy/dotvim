@@ -5,7 +5,7 @@
 
 function! MyShrinkShrink(options) abort
   if exists("b:shrink_before")
-    call INFO('Already shrunk - please unshrink first.')
+    call nb#info('Already shrunk - please unshrink first.')
     return
   endif
 

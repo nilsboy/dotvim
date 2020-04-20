@@ -85,11 +85,11 @@ elseif
 endsnippet
 
 snippet info "info" 
-call INFO(${VISUAL}$0)
+call nb#info(${VISUAL}$0)
 endsnippet
 
 snippet infoo "info with 1 arg" 
-call INFO('$1:', $1)
+call nb#info('$1:', $1)
 endsnippet
 
 snippet echo "echo with 1 arg"
@@ -233,11 +233,11 @@ snippet nop "<nop>" w
 endsnippet
 
 snippet jj ""
-call INFO('### jj`!v DebugId()` ${VISUAL}$1$0: ',  ${VISUAL}$1)
+call nb#info('### jj`!v DebugId()` ${VISUAL}$1$0: ',  ${VISUAL}$1)
 endsnippet
 
 snippet jjj "here"
-call INFO('##################################### jj`!v DebugId()`$0')
+call nb#info('##################################### jj`!v DebugId()`$0')
 endsnippet
 
 snippet fileexists "check if a file exists" b

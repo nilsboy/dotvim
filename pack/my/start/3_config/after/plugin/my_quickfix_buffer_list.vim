@@ -17,7 +17,7 @@ function! my_quickfix_buffer_list#list() abort
           \ 'my_quickfix_buffer_list#cmp'
         \ )
   if len(list) == 0
-    call INFO('No open files.')
+    call nb#info('No open files.')
     return
   endif
   let i = 0

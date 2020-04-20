@@ -56,7 +56,7 @@ function! MyQfPreview() abort
   if filename != ''
     execute 'topleft pedit ' . filename
   else
-    call INFO('No valid filename on current line.')
+    call nb#info('No valid filename on current line.')
   endif
 endfunction
 
@@ -65,7 +65,7 @@ function! MyQfIsQfListError() abort
     execute 'keepjumps cc ' getcurpos()[1]
     " cclose
   else
-    call INFO('No valid error on current line.')
+    call nb#info('No valid error on current line.')
   endif
 endfunction
 
@@ -74,6 +74,6 @@ function! MyQfIsLocListError() abort
     execute 'll ' . getcurpos()[1]
     lclose
   else
-    call INFO('No valid error on current line.')
+    call nb#info('No valid error on current line.')
   endif
 endfunction

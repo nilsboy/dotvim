@@ -86,7 +86,7 @@ function! MyDbExecSql(...) abort
   silent! normal! `a
 
   let limit = g:MyDbConfigLimit
-  " call INFO('limit:', limit)
+  " call nb#info('limit:', limit)
 
   if limit
     let limit = ' --limit ' . limit . ' '
@@ -114,7 +114,7 @@ function! MyDbExecSql(...) abort
         \ . g:MyDbConfigOptions 
         \ . cmd_options 
 
-  " call INFO('cmd:', cmd)
+  " call nb#info('cmd:', cmd)
 
 	let a = systemlist(cmd, sql, 1)
 	call append('$', a)
@@ -155,10 +155,10 @@ function! MyDbConfigKillProcess(processId) abort
   let confirmation = input('Kill process ' . a:processId . '? ', 'y')
   if confirmation != 'y'
     echo "\n"
-    call INFO('Kill cancelled.')
+    call nb#info('Kill cancelled.')
     return
   endif
-  call INFO('Killing process: ' . a:processId)
+  call nb#info('Killing process: ' . a:processId)
   call MyDbExecSql('KILL ' . a:processId, 'Kill process ' . a:processId)
 endfunction
 

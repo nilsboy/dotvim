@@ -21,7 +21,7 @@ function! MyTestStrategy(cmd, type)
   "   let compiler = compiler . '-near'
   " endif
   execute 'compiler! ' . compiler
-  " call INFO('arguments:', arguments)
+  " call nb#info('arguments:', arguments)
   execute 'silent make!' . arguments
   execute 'cd ' . cwd
   " call MyQuickfixRemoveWhitspace()

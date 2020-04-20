@@ -9,19 +9,19 @@ function! Redir(cmd, append, verbose)
 		silent execute a:cmd
 		redir END
 	endif
-  if ! a:append
-    new
+  if !a:append
+    keepjumps execute 'edit ' . fnameescape(a:cmd)
     only
     setlocal buftype=nowrite
   endif
-  normal! Go
+  keepjumps normal! Go
   if a:verbose
     call append('.', "########## " . a:cmd)
   endif
-  normal! G
+  keepjumps normal! G
 	call append('.', split(output, "\n"))
   if !a:append
-    normal! ggdddd
+    keepjumps normal! ggdddd
   endif
 endfunction
 

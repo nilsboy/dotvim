@@ -183,7 +183,7 @@ function! MyJumperJump(direction, movement_type) abort
   let direction = a:direction
 
   if len(g:jumper_positions) == 0
-    call INFO('No jump history collected jet')
+    call nb#info('No jump history collected jet')
     return
   endif
 
@@ -241,7 +241,7 @@ function! MyJumperJump(direction, movement_type) abort
   
   let result = MyJumperJumpTo(new_pos)
   if ! result
-    call INFO('Mark does not exist anymore')
+    call nb#info('Mark does not exist anymore')
     return
   endif
 
