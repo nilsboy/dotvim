@@ -97,7 +97,7 @@ echo '$1:' . $1
 endsnippet
 
 snippet debug "debug" 
-call DEBUG($0)
+call nb#debug($0)
 endsnippet
 
 snippet plugin "Description" b
@@ -109,8 +109,8 @@ snippet pluginadd "Description" b
 PackAdd ${VISUAL}$0
 endsnippet
 
-snippet ifneo "if is neovim" b
-if IsNeoVim()
+snippet isneo "if is neovim" b
+if nb#isNeovim()
   ${VISUAL}$0
 endif
 endsnippet

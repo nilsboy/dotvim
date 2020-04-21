@@ -26,7 +26,7 @@ function! MyNarrow() abort
   " ?\<script\|\<style
   " normal ``
   let b:tag_indent = indent('.') / &shiftwidth + 1
-  call DEBUG('Found indent: ' . b:tag_indent)
+  call nb#debug('Found indent: ' . b:tag_indent)
 
   let b:nrrw_aucmd_close  = ":normal ggO\<esc>Go"
   let b:nrrw_aucmd_written = ':normal vit' . b:tag_indent . '>'

@@ -55,14 +55,14 @@ let g:MyJumperCurposIndex = 0
 
 function! MyJumperAdd(action) abort
 
-  if BufferIsSpecial()
+  if nb#buffer#isSpecial()
     return
   endif
 
   let new = MyJumperGetcurpos()
   let new.action = a:action
 
-  call DEBUG('================== add\n'
+  call nb#debug('================== add\n'
         \ .  a:action
         \ , fnamemodify(new.filename, ':t'))
 
@@ -260,7 +260,7 @@ function! MyJumperJumpTo(pos) abort
   endif
   let bufnum = bufnr(pos.filename)
 
-  call DEBUG('Jumping to'
+  call nb#debug('Jumping to'
         \ , 'b:' . bufnum
         \ , fnamemodify(pos.filename, ':t') . '/' . pos.lnum
         \ , '(' . pos.mark . ')')

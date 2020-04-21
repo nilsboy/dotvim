@@ -41,7 +41,7 @@ set display=lastline,uhex
 " Vim will wrap long lines at any character in 'breakat'
 set linebreak
 set breakat&vim
-if IsNeoVim()
+if nb#isNeovim()
   set breakindent
   " more chars:
   " :help digraph-table

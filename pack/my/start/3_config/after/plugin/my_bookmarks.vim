@@ -10,7 +10,7 @@ function! MyBookmarksAdd(file) abort
     if empty(a:file)
         return
     endif
-    if IsNeoVim()
+    if nb#isNeovim()
       call writefile([a:file], g:MyBookmarksFile, 'a')
     endif
 endfunction

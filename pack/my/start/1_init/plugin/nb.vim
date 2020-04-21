@@ -9,87 +9,13 @@ if exists("g:MyHelpersPluginLoaded")
 endif
 let g:MyHelpersPluginLoaded = 1
 
-" function! MyHelpersClosePreviewWindow() abort
-"   silent! wincmd P
-"   if &previewwindow
-"     bwipe
-"     " cannot close if it's the last window
-"     " pclose
-"   endif
-" endfunction
-
-" Close a buffer writing its content and closing vim if appropriate.
-function! BufferClose() abort
-
-  if &previewwindow
-    pclose
-    return
-  endif
-
-  silent! pclose
-
-  if BufferIsCommandLine() == 1
-    silent! quit
-    return
-  elseif BufferIsQuickfix()
-    cclose
-    return
-  elseif BufferIsLoclist()
-    lclose
-    return
-  elseif BufferIsNetrw() == 1
-    " Netrw leaves its buffers in a weired state
-    silent! bwipeout!
-    return
-  endif
-
-  let wasQfOpen = MyHelpersQuickfixIsOpen()
-  if wasQfOpen
-    cclose
-    return
-  endif
-
-  lclose
-
-  if nb#buffer#isNamed('%')
-    if &write
-      update
-    endif
-  else
-    if !nb#buffer#isEmpty('%')
-      call nb#warn('Buffer has no name.')
-      return
-    endif
-  endif
-
-  if BufferIsLast()
-    if !nb#buffer#isNamed('%')
-      call nb#info('Last buffer.')
-      return
-    else
-      keepjumps new | only
-      silent! keepjumps edit #
-    endif
-    " silent! q!
-  endif
-
-  " use bdelete instead of bwipeout to not loose any marks
-  silent! bdelete!
-
-  if wasQfOpen
-    copen
-    wincmd p
-  endif
-
-endfunction
-
 function! BufferListedCount() abort
   let lastBuffer = bufnr('$')
   let listed = 0
   let i = 0
   while i <= lastBuffer
     let i = i + 1
-    if BufferIsSpecial() == 1
+    if nb#buffer#isSpecial() == 1
       continue
     endif
     if buflisted(i) == 1
@@ -97,13 +23,6 @@ function! BufferListedCount() abort
     endif
   endwhile
   return listed
-endfunction
-
-function! BufferIsSpecial() abort
-  if &previewwindow == 1
-    return 1
-  endif
-  return bufname('%') =~ '\v.*\[.*' ? 1 : 0
 endfunction
 
 function! BufferIsCommandLine() abort
@@ -117,70 +36,6 @@ function! BufferIsNetrw() abort
   if &filetype == 'netrw'
     return 1
   endif
-  return 0
-endfunction
-
-function! BufferCanWrite() abort
-  return &write
-endfunction
-
-function! BufferIsLast() abort
-
-  let lastBuffer = bufnr('$')
-
-  let listed = 0
-  let i = 1
-  while i <= lastBuffer
-
-    if buflisted(i) == 1
-      let listed = listed + 1
-    endif
-
-    if listed > 1
-      return 0
-    endif
-
-    let i = i + 1
-
-  endwhile
-
-  return 1
-
-endfunction
-
-function! BufferFindByFiletype() abort
-
-  let lastBuffer = bufnr('$')
-
-  let listed = 0
-  let i = 1
-  while i <= lastBuffer
-
-    if buflisted(i) == 1
-      let listed = listed + 1
-    endif
-
-    if listed > 1
-      return 0
-    endif
-
-    let i = i + 1
-
-  endwhile
-
-  return 1
-
-endfunction
-
-function! BufferFindByName(name) abort
-  let lastBuffer = bufnr('$')
-  let i = 1
-  while i <= lastBuffer
-    if bufname(i) =~ fnameescape(a:name)
-      return i
-    endif
-    let i = i + 1
-  endwhile
   return 0
 endfunction
 
@@ -248,31 +103,19 @@ nnoremap <silent> <leader>vee :call MyHelpersRunVim(g:MyHelpersLastVimCommand)<c
 "   autocmd CursorHold * silent! :call MyHelpersRunVim('jumps')
 " augroup END
 
-function! EditFileInBufferDir(...) abort
-  let dir = expand("%:h")
-  let file = dir . '/' . join(a:000)
-  let file = fnameescape(file)
-  execute 'edit ' . file
-endfunction
-command! -nargs=* E call EditFileInBufferDir(<f-args>)
-
 function! nb#touch(path) abort
   if empty(a:path)
     throw "Specify non empty path to create"
   endif
   let path = fnamemodify(a:path, ':p')
   let dir = fnamemodify(a:path, ':p:h')
-  call Mkdir(dir, 'p')
-  if IsNeoVim()
+  call nb#mkdir(dir, 'p')
+  if nb#isNeovim()
     call writefile([], path, 'a')
   endif
 endfunction
 
-if $DEBUG
-  silent execute '!echo "==========" > /tmp/vim.log'
-endif
-
-function! DEBUG(...) abort
+function! nb#debug(...) abort
   if $DEBUG
     silent execute '!echo -e "\nDEBUG> ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   endif
@@ -303,15 +146,13 @@ function! DUMP(input) abort
   Neoformat
 endfunction
 
-" Vim's writefile does not support the append (a) flag (2017-02-21)
-" Vim's mkdir complains if directory alread exists (2017-02-21)
-function! IsNeoVim() abort
+function! nb#isNeovim() abort
   return has("nvim-0.2.1")
 endfunction
 
 " For vim compatibility
 " Vim complains if the directory already exists (2017-02-20)
-function! Mkdir(dir, ...) abort
+function! nb#mkdir(dir, ...) abort
   if glob(a:dir) != ''
     return
   endif

@@ -1,7 +1,7 @@
 " Avoid 'hit enter prompt'
 set shortmess=atTIWF
 
-if IsNeoVim()
+if nb#isNeovim()
   " don't give ins-completion-menu messages.
   set shortmess+=c
 endif

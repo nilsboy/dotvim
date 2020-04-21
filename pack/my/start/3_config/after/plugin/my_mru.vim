@@ -18,13 +18,13 @@ augroup END
 call nb#touch(g:MruFiles)
 
 function! MyMruAddFile(file) abort
-    if ! IsNeoVim()
+    if ! nb#isNeovim()
       return
     endif
     if empty(a:file)
         return
     endif
-    if BufferIsSpecial()
+    if nb#buffer#isSpecial()
       return
     endif
     call writefile([a:file], g:MruFiles, 'a')

@@ -1,6 +1,6 @@
 let s:cache_dir = stdpath("cache") . "/vim-normal-buffer-man"
 
-call Mkdir(s:cache_dir, "p")
+call nb#mkdir(s:cache_dir, "p")
 
 function! Man(cmd) abort
     let cmd = a:cmd

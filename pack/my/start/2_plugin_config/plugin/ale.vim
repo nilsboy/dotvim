@@ -6,7 +6,7 @@ finish
 " NOTE: breaks own CursorHoldI autocmds
 " NOTE: Does not update on undo?
 
-if ! IsNeoVim()
+if ! nb#isNeovim()
   finish
 endif
 

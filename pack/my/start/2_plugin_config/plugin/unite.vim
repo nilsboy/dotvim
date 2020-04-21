@@ -192,7 +192,7 @@ let g:neomru#file_mru_limit=3000
 
 nnoremap <silent> <tab> :call UniteResumeOrFallback()<cr><esc>
 function! UniteResumeOrFallback() abort
-  if BufferFindByName('[unite]')
+  if nb#buffer#findByName('[unite]')
     UniteResume
   else
     call Recent_Global_Unite()

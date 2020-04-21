@@ -102,7 +102,7 @@ vnoremap <silent><leader>is "zy:call Web(
 " Mapping <esc> in vimrc breaks arrow behaviour"
 " (http://stackoverflow.com/questions/11940801)
 " - seems to be no problem with neovim
-nnoremap <silent><esc> :call BufferClose()<cr>
+nnoremap <silent><esc> :call nb#buffer#close()<cr>
 
 " Causes delay
 " nnoremap <esc>[ <esc>[

@@ -17,7 +17,7 @@ nmap YY <Plug>MoveMotionLinePlug
 
 let g:EasyClipShareYanksDirectory = stdpath("data") . "/easyclip"
 let g:EasyClipShareYanksFile = "shared-yanks"
-call Mkdir(g:EasyClipShareYanksDirectory, 'p')
+call nb#mkdir(g:EasyClipShareYanksDirectory, 'p')
 let g:EasyClipShareYanks = 1
 let g:EasyClipYankHistorySize = 500
 
