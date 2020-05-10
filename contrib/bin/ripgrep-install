@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Install ripgrep
+
+source bash-helpers
+
+cd /tmp
+curl -sLO https://github.com/BurntSushi/ripgrep/releases/download/12.0.1/ripgrep_12.0.1_amd64.deb
+pkexec dpkg -i /tmp/ripgrep_12.0.1_amd64.deb
+

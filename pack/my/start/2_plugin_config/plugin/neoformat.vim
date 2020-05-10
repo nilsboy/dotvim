@@ -1,3 +1,4 @@
+finish
 " A (Neo)vim plugin for formatting code.
 PackAdd sbdchd/neoformat
 

@@ -18,7 +18,7 @@ if exists("b:did_ftplugin_perl")
 endif
 let b:did_ftplugin_perl = 1
 
-MyInstall perltidy !sudo apt-get install perltidy
+MyInstall perltidy pkexec apt install perltidy
 
 let g:neoformat_perl_my_formatter = {
       \ 'exe': 'perltidy',

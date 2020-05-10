@@ -757,15 +757,6 @@ snippet stdin "get stdin" w
 $0 = await require(\`get-stdin\`)()
 endsnippet
 
-snippet docopt "docopt" b
-const DOCOPT = \`
-usage: `!v expand('%:t:r')`$0
-options:
-\`
-const neodoc = require(\`neodoc\`)
-const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
-endsnippet
-
 snippet j "j" b
 console.error(\`${VISUAL}$0\`)
 endsnippet
@@ -942,6 +933,10 @@ snippet cl "echo" w
 console.log(${VISUAL}$0)
 endsnippet
 
+snippet ce "echo" w
+console.error(${VISUAL}$0)
+endsnippet
+
 snippet test "test" b
 test(\`$1\`, async() => {
 	${VISUAL}$0
@@ -1077,3 +1072,26 @@ snippet uniq "uniq" w
 _.uniq($0)
 endsnippet
 
+snippet argv-docopt "argv-docopt" b
+function parseArgv() {
+  return args = require(\`neodoc\`)
+    .run(require(\`redent\`)(
+      \`
+        ${require(\`../package\`).description}
+
+        Usage:
+          ${require(\`path\`).basename(__filename)} [options] <regex>...
+
+        Options:
+          -h --help              Show this screen.
+          --filename=filename  Fallback filename if none is present in the input.
+      \`),
+      {
+        optionsFirst: true
+        , smartOptions: true
+      }
+    )
+}
+const argv = parseArgv()
+const filename = argv[\`--filename\`]
+endsnippet

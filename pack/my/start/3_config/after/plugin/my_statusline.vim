@@ -29,25 +29,31 @@ function! MyStatuslineDir() abort
 endfunction
 
 let &statusline .= '%#MyStatuslineProject#'
-let &statusline .= ' %<%-0.30{fnamemodify(getcwd(), ":t")} '
+let &statusline .= ' %-0.30{fnamemodify(getcwd(), ":t")} '
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#MyStatuslineDirectory#'
-let &statusline .= '%<%( %{MyStatuslineDir()} %)'
+let &statusline .= '%-0.30( %{MyStatuslineDir()} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#MyStatuslineFile#'
-let &statusline .= '%<%( %t %)'
+let &statusline .= '%( %t %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%<%( %w %)'
+let &statusline .= '%( %w %)'
 let &statusline .= '%#StatusLine#'
 
-" let &statusline .= '%#ErrorMsg#'
-" let &statusline .= '%<%( %q %)'
-" let &statusline .= '%#StatusLine#'
-let &statusline .= '%( %{exists("w:quickfix_title") ? w:quickfix_title : ""} %)'
+let &statusline .= '%<'
+
+function! my_statusline#tuncateRight(value, max) abort
+  if len(a:value) < a:max
+    return a:value
+  endif
+  return printf("%." . a:max . "s", a:value) . ">"
+endfunction
+
+let &statusline .= '%( %{exists("w:quickfix_title") ? my_statusline#tuncateRight(w:quickfix_title, 60) : ""} %)'
 
 let &statusline .= '%='
 
@@ -96,19 +102,19 @@ let &statusline .= '%#StatusLine#'
 " loclist
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %{g:MyStatuslineLoclistErrors} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistErrors}. %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#WarningMsg#'
-let &statusline .= '%( %{g:MyStatuslineLoclistWarnings} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistWarnings}. %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{g:MyStatuslineLoclistInfos} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistInfos}. %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#Cursorline#'
-let &statusline .= '%( %{g:MyStatuslineLoclistOther} %)'
+let &statusline .= '%( %{g:MyStatuslineLoclistOther}. %)'
 let &statusline .= '%#StatusLine#'
 
 " misc
@@ -133,10 +139,10 @@ let &statusline .= '%#StatusLine#'
 
 let &statusline .= ' %3l,%-02c %P '
 
-" TODO:
-let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %{my_bufhist#index()} %)'
-let &statusline .= '%#StatusLine#'
+" " TODO:
+" let &statusline .= '%#ErrorMsg#'
+" let &statusline .= '%( %{my_bufhist#index()} %)'
+" let &statusline .= '%#StatusLine#'
 
 let g:MyStatusline = &statusline
 

@@ -1,5 +1,6 @@
 " A REST console for Vim.
-PackAdd diepm/vim-rest-console
+" PackAdd diepm/vim-rest-console
+PackAdd nilsboy/vim-rest-console
 
 " This is against W3C recommendations
 " let g:vrc_allow_get_request_body = 1
@@ -7,24 +8,16 @@ PackAdd diepm/vim-rest-console
 " deprecated
 " let g:vrc_cookie_jar = '/tmp/vrc_cookie_jar'
 
-" deprecated
-" let g:vrc_follow_redirects = 1
-
-" also automatically formats response when this is set?
-" deprecated
-" let g:vrc_include_response_header = 1
 let g:vrc_debug = 0
 
 " breaks result formatting...
 let g:vrc_show_command = 1
+let g:vrc_show_command_in_result_buffer = 1
+let g:vrc_show_command_in_quickfix = 0
 
 let g:vrc_horizontal_split = 1
 let g:vrc_set_default_mapping = 0
 let g:vrc_syntax_highlight_response = 0
-
-" let g:vrc_connect_timeout = 1
-" deprecated
-" let g:vrc_max_time = 1
 
 " be quiet and only show errors
 " note --insecure causes: curl: (7) Couldn't connect to server
@@ -49,32 +42,29 @@ let g:vrc_auto_format_response_enabled = 0
 let g:MyRestConsoleResultId = 0
 function! MyRestConsoleCall(...) abort
 
-  " hmm, abs fileName does not work?!?
-  " cd /tmp
-
   let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
-  let fileName = 'rest-call.' . g:MyRestConsoleResultId . '.restresult'
-  let b:vrc_output_buffer_name = fileName
+  let filename = tempname() . '/rest-call.' . g:MyRestConsoleResultId . '.restresult'
 
-  " VrcQuery messes up current buffer position
   let b:winview = winsaveview()
-  let cliptext = getreg('"')
   keepjumps call VrcQuery()
   if(exists('b:winview')) | call winrestview(b:winview) | endif
 
+  execute 'keepjumps edit __REST_response__'
   only
+  keepjumps normal! gg"zyG
+  bwipe!
+  execute 'keepjumps edit ' filename
 
-  execute 'keepjumps edit ' . b:vrc_output_buffer_name
+  %delete _
+  keepjumps normal! "zP
 
-  setlocal buftype=nofile
+  setlocal buftype=
   setlocal modifiable
-  setlocal nowrap
-  setlocal filetype=restresult
-  silent! keeppatterns keepjumps g/^curl.*Couldn't connect to server/ :normal "_dd
-  silent! keeppatterns keepjumps g/Connection timed out after .* milliseconds/ :normal "_dd
-  silent! keeppatterns keepjumps g/^HTTP/ :normal gcip
+  silent! keeppatterns keepjumps g/^curl.*Couldn't connect to server/ :normal! "_dd
+  silent! keeppatterns keepjumps g/Connection timed out after .* milliseconds/ :normal! "_dd
+  silent! keeppatterns keepjumps g/\v^(HTTP|REQUEST)/ :normal gcip
 
-  call matchadd('todo', '\v^// (HTTP.* \d+\s*$|age: \d+\s*$)')
+  call matchadd('todo', '\v^// (HTTP.* \d+.*$|age: \d+\s*$|.*cache.*)')
 
   let is_json = search('json', 'n')
   if is_json
@@ -82,5 +72,14 @@ function! MyRestConsoleCall(...) abort
   endif
 
   keepjumps normal! gg
-  call setreg('"', cliptext)
+  " call append(0, [filename])
+  write
+  setlocal nowrap
 endfunction
+
+if exists("b:my_vim_rest_console_ftPluginLoaded")
+  finish
+endif
+let b:my_vim_rest_console_ftPluginLoaded = 1
+
+autocmd BufRead,BufNewFile *.restresult setlocal filetype=restresult

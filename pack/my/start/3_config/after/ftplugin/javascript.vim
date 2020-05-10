@@ -1,7 +1,8 @@
-" FormatterSet eslint-formatter
 " TODO: add?: https://github.com/lebab/lebab
+" TODO: Get source of core node modules: i.e. process.binding("natives").assert
 
-" Get source of core node modules: i.e. process.binding("natives").assert
+let b:formatter = 'prettier'
+" let b:formatter = 'my-javascript'
 
 " support module filenames
 setlocal iskeyword+=-
@@ -38,8 +39,6 @@ function! MyJavascriptIncluedExpr() abort
 endfunction
 set includeexpr=MyJavascriptIncluedExpr()
 
-" setlocal omnifunc=lsp#omni#complete
-
 nnoremap <buffer> <silent><leader>lI yi`:execute 'terminal npm install ' . @"<cr>
 
 " edit module documention
@@ -60,87 +59,10 @@ if exists("b:MyJavascriptFtpluginLoaded")
 endif
 let b:MyJavascriptFtpluginLoaded = 1
 
-" from vim-nodejs-errorformat: Error: bar at Object.foo [as _onTimeout]
-" (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
-let g:MyJavascriptErrorformat  = '%AError: %m' . ','
-let g:MyJavascriptErrorformat .= '%AEvalError: %m' . ','
-let g:MyJavascriptErrorformat .= '%ARangeError: %m' . ','
-let g:MyJavascriptErrorformat .= '%AReferenceError: %m' . ','
-let g:MyJavascriptErrorformat .= '%ASyntaxError: %m' . ','
-let g:MyJavascriptErrorformat .= '%ATypeError: %m' . ','
-let g:MyJavascriptErrorformat .= '%Z%*[ ]at %f:%l:%c' . ','
-let g:MyJavascriptErrorformat .= '%Z%*[ ]%m (%f:%l:%c)' . ','
-
-"     at Object.foo [as _onTimeout] (/Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2:9)
-let g:MyJavascriptErrorformat .= '%*[ ]%m (%f:%l:%c)' . ','
-
-"     at node.js:903:3
-let g:MyJavascriptErrorformat .= '%*[ ]at %f:%l:%c' . ','
-
-" /Users/Felix/.vim/bundle/vim-nodejs-errorformat/test.js:2
-"   throw new Error('bar');
-"         ^
-let g:MyJavascriptErrorformat .= '%Z%p^,%A%f:%l,%C%m' . ','
-let g:MyJavascriptErrorformat .= '%f:%l:%c:%m,'
-
-" Ignore everything else
-" let g:MyJavascriptErrorformat .= '%-G%.%#,'
-
-" let g:neomake_run_maker = {
-"       \ 'exe': 'node',
-"       \ 'args': ['--harmony', '%:p'],
-"       \ 'errorformat': '%m',
-"       \ 'output_stream': 'both',
-"       \ }
-" " \ 'errorformat': g:MyJavascriptErrorformat,
-" " \ 'postprocess':
-" " function('MyJavascriptFixCoreFileLocationInQuickfix')
-
 let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
       \ "Karma", "Lab", "Jasmine"] }
 
-"### Linter
-
-let g:ale_javascript_eslint_options = ' -c ' . $CONTRIB . '/eslintrc.json'
-" let g:ale_linters['javascript'] = ['flow']
-" let g:ale_linters['javascript'] = ['eslint']
-" " let g:ale_javascript_eslint_executable = 'babel-eslint'
-" " let g:ale_javascript_eslint_use_global = 1
-
-"### Formatter
-
-" eslint can not format from stdin - only lint.
-" Errors are reported to stdout never to stderr. Specifying --quiet suppresses
-" them completely.
-" The result can not be send to stdout - the file is changed in place.
-let g:neoformat_javascript_eslint = {
-      \ 'exe': 'eslint'
-      \ ,'args': ['--fix', '--quiet', '-c'
-      \ , $CONTRIB . '/eslintrc-format.yml']
-      \ , 'replace': 1
-      \ }
-MyInstall eslint !npm install -g eslint
-
-MyInstall prettier !npm install -g prettier prettier-eslint-cli
-" let g:neoformat_enabled_javascript = [ 'prettier' ]
-let g:neoformat_javascript_prettier = {
-      \ 'exe': 'prettier'
-      \ ,'args': ['--no-semi', '--single-quote']
-      \ }
-
-" let g:neoformat_enabled_javascript = [ 'prettier_eslint' ]
-let g:neoformat_javascript_prettier_eslint = {
-      \ 'exe': 'prettier-eslint'
-      \ }
-" \ ,'args': ['--log-level', 'error']
-
-let g:neoformat_enabled_javascript = [ 'my_formatter' ]
-let g:neoformat_javascript_my_formatter = {
-      \ 'exe': 'my_javascript_formatter'
-      \ }
-
-nnoremap <silent> <leader>cp :call MyJavascriptConvertFromPerl()<cr>
-function! MyJavascriptConvertFromPerl()
+function! javascript#fromPerl()
   %s/sub //g
   %s/my /let /g
   %s/\$//g

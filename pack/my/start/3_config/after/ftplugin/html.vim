@@ -28,7 +28,7 @@ function! MyHtmlShrinkBeforeRestore() abort
 endfunction
 
 " Needs a package json / every option is a npm package
-MyInstall posthtml !npm install -g posthtml-cli
+MyInstall posthtml npm install -g posthtml-cli
 let g:neoformat_enabled_html = [ 'posthtml' ]
 let g:neoformat_html_posthtml = {
       \ 'exe': 'posthtmlwrapper'

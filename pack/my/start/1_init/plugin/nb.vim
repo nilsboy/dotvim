@@ -117,13 +117,15 @@ endfunction
 
 function! nb#debug(...) abort
   if $DEBUG
-    silent execute '!echo -e "\nDEBUG> ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+    silent execute '!echo -e "\nDEBUG> ' . join(a:000, ' ')
+          \ . '\n" >> /tmp/vim.log'
   endif
 endfunction
 
 function! nb#info(...) abort
   if $DEBUG
-    silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+    silent execute '!echo -e "\nINFO > '
+          \ . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
     echohl MoreMsg | unsilent echom join(a:000, ' ') | echohl None
   endif
@@ -131,7 +133,8 @@ endfunction
 
 function! nb#warn(...) abort
   if $DEBUG
-    silent execute '!echo -e "\nINFO > ' . join(a:000, ' ') . '\n" >> /tmp/vim.log'
+    silent execute '!echo -e "\nINFO > '
+          \ . join(a:000, ' ') . '\n" >> /tmp/vim.log'
   else
     echohl WarningMsg | unsilent echom join(a:000, ' ') | echohl None
   endif
@@ -407,17 +410,20 @@ function! MyHelpersOpenOrg() abort
 endfunction
 command! -nargs=* MyOriginal call MyHelpersOpenOrg(<f-args>)
 
-function! MyInstall(app, ...) abort
+" TODO:
+" let nb#triedToInstall = {}
+function! nb#install(app, ...) abort
   let cmd = join(a:000)
   if cmd == ''
-    let cmd = '!npm install -g ' . a:app
+    let cmd = 'npm install -g ' . a:app
   endif
-  if !executable(a:app)
-    call nb#info('Installing ' . a:app . " via: " . cmd)
-    silent execute cmd
+  if executable(a:app)
+    return
   endif
+  call nb#info('Installing ' . a:app . ' via: "' . cmd . '"...')
+  echo system(cmd)
 endfunction
-command! -nargs=* MyInstall call MyInstall (<f-args>)
+command! -nargs=* MyInstall call nb#install(<f-args>)
 
 " SEE ALSO: https://www.reddit.com/r/vim/comments/88h2wv/substitute_vims_and_with_b_when_you_invoke/dwl5rbg/
 function! RegexToPcre(vim_regex) abort
@@ -598,7 +604,7 @@ endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
-  execute 'Redir map ' . join(a:000, ' ')
+  execute 'Redir verbose map ' . join(a:000, ' ')
   execute 'RedirAppend map! ' . join(a:000, ' ')
   execute 'RedirAppend map  <leader>' . join(a:000, ' ')
   execute 'RedirAppend map! <leader>' . join(a:000, ' ')

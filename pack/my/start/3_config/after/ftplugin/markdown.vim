@@ -18,7 +18,7 @@ let b:MyMarkdownFtpluginLoaded = 1
 " autocmd User SyntaxMarkdownPreLeaveA let &formatoptions = g:MyMarkdownFormatoptions
 " autocmd User SyntaxMarkdownPreLeaveA unsilent echo 'left ' . &formatoptions
 
-" MyInstall remark !npm install -g remark-cli remark-lint-maximum-line-length remark-lint-list-item-indent
+" MyInstall remark npm install -g remark-cli remark-lint-maximum-line-length remark-lint-list-item-indent
 " " NOTE: has no line wrap?
 " let g:neoformat_markdown_myremark = {
 "   \ 'exe': 'remark',

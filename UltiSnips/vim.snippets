@@ -330,12 +330,19 @@ snippet replace "replace" w
 let $1 = substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
 endsnippet
 
-snippet loadedftplugin "ft plugin loaded" b
-if exists("b:my_`!v expand('%:t:r')`_ftPluginLoaded")
-	finish
+snippet loadedftplugin "loadedftplugin" b
+if exists("`!v expand('%:t:r')`#ftpluginLoaded")
+  finish
 endif
-let b:my_`!v expand('%:t:r')`_ftPluginLoaded = 1$0
+let `!v expand('%:t:r')`#ftpluginLoaded = 1
 endsnippet
+
+# snippet loadedftplugin "ft plugin loaded" b
+# if exists("b:my_`!v expand('%:t:r')`_ftPluginLoaded")
+# 	finish
+# endif
+# let b:my_`!v expand('%:t:r')`_ftPluginLoaded = 1$0
+# endsnippet
 
 snippet saveCursorPosition "savecursorposition" b
 let saved_cursor = getcurpos()

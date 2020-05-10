@@ -1,3 +1,2 @@
-setlocal filetype=json
+setlocal filetype=jsonc
 setlocal nowrap
-setlocal modifiable

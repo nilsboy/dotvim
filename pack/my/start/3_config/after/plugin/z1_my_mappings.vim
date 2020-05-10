@@ -264,8 +264,16 @@ sunmap m
 
 augroup z1_my_mappings#augroupClearCmdLine
   autocmd!
-  autocmd CursorHold * :echo
+  " autocmd CursorHold * :echo
+  autocmd CursorHold * :call z1_my_mappings#clearCmdLine()
 augroup END
+
+function! z1_my_mappings#clearCmdLine() abort
+  if exists("z1_my_mappings#clearTimer")
+    call timer_stop(z1_my_mappings#clearTimer)
+  endif
+  let z1_my_mappings#clearTimer = timer_start(5000, {-> execute(":echo", "")})
+endfunction
 
 nnoremap gd [<c-d>
 
@@ -293,3 +301,18 @@ nnoremap <silent> { :keepjumps normal! {<cr>
 nnoremap <silent> } :keepjumps normal! }<cr>
 
 " nnoremap s /\\V
+
+nnoremap j gj
+nnoremap k gk
+
+nnoremap gj j
+nnoremap gk k
+
+nnoremap <silent> <leader>x :call z1_my_mappings#format()<cr>
+function! z1_my_mappings#format() abort
+  execute ':compiler ' . b:formatter
+  silent make!
+  silent edit
+endfunction
+
+nnoremap <silent> <leader>x :compiler jest \| silent make! \| copen<cr>

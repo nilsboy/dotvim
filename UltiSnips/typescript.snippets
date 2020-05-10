@@ -757,15 +757,6 @@ snippet stdin "get stdin" w
 $0 = await require(\`get-stdin\`)()
 endsnippet
 
-snippet docopt "docopt" b
-const DOCOPT = \`
-usage: `!v expand('%:t:r')`$0
-options:
-\`
-const neodoc = require(\`neodoc\`)
-const args = neodoc.run(DOCOPT, { optionsFirst: true, smartOptions: true })
-endsnippet
-
 snippet j "j" b
 console.error(\`${VISUAL}$0\`)
 endsnippet

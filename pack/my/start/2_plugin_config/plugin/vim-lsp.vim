@@ -8,7 +8,7 @@ finish
 " PackAdd prabirshrestha/vim-lsp
 PackAdd nilsboy/vim-lsp
 
-MyInstall javascript-typescript-stdio !npm install -g javascript-typescript-langserver
+MyInstall javascript-typescript-stdio npm install -g javascript-typescript-langserver
 
 let g:lsp_diagnostics_echo_cursor = 1
 

@@ -1,3 +1,4 @@
+finish
 " Intellisense engine for neovim, featured language server support as VSCode
 " TAGS: completion
 "
@@ -8,7 +9,7 @@
 " SEE ALSO: https://www.npmjs.com/search?q=coc-
 
 function! MyCocInstall(...) abort
-  MyInstall yarn !npm install -g yarn
+  MyInstall yarn npm install -g yarn
   !yarn install --frozen-lockfile
 endfunction
 

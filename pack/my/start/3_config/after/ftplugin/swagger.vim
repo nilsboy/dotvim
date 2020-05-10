@@ -5,6 +5,9 @@ augroup MySwaggerAugroupLint
   autocmd BufWritePost <buffer> :silent! call MySwaggerLint()
 augroup END
 
+" NOTE: replace with ibm-openapi-validator?
+MyInstall swagger-tools
+
 " let &l:define = '\v^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
 let b:outline = '^(  /|  \w.+\:|    (post|get|put|patch|delete)\:)'
 let b:outline = '^(\s\s[/\w]|\w).+$'
@@ -28,7 +31,7 @@ function! MySwaggerLint() abort
   silent lmake!
   lclose
   lwindow
-  silent! wincmd w
+  " silent! wincmd w
 endfunction
 
 finish

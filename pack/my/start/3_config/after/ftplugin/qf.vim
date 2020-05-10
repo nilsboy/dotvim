@@ -14,24 +14,28 @@ nmap <buffer> <leader>x :set modifiable \| :keepjumps %s/\\%u00/\\r/g<cr>
 if BufferIsQuickfix()
   nnoremap <silent> <c-n> :silent! keepjumps cnext<cr>
   nnoremap <silent> <c-p> :silent! keepjumps cprevious<cr>
-  nmap <buffer><silent> <tab> :cclose<cr>
-  nmap <buffer><silent> L :silent! cnewer \| :call MyStatuslineUpateQickfixValues()<cr>
-  nmap <buffer><silent> H :silent! colder \| :call MyStatuslineUpateQickfixValues()<cr>
-  nmap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
-  nmap <buffer><silent> <leader><cr> :call MyQfIsQfListError() \| copen<cr>
+  nnoremap <silent> <buffer> <c-n> :silent! keepjumps cnext \| copen<cr>
+  nnoremap <silent> <buffer> <c-p> :silent! keepjumps cprevious \| copen<cr>
+  nnoremap <buffer><silent> <tab> :cclose<cr>
+  nnoremap <buffer><silent> L :silent! cnewer \| :call MyStatuslineUpateQickfixValues()<cr>
+  nnoremap <buffer><silent> H :silent! colder \| :call MyStatuslineUpateQickfixValues()<cr>
+  nnoremap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
+  nnoremap <buffer><silent> <leader><cr> :call MyQfIsQfListError() \| copen<cr>
   augroup MyQfAugroupBufferLeave
     autocmd!
     autocmd BufLeave <buffer> :silent! cclose
   augroup END
 else
-  nnoremap <silent> <c-n> :silent! keepjumps lnext<cr>
-  nnoremap <silent> <c-p> :silent! keepjumps lprevious<cr>
-  nmap <buffer><silent> <s-tab> :lclose<cr>
-  nmap <buffer><silent> <tab> :lclose<cr>
-  nmap <buffer><silent> L :silent! lnewer \| :call MyStatuslineUpateLoclistValues()<cr>
-  nmap <buffer><silent> H :silent! lolder \| :call MyStatuslineUpateLoclistValues()<cr>
-  nmap <buffer><silent> <cr> :call MyQfIsLocListError()<cr>
-  nmap <buffer><silent> <leader><cr> :call MyQfIsLocListError() \| lopen<cr>
+  nnoremap <silent> <c-n> :silent! keepjumps lnext \| lopen<cr>
+  nnoremap <silent> <c-p> :silent! keepjumps lprevious \| lopen<cr>
+  nnoremap <silent> <buffer> <c-n> :silent! keepjumps lnext<cr>
+  nnoremap <silent> <buffer> <c-p> :silent! keepjumps lprevious<cr>
+  nnoremap <buffer><silent> <s-tab> :lclose<cr>
+  nnoremap <buffer><silent> <tab> :lclose<cr>
+  nnoremap <buffer><silent> L :silent! lnewer \| :call MyStatuslineUpateLoclistValues()<cr>
+  nnoremap <buffer><silent> H :silent! lolder \| :call MyStatuslineUpateLoclistValues()<cr>
+  nnoremap <buffer><silent> <cr> :call MyQfIsLocListError()<cr>
+  nnoremap <buffer><silent> <leader><cr> :call MyQfIsLocListError() \| lopen<cr>
   " augroup MyQfAugroupBufferLeave
   "   autocmd!
   "   autocmd BufLeave <buffer> :lclose
@@ -71,7 +75,7 @@ endfunction
 
 function! MyQfIsLocListError() abort
   if getloclist(0)[getcurpos()[1]-1].valid
-    execute 'll ' . getcurpos()[1]
+    execute 'keepjumps ll ' . getcurpos()[1]
     lclose
   else
     call nb#info('No valid error on current line.')

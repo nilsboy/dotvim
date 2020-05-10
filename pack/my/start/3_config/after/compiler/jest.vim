@@ -1,31 +1,23 @@
-let &makeprg = 'myjest'
-" let &makeprg = 'jest'
-
 let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
-finish
+let line = search('\v^\s*it\(.*\)', 'bcn')
+call nb#info('### jj137 getline(line): ', getline(line))
+let matches = matchlist(getline(line), '\v^\s*it\([`"''](.*)[`"'']')
+" call nb#info('### jj114 matches: ',  matches)
+let testName = matches[1]
+" let testName = shellescape(testName, 1)
+echom "jjjjjjjj " . testName
 
-" " remove lines containing a pipe (source code output)
-" let &errorformat .= '%-G%.%#\|%.%#,'
+let &makeprg  = 'jest --useStderr --verbose --testNamePattern "' 
+      \ . testName . '" % 2>&1'
+let &makeprg .= ' \| sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g"'
 
-" let &errorformat .= '%-G%\s%#● %.%#,'
-" let &errorformat .= '%-G%.%#node_modules/%.%#,'
-" let &errorformat .= '%-G%.%#○ skipped%.%#,'
-" let &errorformat .= '%-G%.%##### Using database%.%#,'
-
-" let &errorformat .= '%\s%#%m (%f:%l:%c),'
-
-" let &errorformat = substitute(&errorformat, '\v,$', '', '')
-
-let &errorformat .= '%E%\s%#● %.%#›\s%#%m,'
-let &errorformat .= '%-C%.%#node_modules/%.%#,'
-let &errorformat .= '%-C%.%#|%.%#,'
-let &errorformat .= '%-C\s%#,'
-let &errorformat .= '%Z%\s%#at %.%# (%f:%l:%c),'
-let &errorformat .= '%+C\s%#%.%#,'
-
-" let &errorformat .= '%-G%.%#,'
-" let &errorformat = '%m,'
+let &makeprg .= " \\| errorformatregex "
+let &makeprg .= " 'e/^()\\s*(.+)\\:(\\d+)\\:(\\d+) .+$/gm'"
+" let &makeprg .= " 'e/^\\s*()FAIL (\\S+)()().*$/gm'"
+let &makeprg .= " 'i/^\\s*(at)\\s*.+?\\((node_modules.+?):(\\d+):(\\d+)\\)/gm'"
+let &makeprg .= " 'e/^\\s*(at)\\s*.+?\\((.+?):(\\d+):(\\d+)\\)/gm'"
+let &makeprg .= " 'i/()(\\S+)\\:(\\d+)/gm'"
 
 finish
   console.log node_modules/database.js:19

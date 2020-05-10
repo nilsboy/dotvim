@@ -1,7 +1,7 @@
 " Search in file names and contents and some quickfix tweaks.
 
-MyInstall rg apt-get install ripgrep
-MyInstall errorformatregex !npm install -g @nilsboy/errorformatregex
+MyInstall rg ripgrep-install
+MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
 
 nnoremap <silent> <tab> :copen<cr>
 nnoremap <silent> <s-tab> :lopen<cr>
@@ -14,7 +14,7 @@ let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 
 let g:MyQuickfixSearchLimit = '5000'
 
-command! -bang -nargs=1 Search call MyQuickfixSearch({'term': <q-args>})
+command! -bang -nargs=* Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
 
   let options = {}
@@ -290,6 +290,7 @@ function! MyQuickfixFindInBufferDir() abort
   return { 'path': MyQuickfixBufferDir() }
 endfunction
 
+
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
@@ -314,7 +315,6 @@ nnoremap <silent> <leader>vpp :execute 'edit '
       \ . stdpath('config') . '/pack/minpac/opt/'<cr>
 
 function! MyQuickfixOutline(location) abort
-  silent wall
   cclose
   " let pcreDefine = substitute(&define, '^\\v', '', 'g')
   if ! exists('b:outline')
@@ -487,6 +487,11 @@ endfunction
 augroup MyQuickfixAugroupCloseQfWindows
   autocmd!
   autocmd QuickFixCmdPre * cclose | lclose
+augroup END
+
+augroup my_quickfix#augroupWrite
+  autocmd!
+  autocmd QuickFixCmdPre * silent! wall
 augroup END
 
 augroup MyQuickfixAugroupFormat

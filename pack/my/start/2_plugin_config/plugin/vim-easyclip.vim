@@ -1,6 +1,12 @@
 " Simplified clipboard functionality for Vim
+" NOTE: checkout out yankstack as an alternative for register history
+" NOTE: use this instead of the plugin?:
+" nnoremap d "_d
+" xnoremap d "_d
+" nnoremap c "_c
+" xnoremap c "_c
 
-MyInstall xsel !sudo apt-get install xsel
+MyInstall xsel pkexec apt install xsel
 
 " fix indent level
 " let g:EasyClipAutoFormat = 1
