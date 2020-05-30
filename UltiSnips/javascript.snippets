@@ -404,7 +404,7 @@ const paths = fileWalker($1).map((entry) => {
 })
 endsnippet
 
-snippet glob "glob" b
+snippet glob-req "glob" b
 const glob = require(\`glob\`).sync
 endsnippet
 
@@ -743,13 +743,13 @@ snippet n "\\n" w
 \`\n\`
 endsnippet
 
-snippet yaml "yaml import" b
+snippet yaml-read "yaml import" b
 const yaml = require(\`js-yaml\`)
 const expandTilde = require(\`expand-tilde\`)
 const doc = yaml.safeLoad(fs.readFileSync(expandTilde(\`$1\`)))
 endsnippet
 
-snippet toyaml "toYaml" w
+snippet yaml-write "toYaml" w
 yaml.safeDump($0)
 endsnippet
 
@@ -1028,9 +1028,9 @@ class $1Error extends Error {
 }
 endsnippet
 
-snippet promisethrow "promisethrow" b
+snippet unhandledRejection-catch "promisethrow" b
 process.on(\`unhandledRejection\`, (e) => {
-  throw e
+  throw e.message, e.stack
 })
 endsnippet
 

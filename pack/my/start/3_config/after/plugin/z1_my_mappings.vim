@@ -54,6 +54,8 @@ command! -nargs=* WriteWithSudo :SudoWrite
 " <c-i> is the same as <tab>
 nnoremap <c-u> <c-o>
 nnoremap <c-o> <c-i>
+vnoremap <c-u> <c-o>
+vnoremap <c-o> <c-i>
 
 imap <c-h> <esc><c-h>
 imap <c-l> <esc><c-l>
@@ -245,11 +247,11 @@ command! -nargs=* EditInBufferDir
 " Toggle highlighting current matches
 nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
 
-" prevents statusline from being rendered
-" set nowildmenu
-
 set nomore
-cnoremap <tab> <C-L><C-D>
+set wildignorecase
+set wildmode=list,full
+set wildoptions=pum
+" cnoremap <tab> <C-L><C-D>
 
 " Marks:
 " switch lower case marks with uppercase ones
@@ -277,9 +279,6 @@ endfunction
 
 nnoremap gd [<c-d>
 
-" format json no matter the filetype
-nnoremap <silent> <leader>X :Neoformat! json<cr>
-
 cnoremap <expr> %% fnameescape(expand('%'))
 cnoremap <expr> %b fnameescape(expand('%:t'))
 cnoremap <expr> :: fnameescape(expand('%:p:h')) . '/'
@@ -292,27 +291,11 @@ function! MyVimrcRtp() abort
 endfunction
 nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
 
-" nnoremap <leader>jj :w !npx -q json<space>
-" example: !jq '.data[].id'
-" TODO: use jsonpath instead
-" nnoremap <leader>jj :w !jq<space>
-
 nnoremap <silent> { :keepjumps normal! {<cr>
 nnoremap <silent> } :keepjumps normal! }<cr>
 
-" nnoremap s /\\V
-
 nnoremap j gj
 nnoremap k gk
-
 nnoremap gj j
 nnoremap gk k
 
-nnoremap <silent> <leader>x :call z1_my_mappings#format()<cr>
-function! z1_my_mappings#format() abort
-  execute ':compiler ' . b:formatter
-  silent make!
-  silent edit
-endfunction
-
-nnoremap <silent> <leader>x :compiler jest \| silent make! \| copen<cr>

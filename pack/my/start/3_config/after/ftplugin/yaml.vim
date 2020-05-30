@@ -3,6 +3,8 @@
 
 let b:outline = '^\w+.*\:'
 
+let b:formatter = 'prettier-yaml'
+
 if exists("b:MyYamlFtpluginLoaded")
     finish
 endif

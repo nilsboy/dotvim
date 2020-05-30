@@ -1,4 +1,3 @@
-finish
 " Intellisense engine for neovim, featured language server support as VSCode
 " TAGS: completion
 "

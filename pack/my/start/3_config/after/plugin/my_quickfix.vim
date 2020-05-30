@@ -3,8 +3,34 @@
 MyInstall rg ripgrep-install
 MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
 
-nnoremap <silent> <tab> :copen<cr>
-nnoremap <silent> <s-tab> :lopen<cr>
+let g:my_quickfix#currentList = 'quickfix'
+function! my_quickfix#viewList(toggle) abort
+  if g:my_quickfix#currentList == 'quickfix'
+    if a:toggle
+      let g:my_quickfix#currentList = 'loclist'
+      if len(getloclist(0)) == 0
+        call nb#info('Location list is empty.')
+      else
+        lopen
+      endif
+    else
+      copen
+    endif
+  else
+    if a:toggle
+      let g:my_quickfix#currentList = 'quickfix'
+      copen
+    else
+      if len(getloclist(0)) == 0
+        call nb#info('Location list is empty.')
+      else
+        lopen
+      endif
+    endif
+  endif
+endfunction
+nnoremap <silent> <tab> :call my_quickfix#viewList(0)<cr>
+nnoremap <silent> <s-tab> :call my_quickfix#viewList(1)<cr>
 
 function! MyQuickfixBufferDir() abort
   return expand("%:p:h")

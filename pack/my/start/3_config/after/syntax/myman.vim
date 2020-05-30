@@ -1,2 +1,2 @@
-setlocal syntax=man
+setlocal syntax=text
 

@@ -5,8 +5,6 @@ if $DISPLAY != ''
 endif
 
 set history=1000
-set autoread
-set autowriteall
 set nostartofline
 
 let &tabstop = 2
@@ -36,7 +34,7 @@ set t_vb=
 
 set hidden
 set showcmd
-set display=lastline,uhex
+set display=lastline,uhex,msgsep
 
 " Vim will wrap long lines at any character in 'breakat'
 set linebreak
@@ -82,7 +80,6 @@ set showmatch
 set matchtime=0
 
 set incsearch
-set wildignorecase
 set ignorecase
 set smartcase
 set infercase

@@ -167,3 +167,8 @@ augroup my_statusline#autogroupQuickfix
   autocmd QuickFixCmdPost l* :call MyStatuslineUpateLoclistValues()
 augroup END
 
+augroup my_statusline#augroupInactive
+  autocmd!
+  autocmd WinLeave * :let &l:statusline = ' '
+augroup END
+

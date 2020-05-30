@@ -19,3 +19,5 @@ let &makeprg .= " 'e/^\\s*()()Message\\s*\\:\\s*[\\s\\S]*?Line\\s*\\:\\s*(\\d+)/
 " │ YAMLException: bad indentation of a mapping entry at line 119, column 5:
 
 let &makeprg .= " 'e/^()().*?Exception.*?at\\s+line\\s+(\\d+).*?column\\s+(\\d+).*/gm'"
+
+let &makeprg .= " 'e/^()()()()\[Error\].*$/gm'"

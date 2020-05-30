@@ -2,6 +2,8 @@
 " TODO: Get source of core node modules: i.e. process.binding("natives").assert
 
 let b:formatter = 'prettier'
+let b:tester = 'jest'
+" TODO:
 " let b:formatter = 'my-javascript'
 
 " support module filenames
@@ -58,9 +60,6 @@ if exists("b:MyJavascriptFtpluginLoaded")
   finish
 endif
 let b:MyJavascriptFtpluginLoaded = 1
-
-let test#runners = {'JavaScript': ["Jest", "Mocha", "Intern", "TAP",
-      \ "Karma", "Lab", "Jasmine"] }
 
 function! javascript#fromPerl()
   %s/sub //g

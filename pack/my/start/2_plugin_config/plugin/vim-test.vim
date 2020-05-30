@@ -1,3 +1,4 @@
+finish
 " Run your tests at the speed of thought
 PackAdd janko-m/vim-test
 

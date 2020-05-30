@@ -147,9 +147,13 @@ EOF
 endsnippet
 
 snippet jj "jj" b
-echo '$1:' $$1 >&2
+echo '### jj`!v DebugId()` $1:' $$1 >&2
 endsnippet
 
 snippet jjj "line" b
-echo #################################################### ${VISUAL}$0
+echo '#################################################### jj`!v DebugId()` ${VISUAL}$0' >&2
+endsnippet
+
+snippet install-if-missing "install-if-missing" b
+type $1 &>/dev/null || pkexec apt install $1$0
 endsnippet

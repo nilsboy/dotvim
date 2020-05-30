@@ -68,7 +68,9 @@ function! MyRestConsoleCall(...) abort
 
   let is_json = search('json', 'n')
   if is_json
-    keepjumps Neoformat! json
+    let b:formatter = 'prettier-json'
+    setlocal filetype=json
+    keepjumps call MakeWith(b:formatter)
   endif
 
   keepjumps normal! gg

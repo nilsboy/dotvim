@@ -141,12 +141,12 @@ function! nb#warn(...) abort
 endfunction
 
 function! DUMP(input) abort
-  Verbose echo json_encode(a:input)
-  wincmd _
-  " silent! only
-  normal! gg"_dd
-  setlocal filetype=json
-  Neoformat
+  execute 'edit ' . tempname() . '.json'
+  keepjumps put =json_encode(a:input)
+  " wincmd _
+  silent! only
+  keepjumps normal! gg
+  MakeWith prettier-json
 endfunction
 
 function! nb#isNeovim() abort
@@ -608,7 +608,7 @@ function! Map(...) abort
   execute 'RedirAppend map! ' . join(a:000, ' ')
   execute 'RedirAppend map  <leader>' . join(a:000, ' ')
   execute 'RedirAppend map! <leader>' . join(a:000, ' ')
-  sort u
+  " sort u
   keepjumps g/no mapping found/ normal! "_dd
   keepjumps g/^$/ normal! "_dd
   keepjumps normal! ggO

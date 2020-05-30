@@ -1,0 +1,99 @@
+snippet init "init" b
+openapi: 3.0.1
+info:
+  title: $1
+  description: >
+		$2
+  version: 1.0.xx
+  contact:
+    name: $3
+    email: $4
+servers:
+  - url: $5
+
+x-developer-portal:
+  apiId: uuid$6
+  categories:
+    - system-api
+
+paths:$0
+
+components:
+  schemas:
+
+endsnippet
+
+snippet s "string property" w
+$1${VISUAL}:
+	type: string
+	description: $1$0
+endsnippet
+
+snippet n "number property" w
+$1${VISUAL}:
+	type: integer
+	description: $0
+endsnippet
+
+snippet o "object" w
+$1${VISUAL}:
+	type: object
+	description: $2
+	properties:$0
+endsnippet
+
+snippet path-get "get" b
+/$1/{id}:
+	get:
+		parameters:$0
+		responses:
+endsnippet
+
+snippet param "parameter" b
+- name: $1
+	in: path
+	description: $2
+	required: true$3
+	schema:
+		type: string$4
+endsnippet
+
+snippet res "response" b
+$1:
+	description: $2
+	content:
+		application/json:
+			schema:
+				$ref: "#/components/schemas/$3"
+endsnippet
+
+snippet ref "reference" b
+$ref: "#/components/schemas/$0"
+endsnippet
+
+snippet path-post "post" b
+/$1:
+  post:
+    description: This operation creates a $1 entity.
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/$1'
+      description: The $1 to be created
+      required: true
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/$1'
+endsnippet
+
+snippet a "a" b
+$1:
+	type: array
+	items:
+		$ref: '#/components/schemas/$0'
+endsnippet
