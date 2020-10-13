@@ -1,3 +1,4 @@
+finish
 " Highlights and sets error markers for lines with compile errors
 
 let errormarker_errorgroup = "ErrorMsg"

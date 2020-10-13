@@ -72,19 +72,19 @@ snippet null "Null" b
 endsnippet
 
 snippet req "require" b
-const ${2:`!p snip.rv = toMethodCase(t[1])`} = require(\`$1\`)
+const ${2:`!p snip.rv = toMethodCase(t[1])`} = require("$1")
 endsnippet
 
 snippet newreq "new" b
-const `!p snip.rv = toMethodCase(t[1])` = new (require(\`$1\`))()
+const `!p snip.rv = toMethodCase(t[1])` = new (require("$1"))()
 endsnippet
 
 snippet reqc "require class" b
-const `!p snip.rv = toCamelCase(t[1])` = require(\`$1\`)
+const `!p snip.rv = toCamelCase(t[1])` = require("$1")
 endsnippet
 
 snippet rekk "rekuire" w
-const rekuire = require(\`rekuire\`)
+const rekuire = require("rekuire")
 endsnippet
 
 snippet rek "rekuire" w
@@ -96,14 +96,15 @@ const `!p snip.rv = toCamelCase(t[1])` = rekuire(\`$1\`)
 endsnippet
 
 snippet requirefresh "requirefresh" b
-const importFresh = require(\`import-fresh\`)
+const importFresh = require("import-fresh")
 endsnippet
-snippet import "import" b
-import * as `!p snip.rv = toCamelCase(t[1])` from \`$1\`
+
+snippet ias "import" b
+import * as ${2:`!p snip.rv = toCamelCase(t[1])`} from "$1"
 endsnippet
 
 snippet i "import" b
-import `!p snip.rv = toMethodCase(t[1])` from "$1"
+import ${2:`!p snip.rv = toMethodCase(t[1])`} from "$1"
 endsnippet
 
 snippet ic "import class" b
@@ -132,29 +133,21 @@ process.stderr.write(${VISUAL}$0)
 endsnippet
 
 snippet exec "exec" b
-const exec = require(\`child_process\`).execSync
-const stdout = exec(\`${1:cmd}\`)
+const execa = require("execa")
+const $0 = execa(\`${VISUAL}$1\`)
 endsnippet
 
-snippet execa "execa" b
-const execa = require(\`execa\`)
-const e = execa(\`${VISUAL}$0\`)
-endsnippet
-
-snippet lodash "require lodash" b
-const _ = require(\`lodash\`)
-endsnippet
-
-snippet util "require util" b
-const util = require(\`util\`)
+snippet execsync "exec" b
+const exec = require("child_process").execFileSync
+const stdout = exec(\`${1:cmd}\`, [])
 endsnippet
 
 snippet fs "require fs" b
-const fs = require(\`fs\`)
+const fs = require("fs")
 endsnippet
 
 snippet fsextra "require fs-extra" b
-const fs = require(\`fs-extra\`)
+const fs = require("fs-extra")
 endsnippet
 
 snippet readfile "readfile" w
@@ -166,7 +159,7 @@ fs.writeFileSync(\`${1:file}\`, ${VISUAL}$0)
 endsnippet
 
 snippet csvReader "CSV reader" b
-$0const csv = require(\`ya-csv\`)
+$0const csv = require("ya-csv")
 const [ , , file = \`my.csv\` ] = process.argv
 const options = {
   'separator': \`,\`,
@@ -185,8 +178,8 @@ reader.addListener('data', function(data) {
 endsnippet
 
 snippet csvWriter "csvWriter" b
-$0const _ = require(\`lodash\`)
-const csv = require(\`ya-csv\`)
+$0const _ = require("lodash")
+const csv = require("ya-csv")
 const options = {
 	separator: \`,\`
 	, quote: \`"\`
@@ -287,7 +280,7 @@ process.exit(1$0)
 endsnippet
 
 snippet log "logging" b
-const LogDwim = require(\`@nilsboy/log-dwim\`)
+const LogDwim = require("@nilsboy/log-dwim")
 const logger = new LogDwim()
 const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logger
 endsnippet
@@ -317,7 +310,8 @@ module.exports = class `!p snip.rv = className()` {
 endsnippet
 
 snippet con "constructor" w
-constructor({$0}) {
+constructor(${1:{}}) {
+	$0
 }
 endsnippet
 
@@ -364,7 +358,7 @@ afterEach(() => {
 endsnippet
 
 snippet mockstdout "mock stdout and stderr" b
-const stdMocks = require(\`std-mocks\`)
+const stdMocks = require("std-mocks")
 
 afterEach(() => {
   // make sure std* get restored after failing tests
@@ -382,30 +376,30 @@ it(\`$1\`, () => {
 endsnippet
 
 snippet lockfile "Create lockfile" b
-const lockFile = require(\`lockfile\`)
+const lockFile = require("lockfile")
 // TODO: use default paths module
 lockFile.lockSync(\`/var/lock/$1.lock\`)
 lockFile.unlockSync(\`/var/lock/$1.lock\`)
 endsnippet
 
-snippet promise "promise" b
+snippet promisify "promise" b
 // use export BLUEBIRD_DEBUG=1 or NODE_ENV=development to see long stacktraces
-const Promise = require(\`bluebird\`)
+const Promise = require("bluebird")
 
 // const mv = Promise.promisify(fs.move, {
 //   context: fs
 //})
 endsnippet
 
-snippet walk "file walk" b
-const fileWalker = require(\`klaw-sync\`)
+snippet find "file walk" b
+const fileWalker = require("klaw-sync")
 const paths = fileWalker($1).map((entry) => {
   ${0:entry = entry.path}
 })
 endsnippet
 
 snippet glob-req "glob" b
-const glob = require(\`glob\`).sync
+const glob = require("glob").sync
 endsnippet
 
 snippet ls "loop through all globbed files" b
@@ -491,11 +485,11 @@ fs.removeSync($1)
 endsnippet
 
 snippet paths "xdg default paths" b
-const xdgPaths = require(\`env-paths\`)(${1:appName})${2:.log}
+const xdgPaths = require("env-paths")(${1:appName})${2:.log}
 endsnippet
 
 snippet tilde "expand tilde in filenames" w
-const expandTilde = require(\`expand-tilde\`)
+const expandTilde = require("expand-tilde")
 ${1:file} = expandTilde($1)
 endsnippet
 
@@ -515,7 +509,7 @@ const LOG_DIRECTORY = require(`unique-temp-dir`)()
 endsnippet
 
 snippet cleanup "run cleanup on program exit" b
-require(\`node-cleanup\`)((exitCode, signal) => {
+require("node-cleanup")((exitCode, signal) => {
   $0
 })
 endsnippet
@@ -542,8 +536,8 @@ snippet formatter_ignore "exclude the next node in the abstract syntax tree from
 endsnippet
 
 snippet request "request" b
-const bluebird = require(\`bluebird\`)
-const superagent = require(\`superagent\`)
+const bluebird = require("bluebird")
+const superagent = require("superagent")
 const request = require(\`superagent-bluebird-promise\`)
 
 let response = await request
@@ -569,8 +563,8 @@ endsnippet
 #   return xmlEscape(input)
 # }
 snippet handlebars "handlebars" b
-const handlebars = require(\`handlebars\`)
-require(\`swag\`).registerHelpers(handlebars)
+const handlebars = require("handlebars")
+require("swag").registerHelpers(handlebars)
 
 function fillTemplate(data) {
   const templateRaw = fs
@@ -592,16 +586,16 @@ snippet match "match" b
 let [ , ${3:capture groups} ] = ${1:value}.match(/${2:regex}/) || []$0
 endsnippet
 
-snippet matches "matches" w
-match(/${1:regex}/$0)
+snippet "\.match(es)*" "match" r
+.match(/${1:regex}/$0)
 endsnippet
 
 snippet regex "regex" w
-new RegExp(\`${1:regex}\`, \`${2:i}\`)
+new RegExp(\`${1:regex}\`, \`${2:i}\`)$0
 endsnippet
 
 snippet stdin-loop "stdin" b
-process.stdin.pipe(require(\`split\`)()).on(\`data\`, processLine)
+process.stdin.pipe(require("split")()).on(\`data\`, processLine)
 
 function processLine(line) {
 }
@@ -625,7 +619,7 @@ snippet pm2_config "pm2_config" b
       name: \`$1\`
       , script: \`./src/index.js\`
       , watch: true
-      , ignore_watch: [\`.git\`, \`test\`, \`node_modules\`]
+      , ignore_watch: [\`*.md\`, \`test\`, \`node_modules\`, \`log\`, \`.*\`]
       , restart_delay: 500
       , max_restarts: 1
       , min_uptime: 5000
@@ -647,7 +641,7 @@ snippet reverse-proxy "reverse-proxy" b
 
 // reverse proxy
 
-const proxy = require(\`redbird\`)({
+const proxy = require("redbird")({
   port: 6000
 })
 
@@ -655,7 +649,7 @@ proxy.register(\`fqdn\`, \`http://127.0.0.1:3001/path\`)
 endsnippet
 
 snippet packageJson "packageJson" b
-const packageJson = path.join(require(\`packpath\`).self(), \`package.json\`)
+const packageJson = path.join(require("packpath").self(), \`package.json\`)
 endsnippet
 
 snippet "(const|let)+" "const|let toggle" r
@@ -833,9 +827,21 @@ $0
 }
 endsnippet
 
+snippet mapasync "mapasync" b
+await Promise.all(
+	${VISUAL}${0:foo.map(return async)}
+)
+endsnippet
+
 snippet map "map" b
 $1 = _.map($1, ($2) => {
 	return $0
+})
+endsnippet
+
+snippet "\.map" ".map" r
+.map(($1) => {
+	${VISUAL}$0
 })
 endsnippet
 
@@ -951,6 +957,13 @@ snippet 404 "notfound" w
 throw new errors.NotFound(\`$0\`)
 endsnippet
 
+snippet testfile "testfile" b
+describe
+beforeeach
+aftereach
+test
+endsnippet
+
 snippet describe "describe" b
 describe(\`$1\`, () => {$0
 ${VISUAL}
@@ -1030,6 +1043,7 @@ endsnippet
 
 snippet unhandledRejection-catch "promisethrow" b
 process.on(\`unhandledRejection\`, (e) => {
+  console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
   throw e.message, e.stack
 })
 endsnippet
@@ -1094,4 +1108,15 @@ function parseArgv() {
 }
 const argv = parseArgv()
 const filename = argv[\`--filename\`]
+endsnippet
+
+snippet stripindent "stripindent" b
+import {stripIndent} from 'common-tags'
+stripIndent\`
+${VISUAL}$0
+\`
+endsnippet
+
+snippet http400BadRequest "400" b
+res.status(400).send({ error: \`${VISUAL}$0\` })
 endsnippet

@@ -16,6 +16,7 @@ let s:bg = 'bg'
 let s:fg = 'fg'
 let s:bold = 'bold'
 let s:inverse = 'inverse'
+let s:underline = 'underline'
 
 let s:black = '#1C1C1C'
 let s:blackLight = '#444444'
@@ -35,8 +36,8 @@ let s:redLight = '#F8D7DA'
 let s:yellow = '#FFDF00'
 let s:yellowLight = '#ffffaf'
 let s:yellowBright = '#FFF3CD'
-let s:purple = '#5F5F87'
-let s:purpleLight = '#8787AF'
+let s:purple = '#CA78B9'
+let s:purpleLight = '#E4CBED'
 let s:orange = '#FF8700'
 let s:gold = '#87875F'
 
@@ -57,12 +58,16 @@ execute  'hi Type          guibg='s:none' guifg='s:none' gui='s:none
 execute  'hi Underlined    guibg='s:none' guifg='s:none' gui='s:none
 
 execute  'hi LineNr        guibg='s:greyLight' guifg='s:none' gui='s:none
-execute  'hi NonText       guibg='s:none' guifg='s:grey' gui='s:none
+execute  'hi NonText       guibg='s:none' guifg='s:greyLight' gui='s:none
 
 execute  'hi Pmenu         guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi PmenuSbar     guibg='s:grey' guifg='s:none' gui='s:none
 execute  'hi PmenuSel      guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi PmenuThumb    guibg='s:none' guifg='s:none' gui='s:none
+
+if nb#isNeovim()
+  execute  'hi MsgArea       guibg='s:greyBright' guifg='s:blackLight' gui='s:none
+endif
 
 execute  'hi ErrorMsg      guibg='s:redLight' guifg='s:none' gui='s:none
 execute  'hi WarningMsg    guibg='s:yellowBright' guifg='s:none' gui='s:none
@@ -86,7 +91,7 @@ execute  'hi helpNormal    guibg='s:none' guifg='s:none' gui='s:none
 execute  'hi StatusLine    guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi StatusLineNC  guibg='s:greyLight' guifg='s:none' gui='s:none
 
-execute  'hi Visual        guibg='s:yellow' guifg='s:none' gui='s:none
+execute  'hi Visual        guibg='s:yellowLight' guifg='s:none' gui='s:none
 execute  'hi VisualNOS     guibg='s:greyLight' guifg='s:none' gui='s:none
 
 execute  'hi FoldColumn    guibg='s:greyLight' guifg='s:none' gui='s:none
@@ -96,11 +101,11 @@ execute  'hi VertSplit     guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi WildMenu      guibg='s:greenLight' guifg='s:none' gui='s:none
 
 execute  'hi Function      guibg='s:none' guifg='s:green' gui='s:bold
-execute  'hi Title         guibg='s:greenLight' guifg='s:green' gui='s:bold
+execute  'hi Title         guibg='s:greenLight' guifg='s:blackLight' gui='s:none
 
 execute  'hi DiffAdd       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi DiffChange    guibg='s:yellowLight' guifg='s:none' gui='s:none
-execute  'hi DiffDelete    guibg='s:redLight' guifg='s:none' gui='s:none
+execute  'hi DiffDelete    guibg='s:redLight' guifg='s:redLight' gui='s:none
 execute  'hi DiffText      guibg='s:redLight' guifg='s:none' gui='s:none
 
 execute  'hi IncSearch     guibg='s:yellow' guifg='s:blackLight' gui='s:none
@@ -108,13 +113,20 @@ execute  'hi Search        guibg='s:yellowLight' guifg='s:blackLight' gui='s:non
 
 execute  'hi Directory     guibg='s:none' guifg='s:blue' gui='s:none
 
-execute  'hi SpellBad      guibg='s:none' guifg='s:none' gui=underline guisp='s:redLight
-execute  'hi SpellCap      guibg='s:none' guifg='s:none' gui=underline guisp='s:redLight
-execute  'hi SpellLocal    guibg='s:none' guifg='s:none' gui=underline guisp='s:yellowLight
-execute  'hi SpellRare     guibg='s:none' guifg='s:none' gui=underline guisp='s:blueLight
+" NOTE: undercurl and underline colors needs tmux >= 2.9 - works in
+" gnome-terminal
+" (https://github.com/tmux/tmux/issues/1492)
+execute  'hi SpellBad      guibg='s:none' guifg='s:none' gui='s:underline' guisp='s:red
+execute  'hi SpellCap      guibg='s:none' guifg='s:none' gui='s:underline' guisp='s:red
+execute  'hi SpellLocal    guibg='s:none' guifg='s:none' gui='s:underline' guisp='s:red
+execute  'hi SpellRare     guibg='s:none' guifg='s:none' gui='s:underline' guisp='s:red
 
-execute  'hi ColorColumn   guibg='s:greyLight' guifg='s:none' gui='s:none
-execute  'hi SignColumn    guibg='s:greyLight' guifg='s:none' gui='s:none
+execute  'hi ColorColumn   guibg='s:greyBright' guifg='s:none' gui='s:none
+
+execute  'hi SignColumn    guibg='s:greyBright' guifg='s:none' gui='s:none
+execute  'hi ErrorSign     guibg='s:greyBright' guifg='s:red' gui='s:none
+execute  'hi WarningSign   guibg='s:greyBright' guifg='s:yellow' gui='s:none
+execute  'hi InfoSign      guibg='s:greyBright' guifg='s:green' gui='s:none
 
 " TODO:
 execute 'hi QuickFixLine guibg='s:blueBright' guifg='s:blackLight' gui='s:none
@@ -129,10 +141,6 @@ execute 'hi qfFileName   guibg='s:none' guifg='s:blackLight' gui='s:none
 execute 'hi qfSeparator  guibg='s:none' guifg='s:blackLight' gui='s:none
 execute 'hi qfLineNr     guibg='s:none' guifg='s:blackLight' gui='s:none
 execute 'hi qfError      guibg='s:none' guifg='s:blackLight' gui='s:none
-
-execute 'hi MyStatusLineProject guibg='s:greyLight' guifg='s:none' gui='s:none
-execute 'hi MyStatusLineDirectory guibg='s:greyLight' guifg='s:none' gui='s:none
-execute 'hi MyStatuslineFile guibg='s:blueBright' guifg='s:none' gui='s:none
 
 hi link Boolean            Constant
 hi link Character          Constant

@@ -17,4 +17,5 @@ autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 autocmd BufRead,BufNewFile ctags.conf setlocal filetype=ctags
 autocmd BufRead,BufNewFile *proxy*/*.conf* setlocal filetype=nginx
 autocmd BufRead,BufNewFile *.class setlocal filetype=class
+autocmd BufRead,BufNewFile pm2.json setlocal filetype=javascript
 

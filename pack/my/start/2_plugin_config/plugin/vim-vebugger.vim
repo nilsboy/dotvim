@@ -3,8 +3,8 @@
 " NOTE: Need to escape spaces in arguments i.e.: 
 " VBGstartNInspect ./node_modules/.bin/jest -i -t "^service\ registered\ the\ service$" test/services/myservice-v1.test.js 
 
-" sign define vebugger_current text=-> linehl=MoreMsg
-" sign define vebugger_breakpoint text=** linehl=WarningMsg
+" sign define vebugger_current text=-> texthl=MoreMsg linehl=MoreMsg
+" sign define vebugger_breakpoint text=** texthl=WarningMsg linehl=WarningMsg
 
 " NOTE: debug nodejs: NODE_DEBUG=net - https://github.com/mattinsler/longjohn
 

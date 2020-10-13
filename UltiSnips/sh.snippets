@@ -157,3 +157,30 @@ endsnippet
 snippet install-if-missing "install-if-missing" b
 type $1 &>/dev/null || pkexec apt install $1$0
 endsnippet
+
+snippet try "try" b
+set +e
+${VISUAL}
+set -e
+endsnippet
+
+snippet pipe "pipe" b
+echo """
+foo
+bar
+""" | tac
+endsnippet
+
+snippet err "err" b
+err() { echo -e "$@" 1>&2; }
+endsnippet
+
+snippet while "while" b
+while $1 ; do
+	${VISUAL}$0
+done
+endsnippet
+
+snippet tempfile "create tempfile" b
+tmp=$(mktemp --suffix=.$0)
+endsnippet

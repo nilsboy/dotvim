@@ -2,6 +2,8 @@
 " let &l:comments = 's1:[",ex:"]'
 " let &l:commentstring = '["%s"]'
 
+let b:formatter = 'prettier-json'
+
 setlocal wrap
 let &l:commentstring = '// %s'
 
@@ -40,7 +42,7 @@ MyInstall prettier
 MyInstall json2yaml
 function! MyJsonToYaml() abort
   silent wall
-  silent !cat % | json2yaml - > %:r.yaml
+  silent !json2yaml % > %:r.yaml
   silent edit %:r.yaml
 
   " Fix broken output

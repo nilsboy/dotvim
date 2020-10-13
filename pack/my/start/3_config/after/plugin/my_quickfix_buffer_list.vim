@@ -1,8 +1,5 @@
 " based on: https://vi.stackexchange.com/a/2127
 
-" TODO: duplicate filenames
-" TODO: exclude special buffers quickfix
-
 function! my_quickfix_buffer_list#list() abort
   let currentBufnr = bufnr('%')
   let list = 

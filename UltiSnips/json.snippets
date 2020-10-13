@@ -1,3 +1,14 @@
+global !p
+
+def compB(t, opts):
+  if t:
+    opts = [m[len(t):] for m in opts if m.startswith(t)]
+  if len(opts) == 1:
+    return opts[0]
+  return "(" + '|'.join(opts) + ')'
+
+endglobal
+
 snippet s "String" w
 "${1:key}": "${2:value}",$0
 endsnippet
@@ -34,15 +45,6 @@ snippet null "Null" b
 "${0:key}": null,
 endsnippet
 
-global !p
-def compB(t, opts):
-  if t:
-    opts = [m[len(t):] for m in opts if m.startswith(t)]
-  if len(opts) == 1:
-    return opts[0]
-  return "(" + '|'.join(opts) + ')'
-endglobal
-
 snippet b "Bool" b
 "${1:key}": $2`!p snip.rv=compB(t[2], ['true', 'false'])`,
 endsnippet
@@ -51,30 +53,12 @@ snippet pm2_package_json "pm2_package_json" b
 "scripts": {
   "setup": "npm install",
   "start": "pm2 start pm2.json",
-  "stop": "pm2 stop pm2.json",
+	"stop": "pm2 delete pm2.json",
   "restart": "pm2 restart pm2.json",
   "status": "pm2 ls pm2.json",
   "logs": "pm2 logs --lines 100 pm2.json",
   "monitor": "pm2 monit pm2.json",
   "dev": "bash bin/app.sh -d"
+	"dev": "npm stop ; pm2 start pm2.json --watch"
 },
-endsnippet
-
-snippet tern_config "tern_config" b
-{
-  "ecmaVersion": 6,
-  "libs": [
-    "browser",
-    "jquery",
-    "requirejs",
-    "commonjs"
-  ],
-  "plugins": {
-    "node": {},
-    "doc_comment": {
-      "fullDocs": true,
-      "strong": true
-    }
-  }
-}
 endsnippet

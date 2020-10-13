@@ -1,3 +1,5 @@
+" TODO: jump to current if last
+"
 " TODO: add key to add entry before current or just first?
 " TODO: don't jump in special buffers
 
@@ -5,8 +7,12 @@
 " NOTE: Marks can be restored using undo and redo.
 " NOTE: Do extended marks always keep their position?
 
-let g:my_bufhist#dir = getcwd() . '/.git'
-let g:my_bufhist#file = g:my_bufhist#dir . '/my_bufhist.json'
+let g:my_bufhist#dir = getcwd() .. '/.git'
+if ! isdirectory(g:my_bufhist#dir)
+  let g:my_bufhist#dir = stdpath('data') 
+endif
+
+let g:my_bufhist#file = g:my_bufhist#dir .. '/my_bufhist.json'
 
 function! my_bufhist#clear() abort
   let g:my_bufhist#loc = []
@@ -36,7 +42,7 @@ nnoremap <silent> <leader>se :execute 'edit ' . my_bufhist#file<cr>
 nnoremap <silent> <leader>sc :call my_bufhist#clear()<cr>
 
 function! my_bufhist#index() abort
-  return g:my_bufhist#index . ' of ' . len(g:my_bufhist#loc)
+  return g:my_bufhist#index + 1 . ' of ' . len(g:my_bufhist#loc)
 endfunction
 
 function! my_bufhist#lastLoc() abort
@@ -97,7 +103,7 @@ function! my_bufhist#jump(to) abort
   " call nb#info('### jj174 g:my_bufhist#loc(): ',  g:my_bufhist#loc())
   " call nb#info('### jj188 g:my_bufhist#loc[a:to]: ',  g:my_bufhist#loc[a:to])
   if ! g:my_bufhist#isSameLoc(g:my_bufhist#loc(), g:my_bufhist#loc[a:to])
-    call nb#info('##################################### jj156')
+    " call nb#info('##################################### jj156')
     call remove(g:my_bufhist#loc, a:to)
     " if g:my_bufhist#index >= a:to
     "   let g:my_bufhist#index = g:my_bufhist#index - 1

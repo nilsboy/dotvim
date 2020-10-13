@@ -15,12 +15,14 @@ let g:vrc_show_command = 1
 let g:vrc_show_command_in_result_buffer = 1
 let g:vrc_show_command_in_quickfix = 0
 
+let g:vrc_curl_timeout = '5s'
+
 let g:vrc_horizontal_split = 1
 let g:vrc_set_default_mapping = 0
 let g:vrc_syntax_highlight_response = 0
 
-" be quiet and only show errors
-" note --insecure causes: curl: (7) Couldn't connect to server
+" Be quiet and only show errors.
+" NOTE: --insecure causes: curl: (7) Couldn't connect to server
 let g:vrc_curl_opts = {
       \ '-i' : '',
       \ '-L' : '',
@@ -31,10 +33,6 @@ let g:vrc_curl_opts = {
       \ '--trace-time': '',
       \}
       " \ '--max-time' : '3',
-
-      " always generates 'curl: (7) Couldn't connect to server'
-      " as first line in the output:
-      " \ '--insecure' : '1',
 
 " Sorts the JSON keys
 let g:vrc_auto_format_response_enabled = 0
@@ -55,7 +53,7 @@ function! MyRestConsoleCall(...) abort
   bwipe!
   execute 'keepjumps edit ' filename
 
-  %delete _
+  keepjumps %delete _
   keepjumps normal! "zP
 
   setlocal buftype=
@@ -70,13 +68,13 @@ function! MyRestConsoleCall(...) abort
   if is_json
     let b:formatter = 'prettier-json'
     setlocal filetype=json
-    keepjumps call MakeWith(b:formatter)
+    keepjumps call MakeWith(b:formatter, 1)
   endif
 
   keepjumps normal! gg
   " call append(0, [filename])
   write
-  setlocal nowrap
+  " setlocal nowrap
 endfunction
 
 if exists("b:my_vim_rest_console_ftPluginLoaded")

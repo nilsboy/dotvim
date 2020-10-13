@@ -14,4 +14,4 @@ let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 " [error] > 3 |   title: Product offering - Produktangebote
 " [error]     | ^^^^^^^^
 
-let &makeprg .= " 'e/^()()\\[error\\].+\\s+\\((\\d+)\\:(\\d+)\\)$/gm'"
+let &makeprg .= " 'e/^()\\[error\\].+\\s+\\((\\d+)\\:(\\d+)\\)$/gm'"

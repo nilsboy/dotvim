@@ -1,6 +1,8 @@
 " TODO: add?: https://github.com/lebab/lebab
 " TODO: Get source of core node modules: i.e. process.binding("natives").assert
 
+" NOTE: use `node --prof` for a call trace
+
 let b:formatter = 'prettier'
 let b:tester = 'jest'
 " TODO:
@@ -9,17 +11,19 @@ let b:tester = 'jest'
 " support module filenames
 setlocal iskeyword+=-
 
-setlocal suffixesadd=.js,.node,.json
+setlocal suffixesadd=.js,.node,.json,.ts
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
 let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
+
 let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\s*\(.+\{|^\s*(static)*\s*(async)*\s*\w+\s*\(.+\{|^[\w\.]+\s*\=)'
 " let b:outline = '^\s*(?!if)\s*(static)*\s*(async)*\s*\w+\s*\(.+\{'
 " const deactivateBundleItem = async(item) => {
 let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static|function)\b)*\s*\w+\s*\(.*\{$|\s*class\s+\w+\b|[\w\.]+\s*=)|^\s{0,2},*\s*\w+\s*\:*\s*\{$'
+let b:outline = '(module.exports|async|function|\s+\w+\:\s*[^''"`]*[({]$|\s+\w+\(.*\{$)'
 
-let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>'
-" *b:match_skip*
-" *b:match_ignorecase*
+let b:outline = '(^\s*((async)\s*.+\(.*\)\s*{)\s*$|.*class \w+|constructor|module.exports)'
+
+let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>:`,`'
 
 nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>
 
@@ -41,7 +45,7 @@ function! MyJavascriptIncluedExpr() abort
 endfunction
 set includeexpr=MyJavascriptIncluedExpr()
 
-nnoremap <buffer> <silent><leader>lI yi`:execute 'terminal npm install ' . @"<cr>
+nnoremap <buffer> <silent><leader>lI yi":execute 'terminal npm install ' . @"<cr>
 
 " edit module documention
 nnoremap <buffer> <silent> <leader>lmm yi`:execute 'edit ./node_modules/' . @" . '/README.md'<cr>

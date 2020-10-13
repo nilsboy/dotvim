@@ -23,6 +23,11 @@ function! nb#buffer#close() abort
 
   silent! pclose
 
+  if len(win_findbuf(bufnr('%'))) > 1
+    quit
+    return
+  endif
+
   if BufferIsCommandLine() == 1
     silent! quit
     return
@@ -68,7 +73,7 @@ function! nb#buffer#close() abort
     " silent! q!
   endif
 
-  " use bdelete instead of bwipeout to not loose any marks
+  " use bdelete instead of bwipeout to not loose marks
   silent! bdelete!
 
   if wasQfOpen
@@ -76,6 +81,7 @@ function! nb#buffer#close() abort
     wincmd p
   endif
 
+  set nocursorline
 endfunction
 
 function! nb#buffer#isSpecial() abort

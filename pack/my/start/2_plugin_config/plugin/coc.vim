@@ -6,6 +6,12 @@
 "
 " SEE ALSO: https://github.com/neoclide/coc-sources
 " SEE ALSO: https://www.npmjs.com/search?q=coc-
+"
+" SEE ALSO: Move floating window out of the way:
+" https://github.com/ncm2/float-preview.nvim
+"
+" NOTE: When reinstalling also run:
+"   rm ~/.config/coc/ -rf
 
 function! MyCocInstall(...) abort
   MyInstall yarn npm install -g yarn
@@ -15,6 +21,9 @@ endfunction
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 call coc#add_extension('coc-tsserver')
 call coc#add_extension('coc-ultisnips')
+call coc#add_extension('coc-json')
+" TODO: test
+" call coc#add_extension('coc-sql')
 
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
@@ -49,22 +58,30 @@ augroup MyCocAugroupFixColors
 augroup END
 
 function! MyCocFixColors() abort
-  highlight link CocWarningHighlight normal
-  highlight link CocWarningVirtualText normal
-  highlight link CocErrorVirtualText normal
-  highlight link CocWarningVirtualText normal
-  highlight link CocInfoVirtualText normal
-  highlight link CocHintVirtualText normal
-  highlight link CocErrorHighlight normal
-  highlight link CocWarningHighlight normal
-  highlight link CocInfoHighlight normal
-  highlight link CocHintHighlight normal
-  highlight link CocHighlightRead normal
-  highlight link CocHighlightWrite normal
-  highlight link CocErrorFloat normal
-  highlight link CocWarningFloat normal
-  highlight link CocInfoFloat normal
-  highlight link CocHintFloat normal
-  highlight link CocCursorRange normal
-  highlight link CocHoverRange normal
+  highlight link CocErrorHighlight Error
+  highlight link CocErrorVirtualText Normal
+  highlight link CocErrorFloat Normal
+
+  highlight link CocWarningHighlight WarningMsg
+  highlight link CocWarningVirtualText WarningMsg
+  highlight link CocWarningFloat Normal
+
+  highlight link CocInfoHighlight SpellBad
+  highlight link CocInfoVirtualText MoreMsg
+  highlight link CocInfoFloat Normal
+
+  highlight link CocHintHighlight SpellBad
+  highlight link CocHintVirtualText MoreMsg
+  highlight link CocHintFloat Normal
+
+  highlight link CocHighlightRead Normal
+  highlight link CocHighlightWrite Normal
+
+  highlight link CocCursorRange Normal
+  highlight link CocHoverRange Normal
+
+  sign define CocError text=\ ┃ texthl=ErrorSign
+  sign define CocWarning text=\ ┃ texthl=WarningSign
+  sign define CocInfo text=\ ┃ texthl=InfoSign
+  sign define CocHint text=\ ┃ texthl=InfoSign
 endfunction

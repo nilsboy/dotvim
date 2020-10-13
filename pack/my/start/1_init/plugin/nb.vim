@@ -146,7 +146,7 @@ function! DUMP(input) abort
   " wincmd _
   silent! only
   keepjumps normal! gg
-  MakeWith prettier-json
+  LMakeWith prettier-json
 endfunction
 
 function! nb#isNeovim() abort
@@ -199,7 +199,7 @@ function! nb#createUniqueSignId() abort
   return id
 endfunction
 
-sign define BlinkLine linehl=Todo
+sign define BlinkLine linehl=Todo texthl=Todo
 function! nb#blinkLine() abort
   let cursorline = &cursorline
   let count = 1
@@ -390,9 +390,9 @@ function! MyBufferIsSpecial(bufnr) abort
   if MyBufferIsVerySpecial(a:bufnr)
     return 1
   endif
-  " if  MyBufferIsScratch(a:bufnr)
-  "   return 1
-  " endif
+  if &previewwindow == 1
+    return 1
+  endif
   return 0
 endfunction
 
@@ -604,13 +604,15 @@ endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
-  execute 'Redir verbose map ' . join(a:000, ' ')
-  execute 'RedirAppend map! ' . join(a:000, ' ')
-  execute 'RedirAppend map  <leader>' . join(a:000, ' ')
-  execute 'RedirAppend map! <leader>' . join(a:000, ' ')
-  " sort u
-  keepjumps g/no mapping found/ normal! "_dd
-  keepjumps g/^$/ normal! "_dd
+  execute 'Redir map ' . join(a:000, '')
+  execute 'RedirAppend map! ' . join(a:000, '')
+  execute 'RedirAppend map <leader>' . join(a:000, '')
+  execute 'RedirAppend map! <leader>' . join(a:000, '')
+  silent! keeppatterns %s/\n\v\s*(last set from)/ | \1/g 
+  silent! g/\v<plug>/d
+  sort u
+  silent! keepjumps g/no mapping found/ normal! "_dd
+  silent! keepjumps g/^$/ normal! "_dd
   keepjumps normal! ggO
   keepjumps normal! gg0i########## map
   setlocal filetype=vim

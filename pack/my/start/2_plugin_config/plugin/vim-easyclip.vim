@@ -1,3 +1,4 @@
+finish
 " Simplified clipboard functionality for Vim
 " NOTE: checkout out yankstack as an alternative for register history
 " NOTE: use this instead of the plugin?:
@@ -28,6 +29,8 @@ let g:EasyClipShareYanks = 1
 let g:EasyClipYankHistorySize = 500
 
 PackAdd svermeulen/vim-easyclip
+
+finish
 
 " inoremap <c-v> <c-x><c-u>
 

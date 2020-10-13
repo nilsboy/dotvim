@@ -2,6 +2,8 @@
 
 ## TODO
 
+- https://old.reddit.com/r/vim/comments/j27gi7/just_made_my_first_plugin_vimbettergrep/
+- semgrep: https://news.ycombinator.com/item?id=23919313
 - parse command output by regex
 - require runners to supply a standard output? (move parsing logic to runner
   script)

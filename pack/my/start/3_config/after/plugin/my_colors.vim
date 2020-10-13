@@ -7,7 +7,7 @@ endif
 set termguicolors
 
 set background=light
-set synmaxcol=200
+set synmaxcol=400
 
 " augroup MyColorsAugroupTrailingWhitespace
 "   autocmd!
@@ -35,7 +35,7 @@ function! MyColorsColorschemeCleanup() abort
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
   " highlight MyColorsEolColor ctermbg=red
 
-  match Todo /\v\ctodo|tbd|note/
+  " match Todo /\v\ctodo|tbd|note/
 
 endfunction
 augroup MyColorsAugroupColorschemeCleanup

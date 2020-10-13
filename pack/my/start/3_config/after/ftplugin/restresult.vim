@@ -1,2 +1,2 @@
 setlocal filetype=jsonc
-setlocal nowrap
+setlocal wrap

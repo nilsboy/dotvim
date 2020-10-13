@@ -1,6 +1,6 @@
-sign define ErrorMsg text=EE linehl=ErrorMsg
-sign define WarningMsg text=WW linehl=WarningMsg
-sign define MoreMsg text=II linehl=MoreMsg
+sign define ErrorMsg text=! texthl=ErrorMsg linehl=ErrorMsg
+sign define WarningMsg text=w texthl=WarningMsg linehl=WarningMsg
+sign define MoreMsg text=i texthl=MoreMsg linehl=MoreMsg
 
 augroup MyQfAugroupHilight
   autocmd!

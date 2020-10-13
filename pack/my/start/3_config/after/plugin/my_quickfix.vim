@@ -1,36 +1,18 @@
 " Search in file names and contents and some quickfix tweaks.
+"
 
 MyInstall rg ripgrep-install
 MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
 
-let g:my_quickfix#currentList = 'quickfix'
-function! my_quickfix#viewList(toggle) abort
-  if g:my_quickfix#currentList == 'quickfix'
-    if a:toggle
-      let g:my_quickfix#currentList = 'loclist'
-      if len(getloclist(0)) == 0
-        call nb#info('Location list is empty.')
-      else
-        lopen
-      endif
-    else
-      copen
-    endif
-  else
-    if a:toggle
-      let g:my_quickfix#currentList = 'quickfix'
-      copen
-    else
-      if len(getloclist(0)) == 0
-        call nb#info('Location list is empty.')
-      else
-        lopen
-      endif
-    endif
+function! my_quickfix#openLoclist() abort
+  if len(getloclist(0)) == 0
+    call nb#info('Location list is empty.')
+    return
   endif
+  lopen
 endfunction
-nnoremap <silent> <tab> :call my_quickfix#viewList(0)<cr>
-nnoremap <silent> <s-tab> :call my_quickfix#viewList(1)<cr>
+nnoremap <silent> <tab> :copen<cr>
+nnoremap <silent> <s-tab> :call g:my_quickfix#openLoclist()<cr>
 
 function! MyQuickfixBufferDir() abort
   return expand("%:p:h")
@@ -69,6 +51,7 @@ function! MyQuickfixSearch(options) abort
   let path = get(options, 'path', '')
   let ignoreCase = get(options, 'ignoreCase', 1)
   let type = get(options, 'type', 0)
+  let multiline = get(options, 'multiline', 1)
 
   if selection
     let term = substitute(MyHelpersGetVisualSelection(), '\v[\r\n\s]*$', '', 'g')
@@ -97,6 +80,8 @@ function! MyQuickfixSearch(options) abort
   if line
     let term = file
   endif
+
+  call setreg('/', term)
 
   " fuzzy search for most case variants and plurals
   if fuzzy
@@ -131,7 +116,7 @@ function! MyQuickfixSearch(options) abort
   endif
 
   if !strict
-    let term = substitute(term, '\v\s+', '.*', 'g')
+    let term = substitute(term, '\v\s+', '[\n]*.*', 'g')
   endif
 
   if wordBoundary && isWordBoundable
@@ -156,7 +141,11 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = "rg --pcre2 --vimgrep --type-add 'javascript:*.js'"
+  let grepprg = "timeout -s kill 5s rg --pcre2 --vimgrep --type-add 'javascript:*.js'"
+
+  if multiline == 1
+    let grepprg .= " -U"
+  endif
 
   " don't search for ignore files
   " let grepprg .= ' --no-ignore --iglob "!.git"'
@@ -205,10 +194,15 @@ function! MyQuickfixSearch(options) abort
   endif
 
   let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
-  let grepprg .= " | errorformatregex 'n/^()(.+?)\\:(\\d+)\\:(\\d+)\\:/gm' 2>&1"
+  let grepprg .= " | errorformatregex 'n/^(.+?)\\:(\\d+)\\:(\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
   let tempfile = tempname()
+
+  if $DEBUG
+    let tempfile .= '-mydebug'
+  endif
+
   call writefile([], tempfile)
 
   if $DEBUG
@@ -226,10 +220,16 @@ function! MyQuickfixSearch(options) abort
 
   if find
     call system(findprg . '>> ' . tempfile)
+    if v:shell_error
+      echoerr 'Error finding.'
+    endif
   endif
   if grep
     if matchFilenameOnly != 1
       call system(grepprg . '>> ' . tempfile)
+      if v:shell_error
+        echoerr 'Error grepping.'
+      endif
     endif
   endif
 
@@ -237,11 +237,10 @@ function! MyQuickfixSearch(options) abort
   " let &l:makeprg = findprg . '\; ' . grepprg
   " make!
 
-  if term != ''
+  if title == ''
     let title = term
-  endif
-  if title != ''
-    let title = 'Search for: ' . title
+    let title = substitute(title, '\v\n', '', 'g')
+    let title = 'Search: ' .. title
   endif
 
   let &l:errorformat = 'errorformatregex:%f:%l:%c:%t:%m,errorformatregex:%f,%f'
@@ -249,7 +248,7 @@ function! MyQuickfixSearch(options) abort
   if line
     call MyQuickfixSetDefaultPos(line, column)
   endif
-  call MyQuickfixSetTitle(title)
+  call setqflist([], 'a', { 'title' : title })
   call cursor(l:save_pos[1:])
   silent! pclose
   " call MyHelpersClosePreviewWindow()
@@ -270,7 +269,7 @@ endfunction
 let g:MyQuickfixAllSearchOptions = []
 function! MyQuickfixAddMappings(key, options) abort
   let options = [
-        \ { 'key': 'f', 'title': '<all files>', 'grep': 0,},
+        \ { 'key': 'f', 'title': '[all files]', 'grep': 0,},
         \ { 'key': 'i', 'ask': 1, },
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
@@ -316,16 +315,19 @@ function! MyQuickfixFindInBufferDir() abort
   return { 'path': MyQuickfixBufferDir() }
 endfunction
 
-
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1 })
 call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
-" call MyQuickfixAddMappings('fn', { 'path': g:MyNotesDir })
 call MyQuickfixAddMappings('ft', { 'type': 1 })
 call MyQuickfixAddMappings('fn', { 'matchFilenameOnly': '1', })
+
+nnoremap <silent><leader>// :let g:MyQuickfixFormatOnce = 'NoFile' \| normal <leader>fbi<cr>
+nnoremap <silent><leader>* :let g:MyQuickfixFormatOnce = 'NoFile' \| normal <leader>fw<cr>
+
+nnoremap <silent> <leader>jj :call MyQuickfixSearch({ 'path': '/tmp', 'term': '.', 'find': 1, 'grep': 0, 'orderBy': 'recent', })<cr>
 
 nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
 nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr>
@@ -350,11 +352,12 @@ function! MyQuickfixOutline(location) abort
   let pcreDefine = b:outline
   if a:location == 'bufferOnly'
     let g:MyQuickfixFormatOnce = 'NoFile'
-    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), })
+    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), 'multiline': 0})
   else
-    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, })
+    call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'multiline': 0})
   endif
   call setqflist([], 'a', { 'title' : 'outline' })
+  " TODO: loop over qf list to find line closest to current and set it
 endfunction
 nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
 nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
@@ -556,11 +559,7 @@ function! MyQuickfixFormatToggle() abort
   endif
 endfunction
 
-function! MyQuickfixSetTitle(title) abort
-  call setqflist([], 'a', { 'title' : a:title })
-endfunction
-
-" TODO: keep cursor in qf
+" TODO: keep cursor position in qf
 " nnoremap <silent> <cmd> 5 {-> execute('pedit ' . MyQuickfixGetCurrent().filename)}
 " nnoremap <silent> <cmd> 5 execute 'pedit ' . MyQuickfixGetCurrent().filename<cr>
 " nnoremap <leader>5 :call MyQuickfixPreview()<cr>

@@ -1,6 +1,7 @@
 let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
-let &makeprg  = 'jest --useStderr --verbose' 
+" let &makeprg  = 'jest --useStderr --verbose' 
+let &makeprg  = 'jest --verbose' 
 
 if g:testNearest
   let testNameRegex = '^\s*(it|test)\([`"''](.*)[`"'']' 
@@ -11,14 +12,39 @@ if g:testNearest
   let &makeprg .= ' --testNamePattern "' . testName . '"'
 endif
 
-let &makeprg .= ' % $* 2>&1'
+" need to use expand instead of % to be able to rerun a test
+" let &makeprg .= ' % $* 2>&1'
+let &makeprg .= ' ' . expand('%:p') . ' $* 2>&1'
 
 " remove colors
 let &makeprg .= ' \| sed -r "s/[[:cntrl:]]\[[0-9]{1,3}m//g"'
 
-let &makeprg .= " \\| errorformatregex "
-let &makeprg .= " 'e/^()\\s*(.+)\\:(\\d+)\\:(\\d+) .+$/gm'"
-" let &makeprg .= " 'e/^\\s*()FAIL (\\S+)()().*$/gm'"
-let &makeprg .= " 'i/^\\s*(at)\\s*.+?\\((node_modules.+?):(\\d+):(\\d+)\\)/gm'"
-let &makeprg .= " 'e/^\\s*(at)\\s*.+?\\((.+?):(\\d+):(\\d+)\\)/gm'"
-let &makeprg .= " 'i/()(\\S+)\\:(\\d+)/gm'"
+" TBD:
+finish
+
+let &makeprg .= " \\| errorformatregex"
+let &makeprg .= " 'e/●/igm'"
+
+" finish
+
+" let &makeprg .= " 'e/error/igm'"
+" let &makeprg .= " 'w/warning/igm'"
+
+" joi error locations:
+let &makeprg .= " 'e/\\[\\d+\\]/igm'"
+
+" match any filename
+" POSIX filename: [-_.A-Za-z0-9]
+let &makeprg .= " 'i/([^\\s\\:\\/\\(\"\\\\]+\\/[^\\s\\:\\(\"\\\\]+\\.\\w+)/igm'"
+
+" filename and location
+let &makeprg .= " 'i/([^\\s\\:\\/\\(\"\\\\]+\\/[^\\s\\:\\(\"\\\\]+\\.\\w+).*?(\\d+)\\:(\\d+)/igm'"
+
+" exclude node_modules
+let &makeprg .= " 'd/node_modules/igm'"
+
+
+
+
+
+

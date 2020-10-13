@@ -19,6 +19,13 @@ set backspace=indent,start
 set splitbelow
 set wrap
 
+" set nomore
+set wildignorecase
+set wildmode=list,full
+set wildoptions=pum
+set wildignore=package-lock.json
+" cnoremap <tab> <C-L><C-D>
+
 " Stay in the middle of the screen
 set scrolloff=999
 
@@ -39,6 +46,7 @@ set display=lastline,uhex,msgsep
 " Vim will wrap long lines at any character in 'breakat'
 set linebreak
 set breakat&vim
+" TODO: unset by coc?
 if nb#isNeovim()
   set breakindent
   " more chars:

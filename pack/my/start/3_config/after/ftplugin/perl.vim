@@ -19,10 +19,3 @@ endif
 let b:did_ftplugin_perl = 1
 
 MyInstall perltidy pkexec apt install perltidy
-
-let g:neoformat_perl_my_formatter = {
-      \ 'exe': 'perltidy',
-      \ 'args': ['-pro=' . $CONTRIB . '/perltidyrc'],
-      \ 'stdin': 1,
-      \ }
-let g:neoformat_enabled_perl = [ 'my_formatter' ]

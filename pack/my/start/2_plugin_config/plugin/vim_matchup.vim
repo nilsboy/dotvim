@@ -17,11 +17,12 @@ function! vim_matchup#clear() abort
   endif
 endfunction
 
-augroup vim_matchup#augroupHighlight
-  autocmd!
-  autocmd CursorHold * :call vim_matchup#clear()  
-  autocmd CursorHold * :call matchup#matchparen#highlight_surrounding()  
-augroup END
+" makes the cursor hang when searching for matches
+" augroup vim_matchup#augroupHighlight
+"   autocmd!
+"   autocmd CursorHold * :call vim_matchup#clear()  
+"   autocmd CursorHold * :call matchup#matchparen#highlight_surrounding()  
+" augroup END
 
 " Remove CursorMoved autocmds for speed up.
 " Open ticket?

@@ -9,21 +9,16 @@
 " :h maparg
 
 " Potentially reassignable keys for normal mode:
-" s, S, Q, Z, <bs>, M, r, R, <space>, Y, -, +
-" <cr> is used in quickfix etc for jumping
-" Maybe use r as secondary leader?
+" s, S, Q, Z, <bs>, M, r, R, <space>, Y, -, +, <cr>
 
 " Possible insert mode leaders:
 " imap <c-b>
 " imap <c-space>
 
-" These are the same for vim
+" These are the same in the terminal:
 " Tab and Ctrl-I (<c-i><c-I>)
 " Enter and Ctrl-M (<c-m>)
 " Esc and Ctrl-[ (<c-[>)
-
-" Clear all mappings
-" :mapclear
 
 " Map space to leader instead of the other way around to keep the original
 " leader in insert mode - because space does not work well there.
@@ -36,9 +31,6 @@ vmap <leader> <nop>
 
 inoremap <c-z> <esc><c-z>
 
-" Save file as root
-command! -nargs=* WriteWithSudo :SudoWrite
-
 " Adding a left shift key does not work like this
 " nnoremap < <shift>
 
@@ -47,7 +39,7 @@ command! -nargs=* WriteWithSudo :SudoWrite
 
 " use <leader>! as prefix to remap stuff
 " Remap <C-i> as it's the same as Tab
-" nnoremap <leader>!a <C-o> haha
+" nnoremap <leader>!a <C-o> foo
 " nnoremap <leader>!b <C-i>
 
 " jumplist
@@ -148,9 +140,6 @@ vnoremap <nowait>> >gv
 " similar to gv, reselects the last changed block
 nnoremap gV `[v`]
 
-" hide annoying quit message
-" nnoremap <C-c> <C-c>:echo<cr>
-
 " always search forward and N backward, use this
 " nnoremap <expr> n 'Nn'[v:searchforward]
 " nnoremap <expr> N 'nN'[v:searchforward]
@@ -167,11 +156,11 @@ nnoremap <leader>vem :Verbose cmap <bar> map<cr>
 nnoremap <leader>/? :Verbose map <leader>/<cr> <bar>
 
 " open search history and select last entry
-nnoremap <leader>// q/k
+nnoremap <leader>/k q/k
 
 " search for selection
 " vnoremap <leader>// y:execute '/' . @"<cr>
-vnoremap <leader>// y:/\V<c-r>"<cr>
+" vnoremap <leader>// y:/\V<c-r>"<cr>
 nnoremap <leader>/C /\v^\s*[/"#]+<cr>
 
 " search for character under cursor
@@ -221,19 +210,13 @@ nnoremap c# #NcgN
 nnoremap cg* g*Ncgn
 nnoremap cg# g#NcgN
 
-nnoremap <leader>vK :execute 'help ' . expand('<cword>')<cr>
-vnoremap <leader>vK y:execute 'help ' . escape(expand(@"), ' ')<cr>
-
 " Go to alternate file
 nnoremap <bs> <c-^>
 
 " Replace selection
 nnoremap gs :%s//g<Left><Left>
-xnoremap gs y:%s/<C-r>"//g<Left><Left>
-nnoremap gS :%s/<C-r><C-w>/<c-r><c-w>/g<left><left>
-xnoremap gS :%s/<C-r>"/<c-r>"/g<left><left>
-
-nnoremap gsw "zyiw:%s/\c\<<c-r>z\\>//g<Left><Left>
+xnoremap gs "zy:%s/<C-r>z//g<Left><Left>
+nnoremap gS "zyiw:%s/<C-r>z//g<Left><Left>
 
 " Quickly jump to buffers
 nnoremap gb :ls<cr>:buffer<space>
@@ -241,17 +224,8 @@ nnoremap gb :ls<cr>:buffer<space>
 " select last pasted text
 nnoremap vi<space>p `[v`]
 
-command! -nargs=* EditInBufferDir
-      \ :execute 'edit ' . expand('%:p:h') . '/' . expand('<args>')
-
 " Toggle highlighting current matches
 nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
-
-set nomore
-set wildignorecase
-set wildmode=list,full
-set wildoptions=pum
-" cnoremap <tab> <C-L><C-D>
 
 " Marks:
 " switch lower case marks with uppercase ones
@@ -264,20 +238,8 @@ sunmap m
 " nnoremap ' `
 " nnoremap ` '
 
-augroup z1_my_mappings#augroupClearCmdLine
-  autocmd!
-  " autocmd CursorHold * :echo
-  autocmd CursorHold * :call z1_my_mappings#clearCmdLine()
-augroup END
-
-function! z1_my_mappings#clearCmdLine() abort
-  if exists("z1_my_mappings#clearTimer")
-    call timer_stop(z1_my_mappings#clearTimer)
-  endif
-  let z1_my_mappings#clearTimer = timer_start(5000, {-> execute(":echo", "")})
-endfunction
-
 nnoremap gd [<c-d>
+" nnoremap <silent> <leader>gd gd
 
 cnoremap <expr> %% fnameescape(expand('%'))
 cnoremap <expr> %b fnameescape(expand('%:t'))
@@ -299,3 +261,12 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
+function! z1_my_mappings#pm2log() abort
+  Redir !pm2 log --raw --lines 30000 --nostream
+  keepjumps g/last 30000 lines/d
+  keepjumps normal! G
+  " 2020-06-25 15:39: info: Feathers application started on http://localhost:6000
+  silent! keepjumps keeppatterns %s/\v^\d+-\d+-\d+ \d+\:\d+\: //g
+  silent !pm2 flush
+endfunction
+nnoremap <silent> <leader>jl :call z1_my_mappings#pm2log()<cr>

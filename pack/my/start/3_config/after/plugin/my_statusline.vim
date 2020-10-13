@@ -18,6 +18,19 @@ set laststatus=2
 " Prevent mode info messages on the last line to prevent 'hit enter prompt'
 set noshowmode
 
+function! my_statusline#specialBufferName() abort
+  if BufferIsQuickfix()
+    return 'qf'
+  endif
+  if BufferIsLoclist()
+    return 'll'
+  endif
+  if &previewwindow == 1
+    return 'preview'
+  endif
+  return ''
+endfunction
+
 function! MyStatuslineDir() abort
   let dir = expand("%:p:h:t")
   let project = getcwd()
@@ -28,32 +41,45 @@ function! MyStatuslineDir() abort
   return dir
 endfunction
 
-let &statusline .= '%#MyStatuslineProject#'
+let &statusline .= '%#StatusLine#'
 let &statusline .= ' %-0.30{fnamemodify(getcwd(), ":t")} '
 let &statusline .= '%#StatusLine#'
 
-let &statusline .= '%#MyStatuslineDirectory#'
-let &statusline .= '%-0.30( %{MyStatuslineDir()} %)'
+let &statusline .= '%#StatusLine#'
+let &statusline .= '%-0.30(%{MyStatuslineDir()} %)'
 let &statusline .= '%#StatusLine#'
 
-let &statusline .= '%#MyStatuslineFile#'
-let &statusline .= '%( %t %)'
+" don't show names of special buffers
+function! my_statusline#bufferName() abort
+  if MyBufferIsSpecial(bufnr('%'))
+    return ''
+  endif
+  let file = fnamemodify(bufname(), ':t')
+  if file == ''
+    let file = '[No Name]'
+  endif
+  return file
+endfunction
+
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{my_statusline#bufferName()} %)'
 let &statusline .= '%#StatusLine#'
 
-let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %w %)'
-let &statusline .= '%#StatusLine#'
+let &statusline .= '%( %< %)'
 
-let &statusline .= '%<'
-
-function! my_statusline#tuncateRight(value, max) abort
+function! my_statusline#truncateRight(value, max) abort
   if len(a:value) < a:max
     return a:value
   endif
-  return printf("%." . a:max . "s", a:value) . ">"
+  let value = substitute(a:value, '\v\s+.*', '', 'g')
+  return value
+  " return printf("%." . a:max . "s", a:value) . "..."
 endfunction
 
-let &statusline .= '%( %{exists("w:quickfix_title") ? my_statusline#tuncateRight(w:quickfix_title, 60) : ""} %)'
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{exists("w:quickfix_title") ? my_statusline#truncateRight(w:quickfix_title, 30) : ""} %)'
+" let &statusline .= '%( %{exists("w:quickfix_title") ? w:quickfix_title : ""} %)'
+let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%='
 
@@ -119,7 +145,16 @@ let &statusline .= '%#StatusLine#'
 
 " misc
 
-let &statusline .= ' %{&filetype} '
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{my_statusline#specialBufferName()} %)'
+let &statusline .= '%#StatusLine#'
+
+" TODO:
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{my_bufhist#index()} %)'
+let &statusline .= '%#StatusLine#'
+
+let &statusline .= '%( %{my_statusline#specialBufferName() == "" ? &filetype : ""} %)'
 
 let &statusline .= '%#ErrorMsg#'
 let &statusline .= '%( %{exists("b:region_filetype") ? ">" . b:region_filetype : ""} %)'
@@ -138,11 +173,6 @@ let &statusline .= '%( %{substitute(&ff, "unix", "", "g")} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= ' %3l,%-02c %P '
-
-" " TODO:
-" let &statusline .= '%#ErrorMsg#'
-" let &statusline .= '%( %{my_bufhist#index()} %)'
-" let &statusline .= '%#StatusLine#'
 
 let g:MyStatusline = &statusline
 

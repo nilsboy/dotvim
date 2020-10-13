@@ -1,1 +1,1 @@
-nnoremap <silent><buffer> <leader>x :call MyXmlTidy()<CR>
+let b:formatter = 'tidy-xml'
