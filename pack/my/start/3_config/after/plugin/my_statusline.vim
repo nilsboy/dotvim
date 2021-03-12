@@ -61,7 +61,7 @@ function! my_statusline#bufferName() abort
   return file
 endfunction
 
-let &statusline .= '%#MoreMsg#'
+let &statusline .= '%#Cursorline#'
 let &statusline .= '%( %{my_statusline#bufferName()} %)'
 let &statusline .= '%#StatusLine#'
 
@@ -76,7 +76,7 @@ function! my_statusline#truncateRight(value, max) abort
   " return printf("%." . a:max . "s", a:value) . "..."
 endfunction
 
-let &statusline .= '%#MoreMsg#'
+let &statusline .= '%#Cursorline#'
 let &statusline .= '%( %{exists("w:quickfix_title") ? my_statusline#truncateRight(w:quickfix_title, 30) : ""} %)'
 " let &statusline .= '%( %{exists("w:quickfix_title") ? w:quickfix_title : ""} %)'
 let &statusline .= '%#StatusLine#'
@@ -143,18 +143,19 @@ let &statusline .= '%#Cursorline#'
 let &statusline .= '%( %{g:MyStatuslineLoclistOther}. %)'
 let &statusline .= '%#StatusLine#'
 
+" " TODO:
+" let &statusline .= '%#MoreMsg#'
+" let &statusline .= '%( %{my_bufhist#index()} %)'
+" let &statusline .= '%#StatusLine#'
+
 " misc
 
-let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{my_statusline#specialBufferName()} %)'
-let &statusline .= '%#StatusLine#'
+" let &statusline .= '%#MoreMsg#'
+" let &statusline .= '%( %{my_statusline#specialBufferName()} %)'
+" let &statusline .= '%#StatusLine#'
 
-" TODO:
-let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{my_bufhist#index()} %)'
-let &statusline .= '%#StatusLine#'
-
-let &statusline .= '%( %{my_statusline#specialBufferName() == "" ? &filetype : ""} %)'
+" let &statusline .= '%( %{my_statusline#specialBufferName() == "" ? &filetype : ""} %)'
+let &statusline .= '%( %{&filetype} %)'
 
 let &statusline .= '%#ErrorMsg#'
 let &statusline .= '%( %{exists("b:region_filetype") ? ">" . b:region_filetype : ""} %)'

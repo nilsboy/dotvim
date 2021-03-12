@@ -12,6 +12,7 @@ setlocal makeprg=perl\ -c\ %
 setlocal errorformat+=\ %m\ at\ %f\ line\ %l
 
 let b:outline = '^\s*sub'
+let b:formatter = 'perltidy'
 
 if exists("b:did_ftplugin_perl")
   finish

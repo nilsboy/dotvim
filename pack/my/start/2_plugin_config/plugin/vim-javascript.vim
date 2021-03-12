@@ -1,3 +1,4 @@
+finish
 " Vastly improved Javascript indentation and syntax support in Vim
 PackAdd pangloss/vim-javascript
 

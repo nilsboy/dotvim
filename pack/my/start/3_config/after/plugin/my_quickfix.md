@@ -1,4 +1,6 @@
-# Use for: linting, makeing, testing, formatting, finding stuff
+# Possible features form my_quickfix.vim
+
+Use for: linting, makeing, testing, formatting, finding stuff
 
 ## TODO
 
@@ -114,6 +116,6 @@ rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
 its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
 
 ag gives the wrong result for (it returns empty lines as well): let b:define =
-'^[[:upper:]]+[[:upper:][:space:]]+$'
+'^[[:upper:]]+[[:upper:][:space:]]+\$'
 
 ack is to complicated to install and has wontfix bugs pre ack3.

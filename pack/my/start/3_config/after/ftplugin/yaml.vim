@@ -1,7 +1,9 @@
 " exclude colon
 " setlocal iskeyword=1-57,59-255
 
-let b:outline = '^\w+.*\:'
+setlocal suffixesadd=.js,.node,.json,.ts
+
+let b:outline = '(^\w+.*\:|^  \w+.*\:)'
 
 let b:formatter = 'prettier-yaml'
 

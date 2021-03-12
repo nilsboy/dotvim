@@ -1,4 +1,4 @@
-setlocal nowrap
+execute 'setlocal ' . g:MyQuickfixWrap
 
 execute &cmdwinheight . 'wincmd _'
 
@@ -41,6 +41,12 @@ else
   "   autocmd BufLeave <buffer> :silent! lclose
   " augroup END
 endif
+
+augroup qf#augroupResetErrors
+  autocmd!
+  autocmd QuickFixCmdPost <buffer> :let g:MyStatuslineQfErrors = '' 
+  " autocmd QuickFixCmdPostBufLeave <buffer> :let g:MyStatuslineQfErrors = '' 
+augroup END
 
 set cursorline
 

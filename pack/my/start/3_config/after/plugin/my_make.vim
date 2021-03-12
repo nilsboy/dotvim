@@ -30,9 +30,9 @@ function! MakeWith(...) abort
   let view=winsaveview()
   silent! execute 'keepjumps compiler ' . compiler
   if loclist
-    silent! lmake!
+    silent lmake!
   else
-    silent make!
+    make!
   endif
   call winrestview(view)
   " prettier need edit - does not touch timestamp?
@@ -45,8 +45,3 @@ command! -nargs=* LMakeWith call MakeWith(<f-args>, 1)
 nnoremap <silent> <leader>x :call MakeWith(b:formatter, 1)<cr>
 nnoremap <silent> <leader>X :call MakeWith('prettier-json', 1)<cr>
 
-function! my_make#showConfig() abort
-  Redir echo "&makeprg: " | echo &makeprg | echo "" | echo "&errorformat:" | echo &errorformat
-  silent! keepjumps %s/\\|/\r    \\|/g
-endfunction
-nnoremap <silent> <leader>vM :call my_make#showConfig()<cr>

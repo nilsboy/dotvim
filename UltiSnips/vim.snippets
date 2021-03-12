@@ -334,11 +334,11 @@ snippet replace "replace" w
 let $1 = substitute(${1:input}, '${2:search\s\+}', '${3:replace}', 'g')
 endsnippet
 
-snippet loadedftplugin "loadedftplugin" b
-if exists("`!v expand('%:t:r')`#ftpluginLoaded")
+snippet loadedplugin "loadedplugin" b
+if exists("`!v expand('%:t:r')`#loaded")
   finish
 endif
-let `!v expand('%:t:r')`#ftpluginLoaded = 1
+let `!v expand('%:t:r')`#loaded = 1
 endsnippet
 
 # snippet loadedftplugin "ft plugin loaded" b

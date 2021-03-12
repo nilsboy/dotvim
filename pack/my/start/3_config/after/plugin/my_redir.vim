@@ -9,19 +9,21 @@ function! Redir(cmd, append, verbose)
 		silent execute a:cmd
 		redir END
 	endif
-  if !a:append
-    keepjumps execute 'edit ' . fnameescape(a:cmd)
+  if a:append
+    keepjumps normal! Go
+  else
+    let tempfile = tempname() . '_' . fnameescape(a:cmd)
+    keepjumps execute 'edit ' . tempfile
     only
-    setlocal buftype=nowrite
+    " setlocal buftype=nowrite
+    write
   endif
-  keepjumps normal! Go
   if a:verbose
-    call append('.', "########## " . a:cmd)
+    call append(line('$'), "### " . a:cmd)
   endif
-  keepjumps normal! G
-	call append('.', split(output, "\n"))
+	call append(line('$'), split(output, "\n"))
   if !a:append
-    keepjumps normal! ggdddd
+    normal! ggdd
   endif
 endfunction
 

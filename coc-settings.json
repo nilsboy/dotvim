@@ -1,5 +1,7 @@
 {
   // https://github.com/Microsoft/vscode/issues/47299
   "javascript.showUnused": false,
-  "typescript.showUnused": false
+  "typescript.showUnused": false,
+  "coc.preferences.floatActions": false,
+  "coc.preferences.promptInput": false
 }

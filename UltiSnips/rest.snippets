@@ -1,14 +1,15 @@
 snippet init "init" b
 # defaults
-http://localhost:$1
+http://localhost:8080
 --
+--
+
 --
 GET /$0
 endsnippet
 
 snippet post "post" b
 --
-# ${1:description}
 POST /
 {
   $0

@@ -1,11 +1,52 @@
-priority 2
+priority 3
 
 extends javascript
+
+global !p
+
+def toggle(t, opt):
+  opts = t.split('|')
+  pos = opts.index(opt)
+  if len(opts) == pos + 1:
+    pos = 0
+  else:
+    pos = pos + 1
+  return opts[pos]
+
+def toCamelCase(v):
+  v = re.sub(r'.*/', r'', v)
+  return re.sub(r'(\W)', r'', v.title())
+  return v
+  v = re.sub(r'^[\/\.]+', r'', v)
+  return v
+  return v.title()
+  return re.sub(r'(\W)', r'', v.title())
+
+def toMethodCase(v):
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'^[\.\/]*', r'', v)
+  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+
+def className():
+  v = snip.basename[0:1].upper()
+  v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
+  return v
+
+def escape(v):
+  return re.sub(r'`', r'\`', v)
+
+endglobal
 
 snippet unhandledRejection-catch "promisethrow" b
 process.on(\`unhandledRejection\`, (e: any) => {
   console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
   throw e
 })
+endsnippet
+
+snippet class "class" b
+export default class `!p snip.rv = className()` {
+  ${VISUAL}$0
+}
 endsnippet
 

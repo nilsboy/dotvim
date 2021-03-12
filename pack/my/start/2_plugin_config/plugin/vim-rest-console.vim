@@ -16,6 +16,8 @@ let g:vrc_show_command_in_result_buffer = 1
 let g:vrc_show_command_in_quickfix = 0
 
 let g:vrc_curl_timeout = '5s'
+" TODO: remove
+let g:vrc_curl_timeout = '1m'
 
 let g:vrc_horizontal_split = 1
 let g:vrc_set_default_mapping = 0
@@ -64,15 +66,17 @@ function! MyRestConsoleCall(...) abort
 
   call matchadd('todo', '\v^// (HTTP.* \d+.*$|age: \d+\s*$|.*cache.*)')
 
-  let is_json = search('json', 'n')
+  let is_json = search('// content-type: application/json', 'n')
   if is_json
     let b:formatter = 'prettier-json'
     setlocal filetype=json
     keepjumps call MakeWith(b:formatter, 1)
   endif
 
+  silent! keeppatterns keepjumps %s/\\n/\r/g
   keepjumps normal! gg
   " call append(0, [filename])
+  setlocal filetype=text
   write
   " setlocal nowrap
 endfunction

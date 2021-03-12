@@ -29,6 +29,10 @@ function! my_test#test(rerun)
   let currentCwd = getcwd()
   execute 'cd ' . g:my_test#cwd
   silent make
+  let title = &makeprg
+  let title = substitute(title, '\vtimeout \d*s\s+', '', 'g') 
+  call setqflist([], 'a', { 'title' : title })
   execute 'cd ' . currentCwd
+  cwindow
 endfunction
 

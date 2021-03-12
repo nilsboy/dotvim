@@ -54,8 +54,10 @@ fi
 endsnippet
 
 snippet trap "trap" b
-function cleanup() { test -e "$1" && rm "$1$0" ; }
-trap cleanup ERR
+function cleanup() {
+	test -e "$1" && rm "$1$0"
+}
+trap cleanup ERR INT
 endsnippet
 
 snippet eof "eof" b
@@ -183,4 +185,13 @@ endsnippet
 
 snippet tempfile "create tempfile" b
 tmp=$(mktemp --suffix=.$0)
+endsnippet
+
+snippet tempdir "tempdir" b
+dir=$(mktemp -d)
+cd $dir
+endsnippet
+
+snippet tailfromline "tailfromline" b
+tail -n+${1:line} ${0:file}
 endsnippet

@@ -132,9 +132,13 @@ snippet stderr "stderr"
 process.stderr.write(${VISUAL}$0)
 endsnippet
 
+snippet system "system" b
+exec
+endsnippet
+
 snippet exec "exec" b
 const execa = require("execa")
-const $0 = execa(\`${VISUAL}$1\`)
+const $0 = await execa(\`${VISUAL}$1\`, [])
 endsnippet
 
 snippet execsync "exec" b
@@ -233,6 +237,12 @@ if($1) {
 endsnippet
 
 snippet else "else"
+else {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet elsei "else"
 } else {
   ${VISUAL}$0
 endsnippet
@@ -271,7 +281,7 @@ endsnippet
 snippet fori "fori" b
 for(let i = 0; i < $1.length; i++)
 {
-  $0
+  ${VISUAL}$0
 }
 endsnippet
 
@@ -295,12 +305,6 @@ endsnippet
 
 snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
-endsnippet
-
-snippet class6 "class" b
-export default class `!p snip.rv = className()` {
-  ${VISUAL}$0
-}
 endsnippet
 
 snippet class "class" b
@@ -472,7 +476,7 @@ for(let entry of fs.readdirSync(${1:directory})) {
 }
 endsnippet
 
-snippet pj "path.join" w
+snippet pathjoin "path.join" w
 path.join($0)
 endsnippet
 
@@ -752,24 +756,24 @@ $0 = await require(\`get-stdin\`)()
 endsnippet
 
 snippet j "j" b
-console.error(\`${VISUAL}$0\`)
+console.log(\`${VISUAL}$0\`)
 endsnippet
 
 snippet jj "here"
 
-console.error('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
+console.log('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
 
 endsnippet
 
 snippet jjj "seperator"
 
-console.error(\`\n################################################################jj`!v DebugId()`$0\n\`)
+console.log(\`\n################################################################jj`!v DebugId()`$0\n\`)
 
 endsnippet
 
 snippet jd "dump" w
 
-console.error(\`### jj`!v DebugId()` %s:\n%o\n### jj`!v DebugId()`\`, \``!p snip.rv = escape(t[1])`\`, ${VISUAL}$1$0)
+console.log(\`### jj`!v DebugId()` %s:\n%o\n### jj`!v DebugId()`\`, \``!p snip.rv = escape(t[1])`\`, ${VISUAL}$1$0)
 
 endsnippet
 
@@ -787,7 +791,7 @@ endsnippet
 # for that?
 snippet jd2 "dump" w
 
-console.error(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
+console.log(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
 
 endsnippet
 
@@ -858,7 +862,7 @@ snippet try "try" b
 try {
   ${VISUAL}
 } catch (e) {
-$0
+console.error(e.message)$0
 }
 endsnippet
 
@@ -880,7 +884,7 @@ endsnippet
 
 snippet while "while" w
 while($1) {
-	$0
+	${VISUAL}$0
 }
 endsnippet
 
@@ -894,7 +898,7 @@ Array.isArray($0)
 endsnippet
 
 snippet isObject "isObject" w
-typeof $0 === `object`
+typeof $0 === \`\`
 endsnippet
 
 snippet keys "object keys" w
@@ -957,7 +961,7 @@ snippet 404 "notfound" w
 throw new errors.NotFound(\`$0\`)
 endsnippet
 
-snippet testfile "testfile" b
+snippet test-init "testfile" b
 describe
 beforeeach
 aftereach
@@ -987,8 +991,8 @@ async function main() {
   // TODO: error check
   const hosts = [\`dev1\`]
   for (const host of hosts) {
-    // const e = execa(\`ssh\`, [host, \`pm2\`, \`log\`], {
-    const e = execa(\`ssh\`, [host, \`tail\`, \`-f\`, \`/etc/hosts\`], {
+    // const e = await execa(\`ssh\`, [host, \`pm2\`, \`log\`], {
+    const e = await execa(\`ssh\`, [host, \`tail\`, \`-f\`, \`/etc/hosts\`], {
       // stdio: \`inherit\`
       // , reject: false
       // , buffer: false
@@ -1044,7 +1048,7 @@ endsnippet
 snippet unhandledRejection-catch "promisethrow" b
 process.on(\`unhandledRejection\`, (e) => {
   console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
-  throw e.message, e.stack
+  throw e
 })
 endsnippet
 
@@ -1119,4 +1123,20 @@ endsnippet
 
 snippet http400BadRequest "400" b
 res.status(400).send({ error: \`${VISUAL}$0\` })
+endsnippet
+
+snippet fetch "fetch" b
+const fetch = require("node-fetch")
+const $2 = await fetch(\`${VISUAL}${1:url}\`, {
+	method: \`${3:get}\`,
+	body: \`\`,$0
+	headers: { "Content-Type": "application/json" },
+})
+endsnippet
+
+snippet regex_with_caputure_groups "regex_with_caputure_groups" b
+var XRegExp = require("xregexp")
+const cregex = XRegExp(regex, flags)
+XRegExp.forEach(this.data, cregex, async (match, i) => {
+})
 endsnippet

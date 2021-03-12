@@ -105,7 +105,7 @@ execute  'hi Title         guibg='s:greenLight' guifg='s:blackLight' gui='s:none
 
 execute  'hi DiffAdd       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi DiffChange    guibg='s:yellowLight' guifg='s:none' gui='s:none
-execute  'hi DiffDelete    guibg='s:redLight' guifg='s:redLight' gui='s:none
+execute  'hi DiffDelete    guibg='s:redLight' guifg='s:none' gui='s:none
 execute  'hi DiffText      guibg='s:redLight' guifg='s:none' gui='s:none
 
 execute  'hi IncSearch     guibg='s:yellow' guifg='s:blackLight' gui='s:none

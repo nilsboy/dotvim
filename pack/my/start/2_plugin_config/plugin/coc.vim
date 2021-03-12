@@ -42,12 +42,12 @@ nnoremap <silent> <leader>lK :call CocAction('doHover')<cr>
 
 " inoremap <silent> <expr> <c-space> coc#refresh()
 
-" Show signature help while editing
-augroup MyCocAugroupCoc
-  autocmd!
-  autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup END
+" " Show signature help while editing
+" augroup MyCocAugroupCoc
+"   autocmd!
+"   autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
+"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" augroup END
 
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'

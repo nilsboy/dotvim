@@ -1,4 +1,5 @@
 --backup-and-modify-in-place
+-bext='/'
 --standard-error-output
 --indent-columns=2
 --continuation-indentation=2

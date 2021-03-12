@@ -52,10 +52,10 @@ if nb#isNeovim()
   " more chars:
   " :help digraph-table
   " ≡ ↪ »«‖⇒→><│▓├┠▶ ↑^∟┃
-  let &showbreak=repeat('┃', &tabstop - 1) . " " 
+  let &showbreak=repeat(' ', &tabstop - 2) . "┃ " 
+  " let &showbreak=repeat(' ', &tabstop - 2) . "» "
 else
-  " let &showbreak=repeat(' ', &tabstop * 2) . "↪ "
-  let &showbreak=repeat('›', &tabstop - 1) . " " 
+  let &showbreak=repeat(' ', &tabstop - 2) . "› "
 endif
 
 set mousehide
@@ -108,6 +108,7 @@ set suffixesadd=.txt,.md
 " set diffopt=filler,internal,algorithm:histogram,indent-heuristic
 " TODO: possible to use word-diff like git?: git diff --word-diff-regex=[^[:space:]]
 set diffopt+=algorithm:patience,indent-heuristic,iwhiteall,iblank
+let &fillchars = "diff: ,eob: "
 
 " set verbose=10
 " set diffexpr=MyDiff()

@@ -172,7 +172,7 @@ function! TrimWS(str)
 endfunction
 
 " Reduce a range of lines to only the unique ones, preserving order...
-function! Uniq (...) range
+function! Uniq(...) range
   " Ignore whitespace differences, if asked to...
   let ignore_ws_diffs = len(a:000)
 
@@ -584,40 +584,37 @@ command! -nargs=* RemoveNewlineBlocks
 "   autocmd BufEnter * :if &buftype == 'help' | only | endif
 " augroup END
 
-" augroup MyVimrcAugroupListAllBuffers
-"   autocmd!
-"   autocmd BufEnter * :setlocal buflisted
-" augroup END
-
 function! MyZ0MyrcEnv() abort
-  Map
   setlocal filetype=vim
   setlocal nowrap
-  RedirAppendv verbose command
+  Redirv verbose command
   RedirAppendv verbose autocmd
   RedirAppendv verbose messages
   RedirAppendv verbose set
   RedirAppendv verbose let
   RedirAppendv verbose function
   keepjumps normal! gg0
+  let b:outline = '^### '
 endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
-  execute 'Redir map ' . join(a:000, '')
-  execute 'RedirAppend map! ' . join(a:000, '')
-  execute 'RedirAppend map <leader>' . join(a:000, '')
-  execute 'RedirAppend map! <leader>' . join(a:000, '')
-  silent! keeppatterns %s/\n\v\s*(last set from)/ | \1/g 
+  execute 'Redir       verbose map ' . join(a:000, '')
+  execute 'RedirAppend verbose map! ' . join(a:000, '')
+  execute 'RedirAppend verbose map <c-' . join(a:000, '') . '>'
+  execute 'RedirAppend verbose map! <c-' . join(a:000, '') . '>'
+  execute 'RedirAppend verbose map <leader>' . join(a:000, '')
+  execute 'RedirAppend verbose map! <leader>' . join(a:000, '')
+  silent! keeppatterns %s/\v\n\s*(last set from)/xxx \1/ig 
   silent! g/\v<plug>/d
-  sort u
   silent! keepjumps g/no mapping found/ normal! "_dd
   silent! keepjumps g/^$/ normal! "_dd
-  keepjumps normal! ggO
-  keepjumps normal! gg0i########## map
-  setlocal filetype=vim
-  setlocal nowrap
-  keepjumps normal! gg0
+  sort u /\v^\w+/
+  silent! keeppatterns %s/\v(.+)xxx (last set from) (.+) line (\d+)/\3:\4:1:\1/ig 
+  set errorformat&
+  cgetbuffer
+  bwipe
+  copen
 endfunction
 command! -nargs=* Map call Map (<f-args>)
 

@@ -3,7 +3,7 @@ MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
 
 let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
 
-let &makeprg = "prettier --parser yaml --write --loglevel error --prose-wrap=always % 2>&1"
+let &makeprg = "prettier --parser yaml --write --loglevel error --print-width=80 --prose-wrap=always % 2>&1"
 
 let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 
@@ -14,4 +14,4 @@ let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 " [error] > 3 |   title: Product offering - Produktangebote
 " [error]     | ^^^^^^^^
 
-let &makeprg .= " 'e/^()\\[error\\].+\\s+\\((\\d+)\\:(\\d+)\\)$/gm'"
+let &makeprg .= " 'e/^\\[error\\].+\\s+\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/gm'"

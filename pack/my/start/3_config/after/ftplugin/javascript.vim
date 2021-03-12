@@ -3,6 +3,9 @@
 
 " NOTE: use `node --prof` for a call trace
 
+let &l:comments = 's1://'
+let &l:commentstring = '// %s'
+
 let b:formatter = 'prettier'
 let b:tester = 'jest'
 " TODO:
@@ -15,19 +18,22 @@ setlocal suffixesadd=.js,.node,.json,.ts
 let &l:include = '\v<(require\([''"]|from\s+[''"])'
 let &l:define = '\v(class|[:=]\s+function|Object\.defineProperty|\.prototype\.|^\s*const\s+|async\s|\s\w+\(.+\{|module\.exports|^\s*let\s*)'
 
-let b:outline = '(^\s*class\s*.+\{|^\s*(async)*\s*function\s+.+\{|^\s*(test|id)\s*\(.+\{|^\s*(static)*\s*(async)*\s*\w+\s*\(.+\{|^[\w\.]+\s*\=)'
-" let b:outline = '^\s*(?!if)\s*(static)*\s*(async)*\s*\w+\s*\(.+\{'
-" const deactivateBundleItem = async(item) => {
-let b:outline = '^((?!\s*(if|for|while))\s*(\b(async|static|function)\b)*\s*\w+\s*\(.*\{$|\s*class\s+\w+\b|[\w\.]+\s*=)|^\s{0,2},*\s*\w+\s*\:*\s*\{$'
-let b:outline = '(module.exports|async|function|\s+\w+\:\s*[^''"`]*[({]$|\s+\w+\(.*\{$)'
-
-let b:outline = '(^\s*((async)\s*.+\(.*\)\s*{)\s*$|.*class \w+|constructor|module.exports)'
+let b:outline = ''
+let b:outline .= '('
+let b:outline .= '^\s*((async)\s*.+\(.*\)\s*{)\s*$|.*class \w+|constructor|module.exports'
+" tests
+let b:outline .= '|^\s*describe\s*\(|^\s*test\W'
+" function assignment
+let b:outline .= '|^\s*[\w\.]+\s*=\s*function\s+[\w\.]+\('
+" root assignments
+let b:outline .= '|^[\w\.]+\s*=\s*'
+let b:outline .= ')'
 
 let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>:`,`'
 
 nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>
 
-setlocal path+=node_modules,~/src/node/lib
+" setlocal path+=node_modules,~/src/node/lib
 
 " This does what &include by itself should do - but still works a lot
 " better!?!

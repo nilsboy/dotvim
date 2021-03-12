@@ -1,4 +1,4 @@
-snippet swagger "Swagger template" b
+snippet init-swagger "Swagger template" b
 # Example YAML to get you started quickly.
 # Be aware that YAML has indentation based scoping.
 # Code completion support is available so start typing for available options.
@@ -48,4 +48,11 @@ paths:
                   type: string
                 single:
                   type: boolean
+endsnippet
+
+snippet apt "apt" b
+set -ex; \
+apt-get update; \
+apt-get install -y --no-install-recommends \
+$0
 endsnippet

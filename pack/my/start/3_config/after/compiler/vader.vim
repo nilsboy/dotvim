@@ -6,4 +6,4 @@ let &makeprg  = 'vader ' .. expand('%:p') .. ' 2>&1'
 " │     ( 8/10) [EXECUTE] (X) Assertion failure
 
 let &makeprg .= " \\| errorformatregex --filename " .. expand('%:p')
-let &makeprg .= " 'r/execute\\] (.*)$[\\s\\n].*execute\\] \\(X\\) .+$/igm'"
+let &makeprg .= " 'r/execute\\] (?<file>.*)$[\\s\\n].*execute\\] \\(?<row>X\\) .+$/igm'"

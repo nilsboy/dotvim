@@ -1,14 +1,8 @@
 snippet init "init" b
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 
 MAINTAINER ${2:`!v $USER`}
 
-RUN apt-get update
-
-endsnippet
-
-snippet install "apt-get install" b
-RUN apt-get install -y --no-install-recommends $0
 endsnippet
 
 snippet run "RUN shell command" b
@@ -32,9 +26,8 @@ EXPOSE ${1:8000}
 endsnippet
 
 snippet cmd "CMD - start command" b
-# CMD ["/usr/bin/supervisord"]
-# CMD [ "./bin/mailman-web-django-admin", "runserver", "0.0.0.0:8000" ]
-CMD [ "bin/run" ]
+# NOTE: use only for default arguments to ENTRYPOINT!
+CMD [ "-d" ]
 endsnippet
 
 snippet volume "VOLUME" b
@@ -50,7 +43,7 @@ ADD ${1:src} ${2:dst}
 endsnippet
 
 snippet entrypoint "ENTRYPOINT" b
-ENTRYPOINT ${1:command}
+ENTRYPOINT ["$1", "$0"]
 endsnippet
 
 snippet user "USER" b
@@ -94,4 +87,17 @@ COPY . .
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
+endsnippet
+
+snippet apt "apt" b
+RUN \
+  set -ex; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+  $0
+
+RUN \
+  apt-get autoremove -y && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 endsnippet
