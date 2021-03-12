@@ -27,6 +27,9 @@ let b:outline .= '|^\s*describe\s*\(|^\s*test\W'
 let b:outline .= '|^\s*[\w\.]+\s*=\s*function\s+[\w\.]+\('
 " root assignments
 let b:outline .= '|^[\w\.]+\s*=\s*'
+" function
+let b:outline .= '|^\s*function\s+'
+let b:outline .= '|^\s*async\s+function\s+'
 let b:outline .= ')'
 
 let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>:`,`'

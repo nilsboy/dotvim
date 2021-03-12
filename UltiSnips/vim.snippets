@@ -38,6 +38,9 @@ function! $1(...) abort
   ${VISUAL}$0
 endfunction
 command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1(<f-args>)
+" TODO
+" command! -bar -bang -nargs=* -range -complete=custom,tbone#complete_panes Twrite
+"      \ execute tbone#write_command(<bang>0, <line1>, <line2>, <count>, <f-args>)
 endsnippet
 
 snippet n "name something" w
