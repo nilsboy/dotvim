@@ -3,7 +3,15 @@
 
 setlocal suffixesadd=.js,.node,.json,.ts
 
-let b:outline = '(^\w+.*\:|^  \w+.*\:)'
+let b:outline = '('
+" let b:outline .= '^\w+.*\:|^  \w+.*\:|^\s+\/|^\s+(post|get|patch|delete|put)\:'
+" let b:outline .= '^\w+.*\:$'
+" let b:outline .= '|^    \S+.*\:$'
+let b:outline .= '^\s{0,4}\S+.*\:(\s*\||)\s*$'
+let b:outline .= '|^\S+.*:'
+let b:outline .= '|^---$'
+let b:outline .= ')'
+
 
 let b:formatter = 'prettier-yaml'
 

@@ -1,3 +1,7 @@
+" 7af03108-12a4-4ac9-8ac3-358820ed6f14
+" TODO:
+" - too long lines highlight in light grep
+
 " set verbose=13
 " For a list of vim's internal mappings see:
 " :h index
@@ -73,19 +77,9 @@ nnoremap Q :xa<cr>
 " make . work with visually selected lines
 xnoremap . :norm.<CR>
 
+" map gx myself as long as I disable netrw
+nmap gx <leader>gx
 nnoremap <silent> <leader>gx "zyiW:call system("xdg-open " . @z)<cr>
-
-nnoremap <silent><leader>ii :call Web(expand('<cword>'))<cr>
-vnoremap <silent><leader>ii "zy:call Web(@z)<cr>
-
-nnoremap <silent><leader>it :call Web(&filetype, expand('<cword>'))<cr>
-vnoremap <silent><leader>it "zy:call Web(&filetype, @z)<cr>
-
-nnoremap <silent><leader>is :call Web(
-      \ 'site:stackoverflow.com',
-      \ expand('<cword>'))<cr>
-vnoremap <silent><leader>is "zy:call Web(
-      \ 'site:stackoverflow.com', @z)<cr>
 
 " Don't wait after escape in insert mode
 " Breaks curser keys etc. (apparently not in Neovim)
@@ -104,7 +98,7 @@ nnoremap <silent><esc> :call nb#buffer#close()<cr>
 nnoremap <leader>k :cclose \| :lclose<cr> q:i<esc>k
 
 augroup MyVimrcAugroupAdjustWindowSizes
-  autocmd VimEnter,VimResized * :let &previewheight = &lines / 2
+  autocmd VimEnter,VimResized * :let &previewheight = &lines / 3 * 2
   autocmd VimEnter,VimResized * :let &cmdwinheight = &lines / 3 * 2
   autocmd VimEnter,VimResized * :execute 'nnoremap rl ' . &columns / 2 . 'l'
   autocmd VimEnter,VimResized * :execute 'nnoremap rh ' . &columns / 2 . 'h'
@@ -196,13 +190,13 @@ function! MyZ0MyMappingsMessages() abort
         \ . strftime("%H:%M:%S")
         \ . ' ======================='
   Redir messages
-  normal G
+  keepjumps normal G
   setlocal syntax=txt
   silent! %s/\v\<09\>/\t/g
   silent! %s/\v\<00\>/\r/g
   echom ''
 endfunction
-nnoremap <silent> <leader>vm :call MyZ0MyMappingsMessages()<cr><cr>
+nnoremap <silent> <leader>vM :call MyZ0MyMappingsMessages()<cr><cr>
 
 " Easier change and replace word
 nnoremap c* *Ncgn
@@ -253,8 +247,14 @@ function! MyVimrcRtp() abort
 endfunction
 nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
 
-nnoremap <silent> { :keepjumps normal! {<cr>
-nnoremap <silent> } :keepjumps normal! }<cr>
+" nnoremap <silent> { :keepjumps normal! {<cr>
+" nnoremap <silent> } :keepjumps normal! }<cr>
+
+" " TODO:
+" map { <Plug>(IndentWisePreviousEqualIndent)
+" map } <Plug>(IndentWiseNextEqualIndent)
+" map ( <Plug>(IndentWisePreviousLesserIndent)
+" map ) <Plug>(IndentWiseNextGreaterIndent)
 
 nnoremap j gj
 nnoremap k gk

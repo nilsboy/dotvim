@@ -19,3 +19,8 @@ autocmd BufRead,BufNewFile *proxy*/*.conf* setlocal filetype=nginx
 autocmd BufRead,BufNewFile *.class setlocal filetype=class
 autocmd BufRead,BufNewFile pm2.json setlocal filetype=javascript
 
+autocmd BufRead,BufNewFile *.bson setlocal filetype=bson
+
+autocmd BufRead,BufNewFile .env* setlocal filetype=dotenv
+
+autocmd BufRead,BufNewFile *.mongodb setlocal filetype=mongodb

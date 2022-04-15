@@ -65,6 +65,8 @@ execute  'hi PmenuSbar     guibg='s:grey' guifg='s:none' gui='s:none
 execute  'hi PmenuSel      guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi PmenuThumb    guibg='s:none' guifg='s:none' gui='s:none
 
+" execute  'hi NormalFloat   guibg='s:none' guifg='s:blue' gui='s:none
+
 if nb#isNeovim()
   execute  'hi MsgArea       guibg='s:greyBright' guifg='s:blackLight' gui='s:none
 endif
@@ -81,6 +83,9 @@ execute  'hi TabLine       guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi TabLineFill   guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi TabLineSel    guibg='s:greenLight' guifg='s:none' gui='s:none
 
+" TODO:
+" checkout cterm=reverse to change priority with CursorLine:
+" https://old.reddit.com/r/vim/comments/ga4xe0/why_use_reverse_for_tui_highlights/
 execute  'hi Cursor        guibg='s:none' guifg='s:none' gui='s:none
 execute  'hi CursorLine    guibg='s:greyBright' guifg='s:none' gui='s:none
 execute  'hi CursorLineNr  guibg='s:none' guifg='s:none' gui='s:none
@@ -129,14 +134,12 @@ execute  'hi WarningSign   guibg='s:greyBright' guifg='s:yellow' gui='s:none
 execute  'hi InfoSign      guibg='s:greyBright' guifg='s:green' gui='s:none
 
 " TODO:
+" https://stackoverflow.com/questions/60589935/vim-change-highlight-of-current-quickfix-line-quickfixline
 execute 'hi QuickFixLine guibg='s:blueBright' guifg='s:blackLight' gui='s:none
-" execute 'hi QuickFixLine guibg='s:bg' guifg='s:fg' gui='s:inverse
+" hi QuickFixLine gui=bold 
 " execute 'hi QuickFixLine guibg='s:none' guifg='s:none' gui='s:none
-" hi! QuickFixLine NONE
-" hi! link QuickFixLine NONE 
-" hi default QuickFixLine NONE 
-" hi! link QuickFixLine Normal
 
+" also disabled in syntax/qf.vim
 execute 'hi qfFileName   guibg='s:none' guifg='s:blackLight' gui='s:none
 execute 'hi qfSeparator  guibg='s:none' guifg='s:blackLight' gui='s:none
 execute 'hi qfLineNr     guibg='s:none' guifg='s:blackLight' gui='s:none

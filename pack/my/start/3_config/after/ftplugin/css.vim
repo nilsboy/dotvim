@@ -16,12 +16,12 @@ let g:neoformat_css_csscomb = {
       \ }
 
 MyInstall csslint
-let g:ale_linters['css'] = ['mycsslint']
-call ale#linter#Define('css', {
-      \ 'name': 'mycsslint',
-      \ 'executable': 'csslint',
-      \ 'command': g:ale#util#stdin_wrapper . 
-      \ ' .css csslint --format=compact --ignore=important,universal-selector,empty-rules,regex-selectors',
-      \ 'callback': 'ale#handlers#HandleCSSLintFormat',
-      \})
+" let g:ale_linters['css'] = ['mycsslint']
+" call ale#linter#Define('css', {
+"       \ 'name': 'mycsslint',
+"       \ 'executable': 'csslint',
+"       \ 'command': g:ale#util#stdin_wrapper . 
+"       \ ' .css csslint --format=compact --ignore=important,universal-selector,empty-rules,regex-selectors',
+"       \ 'callback': 'ale#handlers#HandleCSSLintFormat',
+"       \})
 

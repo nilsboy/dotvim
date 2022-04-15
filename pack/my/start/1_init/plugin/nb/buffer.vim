@@ -16,12 +16,12 @@ endfunction
 " Close a buffer writing its content and closing vim if appropriate.
 function! nb#buffer#close() abort
 
+  " only close preview-window if open and return
+  silent! wincmd P
   if &previewwindow
-    pclose
+    silent! pclose
     return
   endif
-
-  silent! pclose
 
   if len(win_findbuf(bufnr('%'))) > 1
     quit
@@ -49,6 +49,12 @@ function! nb#buffer#close() abort
     return
   endif
 
+  let wasLlOpen = MyHelpersLoclistIsOpen()
+  if wasLlOpen
+    lclose
+    return
+  endif
+
   lclose
 
   if nb#buffer#isNamed('%')
@@ -69,6 +75,7 @@ function! nb#buffer#close() abort
     else
       keepjumps new | only
       silent! keepjumps edit #
+      execute 'lcd ' . g:start_cwd
     endif
     " silent! q!
   endif
@@ -78,6 +85,11 @@ function! nb#buffer#close() abort
 
   if wasQfOpen
     copen
+    wincmd p
+  endif
+
+  if wasLlOpen
+    lopen
     wincmd p
   endif
 

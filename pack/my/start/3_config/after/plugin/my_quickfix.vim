@@ -201,23 +201,13 @@ function! MyQuickfixSearch(options) abort
   let grepprg .= " | errorformatregex 'n/^(?<file>.+?)\\:(?<row>\\d+)\\:(?<col>\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
-  let tempfile = tempname()
-
-  if $DEBUG
-    let tempfile .= '-mydebug'
-  endif
+  let tempfile = nb#mktemp("qf") . "out"
 
   call writefile([], tempfile)
 
-  if $DEBUG
-    call writefile([tempfile . ':0:0:tempfile'], tempfile, 'a')
-    if find
-      call writefile(['/dev/null:0:0:findprg: ' . findprg], tempfile, 'a')
-    endif
-    if grep
-      call writefile(['/dev/null:0:0:grepprg: ' . grepprg], tempfile, 'a')
-    endif
-  endif
+  call nb#debug("quickfix tempfile: " . tempfile)
+  call nb#debug('findprg: ' . findprg)
+  call nb#debug('grepprg: ' . grepprg)
 
   let g:MyQuickfixFindPrg = findprg
   let g:MyQuickfixGrepPrg = grepprg
@@ -261,7 +251,6 @@ function! MyQuickfixSearch(options) abort
   call setqflist([], 'a', { 'title' : title })
   call cursor(l:save_pos[1:])
   silent! pclose
-  " call MyHelpersClosePreviewWindow()
   copen
 endfunction
 
@@ -282,6 +271,8 @@ function! MyQuickfixAddMappings(key, options) abort
         \ { 'key': 'f', 'title': 'all files', 'grep': 0,},
         \ { 'key': 'i', 'ask': 1, },
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
+        \ { 'key': 'c', 'ask': 1, 'ignoreCase': 0},
+        \ { 'key': 'C', 'ask': 1, 'wordBoundary': 1, 'ignoreCase': 0},
         \ { 'key': 'w', 'expand': '<cword>', 'wordBoundary': 1, },
         \ { 'key': 'W', 'expand': '<cWORD>', 'wordBoundary': 1, },
         \ { 'key': 'l', 'expand': '<cword>', },
@@ -343,7 +334,7 @@ nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git 
 nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr>
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
-nnoremap <silent> <leader>fpp :edit ~/src/<cr>
+nnoremap <silent> <leader>fpp :edit ~/src/README.md<cr>
 
 nnoremap <silent> <leader>vph :execute 'edit '
       \ . stdpath('config') . '/pack/minpac/opt/'
@@ -372,22 +363,6 @@ function! MyQuickfixOutline(location) abort
 endfunction
 nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
 nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
-
-let g:lastCommand = 'echo "Specify command"'
-function! MyQuickfixRun(...) abort
-  let cmd = join(a:000)
-  let &makeprg = cmd
-  let &errorformat = '%f:%l:%c:%t:%m'
-  let g:lastCommand = &makeprg
-  silent wall
-  silent make!
-  copen
-endfunction
-command! -bang -nargs=* Run call MyQuickfixRun(<f-args>)
-nnoremap <leader>ef :call MyQuickfixRun(expand('%:p'))<left>
-nnoremap <leader>ei :Run<space>
-nnoremap <silent> <leader>el :call MyQuickfixRun(substitute(getline('.'), '\v^["#/ ]+', "", ""))<cr>
-nnoremap <silent> <leader>ee :call MyQuickfixRun(g:lastCommand)<cr>
 
 command! -nargs=* MyQuickfixDump call MyQuickfixDump (<f-args>)
 function! MyQuickfixDump(...) abort
@@ -634,12 +609,4 @@ endfunction
 function! MyQlistVars() abort
   silent Verbose set include? define? includeexpr? suffixesadd?
 endfunction
-
-function! my_quickfix#showMakeInfo() abort
-  Redirv echo &makeprg
-  silent! keeppatterns %s/\v \| /\r    | /g
-  RedirAppendv echo &errorformat
-  keepjumps normal gg
-endfunction
-nnoremap <silent> <leader>vi :call my_quickfix#showMakeInfo()<cr>
 

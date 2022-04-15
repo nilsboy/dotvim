@@ -42,9 +42,6 @@ function! MyMarkdownTocRemove() abort
   let line = line + 1
   let lineTo = lineTo - 1
 
-  " call nb#info('line:', line)
-  " call nb#info('lineTo:', lineTo)
-
   keepjumps execute line . ',' . lineTo . 'd _'
 endfunction
 

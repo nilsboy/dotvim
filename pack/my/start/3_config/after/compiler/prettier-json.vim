@@ -1,6 +1,3 @@
-MyInstall prettier
-MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
-
 let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
 
 let &makeprg = "prettier --parser json --write --loglevel error --prose-wrap=always % 2>&1"
@@ -15,4 +12,12 @@ let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 " [error]     | ^^^^^^^^
 
 let &makeprg .= " 'e/^\\[error\\].+\\s+\\((?<row>\\d+)\\:(<col>\\d+)\\)$/gm'"
+let &makeprg .= " 'e/^\/bin\/bash/gm'"
 
+if exists("prettier-json#loaded")
+  finish
+endif
+let prettier-json#loaded = 1
+
+MyInstall prettier
+MyInstall errorformatregex npm install -g @nilsboy/errorformatregex

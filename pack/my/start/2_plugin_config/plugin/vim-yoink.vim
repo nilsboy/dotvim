@@ -6,8 +6,9 @@ set shada+=!
 
 PackAdd svermeulen/vim-yoink
 
-nmap p <plug>(YoinkPaste_p)
-nmap P <plug>(YoinkPaste_P) 
+" TODO: interferes when pressing j or k right after?
+" nmap p <plug>(YoinkPaste_p)
+" nmap P <plug>(YoinkPaste_P) 
 
 nmap [y <plug>(YoinkPostPasteSwapBack)
 nmap ]y <plug>(YoinkPostPasteSwapForward)

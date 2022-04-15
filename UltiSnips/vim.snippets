@@ -60,8 +60,9 @@ g:`!v expand('%:t:r')`#
 endsnippet
 
 snippet fun "Function" b
-function! `!v expand('%:t:r')`#${1:name}($2) abort
-  ${VISUAL}$0
+function! `!v expand('%:t:r')`#${1:name}(opts) abort
+  default$0
+  ${VISUAL}
 endfunction
 endsnippet
 
@@ -82,6 +83,12 @@ endfunction
 endsnippet
 
 snippet if "if" b
+if $1
+  ${VISUAL}$0
+endif
+endsnippet
+
+snippet iff "iff" b
 if ${VISUAL}$1
   $0
 endif
@@ -96,7 +103,7 @@ call nb#info(${VISUAL}$0)
 endsnippet
 
 snippet infoo "info with 1 arg" 
-call nb#info('$1:', $1)
+call nb#info('$1: ' . $1)
 endsnippet
 
 snippet echo "echo with 1 arg"
@@ -179,6 +186,10 @@ snippet existsDir "existsDir" w
 isdirectory($0)
 endsnippet
 
+snippet funarg "function argument" b
+let $1 = get(a:opts, '${1:var}', '${0:default}')
+endsnippet
+
 snippet get "let with default" w
 let $1 = get(${1/\:.*/:/}, '${1/^.*\://}', ${2:default})
 endsnippet
@@ -220,7 +231,7 @@ snippet no "Named object" w
 endsnippet
 
 snippet exe "execute" w
-execute '${VISUAL}$0'
+execute '${VISUAL}$0
 endsnippet
 
 snippet cut "cut a quoted string" w
@@ -240,11 +251,15 @@ snippet nop "<nop>" w
 endsnippet
 
 snippet jj ""
-call nb#info('### jj`!v DebugId()` ${VISUAL}$1$0:',  ${VISUAL}$1)
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
 endsnippet
 
 snippet jjj "here"
-call nb#info('##################################### jj`!v DebugId()`$0')
+call nb#debug('##################################### jj`!v DebugId()` $1'$0)
+endsnippet
+
+snippet jjdump ""
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . json_encode(${VISUAL}$1))
 endsnippet
 
 snippet fileexists "check if a file exists" b
@@ -485,3 +500,4 @@ endsnippet
 snippet returnif "returnif" b
 if ${VISUAL}$0 | return | endif
 endsnippet
+

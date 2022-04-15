@@ -104,7 +104,7 @@ import * as ${2:`!p snip.rv = toCamelCase(t[1])`} from "$1"
 endsnippet
 
 snippet i "import" b
-import ${2:`!p snip.rv = toMethodCase(t[1])`} from "$1"
+import { ${2:`!p snip.rv = toMethodCase(t[1])`} } from "$1"
 endsnippet
 
 snippet ic "import class" b
@@ -133,10 +133,11 @@ process.stderr.write(${VISUAL}$0)
 endsnippet
 
 snippet system "system" b
-exec
+// use: exec
 endsnippet
 
 snippet exec "exec" b
+// NOTE: 4.x syntax - newest is 6.x
 const execa = require("execa")
 const $0 = await execa(\`${VISUAL}$1\`, [])
 endsnippet
@@ -198,30 +199,6 @@ for (const row of data) {
 }
 endsnippet
 
-snippet trace "Trace" w
-TRACE(\`$1\`)
-endsnippet
-
-snippet debug "Debug" w
-DEBUG(\`$1\`)
-endsnippet
-
-snippet info "Info" w
-INFO(\`${VISUAL}$0\`)
-endsnippet
-
-snippet infoo "Info object" w
-INFO(\`${VISUAL}$1:\`, ${VISUAL}$1)
-endsnippet
-
-snippet warn "Warn" w
-WARN(\`$1\`)
-endsnippet
-
-snippet error "Error" w
-ERROR(\`$1\`)
-endsnippet
-
 snippet l "let" w
 let ${1:var} = ${2:\`$3\`}
 endsnippet
@@ -233,6 +210,12 @@ endsnippet
 snippet if "if"
 if($1) {
   ${VISUAL}$0
+}
+endsnippet
+
+snippet iff "iff"
+if($1${VISUAL}$2) {
+  $0
 }
 endsnippet
 
@@ -289,20 +272,6 @@ snippet exit "process.exit" b
 process.exit(1$0)
 endsnippet
 
-snippet log "logging" b
-const LogDwim = require("@nilsboy/log-dwim")
-const logger = new LogDwim()
-const { TRACE, DEBUG, INFO, WARN, ERROR, DIE, DUMP } = logger
-endsnippet
-
-snippet die "die" w
-DIE(\`$0\`)
-endsnippet
-
-snippet diee "die with var" w
-DIE(\`$1:\`, $1)$0
-endsnippet
-
 snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
@@ -350,13 +319,13 @@ assert.throws(() => {
 endsnippet
 
 snippet beforeeach "before each test" b
-beforeEach(() => {
+beforeEach(async () => {
   $0
 })
 endsnippet
 
 snippet aftereach "before each" b
-afterEach(() => {
+afterEach(async () => {
   $0
 })
 endsnippet
@@ -403,6 +372,7 @@ const paths = fileWalker($1).map((entry) => {
 endsnippet
 
 snippet glob-req "glob" b
+// checkout micromatch
 const glob = require("glob").sync
 endsnippet
 
@@ -529,6 +499,11 @@ async function main() {
 }
 
 main()
+endsnippet
+
+snippet main_iife "main_iife" b
+;(async () => {$0
+})()
 endsnippet
 
 snippet nn "\n in quotes" w
@@ -671,8 +646,8 @@ snippet "\.then$" ".then" r
 endsnippet
 
 snippet "\.catch" ".catch" r
-.catch((error) => {
-  $0console.error(error.stack)
+.catch((e) => {
+  $0console.error(e.stack)
 })
 endsnippet
 
@@ -744,7 +719,7 @@ endsnippet
 snippet yaml-read "yaml import" b
 const yaml = require(\`js-yaml\`)
 const expandTilde = require(\`expand-tilde\`)
-const doc = yaml.safeLoad(fs.readFileSync(expandTilde(\`$1\`)))
+const doc = yaml.load(fs.readFileSync(expandTilde(\`$1\`)))
 endsnippet
 
 snippet yaml-write "toYaml" w
@@ -767,7 +742,7 @@ endsnippet
 
 snippet jjj "seperator"
 
-console.log(\`\n################################################################jj`!v DebugId()`$0\n\`)
+console.log(\`\n################################################################ jj`!v DebugId()`$0\n\`)
 
 endsnippet
 
@@ -862,15 +837,19 @@ snippet try "try" b
 try {
   ${VISUAL}
 } catch (e) {
-console.error(e.message)$0
+	console.error(e.message)$0
 }
 endsnippet
 
-snippet finally "finally" b
-try {
-  ${VISUAL}
-} finally {
-$0
+snippet catch "catch" w
+catch (e) {
+	throw e
+}
+endsnippet
+
+snippet finally "finally" w
+finally {
+	$0
 }
 endsnippet
 
@@ -927,8 +906,20 @@ snippet .toj "toJSON()" i
 .toJSON()
 endsnippet
 
-snippet clone "clone" w
-_.merge({}, ${0:src})
+snippet clone "clone" b
+$0_.merge({}, ${VISUAL}$1)
+endsnippet
+
+snippet cloneHard "clone" b
+$0_.clone(${VISUAL}$1)
+endsnippet
+
+snippet cloneWithoutSetters "clone" w
+$0{...${1:obj}}
+endsnippet
+
+snippet mergeWithoutSetters "merge" w
+$0{...${1:obj1}, ...${2:obj2}}
 endsnippet
 
 snippet contains ".contains" w
@@ -939,26 +930,38 @@ snippet containses5 ".contains" w
 indexOf($0) !== -1
 endsnippet
 
+snippet debug "debug" w
+console.log(\`DEBUG> ${VISUAL}$0\`)
+endsnippet
+
+snippet info "info" w
+console.log(\`INFO > ${VISUAL}$0\`)
+endsnippet
+
+snippet infoo "infoo" w
+console.log(\`INFO > ${VISUAL}$1$0:\`, ${VISUAL}$1)
+endsnippet
+
+snippet warn "warn" w
+console.error(\`WARN > ${VISUAL}$0\`)
+endsnippet
+
+snippet error "error" w
+console.error(\`ERROR> ${VISUAL}$0\`)
+endsnippet
+
 snippet cl "echo" w
-console.log(${VISUAL}$0)
+console.log(\`${VISUAL}$0\`)
 endsnippet
 
 snippet ce "echo" w
-console.error(${VISUAL}$0)
+console.error(\`${VISUAL}$0\`)
 endsnippet
 
 snippet test "test" b
 test(\`$1\`, async() => {
 	${VISUAL}$0
 })
-endsnippet
-
-snippet httperrors "http errors" b
-const errors = require(\`feathers-errors\`)
-endsnippet
-
-snippet 404 "notfound" w
-throw new errors.NotFound(\`$0\`)
 endsnippet
 
 snippet test-init "testfile" b
@@ -974,8 +977,7 @@ ${VISUAL}
 })
 endsnippet
 
-priority -1
-snippet d "Interpolated var" i
+snippet "(?<=\W)d" "Interpolated var" r
 \$\{${VISUAL}$1\}$0
 endsnippet
 
@@ -1017,14 +1019,6 @@ snippet assert "assert" b
 assert($0, \`$1\`)
 endsnippet
 
-snippet clone "clone" b
-_.merge({}, ${VISUAL}$0)
-endsnippet
-
-snippet cloneHard "clone" b
-_.clone(${VISUAL}$0)
-endsnippet
-
 snippet joiString "joiString" w
 Joi.string().valid(${VISUAL}$0).required()
 endsnippet
@@ -1045,18 +1039,10 @@ class $1Error extends Error {
 }
 endsnippet
 
-snippet unhandledRejection-catch "promisethrow" b
+snippet catch-unhandledRejection "promisethrow" b
 process.on(\`unhandledRejection\`, (e) => {
   console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
   throw e
-})
-endsnippet
-
-snippet mongotransaction "mongotransaction" b
-const session = await this.client.startSession()
-await session.withTransaction(async() => {
-	${VISUAL}
-	await this.$0(session,)
 })
 endsnippet
 
@@ -1114,6 +1100,12 @@ const argv = parseArgv()
 const filename = argv[\`--filename\`]
 endsnippet
 
+snippet argvZx "argvZx" b
+#!/usr/bin/env zx
+// npm i zx
+await $\`cat foo | grep bar\`
+endsnippet
+
 snippet stripindent "stripindent" b
 import {stripIndent} from 'common-tags'
 stripIndent\`
@@ -1128,15 +1120,69 @@ endsnippet
 snippet fetch "fetch" b
 const fetch = require("node-fetch")
 const $2 = await fetch(\`${VISUAL}${1:url}\`, {
-	method: \`${3:get}\`,
+	method: \`${3:post}\`,
 	body: \`\`,$0
 	headers: { "Content-Type": "application/json" },
 })
 endsnippet
 
-snippet regex_with_caputure_groups "regex_with_caputure_groups" b
+snippet regex_with_caputure_groups_loop "regex_with_caputure_groups" b
 var XRegExp = require("xregexp")
 const cregex = XRegExp(regex, flags)
 XRegExp.forEach(this.data, cregex, async (match, i) => {
 })
 endsnippet
+
+snippet regex_with_caputure_groups "" b
+const XRegExp = require("xregexp")
+const regex = XRegExp(`^(?<name>.+?)$(?<description>.+)`, `ms`)
+const res = XRegExp.exec(row[`Artikelbezeichnung`], regex)
+console.log('### res.groups.name:', res.groups.name)
+endsnippet
+
+snippet regex_with_caputure_groups "regex" b
+const XRegExp = require("xregexp")
+const regex = XRegExp(`^(?<name>.+?)$(?<description>.+)`, `ms`)
+const res = XRegExp.exec(row[`Artikelbezeichnung`], regex)
+console.log('### res.groups.name:', res.groups.name)
+endsnippet
+
+snippet xlsReader "xlsReader" b
+import xlsx from "xlsx"
+import fs from "fs"
+
+const buf = fs.readFileSync("${1:ods or xls etc}")
+const wb = xlsx.read(buf, { type: "buffer" })
+
+const rows = xlsx.utils.sheet_to_json(wb.Sheets.Export)
+
+for (const row of rows) {$0
+}
+endsnippet
+
+snippet mongodbTransaction "mongodbTransaction" b
+const session = client.startSession();
+try {
+	await session.withTransaction(async () => {
+		const coll1 = client.db('${1:database}').collection('${2:collection}');
+		$0await coll1.insertOne({ abc: 1 }, { session });
+		${VISUAL}
+	});
+} finally {
+	await session.endSession();
+	await client.close();
+}
+endsnippet
+
+snippet traverse "traverse" b
+$1import traverse from "traverse"
+function cleanObject(obj: any) {
+  traverse.forEach(obj, function (entry) {
+    $0if (entry === undefined || entry === '') {
+      this.remove()
+    }
+  })
+  return obj
+}
+endsnippet
+

@@ -3,5 +3,11 @@
   "javascript.showUnused": false,
   "typescript.showUnused": false,
   "coc.preferences.floatActions": false,
-  "coc.preferences.promptInput": false
+  "coc.preferences.promptInput": false,
+
+  "coc.preferences.hoverTarget": "preview",
+  "suggest.detailField": "preview",
+  // "diagnostic.messageTarget": "preview",
+  // "signature.target": "preview",
+  // "diagnostic.messageTarget": "preview",
 }

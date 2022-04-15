@@ -136,7 +136,6 @@ function! MyDbextExecSql(sql, name) abort
       let sql .= ' LIMIT 100'
     endif
   endif
-  " call nb#info('sql:', sql)
   call dbext#DB_execSql(sql)
   silent! call MyDbextAfter(a:name)
 endfunction

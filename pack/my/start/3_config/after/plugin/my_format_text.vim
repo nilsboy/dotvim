@@ -7,15 +7,15 @@ finish
 " previous row
 
 function! MyVimrcShowFormatSettings() abort
-  call nb#info('&comments:', &comments)
-  call nb#info('&commentstring:', &commentstring)
-  call nb#info('&formatoptions:', &formatoptions)
-  call nb#info('&formatlistpat:', &formatlistpat)
-  call nb#info('&autoindent:', &autoindent)
-  call nb#info('&smartindent:', &smartindent)
-  call nb#info('&cindent:', &cindent)
-  call nb#info('&textwidth:', &textwidth)
-  call nb#info('&wrap:', &wrap)
+  call nb#info('&comments:' . &comments)
+  call nb#info('&commentstring:' . &commentstring)
+  call nb#info('&formatoptions:' . &formatoptions)
+  call nb#info('&formatlistpat:' . &formatlistpat)
+  call nb#info('&autoindent:' . &autoindent)
+  call nb#info('&smartindent:' . &smartindent)
+  call nb#info('&cindent:' . &cindent)
+  call nb#info('&textwidth:' . &textwidth)
+  call nb#info('&wrap:' . &wrap)
 endfunction
 
 finish

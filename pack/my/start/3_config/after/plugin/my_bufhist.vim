@@ -99,11 +99,7 @@ function! my_bufhist#jump(to) abort
   endif
   " Succeeds even if the line does not exist anymore.
   call setpos('.', g:my_bufhist#loc[a:to].pos)
-  " call nb#info('##################################### jj190')
-  " call nb#info('### jj174 g:my_bufhist#loc(): ',  g:my_bufhist#loc())
-  " call nb#info('### jj188 g:my_bufhist#loc[a:to]: ',  g:my_bufhist#loc[a:to])
   if ! g:my_bufhist#isSameLoc(g:my_bufhist#loc(), g:my_bufhist#loc[a:to])
-    " call nb#info('##################################### jj156')
     call remove(g:my_bufhist#loc, a:to)
     " if g:my_bufhist#index >= a:to
     "   let g:my_bufhist#index = g:my_bufhist#index - 1
@@ -111,7 +107,6 @@ function! my_bufhist#jump(to) abort
     " call setpos('.', g:my_bufhist#loc[g:my_bufhist#index].pos)
     return
   endif
-  " call nb#info('##################################### jj192')
   let g:my_bufhist#index = a:to
 endfunction
 

@@ -5,6 +5,7 @@ finish
 augroup MyUndoubleCompletions
     autocmd!
     autocmd CompleteDone *  call MyUndoubleCompletions()
+" None?:
 augroup None
 
 function! MyUndoubleCompletions()

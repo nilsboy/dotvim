@@ -7,7 +7,9 @@ endif
 set termguicolors
 
 set background=light
-set synmaxcol=400
+" don't highlight long lines completely - for performance
+" for some reason <=65 keeps if fast
+set synmaxcol=200
 
 " augroup MyColorsAugroupTrailingWhitespace
 "   autocmd!
@@ -36,7 +38,6 @@ function! MyColorsColorschemeCleanup() abort
   " highlight MyColorsEolColor ctermbg=red
 
   " match Todo /\v\ctodo|tbd|note/
-
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!

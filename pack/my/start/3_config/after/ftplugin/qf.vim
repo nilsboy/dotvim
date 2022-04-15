@@ -20,6 +20,7 @@ if BufferIsQuickfix()
   nnoremap <buffer><silent> H :silent! colder \| :call MyStatuslineUpateQickfixValues()<cr>
   nnoremap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
   nnoremap <buffer><silent> <leader><cr> :silent call MyQfIsQfListError() \| copen<cr>
+  nnoremap <buffer> x :call qf#closeBuffer()<cr> 
   augroup MyQfAugroupBufferLeave
     autocmd!
     autocmd BufLeave <buffer> :silent! cclose
@@ -54,6 +55,28 @@ if exists("b:MyQfFtpluginLoaded")
     finish
 endif
 let b:MyQfFtpluginLoaded = 1
+
+function! qf#closeBuffer() abort
+  let saved_cursor = getcurpos()
+  let bufnr = getqflist()[getcurpos()[1]-1].bufnr
+  execute 'bd ' . bufnr
+  call qf#RemoveEntry(getcurpos()[1]-1)
+  call MyQuickfixFormat()
+  call setpos('.', saved_cursor)
+endfunction
+
+function! qf#RemoveEntry(lnum) abort
+  let qflist = getqflist()
+  let newQflist = []
+  let i = -1
+  for entry in qflist
+    let i = i + 1
+    if i != a:lnum
+      call add(newQflist, entry)
+    endif
+  endfor
+  call setqflist(newQflist, 'r')
+endfunction
 
 " augroup MyQfAugroupPreview
 "   autocmd!

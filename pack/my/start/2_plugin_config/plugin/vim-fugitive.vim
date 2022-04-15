@@ -3,7 +3,8 @@
 " TBD: checkout vim-flog, git-jump
 PackAdd tpope/vim-fugitive
 
-nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>gs :Git<cr>
+nnoremap <silent> <leader>g3 :vert Gdiffsplit!<cr>
 nnoremap <silent> <leader>gd :Gvdiff<cr>
 nnoremap <silent> <leader>gD :call MyFugitiveProjectDiff()<cr>
 nnoremap <silent> <leader>gm :call MyFugitiveMasterDiff()<cr>

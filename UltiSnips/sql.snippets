@@ -88,11 +88,11 @@ snippet "(USING|ON)+" "USING|ON toggle" r
 `!p snip.rv = toggle('USING|ON', match.group(1))`
 endsnippet
 
-snippet j "join" w
-JOIN 
-endsnippet
+# snippet j "join" w
+# JOIN 
+# endsnippet
 
-snippet jon "join" w
+snippet j "join" w
 JOIN $1 ON (1
   AND $1.${VISUAL}$0
 )

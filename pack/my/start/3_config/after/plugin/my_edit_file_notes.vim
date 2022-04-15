@@ -11,9 +11,9 @@ function! MyEditFileNotes(term)
   let line_of_match = search(a:term)
   if line_of_match == 0
     normal! G
-    :put =a:term . ':'
+    put =a:term . ':'
     normal! o
-    :startinsert
+    startinsert
   endif
 endfunction
 

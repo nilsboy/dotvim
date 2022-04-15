@@ -33,7 +33,6 @@ nnoremap <leader>y :call <sid>hlstart()<cr>
 
 function! s:hlstart() abort
   let b:lastline = get(b:, 'lastline', line('.'))
-  " call nb#info(' b:lastline: ' . b:lastline . ' line: ' . line('.'))
   if b:lastline != line('.')
     call s:hl(b:lastline)
     let b:lastline = line('.')

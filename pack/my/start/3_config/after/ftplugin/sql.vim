@@ -1,3 +1,5 @@
+setlocal nowrap
+
 " let s:new_title = 'Srvr: ' . DB_listOption('profile')
 " exec 'DBSetOption custom_title=' . s:new_title
 

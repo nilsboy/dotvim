@@ -16,8 +16,7 @@ let g:vrc_show_command_in_result_buffer = 1
 let g:vrc_show_command_in_quickfix = 0
 
 let g:vrc_curl_timeout = '5s'
-" TODO: remove
-let g:vrc_curl_timeout = '1m'
+" let g:vrc_curl_timeout = '1m'
 
 let g:vrc_horizontal_split = 1
 let g:vrc_set_default_mapping = 0
@@ -36,14 +35,14 @@ let g:vrc_curl_opts = {
       \}
       " \ '--max-time' : '3',
 
-" Sorts the JSON keys
+" Sort JSON keys
 let g:vrc_auto_format_response_enabled = 0
 
 let g:MyRestConsoleResultId = 0
 function! MyRestConsoleCall(...) abort
 
   let g:MyRestConsoleResultId = g:MyRestConsoleResultId + 1
-  let filename = tempname() . '/rest-call.' . g:MyRestConsoleResultId . '.restresult'
+  let filename = nb#mktemp("rest-call") . g:MyRestConsoleResultId . '.restresult'
 
   let b:winview = winsaveview()
   keepjumps call VrcQuery()
@@ -70,7 +69,7 @@ function! MyRestConsoleCall(...) abort
   if is_json
     let b:formatter = 'prettier-json'
     setlocal filetype=json
-    keepjumps call MakeWith(b:formatter, 1)
+    keepjumps call MakeWith({'compiler': b:formatter, 'loclist': 1})
   endif
 
   silent! keeppatterns keepjumps %s/\\n/\r/g

@@ -29,6 +29,7 @@ function! Man(cmd) abort
     " needs to be written to keep position within file
     silent! update
     call setpos('.', saved_cursor)
+    call setreg('/', '\v^--- .+ -+$|^\w+\(\d\).+')
 endfunction
 command! -nargs=1 Man call Man("<args>")
 

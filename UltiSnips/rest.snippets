@@ -25,3 +25,31 @@ snippet get "get" b
 --
 GET /
 endsnippet
+
+snippet headerContenttypeTextHtml "headerContenttypeTextHtml" b
+Content-Type: text/html; charset=UTF-8
+endsnippet
+
+snippet headerAccept "headerAccept" b
+Accept:application/sparql-results+json
+endsnippet
+
+snippet headerContentTypeUrlEncoded "headerContentTypeUrlEncoded" b
+Content-Type: application/x-www-form-urlencoded
+endsnippet
+
+snippet sparql "sparql" b
+--
+Content-Type: application/x-www-form-urlencoded
+POST /sparql
+query=
+CONSTRUCT WHERE { ?s ?p ?o . }
+endsnippet
+
+snippet passwordAuth "password" b
+basicAuth
+endsnippet
+
+snippet basicAuth "basic auth" b
+-u ${1:login}:${0:password}
+endsnippet

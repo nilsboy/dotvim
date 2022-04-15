@@ -12,7 +12,7 @@ function! Redir(cmd, append, verbose)
   if a:append
     keepjumps normal! Go
   else
-    let tempfile = tempname() . '_' . fnameescape(a:cmd)
+    let tempfile = nb#mktemp("redir") . fnameescape(a:cmd)
     keepjumps execute 'edit ' . tempfile
     only
     " setlocal buftype=nowrite

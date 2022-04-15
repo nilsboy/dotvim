@@ -45,8 +45,102 @@ process.on(\`unhandledRejection\`, (e: any) => {
 endsnippet
 
 snippet class "class" b
-export default class `!p snip.rv = className()` {
+class `!p snip.rv = className()` {
   ${VISUAL}$0
 }
 endsnippet
 
+snippet a "await" w
+await
+endsnippet
+
+snippet ignore "ignore" b
+// @ts-ignore
+endsnippet
+
+snippet importEventEmitter "importEventEmitter" b
+import {EventEmitter} from 'events'
+endsnippet
+
+snippet importNodeModule "importNodeModule" b
+import cytoscape = require('cytoscape')
+endsnippet
+
+snippet eventAwait "eventAwait" b
+await new Promise((fulfill) => ee.on("end", fulfill))
+endsnippet
+
+snippet xlsxReader "xlsxReader" b
+#!/usr/bin/env ts-node
+
+import xlsx from "xlsx"
+import fs from "fs"
+
+var buf = fs.readFileSync("${1:filename}")
+var wb = xlsx.read(buf, { type: "buffer" })
+const rows = xlsx.utils.sheet_to_json(wb.Sheets.${2:sheetname})
+endsnippet
+
+snippet exit "exit" b
+// @ts-ignore
+if (true === true) {
+	process.exit(1)
+}
+endsnippet
+
+snippet init "init" b
+#!/usr/bin/env ts-node
+
+//$0
+endsnippet
+
+snippet ManyToOne "ManyToOne" b
+@ManyToOne({
+	entity: () => ${1:entity},
+	joinColumn: `${2:joinColumn}`,
+})
+$1!: $1
+endsnippet
+
+snippet OneToMany "OneToMany" b
+@OneToMany({
+	entity: () => ${1:entity},
+	mappedBy: "${2:remoteProperty}",
+	joinColumn: "${3:id}",
+	inverseJoinColumn: `${4:remoteId}`,
+})
+$1 = new Collection<$1>(this)
+endsnippet
+
+snippet iife "iife" b
+(() => {${VISUAL}$0})()
+endsnippet
+
+snippet div "div" b
+<div id="$0">
+${VISUAL}
+</div>
+endsnippet
+
+snippet diffdeep "diffdeep" b
+const deep = require(`deep-diff`)
+const diffs = deep.diff(expected, make.toJSON()) || []
+endsnippet
+
+snippet contenteditable "contenteditable" b
+<h1 contenteditable
+	@keyup=${(e: Event) => {
+		this.productOffering.name = (e.target as HTMLElement).innerText
+	}}
+>${this.productOffering.name}</h1>
+endsnippet
+
+snippet sourceOfNodeCoreModule "dump source of a core module" b
+// dump source of module.js:
+node -e 'console.log(process.binding("natives").module)'
+endsnippet
+
+snippet exfun "export function" b
+export async function ${1:name}($0) {
+}
+endsnippet

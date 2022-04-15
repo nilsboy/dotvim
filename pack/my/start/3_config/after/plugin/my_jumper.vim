@@ -5,6 +5,7 @@ finish
 " - save only one entry for files opened but not edited
 
 " TODO: There are a lot more signs than marks - use them instead?
+" TODO: remove escaped buffers from alternate buffer or remove from jump list?
 
 let g:MyJumperDir = stdpath("data") . '/jumper'
 let g:MyJumperFile = g:MyJumperDir . '/jumps'
@@ -64,7 +65,7 @@ function! MyJumperAdd(action) abort
 
   call nb#debug('================== add\n'
         \ .  a:action
-        \ , fnamemodify(new.filename, ':t'))
+        \ . fnamemodify(new.filename, ':t'))
 
   if new.filename == ''
     return
@@ -261,9 +262,9 @@ function! MyJumperJumpTo(pos) abort
   let bufnum = bufnr(pos.filename)
 
   call nb#debug('Jumping to'
-        \ , 'b:' . bufnum
-        \ , fnamemodify(pos.filename, ':t') . '/' . pos.lnum
-        \ , '(' . pos.mark . ')')
+        \ . 'b:' . bufnum
+        \ . fnamemodify(pos.filename, ':t') . '/' . pos.lnum
+        \ . '(' . pos.mark . ')')
 
   let mark_pos = getpos("'" . pos.mark)
   if mark_pos == [0, 0, 0, 0]

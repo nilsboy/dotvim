@@ -4,8 +4,12 @@ endsnippet
 
 snippet if "if" b
 if [[ $1 ]] ; then
-	$0
+	${VISUAL}$0
 fi
+endsnippet
+
+snippet elseif "elseif" b
+elif [[ $1 ]] ; then
 endsnippet
 
 snippet fun "function" b
@@ -194,4 +198,8 @@ endsnippet
 
 snippet tailfromline "tailfromline" b
 tail -n+${1:line} ${0:file}
+endsnippet
+
+snippet sudogui "sudogui" b
+pkexec
 endsnippet

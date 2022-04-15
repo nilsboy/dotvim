@@ -44,19 +44,20 @@ let g:MyDbConfigProfileName = 'specifyProfileName'
 
 nnoremap <leader>d <nop>
 
-nnoremap <leader>di     :call MyDbInfos()<cr>
-nnoremap <leader>dp     :call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
+nnoremap <silent> <leader>di     :call MyDbInfos()<cr>
+nnoremap <silent> <leader>dp     :call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 
-nnoremap <leader>dd  mayip:call MyDbExecSql(@", '[query]')<cr>
-nnoremap <leader>dD  mayip:call MyDbExecSql(@", '[query]', '', 1)<cr>
+nnoremap <silent> <leader>dd  mayip:call MyDbExecSql(@", '[query]')<cr>
+nnoremap <silent> <leader>dD  mayip:call MyDbExecSql(@", '[query]', '')<cr>
 
-nnoremap <leader>dtt    :call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
-nnoremap <leader>dtc mayiw:call MyDbExecSql('SHOW CREATE TABLE ' . @", @" . '.[create_table]', '--yaml')<cr>
-nnoremap <leader>dtd mayiw:call MyDbExecSql('DESCRIBE '. @", @" . '.[desc]')<cr>
-nnoremap <leader>dts mayiw:call MyDbExecSql('SELECT * FROM ' . @" . ' ORDER BY 1 DESC', @" . '.[contents]')<cr>
+nnoremap <silent> <leader>dtt    :call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
+nnoremap <silent> <leader>dtc mayiw:call MyDbExecSql('SHOW CREATE TABLE ' . @", @" . '.[create_table]', '--yaml')<cr>
+nnoremap <silent> <leader>dtd mayiw:call MyDbExecSql('DESCRIBE '. @", @" . '.[desc]')<cr>
+" nnoremap <silent> <leader>dts mayiw:call MyDbExecSql('SELECT * FROM ' . @" . ' ORDER BY 1 DESC', @" . '.[contents]')<cr>
+nnoremap <silent> <leader>dts mayiw:call MyDbExecSql('SELECT * FROM ' . @" . ' ORDER BY 1 DESC', @")<cr>
 " some tables take too long when queried in DESC order
-nnoremap <leader>dtS mayiw:call MyDbExecSql('SELECT * FROM ' . @", @" . '.[contents]')<cr>
-nnoremap <leader>dtC mayiw:call MyDbExecSql(
+nnoremap <silent> <leader>dtS mayiw:call MyDbExecSql('SELECT * FROM ' . @", @" . '.[contents]')<cr>
+nnoremap <silent> <leader>dtC mayiw:call MyDbExecSql(
       \ 'SELECT COUNT(*) FROM ' . @", @" . '.[count]')<cr>
 
 let g:MyDbConfigOptions = ''
@@ -64,6 +65,7 @@ nnoremap <silent> <leader>doo :let g:MyDbConfigOptions = ''<cr>
 nnoremap <silent> <leader>doy :let g:MyDbConfigOptions .= ' --yaml '<cr>
 nnoremap <silent> <leader>doj :let g:MyDbConfigOptions .= ' --json '<cr>
 nnoremap <silent> <leader>doc :let g:MyDbConfigOptions .= ' --csv '<cr>
+nnoremap <silent> <leader>doi :let g:MyDbConfigOptions .= ' --sql-insert'<cr>
 
 let g:MyDbConfigLimit = 10000
 nnoremap <silent> <leader>dll :let g:MyDbConfigLimit = 10000<cr>
@@ -78,7 +80,7 @@ function! MyDbExecSql(...) abort
   let sql = get(a:000, 0, '')
   let name = get(a:000, 1, '')
   let cmd_options = get(a:000, 2, '')
-  let print_query = get(a:000, 3, '')
+  let add_counter = get(a:000, 3, 0)
 
   " TODO: hack
   " Restore cursor position - `normal y` moves cursor - in manual mode prevented
@@ -86,26 +88,24 @@ function! MyDbExecSql(...) abort
   silent! normal! `a
 
   let limit = g:MyDbConfigLimit
-  " call nb#info('limit:', limit)
 
   if limit
     let limit = ' --limit ' . limit . ' '
   endif
 
   wall
-  let g:MyDbConfigQueryId = g:MyDbConfigQueryId + 1
-	let fileName = '/tmp/' . name . '.' . g:MyDbConfigQueryId . '.sqlresult'
-  if filereadable(fileName)
-    call delete(fileName)
+	let fileName = name
+  if add_counter
+    let g:MyDbConfigQueryId = g:MyDbConfigQueryId + 1
+	  let fileName = fileName '.' . g:MyDbConfigQueryId
   endif
+  let fileName = fileName . '.sqlresult'
+	let fileName = nb#mktempSimple(g:MyDbConfigProfileName, fileName)
 
 	silent execute 'edit ' . fileName
   silent! normal! 1,$"_dd
 
-  if print_query
-    call append(0, ['### Query:', '', sql, '', '### Result:', ''])
-    %s/\%x00/\r/ge
-  endif
+  call nb#debug('Query: ' . sql)
 
 	let cmd = 'NODE_CONFIG_DIR=' . g:MyDbConfigConfigDir
         \ . ' dbquery' 
@@ -114,7 +114,7 @@ function! MyDbExecSql(...) abort
         \ . g:MyDbConfigOptions 
         \ . cmd_options 
 
-  " call nb#info('cmd:', cmd)
+  call nb#debug('cmd: '. cmd)
 
 	let a = systemlist(cmd, sql, 1)
 	call append('$', a)
@@ -131,22 +131,25 @@ function! MyDbConfigSetProfile(...) abort
 endfunction
 
 function! MyDbInfos() abort
-  edit /tmp/database_infos.txt
-  1,$"_d
+  let file = nb#mktempSimple("sql", "db-infos")
+  silent execute 'edit ' . file
+  " 1,$"_d
+  normal! i### SQLs
+  execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.sql'
+  normal! o
+  normal! o
   normal! i### Database profiles
   execute 'normal! o' . g:MyDbConfigConfigDir . '/default.yaml'
   execute 'normal! o' . $HOME . '/src/myconf/README.md'
+  execute 'normal! o' . $HOME . '/src/dbdump/README.md'
   normal! o
   normal! o
   normal! i### Table Data Excerpts
   execute 'normal! o' . $HOME . '/src/sql/table-data-excerpt/README.md'
   normal! o
-  normal! o### SQLs
-  execute 'r! ls -t ' . $HOME . '/src/sql/*.sql'
-  normal! o
   normal! o### Mappings
   RedirAppend map \\d
-  normal! 8gg0
+  normal! gg
 endfunction
 
 nnoremap <leader>dK mayiw:call MyDbConfigKillProcess(@")<cr>

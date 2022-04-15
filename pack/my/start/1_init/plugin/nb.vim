@@ -9,6 +9,24 @@ if exists("g:MyHelpersPluginLoaded")
 endif
 let g:MyHelpersPluginLoaded = 1
 
+function! nb#mktemp(suffix) abort
+  let tempname = tempname() . "/" . a:suffix . "/"
+  call mkdir(tempname, "p", 0700)
+  return tempname
+endfunction
+
+function! nb#mktempSimple(suffix, fileName) abort
+  wall
+  let tempname = fnamemodify(tempname(), ':p:h') . "/" . a:suffix . "/"
+  call mkdir(tempname, "p", 0700)
+  let fileName = tempname . a:fileName
+  if filereadable(fileName)
+    silent! execute "bd " . fileName
+    silent! call delete(fileName)
+  endif
+  return fileName
+endfunction
+
 function! BufferListedCount() abort
   let lastBuffer = bufnr('$')
   let listed = 0
@@ -115,42 +133,44 @@ function! nb#touch(path) abort
   endif
 endfunction
 
+let g:nb#logfile = nb#mktemp("vim") . "log"
+
+nnoremap <silent> <leader>vm :call nb#viewLogfile()<cr><cr>
+function! nb#viewLogfile() abort
+  call writefile(["=== Log messages until " .  strftime("%H:%M:%S") . ' ======================='], g:nb#logfile, 'a') 
+ execute 'edit ' . g:nb#logfile
+ keepjumps normal G
+endfunction
+
 function! nb#debug(...) abort
-  if $DEBUG
-    silent execute '!echo -e "\nDEBUG> ' . join(a:000, ' ')
-          \ . '\n" >> /tmp/vim.log'
-  endif
+  call writefile(["DEBUG> " . join(a:000, ' ')], g:nb#logfile, 'a') 
 endfunction
 
-function! nb#info(...) abort
-  if $DEBUG
-    silent execute '!echo -e "\nINFO > '
-          \ . join(a:000, ' ') . '\n" >> /tmp/vim.log'
-  else
-    echohl MoreMsg | unsilent echom join(a:000, ' ') | echohl None
-  endif
+function! nb#info(msg) abort
+  call writefile(["INFO > " . a:msg], g:nb#logfile, 'a') 
+  echohl MoreMsg | unsilent echom a:msg | echohl None
 endfunction
 
-function! nb#warn(...) abort
-  if $DEBUG
-    silent execute '!echo -e "\nINFO > '
-          \ . join(a:000, ' ') . '\n" >> /tmp/vim.log'
-  else
-    echohl WarningMsg | unsilent echom join(a:000, ' ') | echohl None
-  endif
+function! nb#warn(msg) abort
+  call writefile(["WARN > " . a:msg], g:nb#logfile, 'a') 
+  echohl WarningMsg | unsilent echom a:msg | echohl None
+endfunction
+
+function! nb#error(msg) abort
+  call writefile(["WARN > " . a:msg], g:nb#logfile, 'a') 
+  echohl ErrorMsg | unsilent echom a:msg | echohl None
 endfunction
 
 function! DUMP(input) abort
   execute 'edit ' . tempname() . '.json'
   keepjumps put =json_encode(a:input)
-  " wincmd _
   silent! only
+  call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
   keepjumps normal! gg
-  LMakeWith prettier-json
 endfunction
 
 function! nb#isNeovim() abort
-  return has("nvim-0.2.1")
+  return has("nvim")
 endfunction
 
 " For vim compatibility
@@ -254,17 +274,6 @@ function! GetQuickfixBufferNumber() abort
   endfor
 endfunction
 
-" TODO:
-function! MyGetPreviewBufferNumber() abort
-  for winnr in range(1, winnr('$'))
-    let blist = filter(getwininfo(winnr), 'v:variables.previewwindow')
-    if len(blist) == 0
-      return 0
-    endif
-    return blist[0].bufnr
-  endfor
-endfunction
-
 function! MyHelpersQuickfixIsOpen() abort
   return GetQuickfixBufferNumber() != 0
 endfunction
@@ -277,6 +286,10 @@ function! GetLoclistBufferNumber() abort
     endif
     return qflist[0].bufnr
   endfor
+endfunction
+
+function! MyHelpersLoclistIsOpen() abort
+  return GetLoclistBufferNumber() != 0
 endfunction
 
 function! BufferIsQuickfix(...) abort
@@ -515,19 +528,6 @@ function! RegexToPcre(vim_regex) abort
   return search
 endfunction
 
-command! -nargs=* Web call Web (<f-args>)
-command! -nargs=* WebWithFiletype call Web (&filetype, <f-args>)
-function! Web(...) abort
-  let query = join(a:000, ' ')
-  silent execute '!xdg-open https://duckduckgo.com/?q=' . shellescape(query)
-endfunction
-" SEE ALSO: https://github.com/kabbamine/zeavim.vim
-" Search the web by default instead of manpages
-
-let &keywordprg = ':WebWithFiletype'
-nnoremap <silent> gK :execute 'WebWithFiletype '
-      \ . expand('<cword>')<cr>
-
 " https://stackoverflow.com/a/1534347
 function! MyHelpersGetVisualSelection()
   try
@@ -578,11 +578,6 @@ command! -nargs=* RemoveTrailingSpaces :silent %s/\s\+$//e
 command! -nargs=* RemoveNewlineBlocks
       \ :silent %s/\v\s*\n(\s*\n)+/\r\r/eg
       \ | :silent %s/\n*\%$//eg
-
-" augroup MyVimrcAugroupMaximizeHelp
-"   autocmd!
-"   autocmd BufEnter * :if &buftype == 'help' | only | endif
-" augroup END
 
 function! MyZ0MyrcEnv() abort
   setlocal filetype=vim
@@ -636,3 +631,4 @@ endfunction
 function! nb#getScriptFunction(scriptPath, name) abort
   return function(nb#getScriptFunctionName(a:scriptPath, a:name))
 endfunction
+

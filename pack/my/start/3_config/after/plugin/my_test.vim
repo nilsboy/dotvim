@@ -1,3 +1,6 @@
+" Moved to MakeWith
+finish
+
 let g:testNearest = 0
 let g:my_test#cwd = getcwd()
 
@@ -19,7 +22,7 @@ function! my_test#test(rerun)
   if a:rerun == 0
     let g:my_test#cwd = getcwd()
     execute 'compiler! ' . b:tester
-    let &makeprg = 'timeout 5s ' . &makeprg
+    " let &makeprg = 'timeout 5s ' . &makeprg
     let g:my_test#makeprg = &makeprg
     let g:my_test#errorformat = &errorformat
   else
@@ -28,6 +31,7 @@ function! my_test#test(rerun)
   endif
   let currentCwd = getcwd()
   execute 'cd ' . g:my_test#cwd
+  call nb#debug('Running test with &makeprg: ' . &makeprg)
   silent make
   let title = &makeprg
   let title = substitute(title, '\vtimeout \d*s\s+', '', 'g') 

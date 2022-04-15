@@ -1,0 +1,13 @@
+# defaults
+http://localhost:8081
+--
+--
+
+--
+GET /sparql?query=CONSTRUCT%20WHERE%20%7B%3Fs%20%3Fp%20%3Fo.%7DLIMIT%20100
+
+--
+Content-Type: text/html; charset=UTF-8
+POST /sparql
+  CONSTRUCT WHERE { ?s ?p ?o . }
+

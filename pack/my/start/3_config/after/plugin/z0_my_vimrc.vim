@@ -102,8 +102,8 @@ set modelines=0
 set updatetime=1000
 set suffixesadd=.txt,.md
 
-" don't echo make output to screen
-" let &shellpipe = '&>'
+" return proper exit code from the shell
+set shellpipe=2>&1\ \|\ tee\ %s;exit\ \${PIPESTATUS[0]}
 
 " set diffopt=filler,internal,algorithm:histogram,indent-heuristic
 " TODO: possible to use word-diff like git?: git diff --word-diff-regex=[^[:space:]]

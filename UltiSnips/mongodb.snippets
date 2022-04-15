@@ -1,0 +1,132 @@
+snippet update "update" b
+db.${1:collection}.update({
+	'${2:search key}': '${3:search value}'
+},
+[{
+	$set : { '${4:set key}': '${5:$set.value}' }
+}],
+{"multi": true});
+endsnippet
+
+snippet "bl" "find" b
+db.${1:collection}.find({
+	'${2:search key}': '${3:search value}'
+},
+{
+	'${4:show key}': 1,$0
+})
+endsnippet
+
+snippet findCount "count" w
+.count()
+endsnippet
+
+snippet findlike "like" b
+db.${1:collection}.find({
+	'${2:search key}': /${3:regex}/
+},
+{
+	'${4:show key}': 1,$0
+})
+endsnippet
+
+snippet insert "insert" b
+db.${1:collection}.insertMany([
+   {$0},
+])
+endsnippet
+
+snippet drop "drop" b
+db.${1:collection}.drop()
+endsnippet
+
+snippet delete "delete" b
+db.${1:collection}.deleteMany({
+	${2:delete key} : '${0:delete value}'
+})
+endsnippet
+
+snippet isNull "isNull" w
+{$exists: true, $eq: null},
+endsnippet
+
+snippet isNotNull "isNotNull" w
+{$exists: true, $ne: null},
+endsnippet
+
+snippet isUndefined "isUndefined" w
+{$exists: false},
+endsnippet
+
+snippet "(==|eq)" "eq" r
+{$eq: $0},
+endsnippet
+
+snippet "(!=|ne)" "ne" r
+{$ne: $0},
+endsnippet
+
+# aggregate
+
+snippet "(sel|find|aggregate)" "find" r
+db.${1:collection}.aggregate([
+  { $match: {$0}, },
+])
+endsnippet
+
+snippet match "match" b
+{ $match: {$0}, },
+endsnippet
+
+snippet like "like" b
+{ $match: { $1: /$0/i, } },
+endsnippet
+
+snippet limit "limit" b
+{ $limit: $0 },
+endsnippet
+
+snippet random "random" b
+{ $sample: { size: 3 } },
+endsnippet
+
+snippet project "project" b
+{
+	$project: {
+		_id: 0,
+		id: 1,$0
+	}
+},
+endsnippet
+
+snippet count "count" b
+{ $count: "count"},
+endsnippet
+
+snippet sort "sort" b
+{ $sort: "$0"},
+endsnippet
+
+snippet groupByRegexMatch "groupByRegex" b
+{
+  $addFields: {
+    matches: {
+      $regexMatch: { input: '\$$1', regex: /$0/, } 
+    }
+  }
+},
+{
+  $group: {
+    _id: "$matches",
+    count: {$sum: 1}
+  }
+}
+endsnippet
+
+#
+
+snippet limitMongosh "mongoshLimit" b
+config.set("displayBatchSize", 1000$0)
+endsnippet
+
+

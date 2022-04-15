@@ -15,10 +15,10 @@ let b:outline = '\w+.*[\{\[]+'
 " Breaks coc.
 " setlocal iskeyword=1-33,35-255
 
-if exists("b:MyJsonFtpluginLoaded")
+if exists("b:MyJsonCFtpluginLoaded")
   finish
 endif
-let b:MyJsonFtpluginLoaded = 1
+let b:MyJsonCFtpluginLoaded = 1
 
 let g:MyJsonStrict = 1
 
@@ -34,7 +34,7 @@ function! MyJsonStrict(...) abort
     highlight! default link jsonTrailingCommaError Error
   endif
 endfunction
-command! -nargs=* MyJsonStrict call MyJsonStrict (<f-args>)
+command! -nargs=* JsonStrict call MyJsonStrict (<f-args>)
 call MyJsonStrict()
 
 MyInstall prettier
@@ -42,8 +42,11 @@ MyInstall prettier
 MyInstall json2yaml
 function! MyJsonToYaml() abort
   silent wall
-  silent !json2yaml % > %:r.yaml
-  silent edit %:r.yaml
+  let src = expand("%:p")
+  let dst = nb#mktemp("json2yaml") . expand("%:t:r") . '.yaml'
+  call nb#debug('### jj6 src: ' . src)
+  execute '!json2yaml ' . src . ' > ' . dst
+  silent execute 'edit ' . dst
 
   " Fix broken output
   RemoveTrailingSpaces
@@ -54,6 +57,7 @@ function! MyJsonToYaml() abort
     normal <ie
   endif
 endfunction
+command! -nargs=* JsonToYaml call MyJsonToYaml(<f-args>)
 
 " setlocal ft=swagger
 
@@ -61,6 +65,7 @@ function! MyJsonFromJavascript() " no abort
   %s/\v^(\s*)(\w+)\:/\1"\2":/g
   %s/`/"/g
 endfunction
+command! -nargs=* JsonFromJavascipt call MyJsonFromJavascript(<f-args>)
 
 " " TODO: use Commentary User autocmd instead
 " nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
@@ -76,4 +81,14 @@ endfunction
 "   autocmd User CommentaryPost :s/\v"/\\"/g
 "   autocmd User CommentaryPost :echo "post"
 " augroup END
+
+MyInstall gron pkexec apt install gron
+function! MyJsonToGron() abort
+  silent wall
+  let src = expand("%")
+  let dst = nb#mktemp("gron") . expand("%:r") . '.js'
+  silent execute '!gron ' . src . ' > ' . dst
+  silent execute 'edit ' . dst
+endfunction
+command! -nargs=* JsonToGron call MyJsonToGron(<f-args>)
 

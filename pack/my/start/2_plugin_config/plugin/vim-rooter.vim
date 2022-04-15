@@ -1,6 +1,8 @@
 " Changes Vim working directory to project root
 PackAdd airblade/vim-rooter
 
+let g:start_cwd = getcwd()
+
 " No default mappings
 let g:rooter_disable_map = 1
 
