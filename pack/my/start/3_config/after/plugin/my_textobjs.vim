@@ -1,14 +1,11 @@
 PackAdd kana/vim-textobj-user
 
-" checkout textobj-between
+" TBD: checkout textobj-between
 
 call textobj#user#plugin('my', {
-\   'rest-a': {
-\     'pattern': '\v\s.{-}\ze[`"'')\]\}]+',
-\     'select': 'ar',
-\   },
-\   'rest-i': {
-\     'pattern': '\v\s\zs.{-}\ze[`"'')\]\}]+',
-\     'select': 'ir',
+\   'md-fenced-code-block': {
+\     'pattern': [ '\v```.+$\n', '```' ],
+\     'select-a': 'aC',
+\     'select-i': 'iC',
 \   },
 \ })

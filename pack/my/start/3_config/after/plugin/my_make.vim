@@ -87,9 +87,9 @@ nnoremap <silent> <leader>el :call MakeWith({'name': 'myrunprg', 'compiler': 'ba
 nnoremap <silent> <leader>ee :call MakeWith({'name': 'myrunprg', 'rerun': 1})<cr>
 
 " testing
-nmap <silent> <leader>tf :call my_make#testFile()<cr>
-nmap <silent> <leader>tn :call my_make#testNearest()<cr>
-nmap <silent> <leader>tt :call MakeWith({'name': 'test', 'rerun': 1})<cr>
+nmap <silent> <leader>tf :silent call my_make#testFile()<cr>
+nmap <silent> <leader>tn :silent call my_make#testNearest()<cr>
+nmap <silent> <leader>tt :silent call MakeWith({'name': 'test', 'rerun': 1})<cr>
 
 let g:testNearest = 0
 
@@ -100,6 +100,6 @@ endfunction
 
 function! my_make#testNearest() abort
   let g:testNearest = 1
-  call MakeWith({'name': 'test', 'compiler': b:tester})
+  call MakeWith({'name': 'test', 'compiler': b:tester, 'args': expand('%:p')})
 endfunction
 

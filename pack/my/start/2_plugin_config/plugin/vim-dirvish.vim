@@ -4,6 +4,13 @@
 PackAdd justinmk/vim-dirvish
 
 " disable netrw
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+" see init.vim for these:
+" let g:loaded_netrw = 1
+" let g:loaded_netrwPlugin = 1
+
+" TODO: test
+augroup vim-dirvish#augroupFixBrokenSearchMapping
+  autocmd!
+  autocmd FileType dirvish nmap <silent> <buffer> / <Plug>(incsearch-forward)
+augroup END
 

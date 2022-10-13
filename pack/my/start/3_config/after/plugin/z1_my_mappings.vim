@@ -1,4 +1,3 @@
-" 7af03108-12a4-4ac9-8ac3-358820ed6f14
 " TODO:
 " - too long lines highlight in light grep
 
@@ -64,7 +63,7 @@ vmap <c-j> <esc><c-j>
 vmap <c-k> <esc><c-k>
 
 " Never use formatprg (it's global) and doesn't fallback to vim's default
-set formatprg=false
+" set formatprg=false
 
 " Nicer redo
 " tags: undo
@@ -237,7 +236,7 @@ nnoremap gd [<c-d>
 
 cnoremap <expr> %% fnameescape(expand('%'))
 cnoremap <expr> %b fnameescape(expand('%:t'))
-cnoremap <expr> :: fnameescape(expand('%:p:h')) . '/'
+cnoremap <expr> %d fnameescape(expand('%:p:h')) . '/'
 
 nnoremap <silent> <leader>vs :Redir scriptnames<cr>
 
@@ -249,12 +248,6 @@ nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
 
 " nnoremap <silent> { :keepjumps normal! {<cr>
 " nnoremap <silent> } :keepjumps normal! }<cr>
-
-" " TODO:
-" map { <Plug>(IndentWisePreviousEqualIndent)
-" map } <Plug>(IndentWiseNextEqualIndent)
-" map ( <Plug>(IndentWisePreviousLesserIndent)
-" map ) <Plug>(IndentWiseNextGreaterIndent)
 
 nnoremap j gj
 nnoremap k gk
@@ -270,3 +263,4 @@ function! z1_my_mappings#pm2log() abort
   silent !pm2 flush
 endfunction
 nnoremap <silent> <leader>jl :call z1_my_mappings#pm2log()<cr>
+

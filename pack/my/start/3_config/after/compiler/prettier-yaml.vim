@@ -11,7 +11,7 @@ let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 " [error]   1 | openapi: 3.0.1
 " [error] > 2 | info
 " [error]     | ^^^^
-" [error] > 3 |   title: Product offering - Produktangebote
+" [error] > 3 |   title: Product offering
 " [error]     | ^^^^^^^^
 
 let &makeprg .= " 'e/^\\[error\\].+\\s+\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/gm'"

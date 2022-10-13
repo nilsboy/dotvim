@@ -288,45 +288,39 @@ constructor(${1:{}}) {
 }
 endsnippet
 
-snippet mocha "describe" b
-describe(\`$1\`, () => {
-  ${VISUAL}$0
-})
-endsnippet
-
-snippet it "it" b
-it(\`$1\`, async() => {
-  ${VISUAL}$0
-})
-endsnippet
-
-snippet aeq "assert" w
+snippet asserteq "assert" w
 assert.equal($1, ${2:\`$0\`})
 endsnippet
 
-snippet aok "assert.ok" w
+snippet assertok "assert.ok" w
 assert.ok(${VISUAL}$0)
 endsnippet
 
-snippet adeep "adeep" w
+snippet assertdeep "assertdeep" w
 assert.deepStrictEqual(${VISUAL}$0)
 endsnippet
 
-snippet athrows "assert.throws" w
+snippet assertthrows "assert.throws" w
 assert.throws(() => {
   ${VISUAL}$0
 }, ${2:/$1/})
 endsnippet
 
+snippet expectToThrow "expectToThrow" b
+expect(() => {
+	${VISUAL}$0
+}).toThrowError($1)
+endsnippet
+
 snippet beforeeach "before each test" b
 beforeEach(async () => {
-  $0
+  ${VISUAL}$0
 })
 endsnippet
 
 snippet aftereach "before each" b
 afterEach(async () => {
-  $0
+  ${VISUAL}$0
 })
 endsnippet
 
@@ -384,7 +378,7 @@ endsnippet
 
 snippet globcheck "glob check for files" b
 if(glob(path.join($1)).length !== 0) {
-  $0
+  ${VISUAL}$0
 }
 endsnippet
 
@@ -806,21 +800,16 @@ $0
 }
 endsnippet
 
-snippet mapasync "mapasync" b
-await Promise.all(
-	${VISUAL}${0:foo.map(return async)}
-)
-endsnippet
-
-snippet map "map" b
-$1 = _.map($1, ($2) => {
-	return $0
+snippet .map ".map" i
+.map(($1) => {
+	${VISUAL}$0
 })
 endsnippet
 
-snippet "\.map" ".map" r
-.map(($1) => {
-	${VISUAL}$0
+snippet mapAsync "mapAsync" b
+import { map } from "modern-async" 
+const $1 = await map(${2:array}, async (${3:e}) => {
+	return await $0
 })
 endsnippet
 
@@ -1039,9 +1028,9 @@ class $1Error extends Error {
 }
 endsnippet
 
-snippet catch-unhandledRejection "promisethrow" b
-process.on(\`unhandledRejection\`, (e) => {
-  console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
+snippet unhandledRejectionCatcher "unhandledRejectionCatcher" b
+process.on(\`unhandledRejection\`, function unhandledRejectionCatcher(e: any) {
+  process.stderr.write(\`Error: Caught unhandledRejection: '${e.message}'\n\n\`)
   throw e
 })
 endsnippet

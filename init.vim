@@ -8,9 +8,11 @@ autocmd!
 " set all&
 
 " prevent some builtin plugins from loading
+
 " see vim-dirvish
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
+
 " see vim-matchup
 let g:loaded_matchit = 1
 " let g:loaded_matchparen = 1

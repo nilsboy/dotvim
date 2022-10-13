@@ -17,11 +17,6 @@ vnoremap <silent> <buffer> <leader>x :call MySqlFormat()<cr>
 " let b:outline = '\v^(##+\ .+|select|insert).+$'
 let b:outline = '^(##+\ ).+$'
 
-if exists("g:MySqlFtpluginLoaded")
-    finish
-endif
-let g:MySqlFtpluginLoaded = 1
-
 let g:formatters_sql = ['sqlformatter']
 let g:formatdef_sqlformatter = '"sql-format"'
 

@@ -2,6 +2,8 @@
 " let &l:comments = 's1:[",ex:"]'
 " let &l:commentstring = '["%s"]'
 
+setlocal conceallevel=0
+
 let b:formatter = 'prettier-json'
 
 setlocal wrap

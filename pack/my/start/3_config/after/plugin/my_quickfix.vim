@@ -145,7 +145,7 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = "timeout -s kill 5s rg --pcre2 --vimgrep --type-add 'javascript:*.js'"
+  let grepprg = "timeout -s kill 5s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
 
   if multiline == 1
     let grepprg .= " -U"
@@ -350,6 +350,7 @@ function! MyQuickfixOutline(location) abort
     call nb#info('b:outline not defined for filetye: ' . &filetype)
     return
   endif
+  silent wall
   " let pcreDefine = RegexToPcre(b:outline)
   let pcreDefine = b:outline
   if a:location == 'bufferOnly'
@@ -483,13 +484,50 @@ function! MyQuickfixFormatAsNoFile() abort
   %delete _
   let texts = []
   for entry in qflist
-    let text = entry.text
-    " if entry.valid
-    "     let text = '❱ ' . text
-    " else
-    "     let text = '  ' . text
-    " endif
-    let text = substitute(text, '\v[\n\r]', '', 'g')
+    let text = bufname(entry.bufnr)
+    call add(texts, text)
+  endfor
+  " a lot faster to add all lines in a list sometimes (umlauts problem?)
+  call append(line('$'), texts)
+  keepjumps normal! "_dd
+  setlocal nomodifiable
+  setlocal nomodified
+endfunction
+
+function! MyQuickfixFormatAsBasename() abort
+  if BufferIsLoclist()
+    let qflist = getloclist(0)
+  else
+    let qflist = getqflist()
+  endif
+  setlocal modifiable
+  %delete _
+  let texts = []
+  for entry in qflist
+    let file = bufname(entry.bufnr)
+    let text = fnamemodify(file, ':t')
+    call add(texts, text)
+  endfor
+  " a lot faster to add all lines in a list sometimes (umlauts problem?)
+  call append(line('$'), texts)
+  keepjumps normal! "_dd
+  setlocal nomodifiable
+  setlocal nomodified
+endfunction
+
+function! MyQuickfixFormatAsDirAndBasename() abort
+  if BufferIsLoclist()
+    let qflist = getloclist(0)
+  else
+    let qflist = getqflist()
+  endif
+  setlocal modifiable
+  %delete _
+  let texts = []
+  for entry in qflist
+    let file = bufname(entry.bufnr)
+    let text = fnamemodify(file, ':p:h:t')
+    let text .= '/' . fnamemodify(file, ':t')
     call add(texts, text)
   endfor
   " a lot faster to add all lines in a list sometimes (umlauts problem?)
@@ -535,9 +573,17 @@ function! MyQuickfixFormatToggle() abort
     let g:MyQuickfixFormat = 'NoFile'
     " let g:MyQuickfixFormat = 'None'
     let g:MyQuickfixWrap = 'wrap'
-  else
+  elseif g:MyQuickfixFormat == 'NoFile' 
+    let g:MyQuickfixFormat = 'Basename'
+    let g:MyQuickfixWrap = 'nowrap'
+  elseif g:MyQuickfixFormat == 'Basename' 
+    let g:MyQuickfixFormat = 'DirAndBasename'
+    let g:MyQuickfixWrap = 'nowrap'
+  elseif g:MyQuickfixFormat == 'DirAndBasename' 
     let g:MyQuickfixFormat = 'Simple'
     let g:MyQuickfixWrap = 'nowrap'
+  else
+    throw 'Unknown format: ' . g:MyQuickfixFormat
   endif
   if BufferIsQuickfix()
     cclose
@@ -607,6 +653,6 @@ function! MyQuickfixFixNewlines() abort
 endfunction
 
 function! MyQlistVars() abort
-  silent Verbose set include? define? includeexpr? suffixesadd?
+  Redir set include? define? includeexpr? suffixesadd?
 endfunction
 

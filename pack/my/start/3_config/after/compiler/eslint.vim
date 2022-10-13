@@ -1,14 +1,21 @@
-" --no-eslintrc = only report es errors not formatting problems etc
-let &l:makeprg='eslint -f unix --no-eslintrc %'
+" eslint can not format from stdin - only lint.
+" Errors are reported to stdout never to stderr. Specifying --quiet suppresses
+" them completely.
+" The result can not be send to stdout - the file is changed in place.
 
-" " eslint can not format from stdin - only lint.
-" " Errors are reported to stdout never to stderr. Specifying --quiet suppresses
-" " them completely.
-" " The result can not be send to stdout - the file is changed in place.
-" let g:neoformat_javascript_eslint = {
-"       \ 'exe': 'eslint'
-"       \ ,'args': ['--fix', '--quiet', '-c'
-"       \ , $CONTRIB . '/eslintrc-format.yml']
-"       \ , 'replace': 1
-"       \ }
-" MyInstall eslint npm install -g eslint
+MyInstall eslint
+" MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
+
+let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
+
+let &l:makeprg="eslint"
+let &makeprg = " -f unix"
+" let &makeprg = " --no-eslintrc"
+let &makeprg = " -c " . $CONTRIB . '/eslintrc-format.yml'
+" let &makeprg = " --replace=1"
+" let &makeprg = " --fix"
+" let &makeprg = " --quiet"
+
+let &makeprg .= " " . expand("%:p") . " 2>&1"
+
+" let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")

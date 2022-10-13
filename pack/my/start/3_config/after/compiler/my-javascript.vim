@@ -14,12 +14,3 @@ let &makeprg .= " % 2>&1"
 " TODO:
 let &makeprg .= " \\| errorformatregex"
 
-" [error] openapi/product-offering-v1.openapi.yaml: SyntaxError: Implicit map keys need to be on a single line (2:1)
-" [error]   1 | openapi: 3.0.1
-" [error] > 2 | info
-" [error]     | ^^^^
-" [error] > 3 |   title: Product offering - Produktangebote
-" [error]     | ^^^^^^^^
-
-let &makeprg .= " 'e/^\\[error\\].+\\s+\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/gm'"
-

@@ -4,13 +4,15 @@ setlocal formatoptions=
 setlocal conceallevel=0
 
 let &l:define = '\v#+\s+'
-let b:outline = '#+\s+'
+let b:outline = '^#+\s+'
 
 let b:formatter = 'prettier-markdown'
 
-" " Don't auto-format in code blocks
-" call OnSyntaxChange#Install('MarkdownPre', 'mkdSnippet.*', 1, 'a')
-" autocmd User SyntaxMarkdownPreEnterA unsilent echo 'entered ' . &formatoptions
-" autocmd User SyntaxMarkdownPreEnterA let g:MyMarkdownFormatoptions = &formatoptions | setlocal formatoptions=
-" autocmd User SyntaxMarkdownPreLeaveA let &formatoptions = g:MyMarkdownFormatoptions
-" autocmd User SyntaxMarkdownPreLeaveA unsilent echo 'left ' . &formatoptions
+setlocal nowrap
+
+nmap <silent> <buffer> <leader>nrr m`viC:call my_narrow#narrow({})<cr>
+nmap <silent> <buffer> <leader>nrs m`viC:call my_narrow#narrow({'filetype': 'sql'})<cr>
+nmap <silent> <buffer> <leader>nrt m`viC:call my_narrow#narrow({'filetype': 'text'})<cr>
+
+nmap <silent> <buffer> <leader>nrr m`viC:call my_narrow#narrow({})<cr>
+

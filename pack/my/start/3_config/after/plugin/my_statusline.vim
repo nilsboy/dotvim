@@ -158,7 +158,7 @@ let &statusline .= '%#StatusLine#'
 let &statusline .= '%( %{&filetype} %)'
 
 let &statusline .= '%#ErrorMsg#'
-let &statusline .= '%( %{exists("b:region_filetype") ? ">" . b:region_filetype : ""} %)'
+let &statusline .= '%( %{exists("b:region_filetype") ? "" . b:region_filetype : ""} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#ErrorMsg#'

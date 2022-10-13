@@ -1,7 +1,10 @@
 let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
-" let &makeprg  = 'jest --useStderr --verbose' 
-let &makeprg  = 'jest --verbose' 
+let &makeprg  = 'jest --verbose --runInBand --forceExit'
+" --forceExit
+" --detectOpenHandles
+" --testTimeout
+" --onlyChanged
 
 if g:testNearest
   let testNameRegex = '^\s*(it|test)\([`"''](.*)[`"'']' 
@@ -19,11 +22,14 @@ let &makeprg .= ' $* 2>&1'
 
 let &makeprg .= " \\| errorformatregex"
 
-" │       at src/services/resource-import-v1/resource-import-v1.class.js:95:17
+" at src/services/resource-import-v1/resource-import-v1.class.js:95:17
 let &makeprg .= " 'e/●.*?at .*?(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)/igms'"
 
-" │       at Object.<anonymous> (test/services/resource-v1.test.js:276:10)
+" at Object.<anonymous> (test/services/resource-v1.test.js:276:10)
 let &makeprg .= " 'e/●.*?at .*?\\((?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\)/igms'"
+
+" Error: Caught unhandledRejection: 'Cannot use a session that has ended'
+let &makeprg .= " 'e/.*Caught unhandledRejection.*/igms'"
 
 " joi error locations:
 " TODO: fine tune
@@ -35,11 +41,11 @@ let &makeprg .= " 'e/exiting with code 1/igm'"
 " typescript
 let &makeprg .= " 'e/(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\s+\\-\\s+error\\s+TS\\d+/igms'"
 
-" TODO:
-" exclude node_modules
-" let &makeprg .= " 'd/node_modules/igm'"
+" " TODO:
+" " exclude node_modules
+" " let &makeprg .= " 'd/node_modules/igm'"
 
-" TODO:
-" 549 |     if (!state) {
-" let &makeprg .= " 'd/^\\s+\\d+/igm'"
+" " TODO:
+" " 549 |     if (!state) {
+" " let &makeprg .= " 'd/^\\s+\\d+/igm'"
 

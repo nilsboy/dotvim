@@ -53,7 +53,6 @@ let b:outline .= ')'
 let b:match_words = '\<if\>:\<else\>,\<try\>:\<catch\>:\<finally\>,\<async\>:\<await\>:`,`'
 
 nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>
-nmap <silent> <leader>lL <Plug>(coc-float-jump)
 
 " setlocal path+=node_modules,~/src/node/lib
 

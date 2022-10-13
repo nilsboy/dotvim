@@ -1,3 +1,4 @@
+finish
 " A secure alternative to modelines that executes any predefined ex command
 PackAdd nilsboy/vim-secureexmodelines
 

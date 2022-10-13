@@ -44,21 +44,22 @@ let g:MyDbConfigProfileName = 'specifyProfileName'
 
 nnoremap <leader>d <nop>
 
-nnoremap <silent> <leader>di     :call MyDbInfos()<cr>
-nnoremap <silent> <leader>dp     :call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
+nnoremap <silent> <leader>di  :call MyDbInfos()<cr>
+nnoremap <silent> <leader>dp  mz"zyiW:call MyDbConfigSetProfile(@z)<cr>
 
-nnoremap <silent> <leader>dd  mayip:call MyDbExecSql(@", '[query]')<cr>
-nnoremap <silent> <leader>dD  mayip:call MyDbExecSql(@", '[query]', '')<cr>
+nnoremap <silent> <leader>dP  mz:call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 
-nnoremap <silent> <leader>dtt    :call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
-nnoremap <silent> <leader>dtc mayiw:call MyDbExecSql('SHOW CREATE TABLE ' . @", @" . '.[create_table]', '--yaml')<cr>
-nnoremap <silent> <leader>dtd mayiw:call MyDbExecSql('DESCRIBE '. @", @" . '.[desc]')<cr>
-" nnoremap <silent> <leader>dts mayiw:call MyDbExecSql('SELECT * FROM ' . @" . ' ORDER BY 1 DESC', @" . '.[contents]')<cr>
-nnoremap <silent> <leader>dts mayiw:call MyDbExecSql('SELECT * FROM ' . @" . ' ORDER BY 1 DESC', @")<cr>
+nnoremap <silent> <leader>dd  mz"zyip:call MyDbExecSql(@z, '[query]', '', 1)<cr>
+
+nnoremap <silent> <leader>dtt mz:call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
+nnoremap <silent> <leader>dtD mz:call MyDbExecSql('SHOW DATABASES', '[databases]')<cr>
+nnoremap <silent> <leader>dtc mz"zyiw:call MyDbExecSql('SHOW CREATE TABLE ' . @z, @z . '.[create_table]', '--yaml')<cr>
+nnoremap <silent> <leader>dtd mz"zyiw:call MyDbExecSql('DESCRIBE '. @z, @z . '.[desc]')<cr>
+nnoremap <silent> <leader>dts mz"zyiw:call MyDbExecSql('SELECT * FROM ' . @z . ' ORDER BY 1 DESC', @z)<cr>
 " some tables take too long when queried in DESC order
-nnoremap <silent> <leader>dtS mayiw:call MyDbExecSql('SELECT * FROM ' . @", @" . '.[contents]')<cr>
-nnoremap <silent> <leader>dtC mayiw:call MyDbExecSql(
-      \ 'SELECT COUNT(*) FROM ' . @", @" . '.[count]')<cr>
+nnoremap <silent> <leader>dtS mz"zyiw:call MyDbExecSql('SELECT * FROM ' . @z, @z . '.[contents]')<cr>
+nnoremap <silent> <leader>dtC mz"zyiw:call MyDbExecSql(
+      \ 'SELECT COUNT(*) FROM ' . @z, @z . '.[count]')<cr>
 
 let g:MyDbConfigOptions = ''
 nnoremap <silent> <leader>doo :let g:MyDbConfigOptions = ''<cr>
@@ -85,7 +86,7 @@ function! MyDbExecSql(...) abort
   " TODO: hack
   " Restore cursor position - `normal y` moves cursor - in manual mode prevented
   " by easyclip plugin
-  silent! normal! `a
+  silent! normal! `z
 
   let limit = g:MyDbConfigLimit
 
@@ -97,7 +98,7 @@ function! MyDbExecSql(...) abort
 	let fileName = name
   if add_counter
     let g:MyDbConfigQueryId = g:MyDbConfigQueryId + 1
-	  let fileName = fileName '.' . g:MyDbConfigQueryId
+	  let fileName = fileName . '.' . g:MyDbConfigQueryId
   endif
   let fileName = fileName . '.sqlresult'
 	let fileName = nb#mktempSimple(g:MyDbConfigProfileName, fileName)
@@ -124,10 +125,12 @@ function! MyDbExecSql(...) abort
 	keepjumps normal! gg"_dd
 endfunction
 
-" # vimex: MyDbConfigSetProfile pidb-db-dev
+" # vimex: MyDbConfigSetProfile my-db-profile
 command! -nargs=* MyDbConfigSetProfile call MyDbConfigSetProfile (<f-args>)
 function! MyDbConfigSetProfile(...) abort
+  silent! normal! `z
   let g:MyDbConfigProfileName = a:1
+  call nb#debug('Setting db profile name: ' .. g:MyDbConfigProfileName)
 endfunction
 
 function! MyDbInfos() abort
@@ -136,6 +139,7 @@ function! MyDbInfos() abort
   " 1,$"_d
   normal! i### SQLs
   execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.sql'
+  execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.md'
   normal! o
   normal! o
   normal! i### Database profiles
@@ -152,7 +156,7 @@ function! MyDbInfos() abort
   normal! gg
 endfunction
 
-nnoremap <leader>dK mayiw:call MyDbConfigKillProcess(@")<cr>
+nnoremap <leader>dK mz"zyiw:call MyDbConfigKillProcess(@z)<cr>
 function! MyDbConfigKillProcess(processId) abort
   silent! normal! `a
   let confirmation = input('Kill process ' . a:processId . '? ', 'y')

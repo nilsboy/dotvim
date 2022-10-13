@@ -15,17 +15,21 @@ function! MyCocInstall(...) abort
   !yarn install --frozen-lockfile
 endfunction
 
+" For tsserver:
+" > Note: for rename import on file rename, you have to install watchman in your $PATH.
+MyInstall watchman pkexec apt install watchman
+
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 call coc#add_extension('coc-tsserver')
 call coc#add_extension('coc-ultisnips')
 call coc#add_extension('coc-json')
 call coc#add_extension('coc-java')
 call coc#add_extension('coc-phpls')
+call coc#add_extension('coc-yaml')
 " TODO: test
 " call coc#add_extension('coc-sql')
 " TODO: test
 " call coc#add_extension('coc-sqlfluff')
-
 
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
@@ -35,22 +39,30 @@ nmap <silent> <leader>lr <Plug>(coc-references)
 nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
 nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>lR <Plug>(coc-rename)
-vmap <silent> <leader>lF <Plug>(coc-format-selected)
+nmap <silent> <leader>lF :CocCommand workspace.renameCurrentFile<cr>
+vmap <silent> <leader>lf <Plug>(coc-format-selected)
 nmap <silent> <leader>lf :call CocAction('format')<cr>
 vmap <silent> <leader>lA <Plug>(coc-codeaction-selected)
 nmap <silent> <leader>la <Plug>(coc-codeaction)
 nmap <silent> <leader>lc :CocList commands<cr>
 nmap <silent> <leader>lO :call CocAction('fold', <f-args>)<cr>
 nnoremap <silent> <leader>lK :call CocAction('doHover preview')<cr>
+nnoremap <silent> <leader>l? :CocCommand workspace.showOutput<cr>
 
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" workspace errors - i.e. (see filetype file):
+" nnoremap <silent> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
+
+" nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+" inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+" vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
 nmap <silent> <leader>lL <Plug>(coc-float-jump)
+" nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+"  *coc#float#has_float()* 
+" nmap <silent> <leader>lL <Plug>(coc-float-hide)
 
 " Preview instead of float not supported everywhere (2021-03-23):
 " https://github.com/neoclide/coc.nvim/issues/2233

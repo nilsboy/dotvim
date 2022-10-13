@@ -2,12 +2,36 @@
   // https://github.com/Microsoft/vscode/issues/47299
   "javascript.showUnused": false,
   "typescript.showUnused": false,
+  "typescript.updateImportsOnFileMove.enable": true,
   "coc.preferences.floatActions": false,
   "coc.preferences.promptInput": false,
 
-  "coc.preferences.hoverTarget": "preview",
+  // "coc.preferences.hoverTarget": "preview",
   "suggest.detailField": "preview",
   // "diagnostic.messageTarget": "preview",
   // "signature.target": "preview",
   // "diagnostic.messageTarget": "preview",
+
+  "coc.preferences.useQuickfixForLocations": true,
+  // "typescript.disableAutomaticTypeAcquisition": true,
+  "json.schemas": [
+    {
+      "name": "pm2",
+      "description": "pm2",
+      "url": "https://raw.githubusercontent.com/Unitech/pm2/master/lib/API/schema.json",
+      "fileMatch": ["pm2.json"]
+    }
+  ],
+  "yaml.enable": true,
+  "yaml.validate": true,
+  "yaml.hover": true,
+  "yaml.completion": true,
+  "yaml.format.proseWrap": "always",
+  "yaml.format.printWidth": 80,
+  "yaml.schemaStore.enable": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/kustomization.json": "kustomization.json",
+    "kubernetes": ["*.k8s.yaml", "*.k8s.json"]
+  },
+  "yaml.trace.server": "verbose"
 }

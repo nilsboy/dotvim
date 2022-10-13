@@ -1,3 +1,4 @@
+finish
 " TODO: jump to current if last
 "
 " TODO: add key to add entry before current or just first?

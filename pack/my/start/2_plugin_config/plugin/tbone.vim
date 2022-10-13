@@ -27,19 +27,21 @@ function! tbone#myClear() abort
 endfunction
 
 function! tbone#myRun() abort
-  call tbone#myClear()
+  if get(b:, 'my_tbone_clear', '')
+    call tbone#myClear()
+  endif
   let cmd = getreg('z')
   let g:my_tbone_last_command = cmd
   if cmd !~ '\n$'
     let cmd = cmd .. "\r"
   endif
   call tbone#send_keys(g:my_tbone_pane, cmd)
+  silent! normal! `z
 endfunction
 
-nnoremap <silent> <leader>ms "zyy:call tbone#myRun()<cr>
-nnoremap <silent> <leader>mS "zyip:call tbone#myRun()<cr>
-vnoremap <silent> <leader>ms "zy:call tbone#myRun()<cr>
-nnoremap <silent> <leader>mS "zyi`:call tbone#myRun()<cr>
+nnoremap <silent> <leader>mm mz"zyip:call tbone#myRun()<cr>
+vnoremap <silent> <leader>mm mz"zy:call tbone#myRun()<cr>
+nnoremap <silent> <leader>mM mz"zyy:call tbone#myRun()<cr>
 
 nnoremap <silent> <leader>ml :call setreg('z', g:my_tbone_last_command) \| :call tbone#myRun()<cr>
 
@@ -52,10 +54,11 @@ function! tbone#mySendRaw() abort
   let g:my_tbone_last_command = getreg('z')
   call tbone#send_keys(g:my_tbone_pane, g:my_tbone_last_command)
 endfunction
-nnoremap <silent> <leader>mm "zyy:call tbone#mySendRaw()<cr>
+nnoremap <silent> <leader>mr "zyip:call tbone#mySendRaw()<cr>
+nnoremap <silent> <leader>mR "zyy:call tbone#mySendRaw()<cr>
 " nmap to keep pos on yip
 " nmap <silent> <leader>mp "zyip:let @z .= "\r" \| call tbone#mySendRaw()<cr>
-nmap <silent> <leader>mp "zyip:call tbone#mySendRaw()<cr>
-nnoremap <silent> <leader>mw "zyiW: let @z .= ' ' \| call tbone#mySendRaw()<cr>
-vnoremap <silent> <leader>mw "zy:call tbone#mySendRaw()<cr>
+" nmap <silent> <cr> "zyip:call tbone#mySendRaw()<cr>
+" nnoremap <silent> <leader>mw "zyiW: let @z .= ' ' \| call tbone#mySendRaw()<cr>
+" vnoremap <silent> <leader>mw "zy:call tbone#mySendRaw()<cr>
 

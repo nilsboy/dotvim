@@ -115,3 +115,8 @@ let &fillchars = "diff: ,eob: "
 " function MyDiff()
 "     " execute "!git --no-pager diff --no-prefix --no-color " . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 " endfunction
+
+augroup z0_my_vimrc#augroupReloadVimrcOnWrite
+  autocmd!
+  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+augroup END

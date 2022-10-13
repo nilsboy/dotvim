@@ -103,15 +103,27 @@ call nb#info(${VISUAL}$0)
 endsnippet
 
 snippet infoo "info with 1 arg" 
-call nb#info('$1: ' . $1)
+call nb#info('$1: ', $1)
 endsnippet
 
 snippet echo "echo with 1 arg"
-echo '$1:' . $1
+echo '$1:',  $1
 endsnippet
 
 snippet debug "debug" 
-call nb#debug($0)
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
+endsnippet
+
+snippet jj ""
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
+endsnippet
+
+snippet jjj "here"
+call nb#debug('##################################### jj`!v DebugId()` $1'$0)
+endsnippet
+
+snippet jjdump ""
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:' . json_encode(${VISUAL}$1))
 endsnippet
 
 snippet plugin "Description" b
@@ -248,18 +260,6 @@ endsnippet
 
 snippet nop "<nop>" w
 <nop>
-endsnippet
-
-snippet jj ""
-call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
-endsnippet
-
-snippet jjj "here"
-call nb#debug('##################################### jj`!v DebugId()` $1'$0)
-endsnippet
-
-snippet jjdump ""
-call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . json_encode(${VISUAL}$1))
 endsnippet
 
 snippet fileexists "check if a file exists" b

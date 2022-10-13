@@ -22,9 +22,20 @@ nnoremap <silent><leader>iI :call Web(expand('<cword>'))<cr>
 vnoremap <silent><leader>iI "zy:call Web(@z)<cr>
 
 nnoremap <silent><leader>ig "zyiw:silent execute '!xdg-open https://github.com/search?type=code' . shellescape('&l=' . &filetype . '&q=' . @z)<cr>
-nnoremap <silent><leader>iG "zyiw:silent execute '!xdg-open https://github.com/search?type=code' . shellescape('&q=' . @z)<cr>
 vnoremap <silent><leader>ig "zy:silent execute '!xdg-open https://github.com/search?type=code' . shellescape('&l=' . &filetype . '&q=' . @z)<cr>
+
+nnoremap <silent><leader>iG "zyiw:silent execute '!xdg-open https://github.com/search?type=code' . shellescape('&q=' . @z)<cr>
 vnoremap <silent><leader>iG "zy:silent execute '!xdg-open https://github.com/search?type=code' . shellescape('&q=' . @z)<cr>
+
+nnoremap <silent><leader>it "zyiw:silent execute '!xdg-open https://dict.leo.org/englisch-deutsch/' . shellescape(@z)<cr>
+vnoremap <silent><leader>it "zy:silent execute '!xdg-open https://dict.leo.org/englisch-deutsch/' . shellescape(@z)<cr>
+
+nnoremap <silent><leader>ic "zyiw:silent execute '!xdg-open https://grep.app/search?q=' . shellescape(@z)<cr>
+vnoremap <silent><leader>ic "zy:silent execute '!xdg-open https://grep.app/search?q=' . shellescape(@z)<cr>
+
+nnoremap <silent><leader>iC "zyiW:silent execute '!xdg-open https://grep.app/search?' . shellescape('filter[lang][0]=' . &filetype . '&q=' . @z)<cr>
+
+nnoremap <silent><leader>Ic "zyiW:silent execute '!xdg-open https://grep.app/search?q=' . shellescape(@z)<cr>
 
 nnoremap <silent><leader>is "zyiw:call Web(
       \ 'site:stackoverflow.com',

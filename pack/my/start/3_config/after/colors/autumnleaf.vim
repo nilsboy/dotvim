@@ -101,7 +101,6 @@ hi Error    guibg=red	guifg=white	gui=none
 hi Todo	    guibg=bg	guifg=#aa0000   gui=none
 
 
-
 " The same in cterm colors.
 hi Cursor	ctermbg=6   ctermfg=14
 hi Normal	ctermbg=15  ctermfg=0

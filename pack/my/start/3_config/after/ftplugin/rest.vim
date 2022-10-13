@@ -1,3 +1,3 @@
-nnoremap <buffer> <silent> <CR> :silent call MyRestConsoleCall()<cr>
+nnoremap <buffer> <silent> <leader>bb :silent call MyRestConsoleCall()<cr>
 
 let b:outline = '^(##.*)\s'

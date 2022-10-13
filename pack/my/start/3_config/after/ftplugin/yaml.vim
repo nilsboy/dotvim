@@ -12,6 +12,7 @@ let b:outline .= '|^\S+.*:'
 let b:outline .= '|^---$'
 let b:outline .= ')'
 
+nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>
 
 let b:formatter = 'prettier-yaml'
 

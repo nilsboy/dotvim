@@ -7,9 +7,10 @@ endif
 set termguicolors
 
 set background=light
+
 " don't highlight long lines completely - for performance
 " for some reason <=65 keeps if fast
-set synmaxcol=200
+" set synmaxcol=200
 
 " augroup MyColorsAugroupTrailingWhitespace
 "   autocmd!
@@ -32,12 +33,25 @@ set synmaxcol=200
 " highlight ColorColumn ctermfg=red ctermbg=NONE
 
 function! MyColorsColorschemeCleanup() abort
+  syntax keyword myTodo TODO FIXME XXX NOTE TESTING containedin=ALL
+  highlight link myTodo Todo
+
+  syntax keyword myTbd TBD containedin=ALL
+  highlight link myTbd MatchParen
+
+  " syntax keyword myDone DONE WONTFIX containedin=ALL
+  " highlight link myDone MoreMsg
+
+	" syntax region Comment start=/`/ skip=/\\`/ end=/`/
+	" syntax region Comment start=/"/ skip=/\\"/ end=/"/ oneline
+	" syntax region Comment start=/'/ skip=/\\'/ end=/'/
+
+  syntax sync fromstart
+  
   highlight Normal ctermbg=NONE guibg=NONE gui=NONE
   " highlight MyExtraWhitespace ctermbg=darkred
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
   " highlight MyColorsEolColor ctermbg=red
-
-  " match Todo /\v\ctodo|tbd|note/
 endfunction
 augroup MyColorsAugroupColorschemeCleanup
   autocmd!

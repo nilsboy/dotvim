@@ -45,8 +45,9 @@ function! MyMarkdownTocRemove() abort
   keepjumps execute line . ',' . lineTo . 'd _'
 endfunction
 
-augroup MyMarkdownAugroupCreateToc
-  autocmd!
-  autocmd BufWritePre *.md silent call MyMarkdownTocAddToc()
-augroup END
+" TBD: screws with cursor position
+" augroup MyMarkdownAugroupCreateToc
+"   autocmd!
+"   autocmd BufWritePre *.md silent call MyMarkdownTocAddToc()
+" augroup END
 

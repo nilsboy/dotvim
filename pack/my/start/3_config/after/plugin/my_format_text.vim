@@ -1,4 +1,3 @@
-finish
 " NOTE: autoformat and lists do not seem to work together
 " SEE ALSO: https://www.reddit.com/r/vim/comments/4lvaok/supercharge_vim_formatting_for_plain_text/
 " :help auto-format
@@ -9,6 +8,7 @@ finish
 function! MyVimrcShowFormatSettings() abort
   call nb#info('&comments:' . &comments)
   call nb#info('&commentstring:' . &commentstring)
+  call nb#info('&formatprg:' . &formatprg)
   call nb#info('&formatoptions:' . &formatoptions)
   call nb#info('&formatlistpat:' . &formatlistpat)
   call nb#info('&autoindent:' . &autoindent)

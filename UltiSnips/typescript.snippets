@@ -27,9 +27,13 @@ def toMethodCase(v):
   v = re.sub(r'^[\.\/]*', r'', v)
   return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
 
-def className():
+def classNameOld():
   v = snip.basename[0:1].upper()
   v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
+  return v
+
+def className():
+  v = snip.basename
   return v
 
 def escape(v):
@@ -37,18 +41,17 @@ def escape(v):
 
 endglobal
 
-snippet unhandledRejection-catch "promisethrow" b
-process.on(\`unhandledRejection\`, (e: any) => {
-  console.error(\`Error: Caught unhandledRejection: '${e.message}'\`)
-  throw e
-})
-endsnippet
-
-snippet class "class" b
+snippet class "class" w
 class `!p snip.rv = className()` {
   ${VISUAL}$0
 }
 endsnippet
+
+# snippet class "class" b
+# class `!p snip.rv = className()` {
+#   ${VISUAL}$0
+# }
+# endsnippet
 
 snippet a "await" w
 await
@@ -83,9 +86,7 @@ endsnippet
 
 snippet exit "exit" b
 // @ts-ignore
-if (true === true) {
-	process.exit(1)
-}
+process.exit(1)
 endsnippet
 
 snippet init "init" b
@@ -112,7 +113,7 @@ snippet OneToMany "OneToMany" b
 $1 = new Collection<$1>(this)
 endsnippet
 
-snippet iife "iife" b
+snippet iife "iife" w
 (() => {${VISUAL}$0})()
 endsnippet
 
@@ -143,4 +144,30 @@ endsnippet
 snippet exfun "export function" b
 export async function ${1:name}($0) {
 }
+endsnippet
+
+snippet errorDefinition "errorDefinition" b
+import { CustomError } from "ts-custom-error"
+import { $2 } from "../$2"
+
+export class $1 extends CustomError {
+  $3: $2
+  public constructor($3: $2) {
+    super()
+    this.$3 = $3$0
+  }
+}
+endsnippet
+
+snippet e "e" b
+expect($0)
+endsnippet
+
+snippet uuidmodule "uuidmodule" b
+import { v1 as uuidv1 } from 'uuid'
+uuidv1()
+endsnippet
+
+snippet tag "tag" w
+<$1>$0</$1>
 endsnippet

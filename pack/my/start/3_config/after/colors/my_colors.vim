@@ -17,11 +17,12 @@ let s:fg = 'fg'
 let s:bold = 'bold'
 let s:inverse = 'inverse'
 let s:underline = 'underline'
+let s:undercurl = 'undercurl'
 
 let s:black = '#1C1C1C'
 let s:blackLight = '#444444'
 let s:brown = '#af5f00'
-let s:brownLight = '#aa7733'
+let s:brownLight = '#fad6a5'
 let s:blue = '#0963B1'
 let s:blueLight = '#CCE5FF'
 let s:blueBright = '#82dbf2'
@@ -106,7 +107,7 @@ execute  'hi VertSplit     guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi WildMenu      guibg='s:greenLight' guifg='s:none' gui='s:none
 
 execute  'hi Function      guibg='s:none' guifg='s:green' gui='s:bold
-execute  'hi Title         guibg='s:greenLight' guifg='s:blackLight' gui='s:none
+execute  'hi Title         guibg='s:blueLight' guifg='s:none' gui='s:none
 
 execute  'hi DiffAdd       guibg='s:greenLight' guifg='s:none' gui='s:none
 execute  'hi DiffChange    guibg='s:yellowLight' guifg='s:none' gui='s:none
@@ -186,3 +187,4 @@ hi link diffNoEOL          WarningMsg
 hi link diffOnly           WarningMsg
 
 hi link HelpIgnore Ignore
+

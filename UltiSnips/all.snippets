@@ -1,4 +1,4 @@
-priority -1
+priority 2
 
 ### global snippets
 
@@ -69,28 +69,30 @@ endsnippet
 
 # possible alternative :h langmap
 
-snippet "(u|ü)" "u|ü toggle" r
-`!p snip.rv = toggle('u|ü', match.group(1))`
+priority -1
+
+snippet "(ue|ü)" "ue|ü toggle" r
+`!p snip.rv = toggle('ue|ü', match.group(1))`
 endsnippet
 
-snippet "(U|Ü)" "U|Ü toggle" r
-`!p snip.rv = toggle('U|Ü', match.group(1))`
+snippet "(Ue|Ü)" "UE|Ü toggle" r
+`!p snip.rv = toggle('Ue|Ü', match.group(1))`
 endsnippet
 
-snippet "(a|ä)" "a|ä toggle" r
-`!p snip.rv = toggle('a|ä', match.group(1))`
+snippet "(ae|ä)" "ae|ä toggle" r
+`!p snip.rv = toggle('ae|ä', match.group(1))`
 endsnippet
 
-snippet "(A|Ä)" "A|Ä toggle" r
-`!p snip.rv = toggle('A|Ä', match.group(1))`
+snippet "(Ae|Ä)" "AE|Ä toggle" r
+`!p snip.rv = toggle('Ae|Ä', match.group(1))`
 endsnippet
 
-snippet "(o|ö)" "o|ö toggle" r
-`!p snip.rv = toggle('o|ö', match.group(1))`
+snippet "(oe|ö)" "oe|ö toggle" r
+`!p snip.rv = toggle('oe|ö', match.group(1))`
 endsnippet
 
-snippet "(O|Ö)" "O|Ö toggle" r
-`!p snip.rv = toggle('O|Ö', match.group(1))`
+snippet "(Oe|Ö)" "OE|Ö toggle" r
+`!p snip.rv = toggle('Oe|Ö', match.group(1))`
 endsnippet
 
 snippet "(ss|ß)" "ss|ß toggle" r
@@ -183,29 +185,25 @@ snippet / "comment" b
 `!v nb#surroundings()[0]`${VISUAL}$0`!v  nb#surroundings()[1]`
 endsnippet
 
-# snippet todo "TODO" w
-# `!v nb#surroundings()[0]`TODO:$0`!v  nb#surroundings()[1]`
-# endsnippet
-
 snippet '(^\s*).*todo' "TODO" r
 `!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TODO:$0`!v  nb#surroundings()[1]`
 endsnippet
 
-# snippet "(TODO|DONE)+" "TODO|DONE toggle" r
-# `!p snip.rv = toggle('TODO|DONE', match.group(1))`
+snippet '(^\s*).*testing' "TESTING" r
+`!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TBD: TESTING:$0`!v  nb#surroundings()[1]`
+endsnippet
+
+# snippet '(^\s*).*tbd' "TBD" r
+# `!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TBD:$0`!v  nb#surroundings()[1]`
 # endsnippet
 
 snippet '(.*\s*).*note' "NOTE" r
 `!v nb#surroundings()[0]`NOTE:$0`!v  nb#surroundings()[1]`
 endsnippet
 
-snippet '(.*\s*).*tbd' "TBD" r
-`!v nb#surroundings()[0]`TBD:$0`!v  nb#surroundings()[1]`
-endsnippet
-
-snippet '.*tag' "TAGS" r
-`!v nb#surroundings()[0]`TAGS:$0`!v  nb#surroundings()[1]`
-endsnippet
+# snippet '.*tag' "TAGS" r
+# `!v nb#surroundings()[0]`TAGS:$0`!v  nb#surroundings()[1]`
+# endsnippet
 
 snippet '.*fix' "FIX" r
 `!v nb#surroundings()[0]`FIX:$0`!v  nb#surroundings()[1]`
@@ -302,15 +300,31 @@ parameter
 endsnippet
 
 snippet ok "ok / done" w
-✔
+[DONE]
 endsnippet
 
 snippet done "ok / done" w
-✔
+[DONE]
 endsnippet
 
-snippet fail "fail" w
-✗
+snippet wont "wontfix" w
+[WONTFIX]
+endsnippet
+
+snippet vomit "vomit" w
+🤮
+endsnippet
+
+snippet heart "heart" w
+🖤 
+endsnippet
+
+snippet chat "chat" w
+💬 [NEEDS INFO]
+endsnippet
+
+snippet tbd "tbd" w
+[TBD]
 endsnippet
 
 snippet "(-|=>)+" "-|=> toggle" r
@@ -346,10 +360,6 @@ endsnippet
 # snippet "\(" "(" rA
 # (${VISUAL}$1)$0
 # endsnippet
-
-snippet "ae" "aa" rA
-ä
-endsnippet
 
 snippet eg "eg" w
 e.g.

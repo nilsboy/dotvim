@@ -9,7 +9,7 @@ let &makeprg .= " \\| errorformatregex"
 " typescript
 " let &makeprg .= " 'e/(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\s+\\-\\s+error\\s+TS\\d+/igms'"
 
-" src/cyberscan-entities/cust_env_settings.ts(17,5): error TS2322: ...
+" src/foo.ts(17,5): error TS2322: ...
 let &makeprg .= " 'e/^(?<file>\\S+?)\\((?<row>\\d+?),(?<col>\\d+)\\):\\s+error\\s+TS\\d+.+$/igms'"
 
 " at MySqlExceptionConverter.convertException (node_modules/@mikro-orm/core/platforms/ExceptionConverter.js:8:16)

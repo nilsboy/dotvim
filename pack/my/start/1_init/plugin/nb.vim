@@ -110,7 +110,7 @@ function! MyHelpersRunVim(cmd)
   let g:MyHelpersLastVimCommand = cmd
   wall
   let b:winview = winsaveview()
-  Verbose execute cmd
+  execute 'Redir ' . cmd
 endfunction
 nnoremap <silent> <leader>vef :call MyHelpersRunVim('source ' . expand('%:p'))<cr>
 nnoremap <silent> <leader>vel :call MyHelpersRunVim(getline("."))<cr>
@@ -161,11 +161,19 @@ function! nb#error(msg) abort
   echohl ErrorMsg | unsilent echom a:msg | echohl None
 endfunction
 
+" function! DUMP(input) abort
+"   execute 'edit ' . tempname() . '.json'
+"   keepjumps put =json_encode(a:input)
+"   silent! only
+"   call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
+"   keepjumps normal! gg
+" endfunction
+
+" example usage: :call DUMP('g:')
 function! DUMP(input) abort
-  execute 'edit ' . tempname() . '.json'
-  keepjumps put =json_encode(a:input)
+  execute 'edit ' . tempname() . '.txt'
+  execute '1PP ' . a:input
   silent! only
-  call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
   keepjumps normal! gg
 endfunction
 

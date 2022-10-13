@@ -28,6 +28,13 @@ function! nb#buffer#close() abort
     return
   endif
 
+  if exists('*coc#float#has_float')
+    if coc#float#has_float()
+      call coc#float#close_all()
+      return
+    endif
+  endif
+
   if BufferIsCommandLine() == 1
     silent! quit
     return
@@ -95,6 +102,13 @@ function! nb#buffer#close() abort
 
   set nocursorline
 endfunction
+
+augroup buffer#augroupCmdWinEsc
+  autocmd!
+	autocmd CmdwinEnter : nnoremap <buffer> <esc> <c-c>
+augroup END
+
+tnoremap <esc> <C-\><C-N>
 
 function! nb#buffer#isSpecial() abort
   if &previewwindow == 1

@@ -1,3 +1,10 @@
+# TODO: use db.getCollection('dbname') instead of db.dbname to make collections
+# made up solely from numbers
+
+snippet show "show colletions" b
+show collections
+endsnippet
+
 snippet update "update" b
 db.${1:collection}.update({
 	'${2:search key}': '${3:search value}'
@@ -30,7 +37,20 @@ db.${1:collection}.find({
 })
 endsnippet
 
-snippet insert "insert" b
+snippet replace "replaceOne" b
+insert
+endsnippet
+
+snippet insert "insert aka replaceOne" b
+db.${1:collection}.replaceOne({
+	'${2:search key}': '${3:search value}'
+},
+${VISUAL}$0,
+{upsert: true, },
+)
+endsnippet
+
+snippet insertMany "insertMany" b
 db.${1:collection}.insertMany([
    {$0},
 ])
@@ -40,10 +60,23 @@ snippet drop "drop" b
 db.${1:collection}.drop()
 endsnippet
 
-snippet delete "delete" b
-db.${1:collection}.deleteMany({
-	${2:delete key} : '${0:delete value}'
+# snippet delete "delete" b
+# db.${1:collection}.deleteMany({
+# 	${2:delete key} : '${0:delete value}'
+# })
+# endsnippet
+
+# put after an aggregate - needs to be on the same line as the ])...
+snippet .delete "delete" i
+.map((doc) => {
+  console.log(\`deleting: \` + doc._id);
+  db.${1:collection}.remove({"_id": doc._id });
+  return doc._id
 })
+endsnippet
+
+snippet deleteAll "deleteAll" b
+// DELETES ALL ENTRIES db.${1:collection}.remove({})
 endsnippet
 
 snippet isNull "isNull" w
@@ -58,24 +91,36 @@ snippet isUndefined "isUndefined" w
 {$exists: false},
 endsnippet
 
-snippet "(==|eq)" "eq" r
+snippet eq "eq" w
 {$eq: $0},
 endsnippet
 
-snippet "(!=|ne)" "ne" r
+snippet == "eq" w
+{$eq: $0},
+endsnippet
+
+snippet ne "ne" w
+{$ne: $0},
+endsnippet
+
+snippet != "ne" w
 {$ne: $0},
 endsnippet
 
 # aggregate
 
-snippet "(sel|find|aggregate)" "find" r
+snippet "(sel|find|aggregate)" "aggregate match" r
 db.${1:collection}.aggregate([
-  { $match: {$0}, },
+	${VISUAL}$0
 ])
 endsnippet
 
 snippet match "match" b
 { $match: {$0}, },
+endsnippet
+
+snippet where "where" b
+match
 endsnippet
 
 snippet like "like" b
@@ -104,7 +149,11 @@ snippet count "count" b
 endsnippet
 
 snippet sort "sort" b
-{ $sort: "$0"},
+{
+	$sort: {
+		'$${1:field}': ${2:1}
+	},$0
+},
 endsnippet
 
 snippet groupByRegexMatch "groupByRegex" b
@@ -123,10 +172,50 @@ snippet groupByRegexMatch "groupByRegex" b
 }
 endsnippet
 
-#
-
 snippet limitMongosh "mongoshLimit" b
 config.set("displayBatchSize", 1000$0)
 endsnippet
 
+snippet arrayFieldMatch "arrayFieldMatch" b
+{
+	$match: {
+		'${1:arrayFieldName}': {
+			$elemMatch: {
+				'${2:arrayItemFieldName}': {
+					$in: [ '${3:arrayItemFieldValue}' ] },
+					$nin: [ '${4:arrayItemFieldValue}' ] },$0
+				},
+			}, 
+		},
+	},
+},
+endsnippet
 
+snippet arrayShrinkFilterInProject "arrayShrinkFilterInProject" b
+'${1:arrayFieldName}': {
+	$filter: {
+		input: '$$1',
+		as: 'i',
+		cond: {
+			$eq: [
+				'$$i.${2:arrayItemFieldName:}',
+				'${3:arrayItemFieldValue}',
+			]
+		}
+	}
+},
+endsnippet
+
+snippet unwind "unwind" b
+{
+	$unwind: '$${1:arrayFieldName}',$0
+},
+endsnippet
+
+snippet addFields "addFields" b
+{
+	$addFields: {
+		'${1:fieldName}': '$${2:fieldPath}'
+	}
+},
+endsnippet

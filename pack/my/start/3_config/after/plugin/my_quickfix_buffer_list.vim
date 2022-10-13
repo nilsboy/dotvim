@@ -54,5 +54,4 @@ function! my_quickfix_buffer_list#cmp(e1, e2) abort
         \ : a:e1.basename > a:e2.basename ? 1 : -1
 endfunction
 
-nnoremap <silent><cr> :silent call my_quickfix_buffer_list#list()<CR>
-vnoremap <silent><cr> :silent call my_quickfix_buffer_list#list()<CR>
+nnoremap <silent> <cr> :silent call my_quickfix_buffer_list#list()<CR>

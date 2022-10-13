@@ -1,4 +1,4 @@
-priority 100
+priority 101
 
 snippet readme "readme" b
 ${1:description}
@@ -14,8 +14,14 @@ endsnippet
 
 snippet code "code" b
 \`\`\`${1:language}
-${VISUAL}$0
-\`\`\`
+${VISUAL}
+\`\`\`$0
+endsnippet
+
+snippet txt "txt" b
+\`\`\`text
+${VISUAL}
+\`\`\`$0
 endsnippet
 
 snippet toc "toc" b
@@ -31,6 +37,8 @@ snippet table "table" b
 | ---|
 endsnippet
 
-snippet todo "toodo" b
-TODO
+snippet sql "sql" b
+\`\`\`sql
+${VISUAL}$0
+\`\`\`
 endsnippet
