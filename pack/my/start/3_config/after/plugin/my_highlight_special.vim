@@ -1,5 +1,6 @@
 finish
 " Hightlight all occurences of special character under cursor
+" SEE ALSO: search for character under cursor mapping
 
 augroup MyHighlightSpecialAugroup
   autocmd!

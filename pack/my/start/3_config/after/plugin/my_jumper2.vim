@@ -2,11 +2,14 @@ finish
 " TODO: jump to current if last
 "
 " TODO: add key to add entry before current or just first?
-" TODO: don't jump in special buffers
+" TODO: don't jump into special buffers
 
 " NOTE: Marks keep their position even if the underlying character moves.
 " NOTE: Marks can be restored using undo and redo.
 " NOTE: Do extended marks always keep their position?
+
+" NOTE: Lowercase marks 'a to 'z are remembered as long as the file remains in the
+" buffer list.
 
 let g:my_bufhist#dir = getcwd() .. '/.git'
 if ! isdirectory(g:my_bufhist#dir)

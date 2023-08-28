@@ -1,3 +1,5 @@
+" TODO: checkout webapi-vim
+"
 " A REST console for Vim.
 " PackAdd diepm/vim-rest-console
 PackAdd nilsboy/vim-rest-console
@@ -15,8 +17,8 @@ let g:vrc_show_command = 1
 let g:vrc_show_command_in_result_buffer = 1
 let g:vrc_show_command_in_quickfix = 0
 
-let g:vrc_curl_timeout = '5s'
-" let g:vrc_curl_timeout = '1m'
+" let g:vrc_curl_timeout = '5s'
+let g:vrc_curl_timeout = '1h'
 
 let g:vrc_horizontal_split = 1
 let g:vrc_set_default_mapping = 0
@@ -29,11 +31,11 @@ let g:vrc_curl_opts = {
       \ '-L' : '',
       \ '-S' : '',
       \ '-s' : '',
-      \ '--connect-timeout' : '1',
+      \ '--connect-timeout' : '5',
       \ '--insecure' : '1',
       \ '--trace-time': '',
+      \ '--max-time' : '9999',
       \}
-      " \ '--max-time' : '3',
 
 " Sort JSON keys
 let g:vrc_auto_format_response_enabled = 0
@@ -63,19 +65,19 @@ function! MyRestConsoleCall(...) abort
   silent! keeppatterns keepjumps g/Connection timed out after .* milliseconds/ :normal! "_dd
   silent! keeppatterns keepjumps g/\v^(HTTP|REQUEST)/ :normal gcip
 
-  call matchadd('todo', '\v^// (HTTP.* \d+.*$|age: \d+\s*$|.*cache.*)')
+  call matchadd('todo', '\v^// (HTTP.* \d+.*$|age: \d+\s*$|.*cache.*|.*service-version.*)')
 
   let is_json = search('// content-type: application/json', 'n')
   if is_json
     let b:formatter = 'prettier-json'
     setlocal filetype=json
-    keepjumps call MakeWith({'compiler': b:formatter, 'loclist': 1})
+    keepjumps call MakeWith({'compiler': b:formatter})
   endif
 
   silent! keeppatterns keepjumps %s/\\n/\r/g
   keepjumps normal! gg
   " call append(0, [filename])
-  setlocal filetype=text
+  setlocal filetype=jsonc
   write
   " setlocal nowrap
 endfunction

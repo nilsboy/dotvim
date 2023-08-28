@@ -14,10 +14,10 @@ let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 let &makeprg .= " 'e/^\\[error\\].+\\s+\\((?<row>\\d+)\\:(<col>\\d+)\\)$/gm'"
 let &makeprg .= " 'e/^\/bin\/bash/gm'"
 
-if exists("prettier-json#loaded")
+if exists("prettierjsonloaded")
   finish
 endif
-let prettier-json#loaded = 1
+let "prettierjsonloaded" = 1
 
 MyInstall prettier
 MyInstall errorformatregex npm install -g @nilsboy/errorformatregex

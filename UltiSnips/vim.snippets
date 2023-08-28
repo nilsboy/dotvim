@@ -47,6 +47,14 @@ snippet n "name something" w
 `!v expand('%:t:r')`#${1:name}
 endsnippet
 
+snippet let "name var" w
+let g:`!v expand('%:t:r')`#${1:name}
+endsnippet
+
+snippet g "global var prefix" w
+g:`!v expand('%:t:r')`#${1:name}
+endsnippet
+
 snippet nold "name something" w
 `!p snip.rv = fncc(snip.basename)`$0
 endsnippet
@@ -55,14 +63,13 @@ endsnippet
 # g:`!p snip.rv = fncc(snip.basename)`${VISUAL}$0
 # endsnippet
 
-snippet g "g" w
-g:`!v expand('%:t:r')`#
-endsnippet
+# snippet g "g" w
+# g:`!v expand('%:t:r')`#
+# endsnippet
 
 snippet fun "Function" b
 function! `!v expand('%:t:r')`#${1:name}(opts) abort
-  default$0
-  ${VISUAL}
+  ${VISUAL}$0
 endfunction
 endsnippet
 
@@ -111,18 +118,18 @@ echo '$1:',  $1
 endsnippet
 
 snippet debug "debug" 
-call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
 endsnippet
 
 snippet jj ""
-call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
+call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0: ' . ${VISUAL}$1)
 endsnippet
 
 snippet jjj "here"
 call nb#debug('##################################### jj`!v DebugId()` $1'$0)
 endsnippet
 
-snippet jjdump ""
+snippet jd "dump"
 call nb#debug('### jj`!v DebugId()` ${VISUAL}$1$0:' . json_encode(${VISUAL}$1))
 endsnippet
 
@@ -149,7 +156,7 @@ augroup END
 endsnippet
 
 snippet augroup "augroup" b
-augroup `!p snip.rv = fncc(snip.basename)`Augroup$0
+autocmd
 endsnippet
 
 snippet c "concat" w
@@ -166,10 +173,18 @@ for ${1:var} in ${2:list}
 endfor
 endsnippet
 
-snippet fori "for i in range" b
+snippet forialternative "for i in range" b
 for ${1:i} in range(${2:1,10})
   $0
 endfor
+endsnippet
+
+snippet fori "fori" b
+let i = 0
+while i < len($1)
+	let i = i + 1
+	let $0 = $1[i]
+endwhile
 endsnippet
 
 snippet whilei "whilei" b
@@ -270,6 +285,10 @@ endsnippet
 
 snippet push "array push" w
 call add(${1:array}, ${VISUAL}${0:item})
+endsnippet
+
+snippet pop "pop" b
+let ${1:list} = $1[0:len($1)-2]$0
 endsnippet
 
 snippet remove_array_entry "array remove at index" w
@@ -401,6 +420,10 @@ endsnippet
 
 snippet split "split" w
 split(${1:src}, '${0:pattern}')
+endsnippet
+
+snippet length "listlength" w
+len(${VISUAL}$0)
 endsnippet
 
 snippet listlength "listlength" w

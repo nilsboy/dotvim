@@ -134,7 +134,6 @@ function! nb#touch(path) abort
 endfunction
 
 let g:nb#logfile = nb#mktemp("vim") . "log"
-
 nnoremap <silent> <leader>vm :call nb#viewLogfile()<cr><cr>
 function! nb#viewLogfile() abort
   call writefile(["=== Log messages until " .  strftime("%H:%M:%S") . ' ======================='], g:nb#logfile, 'a') 
@@ -142,8 +141,18 @@ function! nb#viewLogfile() abort
  keepjumps normal G
 endfunction
 
-function! nb#debug(...) abort
-  call writefile(["DEBUG> " . join(a:000, ' ')], g:nb#logfile, 'a') 
+let g:nb#runlogfile = nb#mktemp("vim") . "runlog"
+let &makeef = g:nb#runlogfile
+
+nnoremap <silent> <leader>vr :call nb#viewRunLogfile()<cr><cr>
+function! nb#viewRunLogfile() abort
+  execute 'edit ' . g:nb#runlogfile
+  setlocal nowrap
+  keepjumps normal G
+endfunction
+
+function! nb#debug(msg) abort
+  call writefile(["DEBUG> " . a:msg], g:nb#logfile, 'a') 
 endfunction
 
 function! nb#info(msg) abort
@@ -161,21 +170,21 @@ function! nb#error(msg) abort
   echohl ErrorMsg | unsilent echom a:msg | echohl None
 endfunction
 
-" function! DUMP(input) abort
-"   execute 'edit ' . tempname() . '.json'
-"   keepjumps put =json_encode(a:input)
-"   silent! only
-"   call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
-"   keepjumps normal! gg
-" endfunction
-
-" example usage: :call DUMP('g:')
 function! DUMP(input) abort
-  execute 'edit ' . tempname() . '.txt'
-  execute '1PP ' . a:input
+  execute 'edit ' . tempname() . '.json'
+  keepjumps put =json_encode(a:input)
   silent! only
+  call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
   keepjumps normal! gg
 endfunction
+
+" " example usage: :call DUMP('g:')
+" function! DUMP(input) abort
+"   execute 'edit ' . tempname() . '.txt'
+"   execute '1PP ' . a:input
+"   silent! only
+"   keepjumps normal! gg
+" endfunction
 
 function! nb#isNeovim() abort
   return has("nvim")
@@ -228,23 +237,22 @@ function! nb#createUniqueSignId() abort
 endfunction
 
 sign define BlinkLine linehl=Todo texthl=Todo
+" NOTE: does not work anymore!?!
+" cursorline can not be used twice inside a single function!?!
 function! nb#blinkLine() abort
-  let cursorline = &cursorline
-  let count = 1
+  let count = 10
   let signId = nb#createUniqueSignId()
   let i = 0
   while i <= count
     let i = i + 1
-    set nocursorline
     execute 'sign place ' . signId . ' name=BlinkLine line='
           \ . line('.') . ' buffer=' . bufnr('%')
-    set cursorline
-    sleep 60m
+    set cursorline!
+    sleep 600m
     execute 'sign unplace ' . signId
-    set nocursorline
-    sleep 60m
+    set cursorline!
+    sleep 600m
   endwhile
-  let &cursorline = cursorline
 endfunction
 
 " " OR ELSE just highlight the match in red...
@@ -358,7 +366,7 @@ endfunction
 " nmap <silent>L :bnext<cr>
 " nmap <silent>H :bprev<cr>
 
-nnoremap <silent> L :silent! call MyHelpersNextBuffer()<cr>
+" nnoremap <silent> L :silent! call MyHelpersNextBuffer()<cr>
 function! MyHelpersNextBuffer() abort
   let lastBuffer = bufnr('$')
   let currentBuffer = bufnr('%')
@@ -380,7 +388,7 @@ function! MyHelpersNextBuffer() abort
   endwhile
 endfunction
 
-nnoremap <silent> H :silent! call MyHelpersPreviousBuffer()<cr>
+" nnoremap <silent> H :silent! call MyHelpersPreviousBuffer()<cr>
 function! MyHelpersPreviousBuffer() abort
   let currentBuffer = bufnr('%')
   let i = currentBuffer
@@ -423,10 +431,11 @@ function! MyBufferIsVerySpecial(bufnr) abort
 endfunction
 
 " TODO: remap
-nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
+" nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
-  let fileName = substitute(expand('%:p'), '/txt/', '/org/', 'g')
+  let fileName = substitute(expand('%:p'), '/txt/', '/pdf/', 'g')
   let fileName = substitute(fileName, '\.txt', '', 'g')
+  call nb#debug("Opening " . fileName . " ...")
   silent! execute '!see ' fileName ' &'
 endfunction
 command! -nargs=* MyOriginal call MyHelpersOpenOrg(<f-args>)
@@ -443,6 +452,7 @@ function! nb#install(app, ...) abort
   endif
   call nb#info('Installing ' . a:app . ' via: "' . cmd . '"...')
   echo system(cmd)
+  echo 
 endfunction
 command! -nargs=* MyInstall call nb#install(<f-args>)
 
@@ -602,21 +612,21 @@ endfunction
 nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
-  execute 'Redir       verbose map ' . join(a:000, '')
-  execute 'RedirAppend verbose map! ' . join(a:000, '')
-  execute 'RedirAppend verbose map <c-' . join(a:000, '') . '>'
-  execute 'RedirAppend verbose map! <c-' . join(a:000, '') . '>'
-  execute 'RedirAppend verbose map <leader>' . join(a:000, '')
-  execute 'RedirAppend verbose map! <leader>' . join(a:000, '')
+  let search = join(a:000)
+  execute 'Redir       verbose map'
+  execute 'RedirAppend verbose map!'
   silent! keeppatterns %s/\v\n\s*(last set from)/xxx \1/ig 
   silent! g/\v<plug>/d
   silent! keepjumps g/no mapping found/ normal! "_dd
   silent! keepjumps g/^$/ normal! "_dd
-  sort u /\v^\w+/
-  silent! keeppatterns %s/\v(.+)xxx (last set from) (.+) line (\d+)/\3:\4:1:\1/ig 
+  silent sort u /\v^\w+/
+  silent! keepjumps keeppatterns %s/\v(.+)xxx (last set from) (.+) line (\d+)/\3:\4:1:\1/ig 
+  " example /home/...:s  <C-H>       * <C-G>"_c
+  silent! execute 'v/\c^\S\+:\S\+\s\+\S*' . search . '.*\*/d'
   set errorformat&
-  cgetbuffer
+  silent cgetbuffer
   bwipe
+  call setqflist([], 'a', { 'title' : 'Mappings for ' . search })
   copen
 endfunction
 command! -nargs=* Map call Map (<f-args>)

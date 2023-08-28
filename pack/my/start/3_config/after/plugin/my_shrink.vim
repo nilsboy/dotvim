@@ -1,6 +1,6 @@
 " Shrink and unshrink part of a buffer to edit fenced code with a different
 " filetype.
-" see also: fenced code in markdown
+" see also: fenced code in markdown ; narrow
 " see also: https://github.com/ferranpm/vim-isolate
 
 function! MyShrinkShrink(options) abort

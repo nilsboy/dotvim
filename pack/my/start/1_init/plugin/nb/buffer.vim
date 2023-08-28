@@ -35,14 +35,23 @@ function! nb#buffer#close() abort
     endif
   endif
 
+  if nb#buffer#closeFugitiveDiffBuffer() == 1
+    return
+  endif
+
   if BufferIsCommandLine() == 1
     silent! quit
     return
   elseif BufferIsQuickfix()
-    cclose
+    " NOTE: use bw! to prevent - "last window cannot be closed"
+    bw!
+    " cclose
     return
   elseif BufferIsLoclist()
-    lclose
+    " NOTE: use bw! to prevent - "last window cannot be closed"
+    " TODO: test:
+    bw!
+    " lclose
     return
   elseif BufferIsNetrw() == 1
     " Netrw leaves its buffers in a weired state
@@ -84,7 +93,7 @@ function! nb#buffer#close() abort
       silent! keepjumps edit #
       execute 'lcd ' . g:start_cwd
     endif
-    " silent! q!
+    " silent! quit!
   endif
 
   " use bdelete instead of bwipeout to not loose marks
@@ -101,6 +110,23 @@ function! nb#buffer#close() abort
   endif
 
   set nocursorline
+endfunction
+
+function! nb#buffer#closeFugitiveDiffBuffer() abort
+  let lastBuffer = bufnr('$')
+  let i = 0
+  while i <= lastBuffer
+    let i = i + 1
+    let fugitive_type = getbufvar(i, "fugitive_type")
+    if fugitive_type == ""
+      continue
+    endif
+    if fugitive_type != "index"
+      execute 'bdelete ' . i
+      return 1
+    endif
+  endwhile
+  return 0
 endfunction
 
 augroup buffer#augroupCmdWinEsc
@@ -120,15 +146,15 @@ endfunction
 function! nb#buffer#isLast() abort
   let lastBuffer = bufnr('$')
   let listed = 0
-  let i = 1
+  let i = 0
   while i <= lastBuffer
+    let i = i + 1
     if buflisted(i) == 1
       let listed = listed + 1
     endif
     if listed > 1
       return 0
     endif
-    let i = i + 1
   endwhile
   return 1
 endfunction

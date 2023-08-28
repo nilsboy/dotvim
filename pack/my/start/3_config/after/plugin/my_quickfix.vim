@@ -1,4 +1,5 @@
 " Search in file names and contents and some quickfix tweaks.
+" TODO: checkout vim dispatch for async?
 
 MyInstall rg ripgrep-install
 MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
@@ -20,6 +21,7 @@ endfunction
 let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 let g:MyQuickfixSearchLimit = '5000'
 let g:MyQuickfixWrap = 'nowrap'
+let g:my_quickfix#formatBasename = 0
 
 command! -bang -nargs=* Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
@@ -113,6 +115,16 @@ function! MyQuickfixSearch(options) abort
 
   let orgTerm = term
 
+  " TBD: scpan new lines
+  " let words = split(orgTerm, '\v\s+')
+  " let regex = []
+  " for word in words
+  "   call add(regex, word)
+  "   call add(regex, '(?:(?!' .. word .. ').)*?')
+  " endfor
+  " let regex = regex[0:len(regex)-2]
+  " let term = join(regex, '')
+
   let term = substitute(orgTerm, '\v\s+', '[\n]*.*', 'g')
 
   if strict
@@ -145,10 +157,12 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = "timeout -s kill 5s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
+  let grepprg = "timeout -s kill 500s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
+  " let grepprg = "timeout -s kill 500s rg --only-matching --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
 
   if multiline == 1
-    let grepprg .= " -U"
+    " let grepprg .= " --multiline --multiline-dotall"
+    let grepprg .= " --multiline"
   endif
 
   " don't search for ignore files
@@ -156,6 +170,7 @@ function! MyQuickfixSearch(options) abort
 
   if useIgnoreFile
     let grepprg .= ' --ignore-file ' . g:MyQuickfixIgnoreFile
+    let grepprg .= ' --ignore-file .ignore'
   else
     let grepprg .= ' --no-ignore'
   endif
@@ -173,6 +188,7 @@ function! MyQuickfixSearch(options) abort
   endif
 
   let grepprg .= ' --iglob ''!.git'''
+  let grepprg .= ' --iglob ''!node_modules'''
 
   let limit = ''
   if g:MyQuickfixSearchLimit
@@ -201,13 +217,12 @@ function! MyQuickfixSearch(options) abort
   let grepprg .= " | errorformatregex 'n/^(?<file>.+?)\\:(?<row>\\d+)\\:(?<col>\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
-  let tempfile = nb#mktemp("qf") . "out"
-
+  let tempfile = g:nb#runlogfile
   call writefile([], tempfile)
 
   call nb#debug("quickfix tempfile: " . tempfile)
-  call nb#debug('findprg: ' . findprg)
-  call nb#debug('grepprg: ' . grepprg)
+  call nb#debug('findprg:' . findprg)
+  call nb#debug('grepprg:' . grepprg)
 
   let g:MyQuickfixFindPrg = findprg
   let g:MyQuickfixGrepPrg = grepprg
@@ -331,7 +346,7 @@ nnoremap <silent><leader>* :let g:MyQuickfixFormatOnce = 'NoFile' \| normal <lea
 " nnoremap <silent> <leader>jj :call MyQuickfixSearch({ 'path': '/tmp', 'term': '.', 'find': 1, 'grep': 0, 'orderBy': 'recent', })<cr>
 
 nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
-nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr>
+nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr><cr>
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/README.md<cr>
@@ -417,6 +432,9 @@ function! MyQuickfixFormatAsSimple() abort
     endif
     " let filenameLength = len(filename)
     let filenameLength = len(path)
+    if g:my_quickfix#formatBasename
+      let filenameLength = len(basename)
+    endif
     if filenameLength > maxFilenameLength
       let maxFilenameLength = filenameLength
     endif
@@ -438,6 +456,9 @@ function! MyQuickfixFormatAsSimple() abort
     endif
     " let filename = dir . basename
     let filename = path
+    if g:my_quickfix#formatBasename
+      let filename = basename
+    endif
     let text = filename
     " if ! singleFilename
       " if entry.valid
@@ -472,6 +493,11 @@ function! MyQuickfixFormatAsSimple() abort
   keepjumps normal! "_dd
   setlocal nomodifiable
   setlocal nomodified
+endfunction
+
+function! MyQuickfixFormatAsSimpleBasename() abort
+  let g:my_quickfix#formatBasename = 1
+  call MyQuickfixFormatAsSimple()
 endfunction
 
 function! MyQuickfixFormatAsNoFile() abort
@@ -569,19 +595,19 @@ function! MyQuickfixFormatAsNone() abort
 endfunction
 
 function! MyQuickfixFormatToggle() abort
+  let g:my_quickfix#formatBasename = 0
+  let g:MyQuickfixWrap = 'nowrap'
   if g:MyQuickfixFormat == 'Simple'
+    let g:MyQuickfixFormat = 'SimpleBasename'
+  elseif g:MyQuickfixFormat == 'SimpleBasename' 
     let g:MyQuickfixFormat = 'NoFile'
-    " let g:MyQuickfixFormat = 'None'
-    let g:MyQuickfixWrap = 'wrap'
+    let g:MyQuickfixWrap = 'nowrap'
   elseif g:MyQuickfixFormat == 'NoFile' 
     let g:MyQuickfixFormat = 'Basename'
-    let g:MyQuickfixWrap = 'nowrap'
   elseif g:MyQuickfixFormat == 'Basename' 
     let g:MyQuickfixFormat = 'DirAndBasename'
-    let g:MyQuickfixWrap = 'nowrap'
   elseif g:MyQuickfixFormat == 'DirAndBasename' 
     let g:MyQuickfixFormat = 'Simple'
-    let g:MyQuickfixWrap = 'nowrap'
   else
     throw 'Unknown format: ' . g:MyQuickfixFormat
   endif
@@ -592,6 +618,7 @@ function! MyQuickfixFormatToggle() abort
     lclose
     lopen
   endif
+  let g:my_statusline#msg = g:MyQuickfixFormat
 endfunction
 
 " TODO: keep cursor position in qf

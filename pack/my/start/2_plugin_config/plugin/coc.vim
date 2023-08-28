@@ -26,6 +26,10 @@ call coc#add_extension('coc-json')
 call coc#add_extension('coc-java')
 call coc#add_extension('coc-phpls')
 call coc#add_extension('coc-yaml')
+call coc#add_extension('coc-vimlsp')
+call coc#add_extension('coc-vimlsp')
+call coc#add_extension('@yaegassy/coc-tailwindcss3')
+call coc#add_extension('coc-swagger')
 " TODO: test
 " call coc#add_extension('coc-sql')
 " TODO: test
@@ -40,17 +44,21 @@ nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
 nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>lR <Plug>(coc-rename)
 nmap <silent> <leader>lF :CocCommand workspace.renameCurrentFile<cr>
-vmap <silent> <leader>lf <Plug>(coc-format-selected)
+" vmap <silent> <leader>lf <Plug>(coc-format-selected)
 nmap <silent> <leader>lf :call CocAction('format')<cr>
 vmap <silent> <leader>lA <Plug>(coc-codeaction-selected)
 nmap <silent> <leader>la <Plug>(coc-codeaction)
 nmap <silent> <leader>lc :CocList commands<cr>
 nmap <silent> <leader>lO :call CocAction('fold', <f-args>)<cr>
-nnoremap <silent> <leader>lK :call CocAction('doHover preview')<cr>
+nnoremap <silent> <leader>lK :call CocAction('doHover')<cr>
 nnoremap <silent> <leader>l? :CocCommand workspace.showOutput<cr>
 
-" workspace errors - i.e. (see filetype file):
-" nnoremap <silent> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
+nmap <silent> <leader>lL <Plug>(coc-float-jump)
+
+nnoremap <silent> <leader>lw :call nb#warn("Build workspace not implemented.")<cr>
+nnoremap <silent> <leader>lo :call nb#warn("Organize imports not implemented.")<cr>
+
+" Check complete workspace (project) for errors.
 
 " nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -58,11 +66,6 @@ nnoremap <silent> <leader>l? :CocCommand workspace.showOutput<cr>
 " inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 " vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
-nmap <silent> <leader>lL <Plug>(coc-float-jump)
-" nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-"  *coc#float#has_float()* 
-" nmap <silent> <leader>lL <Plug>(coc-float-hide)
 
 " Preview instead of float not supported everywhere (2021-03-23):
 " https://github.com/neoclide/coc.nvim/issues/2233
@@ -87,13 +90,6 @@ nmap <silent> <leader>lL <Plug>(coc-float-jump)
 "   " call coc#float#close_all() 
 " endfunction
 
-" TODO:
-" call coc#config('coc.preferences', {
-" 		\ 'timeout': 1000,
-" 		\})
-
-" inoremap <silent> <expr> <c-space> coc#refresh()
-
 " Show signature help while editing
 augroup MyCocAugroupCoc
   autocmd!
@@ -108,29 +104,48 @@ augroup MyCocAugroupFixColors
   autocmd!
   autocmd ColorScheme,Syntax,FileType * call MyCocFixColors()
 augroup END
-
 function! MyCocFixColors() abort
-  highlight link CocErrorHighlight Error
-  highlight link CocErrorVirtualText Normal
-  highlight link CocErrorFloat Normal
 
-  highlight link CocWarningHighlight WarningMsg
-  highlight link CocWarningVirtualText WarningMsg
-  highlight link CocWarningFloat Normal
+" Float window/popup related~
 
-  highlight link CocInfoHighlight SpellBad
-  highlight link CocInfoVirtualText MoreMsg
-  highlight link CocInfoFloat Normal
+  hi! link CocFloating PMenu
+  hi! link CocFloatThumb PmenuThumb
+  hi! link CocFloatSbar PmenuSbar
+  hi! link CocFloatDividingLine PMenu
+  hi! link CocFloatActive Search
+  hi! link CocMenuSel PmenuSel
 
-  highlight link CocHintHighlight SpellBad
-  highlight link CocHintVirtualText MoreMsg
-  highlight link CocHintFloat Normal
+  hi! link CocErrorHighlight Error
+  hi! link CocErrorVirtualText Normal
+  hi! link CocErrorFloat NormalFloat
+  hi! link CocHintFloat Pmenu
 
-  highlight link CocHighlightRead Normal
-  highlight link CocHighlightWrite Normal
+" CocNotification 					
 
-  highlight link CocCursorRange Normal
-  highlight link CocHoverRange Normal
+  hi! link CocNotificationProgress MoreMsg
+  hi! link CocNotificationButton MoreMsg
+
+  hi! link CocNotificationError ErrorMsg
+  hi! link CocNotificationWarning WarningMsg
+  hi! link CocNotificationInfo MoreMsg
+
+  hi! link CocWarningHighlight WarningMsg
+  hi! link CocWarningVirtualText WarningMsg
+  hi! link CocWarningFloat Normal
+
+  hi! link CocInfoHighlight SpellBad
+  hi! link CocInfoVirtualText MoreMsg
+  hi! link CocInfoFloat Normal
+
+  hi! link CocHintHighlight SpellBad
+  hi! link CocHintVirtualText MoreMsg
+  hi! link CocHintFloat Normal
+
+  hi! link CocHighlightRead Normal
+  hi! link CocHighlightWrite Normal
+
+  hi! link CocCursorRange Normal
+  hi! link CocHoverRange Normal
 
   sign define CocError text=\ ┃ texthl=ErrorSign
   sign define CocWarning text=\ ┃ texthl=WarningSign

@@ -8,9 +8,9 @@ PackAdd justinmk/vim-dirvish
 " let g:loaded_netrw = 1
 " let g:loaded_netrwPlugin = 1
 
-" TODO: test
-augroup vim-dirvish#augroupFixBrokenSearchMapping
-  autocmd!
-  autocmd FileType dirvish nmap <silent> <buffer> / <Plug>(incsearch-forward)
-augroup END
+" " TODO: test
+" augroup vim-dirvish#augroupFixBrokenSearchMapping
+"   autocmd!
+"   autocmd FileType dirvish nmap <silent> <buffer> / <Plug>(incsearch-forward)
+" augroup END
 

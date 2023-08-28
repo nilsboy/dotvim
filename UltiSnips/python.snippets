@@ -2,3 +2,7 @@ snippet system "system" w
 os.popen("${0:command}").read()
 endsnippet
 
+snippet replace "replace" b
+$1 = re.sub(r'${1:search}', r'${2:replace}', $1$0)
+endsnippet
+

@@ -1,6 +1,6 @@
 let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
-let &makeprg  = 'ts-node --esm' 
+let &makeprg  = 'node' 
 
 let &makeprg .= ' ' . expand('%:p') . ' $* 2>&1'
 

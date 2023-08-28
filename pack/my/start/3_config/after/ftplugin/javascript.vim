@@ -10,7 +10,7 @@
 let b:formatter = 'prettier'
 let b:tester = 'jest'
 
-let b:myrunprg = 'ts-node'
+let b:myrunprg = 'node'
 
 " TODO:
 " let b:formatter = 'my-javascript'
@@ -103,6 +103,11 @@ if exists("b:MyJavascriptFtpluginLoaded")
   finish
 endif
 let b:MyJavascriptFtpluginLoaded = 1
+
+function! javascript#arrayWrap()
+  %s/\[/\[ \/\/\r/g
+  %s/\n\n/\r/g
+endfunction
 
 function! javascript#fromPerl()
   %s/sub //g

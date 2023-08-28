@@ -20,7 +20,7 @@ if BufferIsQuickfix()
   nnoremap <buffer><silent> H :silent! colder \| :call MyStatuslineUpateQickfixValues()<cr>
   nnoremap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
   nnoremap <buffer><silent> <leader><cr> :silent call MyQfIsQfListError() \| copen<cr>
-  nnoremap <buffer> x :call qf#closeBuffer()<cr> 
+  nnoremap <buffer> <silent> x :call qf#closeBuffer()<cr> 
   augroup MyQfAugroupBufferLeave
     autocmd!
     autocmd BufLeave <buffer> :silent! cclose
@@ -58,11 +58,23 @@ let b:MyQfFtpluginLoaded = 1
 
 function! qf#closeBuffer() abort
   let saved_cursor = getcurpos()
-  let bufnr = getqflist()[getcurpos()[1]-1].bufnr
-  execute 'bd ' . bufnr
-  call qf#RemoveEntry(getcurpos()[1]-1)
-  call MyQuickfixFormat()
+  let bufnr = getqflist()[saved_cursor[1]-1].bufnr
+  cclose
+  if nb#buffer#isLast()
+    keepjumps new | only
+    silent! keepjumps edit #
+    execute 'lcd ' . g:start_cwd
+  endif
+  execute 'bdelete ' . bufnr
+  call qf#RemoveEntry(saved_cursor[1]-1)
+  copen
+  call setqflist([], 'a', { 'title' : 'buffers' })
+  if nb#buffer#isLast()
+    return
+  endif
   call setpos('.', saved_cursor)
+  " call MyQfIsQfListError()
+  " copen
 endfunction
 
 function! qf#RemoveEntry(lnum) abort
@@ -94,9 +106,11 @@ function! MyQfPreview() abort
 endfunction
 
 function! MyQfIsQfListError() abort
+  if len(getqflist()) == 0
+    return
+  endif
   if getqflist()[getcurpos()[1]-1].valid 
     execute 'cc ' getcurpos()[1]
-    " cclose
   else
     call nb#warn('No valid error on current line.')
   endif

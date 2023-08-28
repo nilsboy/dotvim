@@ -14,7 +14,10 @@ let &makeprg .= expand('%:p')
 
 let &makeprg .= " \\| errorformatregex --filename='" . expand("%:p") . "'"
 
-" let &makeprg .= " 'e/^\\s*Message\\s*\\:\\s*[\\s\\S]*?Line\\s*\\:\\s*(?<row>\\d+)/gm'"
+                         " │   Message :   Property names must be snake case
+" api-spec/v1.openapi.yaml │   Path    :   components.schemas.Error.properties.referenceError
+                         " │   Line    :   18631
+let &makeprg .= " 'e/^\\s*Message\\s*\\:\\s*[\\s\\S]*?Line\\s*\\:\\s*(?<row>\\d+)/gm'"
 
 " │ YAMLException: bad indentation of a mapping entry at line 119, column 5:
 " let &makeprg .= " 'e/^.*?Exception.*?at\\s+line\\s+(?<row>\\d+).*?column\\s+(?<col>\\d+).*/gm'"

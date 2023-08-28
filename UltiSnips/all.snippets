@@ -1,6 +1,12 @@
-priority 2
-
 ### global snippets
+
+### global paths
+
+# ~/.local/share/gnome-shell/extensions/
+
+###
+
+priority 2
 
 global !p
 def toggle(t, opt):
@@ -165,9 +171,14 @@ snippet date "YYYY-MM-DD" w
 (`!v strftime("%F")`)
 endsnippet
 
-snippet datetime "ISO format datetime" w
-`!v strftime("%FT%H:%M:%S%z")`
+snippet dateIsoUtc "iso date utc with timezone" w
+`date --utc "+%Y-%m-%dT%H:%M:%SZ"`
 endsnippet
+
+# NOTE: timezone should be +1 or +2 depending on summertime
+# snippet datetime "ISO format datetime" w
+# `!v strftime("%FT%H:%M:%S%z")`
+# endsnippet
 
 snippet time "hh:mm" w
 `!v strftime("%H:%M")`
@@ -193,8 +204,12 @@ snippet '(^\s*).*testing' "TESTING" r
 `!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TBD: TESTING:$0`!v  nb#surroundings()[1]`
 endsnippet
 
-# snippet '(^\s*).*tbd' "TBD" r
-# `!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TBD:$0`!v  nb#surroundings()[1]`
+snippet '(^\s*).*tbd' "TBD" r
+`!p snip.rv = match.group(1)``!v nb#surroundings()[0]`TBD:$0`!v  nb#surroundings()[1]`
+endsnippet
+
+# snippet tbd "tbd" w
+# [TBD]
 # endsnippet
 
 snippet '(.*\s*).*note' "NOTE" r
@@ -222,7 +237,7 @@ snippet '(^\s*).*see' "see also" r
 endsnippet
 
 snippet password "generate a secure password" w
-`apg -M SNC -n 1`
+`apg -M SNC -n 1 -m 10`
 endsnippet
 
 snippet ls "ls" b
@@ -257,8 +272,12 @@ snippet "(DEBUG|INFO)+" "DEBUG|INFO toggle" r
 `!p snip.rv = toggle('DEBUG|INFO', match.group(1))`
 endsnippet
 
-snippet uuid "uuid" i
+snippet uuidv4 "uuidv4" i
 `uuidgen`
+endsnippet
+
+snippet uuid "uuid" i
+`uuidv6`
 endsnippet
 
 snippet b64 "base64"
@@ -323,10 +342,6 @@ snippet chat "chat" w
 💬 [NEEDS INFO]
 endsnippet
 
-snippet tbd "tbd" w
-[TBD]
-endsnippet
-
 snippet "(-|=>)+" "-|=> toggle" r
 `!p snip.rv = toggle('-|=>', match.group(1))`
 endsnippet
@@ -384,4 +399,3 @@ endsnippet
 snippet shrug "shrug" b
 ¯\_(ツ)_/¯
 endsnippet
-

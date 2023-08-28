@@ -1,3 +1,6 @@
+# BashPitfalls - Greg's Wiki
+# https://mywiki.wooledge.org/BashPitfalls
+
 snippet info "INFO" b
 INFO "$1"
 endsnippet
@@ -61,7 +64,7 @@ snippet trap "trap" b
 function cleanup() {
 	test -e "$1" && rm "$1$0"
 }
-trap cleanup ERR INT
+trap cleanup ERR INT EXIT SIGUB SIGINT SIGTERM
 endsnippet
 
 snippet eof "eof" b
@@ -187,6 +190,16 @@ while $1 ; do
 done
 endsnippet
 
+snippet while2 "while2" b
+# TODO:
+while read package ; do
+    INFO "Installing package: $package..."
+    (apt-get install -y $package) || ERROR "Cannot install $package"
+done <<-EOF
+    $(cat $file)
+EOF
+endsnippet
+
 snippet tempfile "create tempfile" b
 tmp=$(mktemp --suffix=.$0)
 endsnippet
@@ -200,7 +213,7 @@ snippet tailfromline "tailfromline" b
 tail -n+${1:line} ${0:file}
 endsnippet
 
-snippet sudogui "sudogui" b
+snippet sudogui "sudo gui user root" b
 pkexec
 endsnippet
 
@@ -209,3 +222,6 @@ snippet lockScript "lockScript" b
 [ "\${FLOCKER}" != "\$0" ] && exec env FLOCKER="\$0" flock -en -E 0 "\$0" "\$0"
 endsnippet
   
+snippet timestamp "timestamp" b
+timestamp=`date +%Y%m%d_%H%M%S`
+endsnippet

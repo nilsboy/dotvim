@@ -3,3 +3,4 @@ rules:
   schema-description: info
   enum-case-convention: off
   property-case-convention: off
+  snake_case_only: off

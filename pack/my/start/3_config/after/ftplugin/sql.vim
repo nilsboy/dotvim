@@ -3,7 +3,7 @@ setlocal nowrap
 " let s:new_title = 'Srvr: ' . DB_listOption('profile')
 " exec 'DBSetOption custom_title=' . s:new_title
 
-" let &l:commentstring = '# %s'
+let &l:commentstring = '# %s'
 
 " TODO:
 " TODO npm sqlite3 seems to have a good formatter

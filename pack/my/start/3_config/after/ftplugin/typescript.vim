@@ -1,7 +1,10 @@
 runtime! after/ftplugin/javascript.vim
 
+let b:formatter = 'prettier'
+
 let b:myrunprg = 'ts-node'
-let b:tester = 'jest'
+" let b:tester = 'jest'
+let b:tester = 'vitest'
 
 let b:outline = '('
 
@@ -11,21 +14,42 @@ let b:outline .= '|^\s*export\s+\w+'
 let b:outline .= '|^\s*interface\s+\w+'
 let b:outline .= '|^\s*declare\s+\w+'
 let b:outline .= '|^\s*constructor\s*\('
-let b:outline .= '|^\s*(async)*\s*function\s+\w+'
+
+" static async notifyScannerOfNewDomains(order: ProductOrder) {
+let b:outline .= '|^\s*(static\s)*(async)*\s*function\s+\w+'
+
+let b:outline .= '|^\s*static\s(async)*\s+\w+'
 
 " async method(arg: type): returnType {
 " async find(req, query) {
-let b:outline .= '|^\s*(async)*\s*(?!if)\w+\s*\([\w+\:\s]*\)*.*\{'
+" let b:outline .= '|^\s*(async)*\s*(?!if)\w+\s*\([\w+\:\s]*\)*.*\{'
 
 let b:outline .= '|^\s*(async)*\s*describe\s*\('
 let b:outline .= '|^\s*(async)*\s*before\w+\s*\('
 let b:outline .= '|^\s*(async)*\s*after\w+\s*\('
 let b:outline .= '|^\s*(async)*\s*test\s*\('
 
+" buildService(
+let b:outline .= '|^\s\s(async\s+)*\w+\($'
+
+" async api(app) {
+let b:outline .= '|^\s\s(async\s+)*\w+\(.*?\)\s*\{$'
+
+" async api(app) : Set<string> {
+let b:outline .= '|^\s\s(async\s+)*\w+\(.*?\)[\s\w\<\>\:]+{$'
+
 let b:outline .= ')'
 
-nnoremap <silent> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
-" TODO: replace with this - faster! (lua):
+nnoremap <silent> <buffer> <leader>es :silent call MyShrinkShrink({
+      \ 'start': 'html`',
+      \ 'end': '^\\s*`$',
+      \ 'filetype': 'html',
+      \ })<cr>
+
+nnoremap <silent> <buffer> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
+nnoremap <silent> <buffer> <leader>lo :call CocActionAsync('runCommand', 'tsserver.organizeImports')<cr>
+
+" only shows errors of the nvim session (open buffers?)
 " fn.CocActionAsync('diagnosticList', '', function(err, res)
 "        if err == vim.NIL then
 "            local items = {}

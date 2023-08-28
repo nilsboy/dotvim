@@ -8,6 +8,8 @@ nmap <silent> <leader>tf :call my_test#testFile()<cr>
 nmap <silent> <leader>tn :call my_test#testNearest()<cr>
 nmap <silent> <leader>tt :call my_test#test(1)<cr>
 
+nmap <silent> <leader>tl :e .make.log<cr>
+
 function! my_test#testFile() abort
   let g:testNearest = 0
   call my_test#test(0)

@@ -41,6 +41,8 @@ function! MyStatuslineDir() abort
   return dir
 endfunction
 
+let g:my_statusline#msg = ""
+
 let &statusline .= '%#StatusLine#'
 let &statusline .= ' %-0.30{fnamemodify(getcwd(), ":t")} '
 let &statusline .= '%#StatusLine#'
@@ -143,10 +145,13 @@ let &statusline .= '%#Cursorline#'
 let &statusline .= '%( %{g:MyStatuslineLoclistOther}. %)'
 let &statusline .= '%#StatusLine#'
 
-" " TODO:
-" let &statusline .= '%#MoreMsg#'
-" let &statusline .= '%( %{my_bufhist#index()} %)'
-" let &statusline .= '%#StatusLine#'
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{g:my_jumper3#currentIndex} / %{len(g:my_jumper3#locs)} %)'
+let &statusline .= '%#StatusLine#'
+
+let &statusline .= '%#MoreMsg#'
+let &statusline .= '%( %{g:my_statusline#msg} %)'
+let &statusline .= '%#StatusLine#'
 
 " misc
 
@@ -156,6 +161,14 @@ let &statusline .= '%#StatusLine#'
 
 " let &statusline .= '%( %{my_statusline#specialBufferName() == "" ? &filetype : ""} %)'
 let &statusline .= '%( %{&filetype} %)'
+
+let &statusline .= '%#ErrorMsg#'
+let &statusline .= '%( %{exists("b:fugitive_type") ? "fugitive" : ""} %)'
+let &statusline .= '%#StatusLine#'
+
+" let &statusline .= '%#ErrorMsg#'
+" let &statusline .= '%( %{FugitiveStatusline()} %)'
+" let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%#ErrorMsg#'
 let &statusline .= '%( %{exists("b:region_filetype") ? "" . b:region_filetype : ""} %)'

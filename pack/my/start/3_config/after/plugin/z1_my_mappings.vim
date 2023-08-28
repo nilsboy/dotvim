@@ -175,7 +175,7 @@ nnoremap <leader>/t gg/TODO<cr>
 " nnoremap ]] /{<cr>
 
 " Make gf work with relative file names and non existent files
-nnoremap <leader>jf :execute ":edit " . expand('%:h') . '/' . expand('<cfile>')<cr>
+nnoremap <leader>jf :execute ":edit " . getcwd() . '/' . expand('<cfile>')<cr>
 
 " Restore cursor position after visual selection
 nnoremap v m`v
@@ -215,7 +215,7 @@ nnoremap gS "zyiw:%s/<C-r>z//g<Left><Left>
 nnoremap gb :ls<cr>:buffer<space>
 
 " select last pasted text
-nnoremap vi<space>p `[v`]
+nnoremap viP `[v`]
 
 " Toggle highlighting current matches
 nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
@@ -244,7 +244,7 @@ function! MyVimrcRtp() abort
   Redir echo &runtimepath
   %s/,/\r/g
 endfunction
-nnoremap <silent> <leader>vr :call MyVimrcRtp()<cr>
+nnoremap <silent> <leader>vR :call MyVimrcRtp()<cr>
 
 " nnoremap <silent> { :keepjumps normal! {<cr>
 " nnoremap <silent> } :keepjumps normal! }<cr>

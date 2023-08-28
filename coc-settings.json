@@ -1,16 +1,24 @@
 {
   // https://github.com/Microsoft/vscode/issues/47299
   "javascript.showUnused": false,
+
   "typescript.showUnused": false,
   "typescript.updateImportsOnFileMove.enable": true,
+
+  // https://github.com/neoclide/coc-tsserver/issues/265
+  // geterrForProject
+  // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  // "diagnostic.messageTarget": "preview",
+  // "diagnostic.locationlistLevel": true,
+
   "coc.preferences.floatActions": false,
   "coc.preferences.promptInput": false,
 
   // "coc.preferences.hoverTarget": "preview",
   "suggest.detailField": "preview",
-  // "diagnostic.messageTarget": "preview",
+  // don't automatically select the first entry when pum pops up
+  "suggest.noselect": true,
   // "signature.target": "preview",
-  // "diagnostic.messageTarget": "preview",
 
   "coc.preferences.useQuickfixForLocations": true,
   // "typescript.disableAutomaticTypeAcquisition": true,

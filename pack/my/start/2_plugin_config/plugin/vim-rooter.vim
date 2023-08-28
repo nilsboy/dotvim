@@ -10,7 +10,7 @@ let g:rooter_disable_map = 1
 let g:rooter_silent_chdir = 1
 let g:rooter_use_lcd = 1
 
-let g:rooter_patterns = ['.force-project-root', 'package.json', '.git', '.git/']
+let g:rooter_patterns = ['.force-project-root', '.myroot', 'package.json', '.git', '.git/', '.project' ]
 
 " Make parent dir the root
 nnoremap <silent> <leader>vR :call MyRooterCd()<cr>

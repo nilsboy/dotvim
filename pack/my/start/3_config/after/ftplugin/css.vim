@@ -7,15 +7,15 @@ if exists("b:did_ftplugin_css")
 endif
 let b:did_ftplugin_css = 1
 
-MyInstall csscomb
-let g:neoformat_enabled_css = [ 'csscomb' ]
-let g:neoformat_css_csscomb = {
-      \ 'exe': 'csscomb',
-      \ 'args': ['-c ' . $CONTRIB . '/csscombrc'],
-      \ 'replace': 1
-      \ }
+" MyInstall csscomb
+" let g:neoformat_enabled_css = [ 'csscomb' ]
+" let g:neoformat_css_csscomb = {
+"       \ 'exe': 'csscomb',
+"       \ 'args': ['-c ' . $CONTRIB . '/csscombrc'],
+"       \ 'replace': 1
+"       \ }
 
-MyInstall csslint
+" MyInstall csslint
 " let g:ale_linters['css'] = ['mycsslint']
 " call ale#linter#Define('css', {
 "       \ 'name': 'mycsslint',

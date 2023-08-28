@@ -47,7 +47,6 @@ Use for: linting, makeing, testing, formatting, finding stuff
 
 - make (builtin)
   - synchronous
-  - TODO: set makeef
 - neomake
   - stdin possible with neomake-autolint?
   - does mess with &makeprg / &errorformat and does not respect buffer local

@@ -186,16 +186,16 @@ snippet csvWriter "csvWriter" b
 $0const _ = require("lodash")
 const csv = require("ya-csv")
 const options = {
-	separator: \`,\`
-	, quote: \`"\`
-	, escape: \`"\`
+  separator: \`,\`
+  , quote: \`"\`
+  , escape: \`"\`
 }
 const header = _.keys(data[0])
 const writer = new csv.CsvWriter(process.stdout, options)
 writer.writeRecord(header)
 for (const row of data) {
-	const orderedRow = _.at(data[0], header)
-	writer.writeRecord(orderedRow)
+  const orderedRow = _.at(data[0], header)
+  writer.writeRecord(orderedRow)
 }
 endsnippet
 
@@ -243,7 +243,7 @@ for(const ${2:variable} in ${1:iterable}) {
 }
 endsnippet
 
-snippet foreach "for each in collection" b
+snippet foreach "for each of collection" b
 for(const ${2:variable} of ${1:iterable}) {
   ${VISUAL}$0
 }
@@ -283,48 +283,66 @@ module.exports = class `!p snip.rv = className()` {
 endsnippet
 
 snippet con "constructor" w
-constructor(${1:{}}) {
-	$0
+constructor($1) {
+  ${VISUAL}$0
 }
 endsnippet
 
-snippet asserteq "assert" w
+snippet testAssertEq "assert" w
 assert.equal($1, ${2:\`$0\`})
 endsnippet
 
-snippet assertok "assert.ok" w
+snippet testAssertok "assert.ok" w
 assert.ok(${VISUAL}$0)
 endsnippet
 
-snippet assertdeep "assertdeep" w
+snippet testAssertDeep "assertdeep" w
 assert.deepStrictEqual(${VISUAL}$0)
 endsnippet
 
-snippet assertthrows "assert.throws" w
-assert.throws(() => {
-  ${VISUAL}$0
-}, ${2:/$1/})
-endsnippet
+# snippet assertthrows "assert.throws" w
+# assert.throws(() => {
+#   ${VISUAL}$0
+# }, ${2:/$1/})
+# endsnippet
 
-snippet expectToThrow "expectToThrow" b
+snippet testExpectToThrow "expectToThrow" b
 expect(() => {
-	${VISUAL}$0
+  ${VISUAL}$0
 }).toThrowError($1)
 endsnippet
 
-snippet beforeeach "before each test" b
+snippet testExpectToThrowAsync "expectToThrow" b
+await expect(
+  ${VISUAL}$0
+).rejects.toThrow($1)
+endsnippet
+
+snippet testBeforeAll "beforeAll" b
+beforeAll(async () => {
+  ${VISUAL}$0
+})
+endsnippet
+
+snippet test-beforeeach "before each test" b
 beforeEach(async () => {
   ${VISUAL}$0
 })
 endsnippet
 
-snippet aftereach "before each" b
+snippet test-aftereach "before each" b
 afterEach(async () => {
   ${VISUAL}$0
 })
 endsnippet
 
-snippet mockstdout "mock stdout and stderr" b
+snippet test-afterAll "afterAll" b
+afterAll(async () => {
+  ${VISUAL}$0
+})
+endsnippet
+
+snippet test-mockStdout "mock stdout and stderr" b
 const stdMocks = require("std-mocks")
 
 afterEach(() => {
@@ -393,7 +411,7 @@ function qw(strings, ...keys) {
 endsnippet
 
 snippet f "anonymous function expression" w
-($1) => { ${VISUAL}$0 }
+($1) => ${VISUAL}$0
 endsnippet
 
 snippet af "async anonymous function expression" w
@@ -406,14 +424,14 @@ function $1($2) {
 }
 endsnippet
 
-snippet afun "named function" w
+snippet afun "async function" w
 async function $1($2) {
   ${VISUAL}$0
 }
 endsnippet
 
 snippet m "method" w
-$1($2) {
+$1($2) : $3 {
   ${VISUAL}$0
 }
 endsnippet
@@ -461,7 +479,7 @@ const expandTilde = require("expand-tilde")
 ${1:file} = expandTilde($1)
 endsnippet
 
-snippet exists "file exists" w
+snippet fileExists "file exists" w
 fs.existsSync($1)
 endsnippet
 
@@ -504,7 +522,7 @@ snippet nn "\n in quotes" w
 \n
 endsnippet
 
-snippet formatter_ignore "exclude the next node in the abstract syntax tree from formatting" b
+snippet ignore_formatting "exclude the next node in the abstract syntax tree from formatting" b
 // prettier-ignore
 endsnippet
 
@@ -600,7 +618,7 @@ snippet pm2_config "pm2_config" b
       , next_gen_js: true
       , log_date_format: \`YYYY-MM-DD HH:mm\`
       , error_file: process.env.HOME + \`/log/$1.log\`
-			, out_file: process.env.HOME + \`/log/$1.log\`
+      , out_file: process.env.HOME + \`/log/$1.log\`
       // avoid WARNING: NODE_APP_INSTANCE value of '0'...
       , instance_var: \`INSTANCE_ID\`
     }
@@ -660,7 +678,7 @@ if($1 instanceof ${VISUAL}$2) {
 }
 endsnippet
 
-snippet errord "error definition" b
+snippet errorSubClass "error definition" b
 `!p snip.rv = className()`.$1 = class $1 extends $2.Error {}$0
 endsnippet
 
@@ -682,12 +700,14 @@ snippet dateNow "now" w
 new Date().toISOString()
 endsnippet
 
-snippet dateTimestamp "dateTimestamp" w
-moment().format(\`YYYYMMDD-HHmmss\`)
+snippet datelib "use luxon date lib" w
+import { DateTime } from "luxon"
+const now = DateTime$0.now().toFormat(`yyyyMMdd-HHmmss`)
 endsnippet
 
-snippet dateDayOfMonth "dateDayOfMonth" w
-moment().format(\`DD\`)
+snippet dateTimestamp "dateTimestamp" w
+import { DateTime } from "luxon"
+const now = DateTime.now().toFormat(`yyyyMMdd-HHmmss`)
 endsnippet
 
 snippet config "config" b
@@ -725,48 +745,50 @@ $0 = await require(\`get-stdin\`)()
 endsnippet
 
 snippet j "j" b
-console.log(\`${VISUAL}$0\`)
+console.log(${1:\`${VISUAL}$0\`})
 endsnippet
 
-snippet jj "here"
+snippet jj "debug value"
 
-console.log('### jj`!v DebugId()` ${VISUAL}$1$0:', ${VISUAL}$1)
-
-endsnippet
-
-snippet jjj "seperator"
-
-console.log(\`\n################################################################ jj`!v DebugId()`$0\n\`)
+// prettier-ignore
+{
+  console.log('### jj`!v DebugId()` ${VISUAL}$1:', ${VISUAL}$1$0)
+}
 
 endsnippet
 
-snippet jd "dump" w
+snippet jjj "here"
 
-console.log(\`### jj`!v DebugId()` %s:\n%o\n### jj`!v DebugId()`\`, \``!p snip.rv = escape(t[1])`\`, ${VISUAL}$1$0)
-
-endsnippet
-
-snippet jdd "dump" w
-
-console.log(\`### jj`!v DebugId()`\`, require(\`util\`).inspect(${VISUAL}$0, {depth: null}))
+// prettier-ignore
+{
+  console.log(\`\n################################################################ jj`!v DebugId()`${VISUAL}$0\n\`)
+}
 
 endsnippet
 
-snippet dump "dump" w
-require(\`pretty-format\`)(${VISUAL}$1$0)
+# https://stackoverflow.com/a/27534731
+snippet jd "dump arbitrarily deep structure" b
+
+// prettier-ignore
+{
+  console.log(\`\n################################################################ jj`!v DebugId()`${VISUAL}$0\`)
+  console.log(\`${1///}:\`) ; console.dir(${1:${VISUAL}}$0, { depth: null })
+  console.log(\`\n################################################################ jj`!v DebugId()`${VISUAL}$0\n\`)
+}
+
 endsnippet
 
-# NOTE: does not seem to show node internals written in c - try util.ispect()
-# for that?
-snippet jd2 "dump" w
-
-console.log(\`### jj`!v DebugId()` `!p snip.rv = escape(t[1])`:\n\` + require(\`pretty-format\`)(${VISUAL}$1$0).replace(/Object \{/g, \`{\`).replace(/Array \[/g, \`[\`) + \`\n### jj`!v DebugId()`\`)
-
+snippet dump "dump arbitrarily deep structure into var" b
+import util from 'util'
+const $1 = util.inspect($2, false, null)
 endsnippet
 
 snippet jt "print to stderr with variable and trace" w
 
-console.trace(\`### jj`!v DebugId()` ${VISUAL}$1:\`, ${VISUAL}$1$0)
+// prettier-ignore
+{
+  console.trace(\`### jj`!v DebugId()` ${VISUAL}$1:\`, ${VISUAL}$1$0)
+}
 
 endsnippet
 
@@ -781,9 +803,9 @@ endsnippet
 # snippet arraySortByElementsHashes "sort any array by the hash of its elements" b
 # const hash = require(\`object-hash\`)
 # function sortArrayByElementsHashes(array) {
-# 	return array.sort((a, b) => {
-# 		return hash(a) > hash(b)
-# 	})
+#   return array.sort((a, b) => {
+#     return hash(a) > hash(b)
+#   })
 # }
 # const $1 = sortArrayByElementsHashes($1$0)
 # endsnippet
@@ -802,14 +824,32 @@ endsnippet
 
 snippet .map ".map" i
 .map(($1) => {
-	${VISUAL}$0
+  ${VISUAL}$0
 })
 endsnippet
 
 snippet mapAsync "mapAsync" b
 import { map } from "modern-async" 
 const $1 = await map(${2:array}, async (${3:e}) => {
-	return await $0
+  return await $0
+})
+endsnippet
+
+snippet .mapWithBreak ".some" i
+.some(($1) => {
+  if($0) {
+    ${VISUAL}
+    return true
+  }
+})
+endsnippet
+
+snippet mapWithBreak ".some" w
+.some(($1) => {
+  if($0) {
+    ${VISUAL}
+    return true
+  }
 })
 endsnippet
 
@@ -826,37 +866,37 @@ snippet try "try" b
 try {
   ${VISUAL}
 } catch (e) {
-	console.error(e.message)$0
+  console.error(\`$0${e.message}\`)
 }
 endsnippet
 
 snippet catch "catch" w
 catch (e) {
-	throw e
+  throw e
 }
 endsnippet
 
 snippet finally "finally" w
 finally {
-	$0
+  $0
 }
 endsnippet
 
 snippet catchclass "catchclass" b
 if (e instanceof $1) {
-	$0
+  $0
 } else {
-	throw e
+  throw e
 }
 endsnippet
 
 snippet while "while" w
 while($1) {
-	${VISUAL}$0
+  ${VISUAL}$0
 }
 endsnippet
 
-snippet uuidmodule "uuid" w
+snippet uuidv4 "uuid" w
 const uuid = require(\`uuid/v1\`)
 uuid()
 endsnippet
@@ -883,8 +923,22 @@ const relaxedJson = require(\`relaxed-json\`)
 const $0 = relaxedJson.parse(fs.readFileSync(rekuire.path(\`${VISUAL}$1\`)).toString())
 endsnippet
 
-snippet tojson "toJSON" w
+snippet toJson "tojson" b
+toString
+endsnippet
+
+snippet toString "toJSON" w
 JSON.stringify(${VISUAL}$0, null, 2)
+endsnippet
+
+snippet toStringKeepUndefinedValues "toString" b
+JSON.stringify(
+  odiff,
+  function (k, v) {
+    return v === undefined ? null : v
+  },
+  2
+)
 endsnippet
 
 snippet jsonparse "parse json" w
@@ -895,7 +949,7 @@ snippet .toj "toJSON()" i
 .toJSON()
 endsnippet
 
-snippet clone "clone" b
+snippet clone "clone" w
 $0_.merge({}, ${VISUAL}$1)
 endsnippet
 
@@ -949,18 +1003,21 @@ endsnippet
 
 snippet test "test" b
 test(\`$1\`, async() => {
-	${VISUAL}$0
+  ${VISUAL}$0
 })
 endsnippet
 
 snippet test-init "testfile" b
-describe
-beforeeach
-aftereach
+import { describe, expect, test, beforeAll, beforeEach, afterEach, afterAll } from "vitest"
+import assert from "assert"
+import MockDate from "mockdate"
+test-describe
+test-beforeeach
+test-aftereach
 test
 endsnippet
 
-snippet describe "describe" b
+snippet test-describe "describe" b
 describe(\`$1\`, () => {$0
 ${VISUAL}
 })
@@ -1012,7 +1069,7 @@ snippet joiString "joiString" w
 Joi.string().valid(${VISUAL}$0).required()
 endsnippet
 
-snippet error "custom error" b
+snippet errorJs "custom error" b
 class $1Error extends Error {
   constructor(...params) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor
@@ -1028,7 +1085,7 @@ class $1Error extends Error {
 }
 endsnippet
 
-snippet unhandledRejectionCatcher "unhandledRejectionCatcher" b
+snippet errorunhandledRejectionCatcher "unhandledRejectionCatcher" b
 process.on(\`unhandledRejection\`, function unhandledRejectionCatcher(e: any) {
   process.stderr.write(\`Error: Caught unhandledRejection: '${e.message}'\n\n\`)
   throw e
@@ -1037,8 +1094,8 @@ endsnippet
 
 snippet express.middleware "expressm" b
 app.use((req, res, next) => {
-	$0
-	return next()
+  $0
+  return next()
 })
 endsnippet
 
@@ -1106,33 +1163,26 @@ snippet http400BadRequest "400" b
 res.status(400).send({ error: \`${VISUAL}$0\` })
 endsnippet
 
-snippet fetch "fetch" b
-const fetch = require("node-fetch")
+snippet httpfetch "fetch" b
+import fetch from "node-fetch"
 const $2 = await fetch(\`${VISUAL}${1:url}\`, {
-	method: \`${3:post}\`,
-	body: \`\`,$0
-	headers: { "Content-Type": "application/json" },
+  method: \`${3:post}\`,
+  body: \`\`,$0
+  headers: { "Content-Type": "application/json" },
 })
 endsnippet
 
 snippet regex_with_caputure_groups_loop "regex_with_caputure_groups" b
 var XRegExp = require("xregexp")
-const cregex = XRegExp(regex, flags)
-XRegExp.forEach(this.data, cregex, async (match, i) => {
+const cregex = XRegExp(${1:regex}, \`ms\`)
+XRegExp.forEach(${2:input}, cregex, async (match, i) => {$0
 })
-endsnippet
-
-snippet regex_with_caputure_groups "" b
-const XRegExp = require("xregexp")
-const regex = XRegExp(`^(?<name>.+?)$(?<description>.+)`, `ms`)
-const res = XRegExp.exec(row[`Artikelbezeichnung`], regex)
-console.log('### res.groups.name:', res.groups.name)
 endsnippet
 
 snippet regex_with_caputure_groups "regex" b
 const XRegExp = require("xregexp")
-const regex = XRegExp(`^(?<name>.+?)$(?<description>.+)`, `ms`)
-const res = XRegExp.exec(row[`Artikelbezeichnung`], regex)
+const regex = XRegExp(\`^(?<${1:name}>${2:regex})\`, \`ms\`)
+const res = XRegExp.exec(${3:input}, regex)$0
 console.log('### res.groups.name:', res.groups.name)
 endsnippet
 
@@ -1150,16 +1200,15 @@ for (const row of rows) {$0
 endsnippet
 
 snippet mongodbTransaction "mongodbTransaction" b
-const session = client.startSession();
+const session = mongo.startSession();
 try {
-	await session.withTransaction(async () => {
-		const coll1 = client.db('${1:database}').collection('${2:collection}');
-		$0await coll1.insertOne({ abc: 1 }, { session });
-		${VISUAL}
-	});
+  await session.withTransaction(async () => {
+    const coll1 = mongo.db('${1:database}').collection('${2:collection}');
+    $0await coll1.insertOne({ abc: 1 }, { session });
+    ${VISUAL}
+  });
 } finally {
-	await session.endSession();
-	await client.close();
+  session.endSession();
 }
 endsnippet
 
@@ -1173,5 +1222,11 @@ function cleanObject(obj: any) {
   })
   return obj
 }
+endsnippet
+
+snippet expectaxios "expectaxios" b
+  from: https://github.com/axios/axios/issues/1418
+  add this to your jest config in package.json:
+  "testEnvironment": "node"
 endsnippet
 

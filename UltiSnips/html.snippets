@@ -1,6 +1,17 @@
 snippet t "tag"
-<$1>$2</${1/\ .*//}>
-$0
+<$1>$0</${1/\ .*//}>
+endsnippet
+
+snippet to "tag open"
+<$0>
+endsnippet
+
+snippet tc "tag close"
+</$0>
+endsnippet
+
+snippet c "class" w
+class="$0"
 endsnippet
 
 global !p
@@ -207,4 +218,22 @@ endsnippet
 snippet faviconIgnore "faviconIgnore" b
 <!-- prevent favicon missing error message -->
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+endsnippet
+
+snippet init "init" b
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- prevent favicon missing error message -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0"
+          name="viewport">
+    <title>
+      $1
+    </title>
+  </head>
+  <body>$0
+  </body>
+</html>
 endsnippet

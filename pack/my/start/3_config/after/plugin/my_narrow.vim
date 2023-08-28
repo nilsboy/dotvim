@@ -1,5 +1,6 @@
 " Narrow a region of a buffer into a new buffer updating changes on close.
 " SEE ALSO: nrrwrgn
+" TAGS: shrink narrow
 function! my_narrow#narrow(opts) range abort
   let filetype = get(a:opts, 'filetype', &filetype)
   let lines = getline(a:firstline, a:lastline)

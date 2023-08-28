@@ -33,7 +33,20 @@ def classNameOld():
   return v
 
 def className():
-  v = snip.basename
+  v = snip.basename[0:1].upper()
+  v = v + snip.basename[1:]
+  return v
+
+def classNameSingular():
+  v = snip.basename[0:1].upper()
+  v = v + snip.basename[1:]
+  v = re.sub(r'Contexts$', r'Context', v)
+  return v
+
+def classNameWithoutContext():
+  v = snip.basename[0:1].upper()
+  v = v + snip.basename[1:]
+  v = re.sub(r'Context$', r'', v)
   return v
 
 def escape(v):
@@ -42,16 +55,48 @@ def escape(v):
 endglobal
 
 snippet class "class" w
-class `!p snip.rv = className()` {
+export class `!p snip.rv = className()` {
   ${VISUAL}$0
 }
 endsnippet
 
-# snippet class "class" b
-# class `!p snip.rv = className()` {
-#   ${VISUAL}$0
-# }
-# endsnippet
+snippet interface "interface" w
+export interface `!p snip.rv = className()` {
+  ${VISUAL}$0
+}
+endsnippet
+
+# NOTE: typescript enums can not use objects as values
+snippet enumNonObject "enum" w
+export enum `!p snip.rv = className()` {
+	${1:name} = ${0:value}
+}
+endsnippet
+
+snippet enum "enum" b
+// enum with type
+export const ${1:`!p snip.rv = className()`} = {
+  ${2:key1}: ${3:value1},$0
+} as const
+
+export type $1 = typeof $1[keyof typeof $1]
+endsnippet
+
+snippet con "constructor" b
+public constructor($1) {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet conContext "constructor" b
+public constructor(dto: `!p snip.rv = className()`$1) {
+	this.dto = dto$0
+}
+endsnippet
+
+snippet super "super" b
+super()
+endsnippet
 
 snippet a "await" w
 await
@@ -146,7 +191,8 @@ export async function ${1:name}($0) {
 }
 endsnippet
 
-snippet errorDefinition "errorDefinition" b
+snippet errorClass "custom errorDefinition" b
+// TODO: old version replace!
 import { CustomError } from "ts-custom-error"
 import { $2 } from "../$2"
 
@@ -155,8 +201,20 @@ export class $1 extends CustomError {
   public constructor($3: $2) {
     super()
     this.$3 = $3$0
+
+    this.message = `${this.constructor.name} - ...`
+
+    // if (details) {
+    //   this.message += ` / Details: ${details}`
+    // }
   }
 }
+
+// errorSubClass
+endsnippet
+
+snippet errorSubClass "error definition" b
+export class $0Error extends `!p snip.rv = className()` {}
 endsnippet
 
 snippet e "e" b
@@ -164,10 +222,147 @@ expect($0)
 endsnippet
 
 snippet uuidmodule "uuidmodule" b
+// use v6 instead. Or at least v4?
 import { v1 as uuidv1 } from 'uuid'
 uuidv1()
 endsnippet
 
+snippet uuidv6 "uuidv6" b
+import { v6 as uuidV6 } from "uuid-with-v6"
+uuidV6()
+endsnippet
+
 snippet tag "tag" w
 <$1>$0</$1>
+endsnippet
+
+snippet prom "promise" w
+Promise<${VISUAL}$0>
+endsnippet
+
+snippet castForcably "castForcably" b
+const $1 = _$1 as unknown as ${2:final type}[]
+endsnippet
+
+snippet className "className" b
+this.constructor.name
+endsnippet
+
+snippet pushArrayToUndef "arrayPushToUndef" w
+$1 = [...($1 || []),${2:{$0}}]
+endsnippet
+
+snippet methodStub "methodStub" b
+async $1() : Promise<${2:void}> {
+	throw new Error(\`Method not implemented: "$1()".\`)$0
+}
+endsnippet
+
+snippet lodash "lodash" b
+import _ from "lodash"
+endsnippet
+
+snippet testMockDate "dateMock" b
+import MockDate from "mockdate"
+MockDate.set(new Date())
+endsnippet
+
+snippet new "new" w
+<$1> {$0
+}
+endsnippet
+
+snippet httpfetch "fetch" b
+const fetch = require("node-fetch")
+const $2 = await fetch(\`${VISUAL}${1:url}\`, {
+	method: \`${3:post}\`,
+	body: \`\`,$0
+	headers: { "Content-Type": "application/json" },
+})
+endsnippet
+
+snippet arr "Array<>" w
+Array<${VISUAL}$0>
+endsnippet
+
+snippet mockUuid "mockUuid" b
+const mockedUuid = "11111111-6111-1111-1111-111111111111"
+vi.mock("uuid-with-v6", () => ({
+  v6: vi.fn(() => mockedUuid),
+}))
+endsnippet
+
+snippet toBoolean "toBoolean" b
+function toBoolean(value: string, defaultValue: boolean) {
+  if (value === null || value === undefined || value === ``) {
+    return defaultValue
+  }
+  if (value.match(/^(true)$/i)) {
+    return true
+  }
+  if (value.match(/^(false)$/i)) {
+    return false
+  }
+  throw new Error(`Invalid boolean: '${value}'`)
+}
+endsnippet
+
+snippet ok "ok" b
+assert.ok(${VISUAL}$0)
+endsnippet
+
+snippet classContextIterator "contextIterator" b
+export class `!p snip.rv = className()`
+  implements Iterator<${1:`!p snip.rv = classNameSingular()`}>
+{
+  dto: $1[]
+  iterator: Iterator<$1>
+
+  constructor(dto: $1[]) {
+    this.dto = dto
+  }
+
+  [Symbol.iterator]() {
+    this.iterator = this.dto[Symbol.iterator]()
+    return this.iterator
+  }
+
+  next(
+    ...args: [] | [undefined]
+  ): IteratorResult<$1, any> {
+    if (!this.iterator) {
+      this.iterator = this.dto[Symbol.iterator]()
+    }
+    const next = this.iterator.next()
+    return {
+      value: new $1(next.value),
+      done: next.done,
+    }
+  }
+
+  toArray(): ProductContext[] {
+    return Array.from(this)
+  }
+
+  length(): Number {
+    return this.dto.length
+  }
+}
+endsnippet
+
+snippet classContext "classContext" b
+import { `!p snip.rv = classNameWithoutContext()` } from "./types/`!p snip.rv = classNameWithoutContext()`"
+
+export class `!p snip.rv = className()` extends `!p snip.rv = classNameWithoutContext()` {
+  dto: `!p snip.rv = classNameWithoutContext()`
+
+  public constructor(dto: `!p snip.rv = classNameWithoutContext()`) {
+    super()
+    this.dto = dto
+  }
+}
+endsnippet
+
+snippet iteratorToArray "IteratorToArray" b
+Array.from($1)$0
 endsnippet

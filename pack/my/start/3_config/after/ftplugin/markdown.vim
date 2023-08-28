@@ -14,5 +14,4 @@ nmap <silent> <buffer> <leader>nrr m`viC:call my_narrow#narrow({})<cr>
 nmap <silent> <buffer> <leader>nrs m`viC:call my_narrow#narrow({'filetype': 'sql'})<cr>
 nmap <silent> <buffer> <leader>nrt m`viC:call my_narrow#narrow({'filetype': 'text'})<cr>
 
-nmap <silent> <buffer> <leader>nrr m`viC:call my_narrow#narrow({})<cr>
 

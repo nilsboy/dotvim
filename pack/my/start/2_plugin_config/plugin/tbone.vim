@@ -41,9 +41,9 @@ endfunction
 
 nnoremap <silent> <leader>mm mz"zyip:call tbone#myRun()<cr>
 vnoremap <silent> <leader>mm mz"zy:call tbone#myRun()<cr>
-nnoremap <silent> <leader>mM mz"zyy:call tbone#myRun()<cr>
+nnoremap <silent> <leader>ml mz"zyy:call tbone#myRun()<cr>
 
-nnoremap <silent> <leader>ml :call setreg('z', g:my_tbone_last_command) \| :call tbone#myRun()<cr>
+nnoremap <silent> <leader>mL :call setreg('z', g:my_tbone_last_command) \| :call tbone#myRun()<cr>
 
 nnoremap <silent> <leader>mc :call tbone#myClear()<cr>
 

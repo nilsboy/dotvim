@@ -23,25 +23,6 @@ components:
 
 endsnippet
 
-snippet s "string property" w
-$1${VISUAL}:
-	type: string
-	description: $1$0
-endsnippet
-
-snippet n "number property" w
-$1${VISUAL}:
-	type: integer
-	description: $0
-endsnippet
-
-snippet o "object" w
-$1${VISUAL}:
-	type: object
-	description: $2
-	properties:$0
-endsnippet
-
 snippet path-get "get" b
 /$1/{id}:
 	get:
@@ -91,9 +72,22 @@ snippet path-post "post" b
               $ref: '#/components/schemas/$1'
 endsnippet
 
-snippet a "a" b
-$1:
+snippet property "property" b
+${1:name}:
+  type: $2
+  description: $0
+endsnippet
+
+snippet property_array "a" b
+${1:name}:
 	type: array
 	items:
 		$ref: '#/components/schemas/$0'
+endsnippet
+
+snippet component "component" b
+${1:name}:
+  description: $2
+  type: ${3:object}
+  properties:$0
 endsnippet

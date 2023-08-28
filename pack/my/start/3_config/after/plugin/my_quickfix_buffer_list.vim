@@ -2,12 +2,13 @@
 
 function! my_quickfix_buffer_list#list() abort
   let currentBufnr = bufnr('%')
+              " \ 'buflisted(v:val) && (nb#buffer#isNamed(v:val) || !nb#buffer#isEmpty(v:val))'
   let list = 
         \ sort(
           \ map(
             \ filter(
               \ range(1, bufnr('$')),
-              \ 'buflisted(v:val) && (nb#buffer#isNamed(v:val) || !nb#buffer#isEmpty(v:val))'
+              \ 'buflisted(v:val)'
             \ ),
             \ function('my_quickfix_buffer_list#buildEntry')
           \ ),

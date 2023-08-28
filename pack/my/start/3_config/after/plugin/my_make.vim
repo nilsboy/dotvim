@@ -15,7 +15,8 @@ function! MakeWith(opts) abort
   let pos = getcurpos()
   let currentCwd = getcwd()
   let &makeprg = ''
-" echo g:my_make#lastCommands
+  " echo g:my_make#lastCommands
+
   try
     if rerun == 1
       call nb#debug('MakeWith rerunning last command')
@@ -29,21 +30,24 @@ function! MakeWith(opts) abort
         call nb#error('&makeprg not set by compiler: ' . compiler)
         return
       endif
-      " TODO:
       " let &makeprg = 'timeout 5s ' . &makeprg
       let &makeprg = 'cd ' . currentCwd . ' ; ' . &makeprg
     endif
+
+    " NOTE: make deletes the intermediate &makeef (errorfile)
+    " SEE ALSO: MyQuickfixDump for debuggin help
     call nb#debug('MakeWith &errorformat: ' . &errorformat)
     if loclist
-      call nb#debug('Running lmake into loclist with &makeprg: ' . &makeprg)
+      call nb#debug('Running lmake with &makeprg:' . &makeprg)
       silent execute 'lmake! ' . args
     else
-      call nb#debug('Running make with &makeprg: ' . &makeprg)
+      call nb#debug('Running make with &makeprg:' . &makeprg)
       silent execute 'make! ' . args
     endif
   catch
     execute 'cd ' . currentCwd
     call nb#error('Failed to run &makeprg: ' . &makeprg)
+    call nb#error('v:exception' . v:exception)
     return
   finally  
     silent wall
@@ -78,8 +82,8 @@ function! MakeWith(opts) abort
 endfunction
 
 " formatting
-nnoremap <silent> <leader>x :call MakeWith({'name': 'formatter', 'compiler': b:formatter, 'loclist': 1})<cr>
-nnoremap <silent> <leader>X :call MakeWith({'name': 'formatter', 'compiler': 'prettier-json', 'loclist': 1})<cr>
+nnoremap <silent> <leader>x :silent call MakeWith({'name': 'formatter', 'compiler': b:formatter})<cr>
+nnoremap <silent> <leader>X :call MakeWith({'name': 'formatter', 'compiler': 'prettier-json'})<cr>
 
 " executing
 nnoremap <silent> <leader>ef :call MakeWith({'name': 'myrunprg', 'compiler': b:myrunprg, 'args': expand('%:p')})<cr>

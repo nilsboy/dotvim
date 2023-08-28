@@ -3,13 +3,23 @@
 augroup MyKeepCursorPositionAutogroupOnSwitch
   autocmd!
   autocmd BufLeave * let b:winview = winsaveview()
-  autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+  autocmd BufEnter * call my_keep_cursor_position#BuffEnter()
 augroup END
 
-" :h last-position-jump*
+function! my_keep_cursor_position#BuffEnter() abort
+  " fix diff jump around due to scrollbind
+  if &l:diff
+    return
+  endif
+  if exists('b:winview')
+    call winrestview(b:winview)
+  endif
+endfunction
+
+" :h last-position-jump
 augroup MyKeepCursorPositionAugroupOnReopen
-     autocmd BufReadPost *
-         \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-         \ |   exe "normal! g`\""
-         \ | endif
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   execute "normal! g`\""
+    \ | endif
 augroup END

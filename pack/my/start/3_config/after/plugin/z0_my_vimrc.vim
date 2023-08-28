@@ -34,9 +34,9 @@ set isfname-==
 " allow the @ symbol in file names
 " set isfname+=@-@ 
 
-" Don't make noise
+" Don't make noise / blink the whole screen
 set noerrorbells
-set visualbell
+" set visualbell
 set t_vb=
 
 set hidden

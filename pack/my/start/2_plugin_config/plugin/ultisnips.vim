@@ -20,13 +20,21 @@ vnoremap <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 PackAdd SirVer/ultisnips
 
 function! MyUltisnipsJump() abort
+  " if coc#pum#visible()
   if pumvisible()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 1
-      return ''
-    endif
+    call coc#pum#confirm()
     return "\<C-y>"
   endif
+
+  " " if not using coc:
+  " if pumvisible()
+  "   call UltiSnips#ExpandSnippet()
+  "   if g:ulti_expand_res == 1
+  "     return ''
+  "   endif
+  "   return "\<C-y>"
+  " endif
+
   call UltiSnips#JumpForwards()
   if g:ulti_jump_forwards_res == 1
     return ''
@@ -36,22 +44,28 @@ function! MyUltisnipsJump() abort
     return ''
   endif
 
-  return "\<tab>"
-
   " Return an actual tab key if current position is preceeded
   " by nothing or whitespace only.
-  " let [bufnum, lnum, col, off] = getpos('.')
-  " let prefix = getline('.')[0 : col - 2]
-  " if col == 1 || prefix =~ '\v^\s*$'
-  "   return "\<tab>"
-  " endif
-  " return "\<esc>"
+  let [bufnum, lnum, col, off] = getpos('.')
+  let prefix = getline('.')[0 : col - 2]
+  if col == 1 || prefix =~ '\v^\s*$'
+    return "\<tab>"
+  endif
+  return "\<esc>"
+  " return ''
+
 endfunction
 
 if exists("b:my_ultisnips_ftPluginLoaded")
   finish
 endif
 let b:my_ultisnips_ftPluginLoaded = 1
+
+augroup ultisnips#augroupExistSnippet
+  autocmd!
+  autocmd User UltiSnipsEnterFirstSnippet set cursorline!
+  autocmd User UltiSnipsExitLastSnippet   set cursorline!
+augroup END
 
 augroup MyUltisnipsColorFix
   autocmd!

@@ -23,4 +23,4 @@ autocmd BufRead,BufNewFile *.bson setlocal filetype=bson
 
 autocmd BufRead,BufNewFile .env* setlocal filetype=dotenv
 
-autocmd BufRead,BufNewFile *.mongodb setlocal filetype=mongodb
+autocmd BufRead,BufNewFile *.mongodb.js setlocal filetype=mongodb
