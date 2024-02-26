@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 # Install ripgrep
+#
+# Default Ubuntu ripgrep does not have pcre support.
+# SEE ALSO: https://bugs.launchpad.net/ubuntu/+source/rust-ripgrep/+bug/1950866
+# Releases : https://github.com/BurntSushi/ripgrep/releases 
 
 source bash-helpers
 

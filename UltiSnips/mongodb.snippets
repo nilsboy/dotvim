@@ -63,7 +63,7 @@ snippet insert "insert aka replaceOne" b
 db.${1:collection}.replaceOne({
   "${2:search key}": "${3:search value}"
 },
-${VISUAL}$0,
+$0${VISUAL},
 {upsert: true, },
 )
 endsnippet
@@ -116,7 +116,7 @@ snippet updateArrayElement "updateArrayElement" w
   console.log(\`updating: ${doc.id} (_id: ${doc._id})\`)
   db.${1:collection}.updateOne(
     { "_id": doc._id, },
-    { $set : { "${2:arrayPath}.$[matchingElement].${5:setKey}": "${6:setValue}$0" }, },
+    { $set: { "${2:arrayPath}.$[matchingElement].${5:setKey}": "${6:setValue}$0" }, },
     { 
       arrayFilters: [ { "matchingElement.${3:matchKey}": "${4:matchValue}" } ],
       multi: false,
@@ -132,7 +132,7 @@ snippet pushArrayElement "pushArrayElement" w
   console.log(\`updating: ${doc.id} (_id: ${doc._id})\`)
   db.${1:collection}.updateOne(
     { "_id": doc._id, },
-    { $push :
+    { $push:
       {
         "${2:arrayPath}": 
         {
@@ -180,6 +180,10 @@ snippet != "ne" w
 { $ne: ${VISUAL}$0 },
 endsnippet
 
+snippet exists "exists" b
+"${1:field in dotnotation}": { "$exists": ${2:true}$0 },
+endsnippet
+
 snippet not "not" w
 { $not: ${VISUAL}$0 },
 endsnippet
@@ -195,21 +199,42 @@ endsnippet
 # aggregate
 
 snippet "(sel|find|aggregate)" "aggregate match" r
+global.myFirst = 1
+global.myCount = 0
 db.${1:collection}.aggregate([
   $0
 ])
 endsnippet
 
-snippet match "match" b
-{ $match: { "$1": "${VISUAL}$0" }, },
+snippet match "match" w
+{ 
+  $match: {
+    ${VISUAL}$0
+  },
+},
 endsnippet
 
-snippet where "where" b
-{ $match: { "$1": "${VISUAL}$0" }, },
+snippet where "where" w
+{ 
+  $match: {
+    ${VISUAL}$0
+  },
+},
+endsnippet
+
+snippet : ":" b
+"${VISUAL}$1": ${2:"$0"},
 endsnippet
 
 snippet like "like" b
-{ $match: { $1: /$0/i, } },
+"${VISUAL}$1": /$0/i,
+endsnippet
+
+snippet matchArrayElement "matchArrayElement" b
+"$1": {
+  $elemMatch: {$0
+  }, 
+},
 endsnippet
 
 snippet limit "limit" b
@@ -277,17 +302,6 @@ snippet arrayFieldMatch "arrayFieldMatch" b
 },
 endsnippet
 
-snippet arrayElementMatch "arrayFieldMatch" b
-"${1:arrayFieldName}": {
-  $elemMatch: {
-    '${2:arrayItemFieldName}': {
-      $in: [ '${3:arrayItemFieldValue}' ] },
-      $nin: [ '${4:arrayItemFieldValue}' ] },$0
-    },
-  }, 
-},
-endsnippet
-
 snippet unwind "unwind" b
 {
   $unwind: '$${1:arrayFieldName}',$0
@@ -304,10 +318,6 @@ endsnippet
 
 snippet set "set" b
 $set : { "${1:set key}": "${2:$set.value}$0" },
-endsnippet
-
-snippet exists "exists" b
-{ search: { exists: { path: "${1:path}$0" } } },
 endsnippet
 
 snippet t "start transaction" b
@@ -354,7 +364,11 @@ snippet and "and" b
 endsnippet
 
 snippet in "$in" w
-{ $in: [ ${VISUAL}$0, ], },
+{
+  $in: [
+    "${VISUAL}$0",
+  ],
+},
 endsnippet
 
 snippet date "date" w
@@ -398,18 +412,59 @@ snippet grepDb "grep whole db - careful!" b
 db.getCollectionNames().forEach(function(collectionName) {
   db.getCollection(collectionName).find().forEach(function(doc) {
     var json = JSON.stringify(doc)
-    if (json.match(/${0:regex}/i) != null) {
-        printjson(doc)
+    if (json.match(/${0:regex}/i) == null) {
+      return
     }
+    printjson(doc)
   })
 })
 endsnippet
 
 snippet grep "grep" b
+const myCount = 0
 db.${1:collectionName}.find().forEach(function(doc) {
   var json = JSON.stringify(doc)
-  if (json.match(/$0/i) != null) {
-    printjson(doc)
-  }
+  if (json.match(/$2/i) == null) {
+    return
+  }$0
+  myCount++
+  printjson(doc)
 })
+console.log(\`count: ${myCount}\`)
+endsnippet
+
+snippet grep2 "grep2" b
+if (json.match(/$1/i) == null) {
+  return
+}$0
+endsnippet
+
+snippet csv "csv" w
+.forEach(function(doc) {
+    const keys = Object.keys(doc).sort()
+    const header = keys.join(";")
+    if(!global.myHeader) {
+      print(header)
+      global.myHeader = header
+    }
+    if(global.myHeader != header) {
+      throw new Error('header mismatch: ' + header + ' / ' + global.myHeader)
+    }
+    const values = []
+    for(const key of keys) {
+      values.push(doc[key])
+    }
+    print(values.join(";"))
+})
+global.myHeader = undefined
+endsnippet
+
+snippet countTodo "countTodo" w
+.map(function(doc) {
+  print(doc)
+}).map(function(doc) {
+  global.myCount = global.myCount + 1
+})
+print("Count: " + global.myCount)
+global.myCount = undefined
 endsnippet

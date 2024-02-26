@@ -12,11 +12,13 @@ endif
 " always show status line
 set laststatus=2
 
-" always show tab page labels
-" set showtabline=2
+set showtabline=0
 
 " Prevent mode info messages on the last line to prevent 'hit enter prompt'
 set noshowmode
+
+" generic var to use to display debug infos
+let g:my_statusline_debug = ''
 
 function! my_statusline#specialBufferName() abort
   if BufferIsQuickfix()
@@ -40,8 +42,6 @@ function! MyStatuslineDir() abort
   endif
   return dir
 endfunction
-
-let g:my_statusline#msg = ""
 
 let &statusline .= '%#StatusLine#'
 let &statusline .= ' %-0.30{fnamemodify(getcwd(), ":t")} '
@@ -145,13 +145,14 @@ let &statusline .= '%#Cursorline#'
 let &statusline .= '%( %{g:MyStatuslineLoclistOther}. %)'
 let &statusline .= '%#StatusLine#'
 
+let g:my_statusline_debug = ''
 let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{g:my_jumper3#currentIndex} / %{len(g:my_jumper3#locs)} %)'
+let &statusline .= '%( %{my_statusline#debugInfo()} %)'
 let &statusline .= '%#StatusLine#'
 
-let &statusline .= '%#MoreMsg#'
-let &statusline .= '%( %{g:my_statusline#msg} %)'
-let &statusline .= '%#StatusLine#'
+function! my_statusline#debugInfo() abort
+  return g:my_statusline_debug
+endfunction
 
 " misc
 

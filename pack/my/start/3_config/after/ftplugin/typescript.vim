@@ -2,7 +2,7 @@ runtime! after/ftplugin/javascript.vim
 
 let b:formatter = 'prettier'
 
-let b:myrunprg = 'ts-node'
+let b:myrunprg = 'vite-node'
 " let b:tester = 'jest'
 let b:tester = 'vitest'
 

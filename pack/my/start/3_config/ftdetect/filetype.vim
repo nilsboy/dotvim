@@ -24,3 +24,11 @@ autocmd BufRead,BufNewFile *.bson setlocal filetype=bson
 autocmd BufRead,BufNewFile .env* setlocal filetype=dotenv
 
 autocmd BufRead,BufNewFile *.mongodb.js setlocal filetype=mongodb
+
+" autocmd BufRead,BufNewFile *.mongodb.js setlocal filetype=typescript
+" if did_filetype()
+"   finish
+" endif
+" if getline(1) =~ '^#!.*\<vite-node\>'
+"   setfiletype typescript
+" endif

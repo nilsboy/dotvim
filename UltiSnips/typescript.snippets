@@ -55,7 +55,7 @@ def escape(v):
 endglobal
 
 snippet class "class" w
-export class `!p snip.rv = className()` {
+export class ${1:`!p snip.rv = className()`} {
   ${VISUAL}$0
 }
 endsnippet
@@ -74,15 +74,18 @@ export enum `!p snip.rv = className()` {
 endsnippet
 
 snippet enum "enum" b
-// enum with type
 export const ${1:`!p snip.rv = className()`} = {
   ${2:key1}: ${3:value1},$0
 } as const
-
 export type $1 = typeof $1[keyof typeof $1]
 endsnippet
 
 snippet con "constructor" b
+# TODO:
+public constructor(data: Partial<"class"Context>) {
+  Object.assign(this, data)
+}
+
 public constructor($1) {
 	${VISUAL}$0
 }
@@ -135,7 +138,7 @@ process.exit(1)
 endsnippet
 
 snippet init "init" b
-#!/usr/bin/env ts-node
+#!/usr/bin/env vite-node
 
 //$0
 endsnippet
@@ -163,8 +166,8 @@ snippet iife "iife" w
 endsnippet
 
 snippet div "div" b
-<div id="$0">
-${VISUAL}
+<div ${1:id="$0"} ${2:class="$3"}>
+  ${VISUAL}$0
 </div>
 endsnippet
 
@@ -221,19 +224,19 @@ snippet e "e" b
 expect($0)
 endsnippet
 
-snippet uuidmodule "uuidmodule" b
-// use v6 instead. Or at least v4?
-import { v1 as uuidv1 } from 'uuid'
-uuidv1()
-endsnippet
+# snippet uuidmodule "uuidmodule" b
+# // use v6 instead. Or at least v4?
+# import { v1 as uuidv1 } from 'uuid'
+# uuidv1()
+# endsnippet
 
-snippet uuidv6 "uuidv6" b
-import { v6 as uuidV6 } from "uuid-with-v6"
+snippet uuidv6 "uuidv6" w
 uuidV6()
+import { v6 as uuidV6 } from "uuid-with-v6"
 endsnippet
 
 snippet tag "tag" w
-<$1>$0</$1>
+<$1>${VISUAL}$0</$1>
 endsnippet
 
 snippet prom "promise" w
@@ -267,6 +270,12 @@ import MockDate from "mockdate"
 MockDate.set(new Date())
 endsnippet
 
+snippet datelib "datelib" b
+import { DateTime } from "luxon"
+DateTime.now().startOf("day")
+const timestamp = DateTime.now().toFormat(`yyyyMMddhhmmss`)
+endsnippet
+
 snippet new "new" w
 <$1> {$0
 }
@@ -283,13 +292,6 @@ endsnippet
 
 snippet arr "Array<>" w
 Array<${VISUAL}$0>
-endsnippet
-
-snippet mockUuid "mockUuid" b
-const mockedUuid = "11111111-6111-1111-1111-111111111111"
-vi.mock("uuid-with-v6", () => ({
-  v6: vi.fn(() => mockedUuid),
-}))
 endsnippet
 
 snippet toBoolean "toBoolean" b
@@ -312,6 +314,7 @@ assert.ok(${VISUAL}$0)
 endsnippet
 
 snippet classContextIterator "contextIterator" b
+// TODO: see ProductOrderItemContexts for [Symbol.iterator]() fix
 export class `!p snip.rv = className()`
   implements Iterator<${1:`!p snip.rv = classNameSingular()`}>
 {
@@ -340,11 +343,11 @@ export class `!p snip.rv = className()`
     }
   }
 
-  toArray(): ProductContext[] {
+  toArray(): ${1:`!p snip.rv = classNameSingular()`}[] {
     return Array.from(this)
   }
 
-  length(): Number {
+  length(): number {
     return this.dto.length
   }
 }
@@ -352,6 +355,7 @@ endsnippet
 
 snippet classContext "classContext" b
 import { `!p snip.rv = classNameWithoutContext()` } from "./types/`!p snip.rv = classNameWithoutContext()`"
+import { contextProxyHandler } from "./contextProxyHandler"
 
 export class `!p snip.rv = className()` extends `!p snip.rv = classNameWithoutContext()` {
   dto: `!p snip.rv = classNameWithoutContext()`
@@ -359,10 +363,123 @@ export class `!p snip.rv = className()` extends `!p snip.rv = classNameWithoutCo
   public constructor(dto: `!p snip.rv = classNameWithoutContext()`) {
     super()
     this.dto = dto
+    return new Proxy(this, contextProxyHandler)
   }
 }
 endsnippet
 
 snippet iteratorToArray "IteratorToArray" b
 Array.from($1)$0
+endsnippet
+
+snippet logWithStacktrace "add stacktrace for every console.log" b
+function logWithStackTrace(...args: any[]) {
+  console.trace(...args)
+}
+console.log = logWithStackTrace;
+endsnippet
+
+snippet traceConsoleOutput "traceConsoleOutput" b
+// Trace/debug all console output
+import util from 'util'
+// prettier-ignore
+{
+  process.stdout.write = (data: string | Buffer): boolean => {
+    const obj = new Error()
+    Error.captureStackTrace(obj)
+    let stack = obj.stack
+    stack = stack.replace(/^Error\:.*\n/m, ``)
+    const processedData =
+      data.toString() +
+      `\n### >>> TRACE start\n` +
+      stack +
+      `\n### <<< TRACE end\n`
+    process.stdout._write(processedData, "utf8", () => {})
+    return true
+  }
+  process.stderr.write = process.stdout.write
+
+  function logWithStackTrace(message: any) {
+    process.stdout.write(message)
+  }
+  console.log = logWithStackTrace
+  console.warn = logWithStackTrace
+  console.error = logWithStackTrace
+
+  function dirWithStackTrace(...args: any[]) {
+    process.stdout.write(util.inspect(args[0], false, null))
+  }
+  console.dir = dirWithStackTrace
+}
+endsnippet
+
+snippet mockUuid "mockUuid" b
+let mockedUuid = 0
+vi.mock("uuid-with-v6", () => ({
+  v6: vi.fn(() => "mocked-uuid-" + ++mockedUuid),
+}))
+
+// put into beforeEach
+mockedUuid = 0
+endsnippet
+
+snippet lit "lit" b
+import { html } from "lit"
+import { MobxLitElement } from "@adobe/lit-mobx"
+import { customElement, property } from "lit/decorators.js"
+
+@customElement("`!p snip.rv = snip.basename`")
+export class `!p snip.rv = toCamelCase(snip.basename)` extends MobxLitElement {
+  @property()
+  productSpecifications: Array<ProductSpecification> = []
+
+  override render() {
+    return html\`
+    \`
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "`!p snip.rv = snip.basename`": `!p snip.rv = toCamelCase(snip.basename)`
+  }
+}
+endsnippet
+
+snippet litproperty "litproperty" b
+@property()
+$0
+endsnippet
+
+snippet express-init "express-init" b
+import express from "express"
+const app = express()
+const port = 3000
+
+app.get("/", (req, res) => {
+  res.send("Hello World!")
+})
+
+app.use(function noApiAtThisLocationError(req: Request, res: Response, next) {
+  res.status(400).send({
+    statusCode: 400,
+    message: {
+      title: `No API at this location.`,
+    },
+  })
+})
+
+// default error handler
+app.use(function myErrorHandler(
+  e: Error,
+  req: Request,
+  res: Response,
+  next: any
+) {
+  res.status(500).send(`<pre>${JSON.stringify(e, null, 2)}</pre>`)
+})
+
+app.listen(port, () => {
+  console.log(\`Example app listening on port ${port}\`)
+})
 endsnippet

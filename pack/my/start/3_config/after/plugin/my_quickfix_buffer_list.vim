@@ -27,7 +27,7 @@ function! my_quickfix_buffer_list#list() abort
       break
     endif
   endfor
-  let g:MyQuickfixFormatOnce = 'NoFile'
+  " let g:MyQuickfixFormatOnce = 'NoFile'
   call setqflist(list)
   " current file may not be in the listed
   if currentFileLine != 0

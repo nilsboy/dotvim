@@ -4,4 +4,4 @@ nnoremap <buffer><silent>K :call Man(expand("<cword>"))<cr>
 let &l:define = '\v^(##+\s|function|alias)'
 let b:outline = '^(##+\s|function|alias)'
 
-let b:my_tbone_clear=1
+let b:myrunprg = 'bash'

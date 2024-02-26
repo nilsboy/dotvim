@@ -64,7 +64,13 @@ snippet trap "trap" b
 function cleanup() {
 	test -e "$1" && rm "$1$0"
 }
-trap cleanup ERR INT EXIT SIGUB SIGINT SIGTERM
+trap cleanup ERR INT EXIT SIGHUP SIGINT SIGTERM
+endsnippet
+
+# TAGS: timeout kill interupt trap int wait
+snippet killshell "killshell" b
+(timeout 15m sleep 30m || true) &
+wait $!
 endsnippet
 
 snippet eof "eof" b
@@ -224,4 +230,8 @@ endsnippet
   
 snippet timestamp "timestamp" b
 timestamp=`date +%Y%m%d_%H%M%S`
+endsnippet
+
+snippet timestamp-generate "timestamp" w
+$(date +%Y%m%d_%H%M%S)
 endsnippet

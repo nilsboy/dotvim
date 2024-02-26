@@ -11,7 +11,7 @@
 function! MyCompilerTesterTest() abort
   silent write
   source %
-  call setqflist([])
+  call setqflist([], 'a', { 'title' : 'comiler tester' })
   /^finish$/+1,$ :cgetbuffer
   copen
 endfunction

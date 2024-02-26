@@ -2,7 +2,8 @@ let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
 call writefile([expand('%:p')], "/tmp/haha")
 
-let &makeprg  = 'jest --verbose --runInBand'
+" let &makeprg  = 'jest --verbose --runInBand'
+let &makeprg  = 'jest --runInBand'
 " --forceExit
 " --detectOpenHandles
 " --testTimeout

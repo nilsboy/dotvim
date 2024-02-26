@@ -16,24 +16,17 @@ endif
 " let &makeprg .= ' % $* '
 " let &makeprg .= ' ' . expand('%:p') . ' $* 2>&1'
 let &makeprg .= ' $* 2>&1'
+let &makeprg = "( echo 'Running        : " . &makeprg . "'; echo 'Original Output: " . g:nb#tempdir . "vitest-compiler' ; " . &makeprg . " )"
 
-let &makeprg .= " \\| tee " . g:nb#runlogfile
+let &makeprg .= " \\| tee --output-error=exit " . g:nb#tempdir . 'vitest-compiler'
+let &makeprg .= " \\| grep -vi 'node\\:[^:]\\+'"
+let &makeprg .= " \\| grep -vFi 'node_modules/'"
+let &makeprg .= " \\| grep -vFi 'process.stdout.write'"
+let &makeprg .= " \\| grep -vFi 'consoleWithStackTrace'"
 
-let &makeprg .= " \\| grep -vF 'node_modules/'"
 let &makeprg .= " \\| errorformatregex"
 
-" FAIL  test/src/OrderItemContext.test.ts [ test/src/OrderItemContext.test.ts ]
-let &makeprg .= " 'e/^\\s+FAIL\\s+.+?\\\[\\s+(?<file>\\S+)\\s+\\\]$/igms'"
-
-" FAIL  test/src/OrderItemContext.test.ts
-let &makeprg .= " 'e/^\\s+FAIL\\s+(?<file>\\S+)\\s*$/igms'"
-
-" " FAIL  test/src/OrderItemContext.test.ts > OrderItemContext
-" " ❯ ProductSpecificationContext.build src/ProductSpecificationContext.ts:11:72
-" " ❯ ProductContext.build src/ProductContext.ts:30:37
-let &makeprg .= " 'e/^\\s+FAIL\\s+.+❯\\s+(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\n\\n/igms'"
-
-" " Error: Caught unhandledRejection: 'Cannot use a session that has ended'
+" Error: Caught unhandledRejection: 'Cannot use a session that has ended'
 " let &makeprg .= " 'e/.*Caught unhandledRejection.*/igms'"
 
 " " joi error locations:
@@ -42,11 +35,22 @@ let &makeprg .= " 'e/^\\s+FAIL\\s+.+❯\\s+(?<file>\\S+?):(?<row>\\d+?):(?<col>\
 
 " let &makeprg .= " 'e/No tests found/igm'"
 " let &makeprg .= " 'e/exiting with code 1/igm'"
+let &makeprg .= " 'e/error/igm'"
 
-" " typescript
+" ❯ Function.verifyViaDns src/DomainVerification.ts:21:15
+" let &makeprg .= " 'e/\\s+(?<file>\\S+\\.\\S+?):(?<row>\\d+?):(?<col>\\d+)/igms'"
+" let &makeprg .= " 'e/(?<file>[\\w\\/\\-\\.]+?):(?<row>\\d+?):(?<col>\\d+)/igms'"
+let &makeprg .= " 'e/(?<file>[\\w\\/\\-\\.]+?):(?<row>\\d+?):(?<col>\\d+)/igms'"
+
 " let &makeprg .= " 'e/(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\s+\\-\\s+error\\s+TS\\d+/igms'"
 
-" typescript
 " TypeError: Cannot read properties of undefined (reading 'productSpecCharacteristic')
 "  ❯ CharacteristicsContext.generateDefaultCharacteristicsFromSpec src/CharacteristicsContext.ts:42:33
-let &makeprg .= " 'e/^\\w+Error\\:.+?\\ (?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)$/igms'"
+" let &makeprg .= " 'e/^\\w+Error\\:.+?\\ (?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)$/igms'"
+
+" FAIL  test/src/ScannerNotification.test.ts ...
+" let &makeprg .= " 'e/^\\s+FAIL\\s+(?<file>\\S+)\\s+/igms'"
+" let &makeprg .= " 'e/^\\s+FAIL\\s+\\S+\\s+/igms'"
+let &makeprg .= " 'r/^\s+FAIL\s+(?<file>\S+)\s+.+?\>\s+(?<location>.+)\s*$/igm'"
+
+" │  FAIL  test/src/session-helper.test.ts > session-helper > generateMongoCustomerAccessConstraint CUSTOMER_ADMIN

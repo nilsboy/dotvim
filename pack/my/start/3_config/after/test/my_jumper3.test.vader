@@ -1,0 +1,74 @@
+Before:
+  let g:nb#logfile = '/tmp/vader.log'
+  call delete(g:nb#logfile)
+  call nb#debug('#########################################################')
+  let dir = $HOME . '/.config/nvim/pack/my/start/3_config/after/plugin/'
+  execute 'source ' . dir . 'my_jumper3.vim'
+  execute 'edit ' . dir . 'a' 
+  execute 'edit ' . dir . 'b' 
+  execute 'edit ' . dir . 'c' 
+
+" Given (text):
+"   foo
+"   bar
+"   baz
+
+Execute (jump):
+
+  execute 'redir >> ' . g:nb#logfile
+  silent execute 'ls'
+  redir END
+  " call my_jumper3#next()
+  " let loc = my_jumper3#getLoc()
+  " call nb#debug('### jj64 loc:' . json_encode(loc))
+  " echo dir
+  " Assert loc.bufnr == 3
+
+" Execute (toggle on):
+"   call my_jumper3#toggle()
+"   call my_jumper3#toggle()
+
+" Execute (next no marks):
+"   call my_jumper3#next()
+
+" Execute (next one mark):
+"   call my_jumper3#toggle()
+"   call my_jumper3#next()
+
+" Execute (previous no marks):
+"   call my_jumper3#previous()
+
+" Execute (previous one mark):
+"   call my_jumper3#toggle()
+"   call my_jumper3#previous()
+
+" Execute (previous two marks):
+"   call my_jumper3#toggle()
+"   normal j
+"   call my_jumper3#toggle()
+"   call my_jumper3#previous()
+"   Assert line('.') == 1
+
+" Execute (previous cursor moved):
+"   call my_jumper3#toggle()
+"   normal j
+"   call my_jumper3#previous()
+"   Assert line('.') == 1
+
+" Execute (previous missing mark):
+"   call my_jumper3#toggle()
+"   normal dd
+"   call my_jumper3#previous()
+
+" Execute (previous missing 2. mark):
+"   call my_jumper3#toggle()
+"   normal j
+"   call my_jumper3#toggle()
+"   normal j
+"   call my_jumper3#toggle()
+"   normal kdd
+"   call my_jumper3#previous()
+"   Assert line('.') == 2
+"   call my_jumper3#previous()
+"   Assert line('.') == 1
+

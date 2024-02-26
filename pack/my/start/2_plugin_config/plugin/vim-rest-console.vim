@@ -75,9 +75,12 @@ function! MyRestConsoleCall(...) abort
   endif
 
   silent! keeppatterns keepjumps %s/\\n/\r/g
+  silent! keeppatterns keepjumps %s/<br>/\r/g
+  silent! keeppatterns keepjumps %s/&nbsp;/ /g
   keepjumps normal! gg
   " call append(0, [filename])
-  setlocal filetype=jsonc
+  setlocal filetype=text
+  setlocal nowrap
   write
   " setlocal nowrap
 endfunction

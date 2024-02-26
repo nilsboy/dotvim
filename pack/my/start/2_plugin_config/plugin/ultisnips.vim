@@ -1,5 +1,9 @@
 " The ultimate snippet solution for Vim.
 
+" Setup:
+" apt install python3-pynvim
+" python3 -m pip install --user --upgrade pynvim
+
 nnoremap <silent><leader>js :execute ":edit "
       \ . stdpath('config') . "/UltiSnips/" . &filetype
       \ . ".snippets"<cr>

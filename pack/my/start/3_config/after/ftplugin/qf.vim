@@ -2,7 +2,7 @@ execute 'setlocal ' . g:MyQuickfixWrap
 
 execute &cmdwinheight . 'wincmd _'
 
-nnoremap <silent> <buffer> <bs> :call MyQuickfixFormatToggle()<cr>
+nnoremap <silent> <buffer> <bs> :call my_quickfix#toggle()<cr>
 
 nmap <buffer> <c-u> <esc><c-u>
 nmap <buffer> <c-o> <esc><c-o>
@@ -51,8 +51,10 @@ augroup END
 
 set cursorline
 
+call my_quickfix#runContext()
+
 if exists("b:MyQfFtpluginLoaded")
-    finish
+  finish
 endif
 let b:MyQfFtpluginLoaded = 1
 
@@ -124,3 +126,4 @@ function! MyQfIsLocListError() abort
     call nb#warn('No valid error on current line.')
   endif
 endfunction
+

@@ -133,7 +133,10 @@ function! nb#touch(path) abort
   endif
 endfunction
 
-let g:nb#logfile = nb#mktemp("vim") . "log"
+let g:nb#tempdir = nb#mktemp("vim")
+nnoremap <silent> <leader>vl :execute 'edit ' . g:nb#tempdir<cr>
+
+let g:nb#logfile = g:nb#tempdir . "log"
 nnoremap <silent> <leader>vm :call nb#viewLogfile()<cr><cr>
 function! nb#viewLogfile() abort
   call writefile(["=== Log messages until " .  strftime("%H:%M:%S") . ' ======================='], g:nb#logfile, 'a') 
@@ -141,7 +144,7 @@ function! nb#viewLogfile() abort
  keepjumps normal G
 endfunction
 
-let g:nb#runlogfile = nb#mktemp("vim") . "runlog"
+let g:nb#runlogfile = nb#tempdir . "runlog"
 let &makeef = g:nb#runlogfile
 
 nnoremap <silent> <leader>vr :call nb#viewRunLogfile()<cr><cr>
@@ -151,8 +154,8 @@ function! nb#viewRunLogfile() abort
   keepjumps normal G
 endfunction
 
-function! nb#debug(msg) abort
-  call writefile(["DEBUG> " . a:msg], g:nb#logfile, 'a') 
+function! nb#debug(msg, ...) abort
+  call writefile(["DEBUG> " . a:msg] + a:000, g:nb#logfile, 'a') 
 endfunction
 
 function! nb#info(msg) abort
@@ -174,7 +177,7 @@ function! DUMP(input) abort
   execute 'edit ' . tempname() . '.json'
   keepjumps put =json_encode(a:input)
   silent! only
-  call MakeWith({'compiler': 'prettier-json', 'loclist': 1})
+  call MakeWith({'compiler': 'prettier-json'})
   keepjumps normal! gg
 endfunction
 

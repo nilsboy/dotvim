@@ -68,7 +68,7 @@ endsnippet
 # endsnippet
 
 snippet fun "Function" b
-function! `!v expand('%:t:r')`#${1:name}(opts) abort
+function! `!v expand('%:t:r')`#${1:name}(${2:opts}) abort
   ${VISUAL}$0
 endfunction
 endsnippet
@@ -340,8 +340,13 @@ snippet getcurpos "getcurpos" b
 let [bufnum, lnum, col, off] = getpos('.')
 endsnippet
 
-snippet substr "substr" w
+snippet substrbytes "substr" w
+" NOTE: on  works for bytes not unicode
 ${1:string}[${2:from} : ${3:to}]
+endsnippet
+
+snippet substr "substr" w
+let ${1:string} = strcharpart($1, ${2:start}, ${3:end})$0
 endsnippet
 
 snippet getchar "ask for a single character" b

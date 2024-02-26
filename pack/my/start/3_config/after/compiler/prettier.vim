@@ -9,7 +9,6 @@ let &makeprg .= " --loglevel=error"
 let &makeprg .= " --arrow-parens=always"
 let &makeprg .= " --no-semi"
 let &makeprg .= " --trailing-comma=es5"
-let &makeprg .= " --single-attribute-per-line"
 
 let &makeprg .= " " . expand("%:p") . " 2>&1"
 

@@ -45,7 +45,7 @@ let g:MyDbConfigProfileName = 'specifyProfileName'
 nnoremap <leader>d <nop>
 
 nnoremap <silent> <leader>di  :call MyDbInfos()<cr>
-nnoremap <silent> <leader>dp  mz"zyiW:call MyDbConfigSetProfile(@z)<cr>
+nnoremap <silent> <leader>dp  mz"zyiw:call MyDbConfigSetProfile(@z)<cr>
 
 nnoremap <silent> <leader>dP  mz:call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 

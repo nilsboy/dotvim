@@ -1,6 +1,6 @@
 let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
 
-let &makeprg = "prettier --parser json --write --loglevel error --prose-wrap=always % 2>&1"
+let &makeprg = "prettier --parser json --write --prose-wrap=always % 2>&1"
 
 let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 

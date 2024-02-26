@@ -85,8 +85,8 @@ command! -nargs=* JsonFromJavascipt call MyJsonFromJavascript(<f-args>)
 "   autocmd User CommentaryPost :echo "post"
 " augroup END
 
-MyInstall gron pkexec apt install gron
 function! MyJsonToGron() abort
+  MyInstall gron pkexec apt install gron
   silent wall
   let src = expand("%")
   let dst = nb#mktemp("gron") . expand("%:r") . '.js'

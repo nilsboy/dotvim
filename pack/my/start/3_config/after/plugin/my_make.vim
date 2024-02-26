@@ -41,7 +41,7 @@ function! MakeWith(opts) abort
       call nb#debug('Running lmake with &makeprg:' . &makeprg)
       silent execute 'lmake! ' . args
     else
-      call nb#debug('Running make with &makeprg:' . &makeprg)
+      call nb#debug("Running make with &makeprg:", &makeprg)
       silent execute 'make! ' . args
     endif
   catch
@@ -83,7 +83,16 @@ endfunction
 
 " formatting
 nnoremap <silent> <leader>x :silent call MakeWith({'name': 'formatter', 'compiler': b:formatter})<cr>
-nnoremap <silent> <leader>X :call MakeWith({'name': 'formatter', 'compiler': 'prettier-json'})<cr>
+
+function! my_make#forceJsonFormat() abort
+  call MakeWith({'name': 'formatter', 'compiler': 'prettier-json'})
+  silent! keeppatterns keepjumps %s/\\n/\r/g
+  silent! keeppatterns keepjumps %s/\v'[[:blank:]\+\n\\]+'//g
+  silent! keeppatterns keepjumps %s/<br>/\r/g
+  silent! keeppatterns keepjumps %s/&nbsp;/ /g
+  silent! keeppatterns keepjumps %s/\/app\/src/src/g
+endfunction
+nnoremap <silent> <leader>X :call my_make#forceJsonFormat()<cr>
 
 " executing
 nnoremap <silent> <leader>ef :call MakeWith({'name': 'myrunprg', 'compiler': b:myrunprg, 'args': expand('%:p')})<cr>

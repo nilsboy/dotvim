@@ -2,6 +2,9 @@ setlocal formatoptions=
 " setlocal formatoptions=tacqwn
 
 setlocal conceallevel=0
+let &l:tabstop = 2
+let &l:softtabstop = &l:tabstop
+let &l:shiftwidth = &l:tabstop
 
 let &l:define = '\v#+\s+'
 let b:outline = '^#+\s+'

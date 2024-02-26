@@ -21,11 +21,8 @@ endfunction
 let g:MyQuickfixIgnoreFile = $CONTRIB . '/ignore-files'
 let g:MyQuickfixSearchLimit = '5000'
 let g:MyQuickfixWrap = 'nowrap'
-let g:my_quickfix#formatBasename = 0
 
-command! -bang -nargs=* Search call MyQuickfixSearch({'term': <q-args>})
 function! MyQuickfixSearch(options) abort
-
   let options = {}
   call extend(options, a:options)
 
@@ -157,7 +154,7 @@ function! MyQuickfixSearch(options) abort
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = "timeout -s kill 500s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
+  let grepprg = "timeout -s kill 500s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts' --sort-files"
   " let grepprg = "timeout -s kill 500s rg --only-matching --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
 
   if multiline == 1
@@ -217,7 +214,7 @@ function! MyQuickfixSearch(options) abort
   let grepprg .= " | errorformatregex 'n/^(?<file>.+?)\\:(?<row>\\d+)\\:(?<col>\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
-  let tempfile = g:nb#runlogfile
+  let tempfile = g:nb#tempdir . 'my_quickfix'
   call writefile([], tempfile)
 
   call nb#debug("quickfix tempfile: " . tempfile)
@@ -244,19 +241,17 @@ function! MyQuickfixSearch(options) abort
     endif
   endif
 
-	" let somectx = {'makeprg' : &makeprg}
-	" call setqflist([], 'a', {'context' : somectx})
-  " call setqflist([], 'a', {'context': { 'foo': 'no'}})
-
   " NOTE: semicolons seem to trigger a redirect into a vim tempfile.
   " let &l:makeprg = findprg . '\; ' . grepprg
   " make!
 
-  " if title == ''
-  "   let title = term
-  "   let title = substitute(title, '\v\n', '', 'g')
-  "   let title = 'Search: ' .. title
-  " endif
+  if title == ''
+    let title = term
+    let title = substitute(title, '\v\n', '', 'g')
+    " NOTE: qf list title seems to have a max length - if longer it's not shown
+    let title = strcharpart(title, 0, 21)
+    let title = 'Search: ' . title
+  endif
 
   let &l:errorformat = 'errorformatregex:%f:%l:%c:%t:%m,errorformatregex:%f,%f'
   execute 'cgetfile ' . tempfile
@@ -335,13 +330,13 @@ call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1 })
-call MyQuickfixAddMappings('fb', { 'function': 'MyQuickfixFindInBuffer' } )
+call MyQuickfixAddMappings('f/', { 'function': 'MyQuickfixFindInBuffer' } )
 call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
 call MyQuickfixAddMappings('ft', { 'type': 1 })
 call MyQuickfixAddMappings('fn', { 'matchFilenameOnly': '1', })
 
-nnoremap <silent><leader>// :let g:MyQuickfixFormatOnce = 'NoFile' \| normal <leader>fbi<cr>
-nnoremap <silent><leader>* :let g:MyQuickfixFormatOnce = 'NoFile' \| normal <leader>fw<cr>
+nnoremap <silent><leader>// :normal <leader>fbi<cr>
+nnoremap <silent><leader>*  :normal <leader>fw<cr>
 
 " nnoremap <silent> <leader>jj :call MyQuickfixSearch({ 'path': '/tmp', 'term': '.', 'find': 1, 'grep': 0, 'orderBy': 'recent', })<cr>
 
@@ -362,14 +357,13 @@ function! MyQuickfixOutline(location) abort
   cclose
   " let pcreDefine = substitute(&define, '^\\v', '', 'g')
   if ! exists('b:outline')
-    call nb#info('b:outline not defined for filetye: ' . &filetype)
+    call nb#info('b:outline not defined for filetype: ' . &filetype)
     return
   endif
   silent wall
   " let pcreDefine = RegexToPcre(b:outline)
   let pcreDefine = b:outline
   if a:location == 'bufferOnly'
-    let g:MyQuickfixFormatOnce = 'NoFile'
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'path': expand('%:p'), 'multiline': 0, 'exact': 1})
   else
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'multiline': 0, 'exact': 1})
@@ -380,20 +374,27 @@ endfunction
 nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
 nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
 
-command! -nargs=* MyQuickfixDump call MyQuickfixDump (<f-args>)
+nnoremap <silent> <leader>vqq :call MyQuickfixDump()<cr>
 function! MyQuickfixDump(...) abort
-  call DUMP(getqflist())
+  call DUMP(getqflist({'all': 1}))
+  keepjumps /^  "title":
+  keepjumps normal! ddggjP
 endfunction
 
-command! -nargs=* MyLoclistDump call MyLoclistDump (<f-args>)
+nnoremap <silent> <leader>vll :call MyLoclistDump()<cr>
 function! MyLoclistDump(...) abort
-  call DUMP(getloclist(0))
+  call DUMP(getloclist(0, {'all': 1}))
+  keepjumps /^  "title":
+  keepjumps normal! ddggjP
 endfunction
+
+let g:my_quickfix#maxFilenameLength = 50
+let g:my_quickfix#showDir = 0
 
 " setqflist() has a fixed display format so it can not be used for formatting.
 " This function only formats and *must* not delete entries - use a different
 " function for that.
-function! MyQuickfixFormatAsSimple() abort
+function! MyQuickfixFormat() abort
   if BufferIsLoclist()
     let qflist = getloclist(0)
   else
@@ -401,44 +402,23 @@ function! MyQuickfixFormatAsSimple() abort
   endif
   setlocal modifiable
   silent! %delete _
-  let maxFilenameLength = 0
-  let maxTextLength = 0
-  let singleFilename = 1
-  let lastFilename = ''
+
+  let foundBufnr = ''
+  let first = 1
+  let multipleFiles = 0
   for entry in qflist
-    let textLength = len(entry.text)
-    if textLength > maxTextLength
-      let maxTextLength = textLength
+    if first == 1
+      let foundBufnr = entry.bufnr
+      let first = 0
     endif
-    if entry.bufnr == 0
-      let bufname = ''
-    else
-      let bufname = bufname(entry.bufnr) 
-    endif
-    let path = fnamemodify(bufname, ':.')
-    let basename = fnamemodify(path, ':t')
-    let dir = fnamemodify(path, ':h:t')
-    if dir == '.'
-      let dir = ''
-    else
-      let dir .= '/'
-    endif
-    let filename = dir . basename
-    if lastFilename == ''
-      let lastFilename = filename
-    endif
-    if lastFilename != filename
-      let singleFilename = 0
-    endif
-    " let filenameLength = len(filename)
-    let filenameLength = len(path)
-    if g:my_quickfix#formatBasename
-      let filenameLength = len(basename)
-    endif
-    if filenameLength > maxFilenameLength
-      let maxFilenameLength = filenameLength
+    if entry.bufnr != foundBufnr
+      let multipleFiles = 1
+      break
     endif
   endfor
+
+  let foundMaxFilenameLength = 0
+  let foundMaxTextLength = 0
   let texts = []
   for entry in qflist
     if entry.bufnr == 0
@@ -454,40 +434,55 @@ function! MyQuickfixFormatAsSimple() abort
     else
       let dir .= '/'
     endif
-    " let filename = dir . basename
-    let filename = path
-    if g:my_quickfix#formatBasename
+    let text = ''
+    if multipleFiles == 1
       let filename = basename
-    endif
-    let text = filename
-    " if ! singleFilename
-      " if entry.valid
-      "   if entry.text == ''
-      "     let text = filename
-      "   endif
-      " endif
-      if maxTextLength > 0
-        let text = printf('%-' . maxFilenameLength . 's', text)
-        let text .= ' │ '
+      if g:my_quickfix#showDir
+        let filename = path
       endif
-    " endif
-    if entry.valid
-      " if entry.text != ''
-      " if maxTextLength > 0
-        " let text .= '❭ '
-        " let text .= '❱ '
-        " let text .= '⚠ '
-      " else
-        " let text = '❱ ' . text
-      " endif
+      let max = g:my_quickfix#maxFilenameLength
+      if len(filename) > max
+        let start = strcharpart(filename, 0, max - 13) 
+        let end =   strcharpart(filename, len(filename) - 10, len(filename)) 
+        let filename = start . '...' . end
+      endif
+      let entry._formattedFilename = filename
+      if foundMaxFilenameLength < len(filename)
+        let foundMaxFilenameLength = len(filename)
+      endif
+      if entry.text == path
+        let entry.text = ''
+      endif
     else
-        " let text = '  ' . text
+      let entry._formattedFilename = ''
+      let text = entry.text
     endif
-    " let text .= substitute(entry.text, '\v^\s*', '', 'g')
-    let text .= entry.text
-    let text = substitute(text, '\v[\n\r]', '', 'g')
-    call add(texts, text)
+    if foundMaxTextLength < len(entry.text)
+      let foundMaxTextLength = len(entry.text)
+    endif
   endfor
+
+  " if multipleFiles == 1
+    let max = foundMaxFilenameLength
+    if g:my_quickfix#maxFilenameLength == 0
+      let max = 0
+    endif
+
+    for entry in qflist
+      let filename = entry._formattedFilename
+      let text = ''
+      if foundMaxTextLength > 0
+        let text =  substitute(entry.text, '\v[\n\r]', '', 'g')
+        let filename = printf("%-" . max . "s", filename) . ' │ '
+      endif
+      if max == 0
+        let filename = ''
+      endif
+      let text = filename . text
+      call add(texts, text)
+    endfor
+  " endif
+
   " a lot faster to add all lines in a list sometimes (umlauts problem?)
   call append(line('$'), texts)
   keepjumps normal! "_dd
@@ -495,72 +490,18 @@ function! MyQuickfixFormatAsSimple() abort
   setlocal nomodified
 endfunction
 
-function! MyQuickfixFormatAsSimpleBasename() abort
-  let g:my_quickfix#formatBasename = 1
-  call MyQuickfixFormatAsSimple()
-endfunction
-
-function! MyQuickfixFormatAsNoFile() abort
-  if BufferIsLoclist()
-    let qflist = getloclist(0)
+function! my_quickfix#toggle(...) abort
+  if g:my_quickfix#maxFilenameLength == 50
+    let g:my_quickfix#showDir = 1
+    let g:my_quickfix#maxFilenameLength = 300
+  elseif g:my_quickfix#maxFilenameLength == 300
+    let g:my_quickfix#showDir = 0
+    let g:my_quickfix#maxFilenameLength = 0
   else
-    let qflist = getqflist()
+    let g:my_quickfix#showDir = 0
+    let g:my_quickfix#maxFilenameLength = 50
   endif
-  setlocal modifiable
-  %delete _
-  let texts = []
-  for entry in qflist
-    let text = bufname(entry.bufnr)
-    call add(texts, text)
-  endfor
-  " a lot faster to add all lines in a list sometimes (umlauts problem?)
-  call append(line('$'), texts)
-  keepjumps normal! "_dd
-  setlocal nomodifiable
-  setlocal nomodified
-endfunction
-
-function! MyQuickfixFormatAsBasename() abort
-  if BufferIsLoclist()
-    let qflist = getloclist(0)
-  else
-    let qflist = getqflist()
-  endif
-  setlocal modifiable
-  %delete _
-  let texts = []
-  for entry in qflist
-    let file = bufname(entry.bufnr)
-    let text = fnamemodify(file, ':t')
-    call add(texts, text)
-  endfor
-  " a lot faster to add all lines in a list sometimes (umlauts problem?)
-  call append(line('$'), texts)
-  keepjumps normal! "_dd
-  setlocal nomodifiable
-  setlocal nomodified
-endfunction
-
-function! MyQuickfixFormatAsDirAndBasename() abort
-  if BufferIsLoclist()
-    let qflist = getloclist(0)
-  else
-    let qflist = getqflist()
-  endif
-  setlocal modifiable
-  %delete _
-  let texts = []
-  for entry in qflist
-    let file = bufname(entry.bufnr)
-    let text = fnamemodify(file, ':p:h:t')
-    let text .= '/' . fnamemodify(file, ':t')
-    call add(texts, text)
-  endfor
-  " a lot faster to add all lines in a list sometimes (umlauts problem?)
-  call append(line('$'), texts)
-  keepjumps normal! "_dd
-  setlocal nomodifiable
-  setlocal nomodified
+  call MyQuickfixFormat()
 endfunction
 
 augroup MyQuickfixAugroupCloseQfWindows
@@ -577,49 +518,6 @@ augroup MyQuickfixAugroupFormat
   autocmd!
   autocmd FileType qf call MyQuickfixFormat()
 augroup END
-
-let g:MyQuickfixFormat = 'Simple'
-let g:MyQuickfixFormatOnce = ''
-function! MyQuickfixFormat() abort
-  if g:MyQuickfixFormatOnce != ''
-    let format = g:MyQuickfixFormatOnce
-    let g:MyQuickfixFormatOnce = ''
-  else
-    let format = g:MyQuickfixFormat
-  endif
-  call function('MyQuickfixFormatAs' . format)()
-endfunction
-
-function! MyQuickfixFormatAsNone() abort
-  " nothing
-endfunction
-
-function! MyQuickfixFormatToggle() abort
-  let g:my_quickfix#formatBasename = 0
-  let g:MyQuickfixWrap = 'nowrap'
-  if g:MyQuickfixFormat == 'Simple'
-    let g:MyQuickfixFormat = 'SimpleBasename'
-  elseif g:MyQuickfixFormat == 'SimpleBasename' 
-    let g:MyQuickfixFormat = 'NoFile'
-    let g:MyQuickfixWrap = 'nowrap'
-  elseif g:MyQuickfixFormat == 'NoFile' 
-    let g:MyQuickfixFormat = 'Basename'
-  elseif g:MyQuickfixFormat == 'Basename' 
-    let g:MyQuickfixFormat = 'DirAndBasename'
-  elseif g:MyQuickfixFormat == 'DirAndBasename' 
-    let g:MyQuickfixFormat = 'Simple'
-  else
-    throw 'Unknown format: ' . g:MyQuickfixFormat
-  endif
-  if BufferIsQuickfix()
-    cclose
-    copen
-  else
-    lclose
-    lopen
-  endif
-  let g:my_statusline#msg = g:MyQuickfixFormat
-endfunction
 
 " TODO: keep cursor position in qf
 " nnoremap <silent> <cmd> 5 {-> execute('pedit ' . MyQuickfixGetCurrent().filename)}
@@ -681,5 +579,14 @@ endfunction
 
 function! MyQlistVars() abort
   Redir set include? define? includeexpr? suffixesadd?
+endfunction
+
+function! my_quickfix#runContext() abort
+	let context = getqflist({'context' : 1}).context
+  if !exists('context.qftype')
+    return
+  endif
+  let Qftype = function(context.qftype)
+  call Qftype()
 endfunction
 

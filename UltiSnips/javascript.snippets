@@ -288,15 +288,15 @@ constructor($1) {
 }
 endsnippet
 
-snippet testAssertEq "assert" w
-assert.equal($1, ${2:\`$0\`})
+snippet testeq "assert" w
+expect($1).toEqual($2)
 endsnippet
 
-snippet testAssertok "assert.ok" w
+snippet testok "assert.ok" w
 assert.ok(${VISUAL}$0)
 endsnippet
 
-snippet testAssertDeep "assertdeep" w
+snippet testDeep "assertdeep" w
 assert.deepStrictEqual(${VISUAL}$0)
 endsnippet
 
@@ -306,13 +306,13 @@ endsnippet
 # }, ${2:/$1/})
 # endsnippet
 
-snippet testExpectToThrow "expectToThrow" b
+snippet testThrows "expectToThrow" b
 expect(() => {
   ${VISUAL}$0
 }).toThrowError($1)
 endsnippet
 
-snippet testExpectToThrowAsync "expectToThrow" b
+snippet testThrowsAsync "expectToThrow" b
 await expect(
   ${VISUAL}$0
 ).rejects.toThrow($1)
@@ -778,6 +778,18 @@ snippet jd "dump arbitrarily deep structure" b
 
 endsnippet
 
+# https://stackoverflow.com/a/27534731
+snippet jdAlt "dump arbitrarily deep structure" b
+
+// prettier-ignore
+{
+  console.log(\`\n################################################################ jj`!v DebugId()`${VISUAL}$0\`)
+  console.dir({'${1///}': ${1:${VISUAL}}}$0, { depth: null })
+  console.log(\`\n################################################################ jj`!v DebugId()`${VISUAL}$0\n\`)
+}
+
+endsnippet
+
 snippet dump "dump arbitrarily deep structure into var" b
 import util from 'util'
 const $1 = util.inspect($2, false, null)
@@ -949,6 +961,7 @@ snippet .toj "toJSON()" i
 .toJSON()
 endsnippet
 
+# $0_.merge(Object.create(Object.getPrototypeOf($1)), ${VISUAL}$1)
 snippet clone "clone" w
 $0_.merge({}, ${VISUAL}$1)
 endsnippet
@@ -1112,7 +1125,7 @@ endsnippet
 
 snippet matchallglobal "matchglobal" b
 const $1 = [
-  ...matchAll(movieRes.data, /$2/g$0)
+  ...matchAll(res.data, /$2/g$0)
 ].map((match) => {
   return match[1]
 })
@@ -1200,15 +1213,15 @@ for (const row of rows) {$0
 endsnippet
 
 snippet mongodbTransaction "mongodbTransaction" b
-const session = mongo.startSession();
+const mongoSession = mongo.startSession();
 try {
-  await session.withTransaction(async () => {
+  await mongoSession.withTransaction(async () => {
     const coll1 = mongo.db('${1:database}').collection('${2:collection}');
     $0await coll1.insertOne({ abc: 1 }, { session });
     ${VISUAL}
   });
 } finally {
-  session.endSession();
+  mongoSession.endSession();
 }
 endsnippet
 

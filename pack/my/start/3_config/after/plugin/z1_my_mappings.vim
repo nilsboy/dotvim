@@ -215,7 +215,7 @@ nnoremap gS "zyiw:%s/<C-r>z//g<Left><Left>
 nnoremap gb :ls<cr>:buffer<space>
 
 " select last pasted text
-nnoremap viP `[v`]
+" nnoremap <expr> gp '`[' . getregtype()[0] . '`]'
 
 " Toggle highlighting current matches
 nmap <silent><c-c> :silent set hlsearch! hlsearch? \| :echo<CR>
@@ -253,6 +253,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
+
+" set virtualedit=all
 
 function! z1_my_mappings#pm2log() abort
   Redir !pm2 log --raw --lines 30000 --nostream

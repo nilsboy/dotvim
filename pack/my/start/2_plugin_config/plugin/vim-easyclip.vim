@@ -1,3 +1,4 @@
+finish
 " Simplified clipboard functionality for Vim
 " NOTE: checkout out yankstack as an alternative for register history
 " NOTE: use this instead of the plugin?:

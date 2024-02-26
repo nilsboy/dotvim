@@ -1,0 +1,45 @@
+# build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+# ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+# docs: Documentation only changes
+# feat: A new feature
+# fix: A bug fix
+# perf: A code change that improves performance
+# refactor: A code change that neither fixes a bug nor adds a feature
+# style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+# test: Adding missing tests or correcting existing tests
+
+# https://www.conventionalcommits.org/en/v1.0.0/ 
+# https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
+
+snippet i "init" b
+${1:refactor}: ${4:description}
+
+endsnippet
+
+snippet init-choice "choice" b
+${1|build, ci, docs, feat, fix, perf, refactor, style, test|}: ${4:description}
+endsnippet
+
+snippet init-elaborate "init" b
+${1:type}${2:(${3:optional scope})}: ${4:description}${5:
+
+${6:optional body}}${7:
+
+${8:optional footer(s)}}
+
+endsnippet
+
+snippet trailer "trailer" b
+${1:subject}
+
+${2:Lorem ipsum dolor sit amet, consectetur adipiscing elit.}
+
+#
+# Signed-off-by: Alice <alice@example.com>
+# Signed-off-by: Bob <bob@example.com>
+endsnippet
+
+snippet footer-breaking-change "footer-breaking-change" b
+BREAKING CHANGE: $0
+
+endsnippet
