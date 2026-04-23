@@ -1,12 +1,20 @@
 " A Git wrapper so awesome, it should be illegal
 " TAGS: git
 " TBD: checkout vim-flog, git-jump
+" SEE ALSO: ~/.gitconfig
+
 PackAdd tpope/vim-fugitive
 
+nnoremap <leader>gH :execute "edit " . stdpath('config')
+  \ . "/pack/my/start/2_plugin_config/plugin/vim-fugitive.vim"<cr>
+ 
 nnoremap <silent> <leader>gs :Git<cr>
-nnoremap <silent> <leader>gd :Gvdiffsplit! \| echo 'target branch (current) / working copy / merge branch (other)'<cr>
-" TODO:
-nnoremap <silent> <leader>gm :call MyFugitiveMasterDiff()<cr>
+nnoremap <silent> <leader>gD :Gvdiffsplit! \| echo 'target branch (current) / working copy / merge branch (other)'<cr>
+
+" diff staging @=HEAD
+nnoremap <silent> <leader>gd :silent Gvdiffsplit! @   \| echo 'target branch (current) / working copy / merge branch (other)'<cr>
+nnoremap <silent> <leader>gm :Gvdiffsplit! dev \| echo 'target branch (current) / working copy / merge branch (other)'<cr>
+
 nnoremap <silent> <leader>gc :Git commit<cr>
 nnoremap <silent> <leader>gB :Git blame<cr>
 nnoremap <silent> <leader>gi :GBrowse<cr>
@@ -36,14 +44,20 @@ nnoremap <silent> <leader>gA :silent !git add -A .<cr>
 
 nnoremap <silent> <leader>gC :!git checkout %<cr>
 
-" nnoremap <silent> <leader>gg :call Redir("!git log --graph --simplify-by-decoration --date=\"format:%F %T\" --pretty=format:\"%d %s \| %ad \| %h\" --all", 0, 0) \| set filetype=git-branches<cr>
-" nnoremap <silent> <leader>gB :call Redir("!git log --graph --oneline --decorate --all", 0, 0) \| set filetype=git-branches<cr>
-
-" nnoremap <silent> <leader>gb :Twiggy<cr>
-
+" TODO:
+" nnoremap <silent> <leader>gM :call MyFugitiveMasterDiff()<cr>
 function! MyFugitiveMasterDiff() abort
-  Redir !git diff master
-  setlocal filetype=diff
+  call nb#createTempBuffer('GitDiffMaster', '', 'diff')
+  " TBD: git command not working:
+  put!=execute('!git diff main...')
+  normal! gg
+  " setlocal filetype=diff
 endfunction
 
-command! -nargs=* SyntaxOffBuffer setlocal syntax=off
+nnoremap <silent> <leader>gg :call MakeWith({'name': 'myrunprg', 'compiler': 'git-status', 'args': ''})<cr>
+" nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
+
+nnoremap <silent> <leader>gS :let &g:errorformat = '%f' \| cgetexpr system('git diff --name-only --diff-filter=d dev --') \| :copen<cr>
+
+" diff --name-only dev -- 
+

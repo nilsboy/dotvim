@@ -7,6 +7,26 @@ autocmd!
 " Reset all settings to their defaults
 " set all&
 
+let mapleader = " "
+
+" " Map space to leader instead of the other way around to keep the original
+" " leader in insert mode - because space does not work well there.
+" nmap <space> <leader>
+" vmap <space> <leader>
+
+" " Ignore the leader if the following key is not mapped
+" NOTE: using map makes localleader shadow leader?!?
+" nmap <leader> <nop>
+" vmap <leader> <nop>
+
+let maplocalleader = ","
+" nmap , <localleader>
+" vmap , <localleader>
+
+" Ignore the localleader if the following key is not mapped
+" nmap <nowait> <localleader> <nop>
+" vmap <nowait> <localleader> <nop>
+
 " prevent some builtin plugins from loading
 
 " see vim-dirvish
@@ -27,5 +47,19 @@ filetype on
 filetype plugin on
 filetype indent on
 
+" augroup z0_my_vimrc#augroupReloadVimrcOnWrite
+"   autocmd!
+"   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
+" augroup END
+
+" TODO:
 " set verbosefile=/tmp/vim-debug.log
 " set verbose=13
+
+" " debug performance problems
+" " look at the stats at the end of the file to see what takes long
+" profile start /tmp/profile.log
+" profile func *
+" profile file *
+" echohl WarningMsg | unsilent echom 'profiling to log.' | echohl None
+

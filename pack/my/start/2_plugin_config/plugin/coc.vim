@@ -17,19 +17,28 @@ endfunction
 
 " For tsserver:
 " > Note: for rename import on file rename, you have to install watchman in your $PATH.
+" NOTE: Ubuntu (2025-08-26) has a very old version of watchman that leaves lots
+" of file handles open and does not update watchman.
 MyInstall watchman pkexec apt install watchman
 
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 call coc#add_extension('coc-tsserver')
 call coc#add_extension('coc-ultisnips')
 call coc#add_extension('coc-json')
+
+" NOTE: loads jars and complains for missing jars - even when it is not used?!?:
 call coc#add_extension('coc-java')
-call coc#add_extension('coc-phpls')
+
+" call coc#add_extension('coc-phpls')
 call coc#add_extension('coc-yaml')
-call coc#add_extension('coc-vimlsp')
+" TBD: produces isKeyword error when opening a .vim file
 call coc#add_extension('coc-vimlsp')
 call coc#add_extension('@yaegassy/coc-tailwindcss3')
-call coc#add_extension('coc-swagger')
+" call coc#add_extension('coc-swagger')
+
+" NOTE: needs pip3 install jedi
+call coc#add_extension('coc-python')
+
 " TODO: test
 " call coc#add_extension('coc-sql')
 " TODO: test
@@ -38,10 +47,17 @@ call coc#add_extension('coc-swagger')
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
 nmap <silent> <leader>li <Plug>(coc-implementation)
-nmap <silent> <leader>lD <Plug>(coc-diagnostic-info)
 nmap <silent> <leader>lr <Plug>(coc-references)
-nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
+
+nmap <silent> <leader>le :CocDiagnostics<cr>
+nmap <silent> <leader>lD <Plug>(coc-diagnostic-info)
+
+nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev-error)
+nmap <silent> <leader>ln <Plug>(coc-diagnostic-next-error)
+
+nmap <silent> <leader>lP <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>lN <Plug>(coc-diagnostic-next)
+
 nmap <silent> <leader>lR <Plug>(coc-rename)
 nmap <silent> <leader>lF :CocCommand workspace.renameCurrentFile<cr>
 " vmap <silent> <leader>lf <Plug>(coc-format-selected)
@@ -50,13 +66,16 @@ vmap <silent> <leader>lA <Plug>(coc-codeaction-selected)
 nmap <silent> <leader>la <Plug>(coc-codeaction)
 nmap <silent> <leader>lc :CocList commands<cr>
 nmap <silent> <leader>lO :call CocAction('fold', <f-args>)<cr>
-nnoremap <silent> <leader>lK :call CocAction('doHover')<cr>
+" nnoremap <silent> <leader>lK :call CocAction('doHover')<cr>
+nnoremap <silent> <leader>lK :call CocAction('definitionHover')<cr>
 nnoremap <silent> <leader>l? :CocCommand workspace.showOutput<cr>
 
 nmap <silent> <leader>lL <Plug>(coc-float-jump)
 
 nnoremap <silent> <leader>lw :call nb#warn("Build workspace not implemented.")<cr>
 nnoremap <silent> <leader>lo :call nb#warn("Organize imports not implemented.")<cr>
+
+nnoremap <silent> <leader>k :call coc#float#close_all()<cr>
 
 " Check complete workspace (project) for errors.
 
@@ -93,9 +112,17 @@ nnoremap <silent> <leader>lo :call nb#warn("Organize imports not implemented.")<
 " Show signature help while editing
 augroup MyCocAugroupCoc
   autocmd!
-  autocmd CursorHoldI * silent! call CocActionAsync('showSignatureHelp')
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd CursorHoldI,InsertEnter * call coc#showSignatureHelp()
+  " autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup END
+
+" fix coc error message in command line edit window
+function! coc#showSignatureHelp() abort
+  if ! CocAction('ensureDocument')
+    return
+  endif
+  call CocActionAsync('showSignatureHelp')
+endfunction
 
 let g:coc_snippet_next = '<TAB>'
 let g:coc_snippet_prev = '<S-TAB>'

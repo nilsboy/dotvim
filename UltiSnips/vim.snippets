@@ -114,7 +114,7 @@ call nb#info('$1: ', $1)
 endsnippet
 
 snippet echo "echo with 1 arg"
-echo '$1:',  $1
+echo '$1:' .  $1
 endsnippet
 
 snippet debug "debug" 
@@ -140,12 +140,6 @@ endsnippet
 
 snippet pluginadd "Description" b
 PackAdd ${VISUAL}$0
-endsnippet
-
-snippet isneo "if is neovim" b
-if nb#isNeovim()
-  ${VISUAL}$0
-endif
 endsnippet
 
 snippet autocmd "autocmd" b
@@ -356,15 +350,11 @@ redraw
 execute 'echo "' . $2 . '"'
 endsnippet
 
-snippet put "put" b
-:put =${1:a:term . ':'}
-endsnippet
-
 snippet buf "buf" w
 <buffer>
 endsnippet
 
-snippet setl "set local" b
+snippet setlocal "" b
 let &l:$1 = $0
 endsnippet
 
@@ -529,3 +519,28 @@ snippet returnif "returnif" b
 if ${VISUAL}$0 | return | endif
 endsnippet
 
+snippet ifNeovim "ifNeovim" b
+if has("nvim")
+  ${VISUAL}$0
+endif
+endsnippet
+
+snippet put2 "" b
+silent put${1:!}=execute('${VISUAL}$0')
+endsnippet
+
+snippet put "" b
+call setline('.', execute('${VISUAL}$0')->split("\n"))
+endsnippet
+
+snippet loc "" w
+<localleader>
+endsnippet
+
+snippet TODO "" w
+TBD
+endsnippet
+
+snippet TBD "" w
+TODO
+endsnippet

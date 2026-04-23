@@ -3,7 +3,7 @@ runtime! after/ftplugin/javascript.vim
 let &l:commentstring = '// %s'
 
 " NOTE: change for word under cursor
-setl iskeyword-=$
+setlocal iskeyword-=$
 
 let b:formatter = 'prettier'
 let b:outline = '^//\s+'

@@ -2,7 +2,6 @@
 
 function! my_quickfix_buffer_list#list() abort
   let currentBufnr = bufnr('%')
-              " \ 'buflisted(v:val) && (nb#buffer#isNamed(v:val) || !nb#buffer#isEmpty(v:val))'
   let list = 
         \ sort(
           \ map(

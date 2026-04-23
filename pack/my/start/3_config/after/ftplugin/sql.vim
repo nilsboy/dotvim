@@ -1,3 +1,5 @@
+" for linting checkout: https://github.com/sqlfluff/sqlfluff 
+
 setlocal nowrap
 
 " let s:new_title = 'Srvr: ' . DB_listOption('profile')

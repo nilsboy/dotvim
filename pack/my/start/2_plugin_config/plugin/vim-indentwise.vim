@@ -8,11 +8,18 @@ let g:indentwise_treat_whitespace_as_blank = 0
 let g:indentwise_suppress_keymaps = 1
 let g:indentwise_preserve_col_pos = 0
 
+map ( <Plug>(IndentWisePreviousLesserIndent)
+map ) <Plug>(IndentWiseNextGreaterIndent)
+" map ) <Plug>(IndentWiseNextLesserIndent)
+
 map { <Plug>(IndentWisePreviousEqualIndent)
 map } <Plug>(IndentWiseNextEqualIndent)
 
-map ( <Plug>(IndentWisePreviousLesserIndent)
-map ) <Plug>(IndentWiseNextGreaterIndent)
+" nmap { <Plug>(IndentWiseBlockScopeBoundaryBegin)
+" nmap } <Plug>(IndentWiseBlockScopeBoundaryEnd)
+
+nmap ( <Plug>(IndentWiseBlockScopeBoundaryBegin)
+nmap ) <Plug>(IndentWiseBlockScopeBoundaryEnd)
 
 finish
 

@@ -47,7 +47,7 @@ set display=lastline,uhex,msgsep
 set linebreak
 set breakat&vim
 " TODO: unset by coc?
-if nb#isNeovim()
+if has("nvim")
   set breakindent
   " more chars:
   " :help digraph-table
@@ -115,8 +115,3 @@ let &fillchars = "diff: ,eob: "
 " function MyDiff()
 "     " execute "!git --no-pager diff --no-prefix --no-color " . v:fname_in . " " . v:fname_new .  " > " . v:fname_out
 " endfunction
-
-augroup z0_my_vimrc#augroupReloadVimrcOnWrite
-  autocmd!
-  autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-augroup END

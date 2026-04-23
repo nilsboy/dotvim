@@ -2,7 +2,7 @@
 " let &l:comments = 's1:[",ex:"]'
 " let &l:commentstring = '["%s"]'
 
-let b:formatter = 'prettier-json'
+let b:formatter = 'jq-json'
 
 setlocal wrap
 let &l:commentstring = '// %s'

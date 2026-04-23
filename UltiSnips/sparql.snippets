@@ -1,0 +1,78 @@
+# Case usage:
+# ex:Book a rdfs:Class ;
+# ex:title a rdf:Property ;
+# ex:theHobbit a ex:Book ;
+
+# TODO: use rdfs:label instead of name?:
+# rdfs:label "Workflow" ;
+
+# SPARQL: is there any path between two nodes?
+# https://stackoverflow.com/questions/30916040/sparql-is-there-any-path-between-two-nodes?rq=4
+
+snippet delete-interesting "" w
+WITH <http://example.com/data>
+DELETE {
+  ?s ?p ?o .
+}
+WHERE {
+  VALUES ?s {
+    ex:order1
+    ex:item/order1/sku1
+    ex:item/order1/sku2
+  }
+  ?s ?p ?o .
+}
+endsnippet
+
+snippet update "" w
+PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
+WITH <http://example/addresses>
+DELETE { ?person foaf:givenName 'Bill' }
+INSERT { ?person foaf:givenName 'William' }
+WHERE
+  { ?person foaf:givenName 'Bill'
+  }
+endsnippet
+
+snippet delete "" w
+PREFIX dc:  <http://purl.org/dc/elements/1.1/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+DELETE
+ { ?book ?p ?v }
+WHERE
+ { ?book dc:date ?date .
+   FILTER ( ?date > "1970-01-01T00:00:00-02:00"^^xsd:dateTime )
+   ?book ?p ?v
+ }
+endsnippet
+
+snippet insert "" w
+INSERT DATA
+{
+  :019adc2b-2ba2-7220-bff5-6ac1b53ddde6
+    a :workflow ;
+    :name :Order.
+}
+endsnippet
+
+snippet sel "" w
+PREFIX : <https://my.org/ns#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE {
+  $0?s ?p ?o ;
+  .
+}
+endsnippet
+
+snippet date "" w
+FILTER(?date > "1970-01-01T00:00:00-02:00"^^xsd:dateTime)
+endsnippet
+
+snippet all "" w
+?s ?p ?o ;
+endsnippet
+
+snippet join "" w
+OPTIONAL { ?$0person :email ?email . }
+endsnippet

@@ -1,5 +1,5 @@
-finish
 " Vastly improved Javascript indentation and syntax support in Vim
+" NOTE: fixes highlight error in js html-template-strings
 PackAdd pangloss/vim-javascript
 
 " let g:javascript_enable_domhtmlcss=1

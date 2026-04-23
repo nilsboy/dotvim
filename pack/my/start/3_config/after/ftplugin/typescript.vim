@@ -1,6 +1,9 @@
 runtime! after/ftplugin/javascript.vim
 
+" setlocal iskeyword+=-,.
+
 let b:formatter = 'prettier'
+let b:linter = 'eslint'
 
 let b:myrunprg = 'vite-node'
 " let b:tester = 'jest'
@@ -28,12 +31,14 @@ let b:outline .= '|^\s*(async)*\s*describe\s*\('
 let b:outline .= '|^\s*(async)*\s*before\w+\s*\('
 let b:outline .= '|^\s*(async)*\s*after\w+\s*\('
 let b:outline .= '|^\s*(async)*\s*test\s*\('
+let b:outline .= '|^\s*(async)*\s*it\s*\('
 
 " buildService(
 let b:outline .= '|^\s\s(async\s+)*\w+\($'
 
 " async api(app) {
-let b:outline .= '|^\s\s(async\s+)*\w+\(.*?\)\s*\{$'
+  " async findAll(query: FindAllQueryDto){
+let b:outline .= '|^\s+(async\s+)*\w+\(.*?\)\s*.*\{$'
 
 " async api(app) : Set<string> {
 let b:outline .= '|^\s\s(async\s+)*\w+\(.*?\)[\s\w\<\>\:]+{$'
@@ -47,25 +52,9 @@ nnoremap <silent> <buffer> <leader>es :silent call MyShrinkShrink({
       \ })<cr>
 
 nnoremap <silent> <buffer> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
-nnoremap <silent> <buffer> <leader>lo :call CocActionAsync('runCommand', 'tsserver.organizeImports')<cr>
+nnoremap <silent> <buffer> <leader>lo :call CocActionAsync('runCommand', 'editor.action.organizeImport')<cr>
 
-" only shows errors of the nvim session (open buffers?)
-" fn.CocActionAsync('diagnosticList', '', function(err, res)
-"        if err == vim.NIL then
-"            local items = {}
-"            for _, d in ipairs(res) do
-"                local text = ('[%s%s] %s'):format((d.source == '' and 'coc.nvim' or d.source),
-"                    (d.code == vim.NIL and '' or ' ' .. d.code), d.message:match('([^\n]+)\n*'))
-"                local item = {
-"                    filename = d.file,
-"                    lnum = d.lnum,
-"                    end_lnum = d.end_lnum,
-"                    col = d.col,
-"                    end_col = d.end_col,
-"                    text = text,
-"                    type = d.severity
-"                }
-"                table.insert(items, item)
-"            end
-"            fn.setqflist({}, ' ', {title = 'CocDiagnosticList', items = items})
-
+function! typescript#cleanMongo()
+  %s/ISODate/new Date/g
+  g/_id: ObjectId/d 
+endfunction

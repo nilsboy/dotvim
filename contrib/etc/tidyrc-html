@@ -10,7 +10,7 @@ markup: 1
 sort-attributes: alpha
 tab-size: 2
 wrap: 80
-wrap-attributes: true
+wrap-attributes: false
 enclose-text: true
 enclose-block-text: true
 wrap-script-literals: false

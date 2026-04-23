@@ -1,4 +1,6 @@
-priority 101
+snippet '(.*\s*).*note' "NOTE" r
+NOTE: ${VISUAL}$0
+endsnippet
 
 snippet readme "readme" b
 ${1:description}
@@ -14,6 +16,12 @@ endsnippet
 
 snippet code "code" b
 \`\`\`${1:language}
+${VISUAL}
+\`\`\`$0
+endsnippet
+
+snippet sh "sh" b
+\`\`\`sh
 ${VISUAL}
 \`\`\`$0
 endsnippet

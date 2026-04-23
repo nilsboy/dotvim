@@ -1,41 +1,87 @@
-# TODO: use db.getCollection('dbname') instead of db.dbname to make collections
+# TODO: use db.getCollection("dbname") instead of db.dbname to make collections
 # made up solely from numbers
 
 # config: ~/.mongoshrc.js
 
-priority 5
+global !p
+
+def toggle(t, opt):
+  opts = t.split('|')
+  pos = opts.index(opt)
+  if len(opts) == pos + 1:
+    pos = 0
+  else:
+    pos = pos + 1
+  return opts[pos]
+
+def toCamelCase(v):
+  v = re.sub(r'.*/', r'', v)
+  return re.sub(r'(\W)', r'', v.title())
+  return v
+  v = re.sub(r'^[\/\.]+', r'', v)
+  return v
+  return v.title()
+  return re.sub(r'(\W)', r'', v.title())
+
+def toMethodCase(v):
+  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
+  v = re.sub(r'^[\.\/]*', r'', v)
+  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+
+def className():
+  v = snip.basename[0:1].upper()
+  v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
+  return v
+
+def escape(v):
+  return re.sub(r'`', r'\`', v)
+
+def lcFirst(v):
+  return v[0].lower() + v[1:]
+
+endglobal
 
 snippet show "show collections" b
 show collections
 endsnippet
 
 snippet updateKey "updateOne" b
-db.${1:collection}.updateOne({
-  "${2:search key}": "${3:search value}"
-},
-[{
-  $set : { "${4:set key}": "${5:$set.value}" }
-}],
-{"multi": true});
+db.${1:collection}.updateOne(
+  {
+    "${2:search key}": "${3:search value}"
+  },
+  [
+    {
+      $set : { "${4:set key}": "${5:$set.value}" }
+    }
+  ],
+  { "multi": true }
+)
 endsnippet
 
 snippet deleteKey "updateOne" b
-db.${1:collection}.updateOne({
-  "${2:search key}": "${3:search value}"
-},
-[{
-  $unset : { "${4:set key}": "${5:$set.value}" }
-}],
-{"multi": true});
+db.${1:collection}.updateOne(
+  {
+    "${2:search key}": "${3:search value}"
+  },
+  [
+    {
+      $unset : { "${4:set key}": "${5:$set.value}" }
+    }
+  ],
+  { "multi": true }
+)
 endsnippet
 
 snippet find "find" b
-db.${1:collection}.find({
-  "${2:search key}": "${3:search value}"
-},
-{
-  "${4:show key}": 1,$0
-})
+db.${1:collection}.find(
+  {
+    "${2:search key}": "${3:search value}"
+  },
+  {
+    "${4:show key}": 1,$0
+  }
+)
 endsnippet
 
 snippet findCount "count" w
@@ -43,12 +89,14 @@ snippet findCount "count" w
 endsnippet
 
 snippet findlike "like" b
-db.${1:collection}.find({
-  "${2:search key}": /${3:regex}/i
-},
-{
-  "${4:show key}": 1,$0
-})
+db.${1:collection}.find(
+  {
+    "${2:search key}": /${3:regex}/i
+  },
+  {
+    "${4:show key}": 1,$0
+  }
+)
 endsnippet
 
 snippet update "update" b
@@ -60,22 +108,24 @@ insert
 endsnippet
 
 snippet insert "insert aka replaceOne" b
-db.${1:collection}.replaceOne({
-  "${2:search key}": "${3:search value}"
-},
-$0${VISUAL},
-{upsert: true, },
+db.${1:collection}.replaceOne(
+  {$0
+  },
+  ${VISUAL},
+  { upsert: true, },
 )
 endsnippet
 
 snippet insertMany "insertMany" b
-db.${1:collection}.insertMany([
-${VISUAL}$0
-])
+db.${1:collection}.insertMany(docs)
 endsnippet
 
-snippet drop "drop" b
-db.${1:collection}.drop()
+snippet insertMany "insertManyOld" b
+db.${1:collection}.insertMany(
+  [
+    ${VISUAL}$0
+  ]
+)
 endsnippet
 
 # snippet delete "delete" b
@@ -85,53 +135,53 @@ endsnippet
 # endsnippet
 
 # put after an aggregate - needs to be on the same line as the ])...
-snippet delete "delete" w
+snippet delete "delete" i
 .map((doc) => {
-  console.log(\`deleting: ${doc.id} (_id: ${doc._id})\`)
+  console.log(\`deleting: ${doc.id} (id: ${doc.id})\`)
   db.${1:collection}.remove(
-    {"_id": doc._id },
+    {"id": doc.id },
   )
-  return doc._id
+  return doc.id
 })
 endsnippet
 
 # put after an aggregate - needs to be on the same line as the ])...
 snippet updateDoc "update" w
 .map((doc) => {
-  console.log(\`updating: ${doc.id} (_id: ${doc._id})\`)
+  console.log(\`updating: ${doc.id} (id: ${doc.id})\`)
   db.${1:collection}.updateOne(
-    { "_id": doc._id, },
+    { "id": doc.id, },
     [
       { $set : { "${4:set key}": "${5:$set.value}$0" }, },
     ],
     { multi: false },
   )
-  return doc._id
+  return doc.id
 })
 endsnippet
 
 # put after an aggregate - needs to be on the same line as the ])...
 snippet updateArrayElement "updateArrayElement" w
 .map((doc) => {
-  console.log(\`updating: ${doc.id} (_id: ${doc._id})\`)
+  console.log(\`updating: ${doc.id} (id: ${doc.id})\`)
   db.${1:collection}.updateOne(
-    { "_id": doc._id, },
+    { "id": doc.id, },
     { $set: { "${2:arrayPath}.$[matchingElement].${5:setKey}": "${6:setValue}$0" }, },
     { 
       arrayFilters: [ { "matchingElement.${3:matchKey}": "${4:matchValue}" } ],
       multi: false,
     },
   )
-  return doc._id
+  return doc.id
 })
 endsnippet
 
 # put after an aggregate - needs to be on the same line as the ])...
 snippet pushArrayElement "pushArrayElement" w
 .map((doc) => {
-  console.log(\`updating: ${doc.id} (_id: ${doc._id})\`)
+  console.log(\`updating: ${doc.id} (id: ${doc.id})\`)
   db.${1:collection}.updateOne(
-    { "_id": doc._id, },
+    { "id": doc.id, },
     { $push:
       {
         "${2:arrayPath}": 
@@ -144,12 +194,12 @@ snippet pushArrayElement "pushArrayElement" w
       },
     },
   )
-  return doc._id
+  return doc.id
 })
 endsnippet
 
 snippet deleteAll "deleteAll" b
-// DELETES ALL ENTRIES db.${1:collection}.remove({})
+$0// DELETES ALL ENTRIES db.${1:collection}.remove({})
 endsnippet
 
 snippet isNull "isNull" w
@@ -162,6 +212,10 @@ endsnippet
 
 snippet isUndefined "isUndefined" w
 {$exists: false},
+endsnippet
+
+snippet eq "eq2" w
+"${VISUAL}$1": { $eq: "$0" },
 endsnippet
 
 snippet eq "eq" w
@@ -185,6 +239,13 @@ snippet exists "exists" b
 endsnippet
 
 snippet not "not" w
+$not:
+{
+  ${VISUAL}$1,
+},
+endsnippet
+
+snippet not2 "not" w
 { $not: ${VISUAL}$0 },
 endsnippet
 
@@ -193,30 +254,70 @@ snippet lt "lower then" w
 endsnippet
 
 snippet gt "greater then" w
-{ $match: { $1: { $gt: ${VISUAL}$0 } },
+{ $gt: ${VISUAL}$0 },
+endsnippet
+
+snippet dump "dump" b
+db.$1.aggregate(
+  [
+    {
+      $sort:
+      {
+        "id": -1
+      },
+    },
+    { $limit: 30$0 },
+  ]
+).map(function(doc) { count++; return doc; })
 endsnippet
 
 # aggregate
 
 snippet "(sel|find|aggregate)" "aggregate match" r
-global.myFirst = 1
-global.myCount = 0
-db.${1:collection}.aggregate([
-  $0
-])
+db.${1:${VISUAL:collection}}.aggregate(
+  [$0
+  ]
+).map(function(doc) { count++; return doc; })
+endsnippet
+
+snippet "selid" "aggregate match" r
+db.${1:collection}.aggregate(
+  [
+    {
+      $match:
+      {
+        id: UUID("${VISUAL}$0")
+      },
+    }
+  ]
+).map(function(doc) { count++; return doc; })
+endsnippet
+
+snippet "countmap" "count" r
+.map(function(doc) { count++; return doc; })
+endsnippet
+
+snippet toJson "print output as json" b
+).map(function(doc) { console.log(JSON.stringify(doc, null, 2) + ","); return ''; })
+endsnippet
+
+snippet print "print" b
+).map(function(doc) { console.log(doc.$1); })
 endsnippet
 
 snippet match "match" w
 { 
-  $match: {
-    ${VISUAL}$0
+  $match:
+  {
+    $0${VISUAL}
   },
 },
 endsnippet
 
 snippet where "where" w
 { 
-  $match: {
+  $match:
+  {
     ${VISUAL}$0
   },
 },
@@ -226,19 +327,16 @@ snippet : ":" b
 "${VISUAL}$1": ${2:"$0"},
 endsnippet
 
+snippet d ":" b
+"${VISUAL}$1": ${2:"$0"},
+endsnippet
+
 snippet like "like" b
 "${VISUAL}$1": /$0/i,
 endsnippet
 
-snippet matchArrayElement "matchArrayElement" b
-"$1": {
-  $elemMatch: {$0
-  }, 
-},
-endsnippet
-
 snippet limit "limit" b
-{ $limit: $0 },
+{ $limit: ${1:1}$0 },
 endsnippet
 
 snippet random "random" b
@@ -247,8 +345,9 @@ endsnippet
 
 snippet project "project" b
 {
-  $project: {
-    _id: 0,
+  $project:
+  {
+    id: 0,
     id: 1,$0
   }
 },
@@ -258,26 +357,34 @@ snippet count "count" b
 { $count: "count"},
 endsnippet
 
+snippet order "order" b
+sort
+endsnippet
+
 snippet sort "sort" b
 {
-  $sort: {
-    "$${1:field}": ${2:1}
+  $sort:
+  {
+    "${1:field}": ${2:1}
   },$0
 },
 endsnippet
 
 snippet groupByRegexMatch "groupByRegex" b
 {
-  $addFields: {
-    matches: {
+  $addFields:
+  {
+    matches:
+    {
       $regexMatch: { input: "\$$1", regex: /$0/, } 
     }
   }
 },
 {
-  $group: {
-    _id: "$matches",
-    count: {$sum: 1}
+  $group:
+  {
+    id: "$matches",
+    count: { $sum: 1 }
   }
 }
 endsnippet
@@ -287,31 +394,31 @@ snippet limitMongosh "mongoshLimit" b
 config.set("displayBatchSize", 1000$0)
 endsnippet
 
-snippet arrayFieldMatch "arrayFieldMatch" b
+snippet matchArrayElement "arrayFieldMatch" b
+"${1:arrayFieldName}":
 {
-  $match: {
-    "${1:arrayFieldName}": {
-      $elemMatch: {
-        '${2:arrayItemFieldName}': {
-          $in: [ '${3:arrayItemFieldValue}' ] },
-          $nin: [ '${4:arrayItemFieldValue}' ] },$0
-        },
-      }, 
+  $elemMatch:
+  {
+    "${2:arrayItemFieldName}":
+    {
+      $in: [ "${3:arrayItemFieldValue}" ],
+      $nin: [ "${4:arrayItemFieldValue}" ],$0
     },
-  },
+  }, 
 },
 endsnippet
 
 snippet unwind "unwind" b
 {
-  $unwind: '$${1:arrayFieldName}',$0
+  $unwind: "$${1:arrayFieldName}",$0
 },
 endsnippet
 
 snippet addFields "addFields" b
 {
-  $addFields: {
-    '${1:fieldName}': '$${2:fieldPath}'
+  $addFields:
+  {
+    "${1:fieldName}": "$${2:fieldPath}"
   }
 },
 endsnippet
@@ -341,33 +448,61 @@ session.commitTransaction()
 endsnippet
 
 snippet filter "$filter" b
-$filter: {
+$filter:
+{
   input: "\$$1",
-  cond: { $and: [
+  cond:
+  {
+    $and:
+    [
       { $eq: ["\$\$this.$2", "$3"] },$0
     ]
   }
 },
 endsnippet
 snippet projectFilter "redirect to projectFilter" b
-$1: {
+$1:
+{
   filter$0
 },
 endsnippet
 
 snippet and "and" b
+$and:
+[
+  ${VISUAL}$0
+],
+endsnippet
+
+snippet or "or" b
 {
-  $and: [
-    ${VISUAL}$0
+  $or:
+  [
+    ${VISUAL}${1:{foo: 1, bar: 2,},
+    {foo: 2, bar: 3,},}
   ],
-},
+}
 endsnippet
 
 snippet in "$in" w
 {
-  $in: [
+  $in:
+  [
     "${VISUAL}$0",
   ],
+},
+endsnippet
+
+snippet notin "" b
+$expr:
+{
+  $not:
+  {
+    $in:
+    [
+      ${VISUAL}$0
+    ],
+  },
 },
 endsnippet
 
@@ -381,38 +516,55 @@ endsnippet
 
 snippet groupDistinct "distinct" b
 {
-  $group: {
-    _id: [ $1, ],
+  $group:
+  {
+    id: [ $1, ],
     doc: { $first: "$$ROOT" },
   },
 },
-{ $replaceRoot: { newRoot: "$doc" } },
+{
+  $replaceRoot:
+  {
+    newRoot: "$doc"
+  }
+},
 endsnippet
 
 snippet groupByArrayField "groupByArrayField" b
 {
-  $addFields: {
+  $addFields:
+  {
     "${1:pathToArray}._root": "$$ROOT",
   },
 },
 {
   $unwind: { path: "$$1" },
 },
-{ $match: { "$1.${2:match field}": "${3:match value}" } },
+{
+  $match:
+  {
+    "$1.${2:match field}": "${3:match value}"
+  }
+},
 {
   $group: {
-    _id: "$$1.${4:group field}",
+    id: "$$1.${4:group field}",
     _root: { $first: "$productCharacteristic._root" },
   },
 },
-{ $replaceRoot: { newRoot: "$_root" } },
+{
+  $replaceRoot:
+  {
+    newRoot: "$_root"
+  }
+},
 endsnippet
 
 snippet grepDb "grep whole db - careful!" b
 db.getCollectionNames().forEach(function(collectionName) {
   db.getCollection(collectionName).find().forEach(function(doc) {
     var json = JSON.stringify(doc)
-    if (json.match(/${0:regex}/i) == null) {
+    if (json.match(/${0:regex}$0/i) == null) {
       return
     }
     printjson(doc)
@@ -421,16 +573,14 @@ db.getCollectionNames().forEach(function(collectionName) {
 endsnippet
 
 snippet grep "grep" b
-const myCount = 0
 db.${1:collectionName}.find().forEach(function(doc) {
   var json = JSON.stringify(doc)
-  if (json.match(/$2/i) == null) {
+  if (json.match(/${VISUAL}$2$0/i) == null) {
     return
-  }$0
-  myCount++
+  }
+  count++
   printjson(doc)
 })
-console.log(\`count: ${myCount}\`)
 endsnippet
 
 snippet grep2 "grep2" b
@@ -440,15 +590,17 @@ if (json.match(/$1/i) == null) {
 endsnippet
 
 snippet csv "csv" w
-.forEach(function(doc) {
+.map(function(doc) { count++; return doc; }).forEach(function(doc) {
     const keys = Object.keys(doc).sort()
     const header = keys.join(";")
-    if(!global.myHeader) {
+    if(first) {
+      first = 0
+      print()
       print(header)
-      global.myHeader = header
+      gHeader = header
     }
-    if(global.myHeader != header) {
-      throw new Error('header mismatch: ' + header + ' / ' + global.myHeader)
+    if(gHeader != header) {
+      throw new Error("header mismatch: " + header + " / " + gHeader)
     }
     const values = []
     for(const key of keys) {
@@ -456,15 +608,116 @@ snippet csv "csv" w
     }
     print(values.join(";"))
 })
-global.myHeader = undefined
 endsnippet
 
-snippet countTodo "countTodo" w
-.map(function(doc) {
-  print(doc)
-}).map(function(doc) {
-  global.myCount = global.myCount + 1
+snippet map "map" i
+.map(function(doc) {$0
 })
-print("Count: " + global.myCount)
-global.myCount = undefined
+endsnippet
+
+snippet foreach "foreach" is
+).forEach(function(doc) {
+  ${VISUAL}$0
+})
+endsnippet
+
+snippet collectionShowIndexes "" b
+printjson(db.${1:collection}.getIndexes({includeHidden: true})) 
+endsnippet
+
+snippet collectionCreateIndex "" b
+db.${1:collection}.createIndex({ ${2:fieldname}: ${3:direction 1 asc 2 desc} }, { name: '$2_$3' });
+endsnippet
+
+snippet collectionDropIndex "" b
+db.${1:collection}.dropIndex('status_');
+endsnippet
+
+snippet collectionCopy "" b
+db.${1:from}.aggregate([ { $match: {} }, { $out: "${2:to}" } ])
+endsnippet
+
+snippet collectionsShow "" b
+show collections
+endsnippet
+
+snippet collectionDrop "" b
+db.${1:collection}.drop()
+endsnippet
+
+snippet id2 "id" b
+id: "$0",
+endsnippet
+
+snippet id "id" b
+id: UUID("$0"),
+endsnippet
+
+snippet join "join" b
+{
+  $lookup: {
+    from: "${1:other collection}",
+    localField: "`!p snip.rv = lcFirst(t[1])`.id",
+    foreignField: "id",
+    as: "`!p snip.rv = lcFirst(t[1])`",
+  },
+},
+{
+  $unwind: "$`!p snip.rv = lcFirst(t[1])`"
+},
+endsnippet
+
+snippet renameCollection "renameCollection" b
+db.${1:oldName}.renameCollection("${2:newName}$0")
+endsnippet
+
+snippet insertManyUpsert "upsertMany" b
+upsertMany
+endsnippet
+
+snippet docs "" w
+docs = [
+  ${VISUAL}$0{
+  }
+]
+endsnippet
+
+snippet upsertMany "upsertMany" b
+docs.map(function(doc) {
+  console.log(\`doc: \` + doc.id.toString('hex').replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '\$1-\$2-\$3-\$4-\$5'))
+  db.${1:Collection}.replaceOne(
+    { id: doc.id },
+    doc,
+    { upsert: true, },
+  )
+})
+endsnippet
+
+snippet deleteMany "" b
+docs.map(function(doc) {
+  console.log(\`doc: \` + doc.id.toString('hex').replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '\$1-\$2-\$3-\$4-\$5'))
+  db.${1:Collection}.remove(
+    {"id": doc.id },
+  )
+})
+endsnippet
+
+snippet uuidToString "uuidToString" w
+${VISUAL}$0.toString('hex').replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, '\$1-\$2-\$3-\$4-\$5')
+endsnippet
+
+snippet uuidFromString "uuidFromString" w
+UUID("${VISUAL}$0")
+endsnippet
+
+snippet exists "" w
+{ $exists: false$0 },
+endsnippet
+
+snippet createDatabase "" w
+use $0
+endsnippet
+
+snippet nullOrNonExistentOrCondition "" w
+{ lastUpdated: { $not: { $gt: new Date() } } }
 endsnippet

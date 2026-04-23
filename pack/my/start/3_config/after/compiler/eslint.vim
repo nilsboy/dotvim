@@ -10,15 +10,20 @@ MyInstall eslint npm install -g eslint @typescript-eslint/parser @typescript-esl
 let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
 
 let &makeprg = "eslint"
-let &makeprg .= " -f unix"
-" let &makeprg .= " --no-eslintrc"
-let &makeprg .= " -c " . $CONTRIB . '/eslintrc-typescript.json'
-" let &makeprg .= " --replace=1"
-" let &makeprg .= " --fix"
-" let &makeprg .= " --quiet"
+
+if filereadable('.eslintrc.js')
+else 
+  let &makeprg .= " -f unix"
+  " let &makeprg .= " --no-eslintrc"
+  let &makeprg .= " -c " . $CONTRIB . '/eslintrc-typescript.json'
+  " let &makeprg .= " --replace=1"
+  " let &makeprg .= " --fix"
+  " let &makeprg .= " --quiet"
+endif
 
 let &makeprg .= " " . expand("%:p") . " 2>&1"
 
+" TODO: add rules
 let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 
 " Oops! Something went wrong! :(

@@ -1,9 +1,18 @@
 {
-  // https://github.com/Microsoft/vscode/issues/47299
-  "javascript.showUnused": false,
+  // TODO: test: Go to implementation instead type definition:
+  "typescript.preferGoToSourceDefinition": true,
 
-  "typescript.showUnused": false,
-  "typescript.updateImportsOnFileMove.enable": true,
+  // does not help with no implicit any
+  // "workspace.workspaceFolderCheckCwd": false,
+
+  // https://github.com/Microsoft/vscode/issues/47299
+  // "javascript.showUnused": true,
+
+  "java.maven.downloadSources": true,
+  "java.signatureHelp.description.enabled": true,
+
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "relative",
 
   // https://github.com/neoclide/coc-tsserver/issues/265
   // geterrForProject

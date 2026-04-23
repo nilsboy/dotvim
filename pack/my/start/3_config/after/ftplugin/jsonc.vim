@@ -5,7 +5,7 @@
 setlocal keywordprg=:help
 setlocal conceallevel=0
 
-let b:formatter = 'prettier-json'
+let b:formatter = 'jq-json'
 
 setlocal wrap
 let &l:commentstring = '// %s'
@@ -46,8 +46,11 @@ MyInstall json2yaml
 function! MyJsonToYaml() abort
   silent wall
   let src = expand("%:p")
-  let dst = nb#mktemp("json2yaml") . expand("%:t:r") . '.yaml'
-  call nb#debug('### jj6 src: ' . src)
+
+  " let dst = nb#mktemp("json2yaml") . expand("%:t:r") . '.yaml'
+  " TODO: test
+  let dst = nb#createTempFile('json2yaml', '', 'yaml')
+
   execute '!json2yaml ' . src . ' > ' . dst
   silent execute 'edit ' . dst
 
@@ -89,7 +92,7 @@ function! MyJsonToGron() abort
   MyInstall gron pkexec apt install gron
   silent wall
   let src = expand("%")
-  let dst = nb#mktemp("gron") . expand("%:r") . '.js'
+  let dst = nb#createTempBuffer('gron', '', 'js')
   silent execute '!gron ' . src . ' > ' . dst
   silent execute 'edit ' . dst
 endfunction

@@ -121,7 +121,6 @@ call tinykeymap#Map("location", "x", ':RunIntoBufferOrLastCommand' , {'exit': 1 
 call tinykeymap#Map("location", "X", ":RunIntoBufferCurrentBuffer", {'exit': 1 })
 " call tinykeymap#Map("location", "X", ":update | :make | :lwindow", {'exit': 1})
 
-call tinykeymap#Map("location", "c", ":Redir :RunCursorLine", {'exit': 1})
 call tinykeymap#Map("location", "C", ":RunCursorLine", {'exit': 1})
 call tinykeymap#Map("location", "0", "lrewind")
 call tinykeymap#Map("location", "$", "llast")

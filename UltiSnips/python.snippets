@@ -6,3 +6,17 @@ snippet replace "replace" b
 $1 = re.sub(r'${1:search}', r'${2:replace}', $1$0)
 endsnippet
 
+snippet jj "debug value"
+print('### jj`!v DebugId()` ${VISUAL}$1:', ${VISUAL}$1$0)
+endsnippet
+
+snippet writefile "writefile" b
+f = open(${1:filename}, 'w')
+f.write(${2:string})
+f.close()
+endsnippet
+
+snippet readfile "readfile" b
+with open(${1:filename}, 'r') as file:
+    ${2:var} = file.read()
+endsnippet

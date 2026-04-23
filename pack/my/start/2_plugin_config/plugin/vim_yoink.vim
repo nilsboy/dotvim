@@ -1,21 +1,26 @@
+" NOTE: something wrong when used with wayland - somekind of copy loop? Maybe
+" it's my config. :q will stop it.
+" NOTE: remove wl-clipboard from system and keep using xset in wayland for
+" now.
+
 " Yoink will automatically maintain a history of yanks that you can choose between when pasting.
 " TAGS: history clipboard copy paste
 
 set shada+=!
-" Prefer xsel over xclip to avoid "Clipboard error : Target STRING not available"
-" https://github.com/svermeulen/vim-yoink/issues/16#issuecomment-632234373
-let g:clipboard = {
-  \   'name': 'xsel_override',
-  \   'copy': {
-  \      '+': 'xsel --input --clipboard',
-  \      '*': 'xsel --input --primary',
-  \    },
-  \   'paste': {
-  \      '+': 'xsel --output --clipboard',
-  \      '*': 'xsel --output --primary',
-  \   },
-  \   'cache_enabled': 1,
-  \ }
+
+" " workaround for clipboard problems with wayland
+" let g:clipboard = {
+" \   'name': 'wl-clipboard-custom',
+" \   'copy': {
+" \       '+': 'wl-copy --type text/plain',
+" \       '*': 'wl-copy --type text/plain',
+" \   },
+" \   'paste': {
+" \       '+': 'wl-paste --no-newline --type text/plain',
+" \       '*': 'wl-paste --no-newline --type text/plain',
+" \   },
+" \   'cache_enabled': 1
+" \}
 
 let g:yoinkIncludeDeleteOperations = 1
 let g:yoinkSavePersistently = 1
@@ -25,6 +30,8 @@ PackAdd svermeulen/vim-yoink
 
 nmap y <plug>(YoinkYankPreserveCursorPosition)
 xmap y <plug>(YoinkYankPreserveCursorPosition)
+
+finish
 
 nnoremap <silent> <leader>p :call vim_yoink#list()<cr>
 function! vim_yoink#list() abort

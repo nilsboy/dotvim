@@ -6,7 +6,7 @@
 
 ###
 
-priority 2
+priority -1
 
 global !p
 def toggle(t, opt):
@@ -75,35 +75,33 @@ endsnippet
 
 # possible alternative :h langmap
 
-priority -1
+# snippet "(ue|ü)" "ue|ü toggle" r
+# `!p snip.rv = toggle('ue|ü', match.group(1))`
+# endsnippet
 
-snippet "(ue|ü)" "ue|ü toggle" r
-`!p snip.rv = toggle('ue|ü', match.group(1))`
-endsnippet
+# snippet "(Ue|Ü)" "UE|Ü toggle" r
+# `!p snip.rv = toggle('Ue|Ü', match.group(1))`
+# endsnippet
 
-snippet "(Ue|Ü)" "UE|Ü toggle" r
-`!p snip.rv = toggle('Ue|Ü', match.group(1))`
-endsnippet
+# snippet "(ae|ä)" "ae|ä toggle" r
+# `!p snip.rv = toggle('ae|ä', match.group(1))`
+# endsnippet
 
-snippet "(ae|ä)" "ae|ä toggle" r
-`!p snip.rv = toggle('ae|ä', match.group(1))`
-endsnippet
+# snippet "(Ae|Ä)" "AE|Ä toggle" r
+# `!p snip.rv = toggle('Ae|Ä', match.group(1))`
+# endsnippet
 
-snippet "(Ae|Ä)" "AE|Ä toggle" r
-`!p snip.rv = toggle('Ae|Ä', match.group(1))`
-endsnippet
+# snippet "(oe|ö)" "oe|ö toggle" r
+# `!p snip.rv = toggle('oe|ö', match.group(1))`
+# endsnippet
 
-snippet "(oe|ö)" "oe|ö toggle" r
-`!p snip.rv = toggle('oe|ö', match.group(1))`
-endsnippet
+# snippet "(Oe|Ö)" "OE|Ö toggle" r
+# `!p snip.rv = toggle('Oe|Ö', match.group(1))`
+# endsnippet
 
-snippet "(Oe|Ö)" "OE|Ö toggle" r
-`!p snip.rv = toggle('Oe|Ö', match.group(1))`
-endsnippet
-
-snippet "(ss|ß)" "ss|ß toggle" r
-`!p snip.rv = toggle('ss|ß', match.group(1))`
-endsnippet
+# snippet "(ss|ß)" "ss|ß toggle" r
+# `!p snip.rv = toggle('ss|ß', match.group(1))`
+# endsnippet
 
 snippet "(eur|EUR|€)" "eur|EUR|€ toggle" r
 `!p snip.rv = toggle('eur|EUR|€', match.group(1))`
@@ -121,8 +119,6 @@ snippet degree "Degree sign" i
 °
 endsnippet
 
-priority 1
-
 # snippet '(\d+)' "(\d+)" r
 # `!p snip.rv = int(match.group(1)) + 1`
 # endsnippet
@@ -131,7 +127,9 @@ priority 1
 
 # comments
 snippet // "multiline comment" w
-/* ${VISUAL}$0 */
+/**
+ * ${VISUAL}$0
+ */
 endsnippet
 
 snippet node "node shebang" b
@@ -147,7 +145,8 @@ snippet bash "bash shebang" b
 
 # ${1:TODO Description}
 
-${2:source bash-helpers}
+set -e
+set -o pipefail
 
 $0
 endsnippet
@@ -280,8 +279,8 @@ snippet uuidv4 "uuidv4" i
 `uuidgen`
 endsnippet
 
-snippet uuid "uuid" i
-`uuidv6`
+snippet uuid "uuid v7" i
+`uuid-nilsb`
 endsnippet
 
 snippet b64 "base64"
@@ -358,12 +357,6 @@ endsnippet
 # (${VISUAL}$0)
 # endsnippet
 
-snippet { "{" w
-{
-  ${VISUAL}$0
-}
-endsnippet
-
 # snippet [ "[" w
 # [${VISUAL}$0]
 # endsnippet
@@ -402,4 +395,8 @@ endsnippet
 
 snippet shrug "shrug" b
 ¯\_(ツ)_/¯
+endsnippet
+
+snippet org "org" w
+organisation
 endsnippet

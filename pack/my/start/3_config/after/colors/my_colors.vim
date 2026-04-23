@@ -1,3 +1,5 @@
+" NOTE: open `:h highlight-groups` to see current colors of highlight-groups
+
 " Only care about RGB environments - otherwise any default colorscheme is fine.
 if !&termguicolors && !has('gui_running')
   finish
@@ -68,7 +70,7 @@ execute  'hi! PmenuThumb    guibg='s:grey' guifg='s:none' gui='s:none
 
 execute  'hi! link NormalFloat Pmenu'
 
-if nb#isNeovim()
+if has("nvim")
   execute  'hi! MsgArea       guibg='s:greyBright' guifg='s:blackLight' gui='s:none
 endif
 

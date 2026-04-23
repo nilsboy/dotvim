@@ -4,27 +4,67 @@
 " - tomtom/tlib_vim
 " - ingo-library
 
-if exists("g:MyHelpersPluginLoaded")
-    finish
-endif
-let g:MyHelpersPluginLoaded = 1
+" if exists("g:MyHelpersPluginLoaded")
+"     finish
+" endif
+" let g:MyHelpersPluginLoaded = 1
 
+function! nb#debug(msg, ...) abort
+  call writefile(["DEBUG> " . a:msg] + a:000, g:nb#logfile, 'a') 
+endfunction
+
+" TODO: remove
 function! nb#mktemp(suffix) abort
   let tempname = tempname() . "/" . a:suffix . "/"
   call mkdir(tempname, "p", 0700)
   return tempname
 endfunction
 
-function! nb#mktempSimple(suffix, fileName) abort
-  wall
-  let tempname = fnamemodify(tempname(), ':p:h') . "/" . a:suffix . "/"
-  call mkdir(tempname, "p", 0700)
-  let fileName = tempname . a:fileName
-  if filereadable(fileName)
-    silent! execute "bd " . fileName
-    silent! call delete(fileName)
+let s:tempFileCounters = {}
+function! nb#createTempFile(dir, basename = '', ext = '') abort
+  let basename = a:basename
+  if basename == ''
+    let basename = fnamemodify(bufname(), ':t')
   endif
+  if basename == ''
+    let basename = a:dir
+  endif
+
+  let ext = a:ext
+  if ext == ''
+    let ext = fnamemodify(basename, ':e')
+  endif
+  if ext == ''
+    let ext = fnamemodify(bufname(), ':e')
+  endif
+  if ext == ''
+    let ext = 'txt'
+  endif
+
+  let count = 0
+  if has_key(s:tempFileCounters, a:dir)
+    let count = s:tempFileCounters[a:dir]
+  endif
+  let count = count + 1
+  let s:tempFileCounters[a:dir] = count
+
+  let count = s:tempFileCounters[a:dir]
+  let tempdir = fnamemodify(tempname(), ':p:h') . "/vimtmp/" . a:dir . "/"
+  call mkdir(tempdir, "p", 0700)
+  let basename = substitute(basename, '\v[^a-zA-Z0-9-_]+', '_', 'g')
+  let basename = substitute(basename, '\v__', '_', 'g')
+  let basename = substitute(basename, '\v_$', '', 'g')
+  let basename = substitute(basename, '\v^_', '', 'g')
+  let fileName =  tempdir . basename . '.' . count . '.' . ext
   return fileName
+endfunction
+
+function! nb#createTempBuffer(dir, basename = '', ext = '') abort
+  wall
+  let filename = nb#createTempFile(a:dir, a:basename, a:ext)
+  silent execute "edit " . filename
+  silent write
+  return filename
 endfunction
 
 function! BufferListedCount() abort
@@ -110,7 +150,9 @@ function! MyHelpersRunVim(cmd)
   let g:MyHelpersLastVimCommand = cmd
   wall
   let b:winview = winsaveview()
-  execute 'Redir ' . cmd
+  call nb#createTempBuffer("runvim", cmd)
+  silent put!='\" command: ' . cmd
+  silent put=execute(cmd)
 endfunction
 nnoremap <silent> <leader>vef :call MyHelpersRunVim('source ' . expand('%:p'))<cr>
 nnoremap <silent> <leader>vel :call MyHelpersRunVim(getline("."))<cr>
@@ -121,6 +163,15 @@ nnoremap <silent> <leader>vee :call MyHelpersRunVim(g:MyHelpersLastVimCommand)<c
 "   autocmd CursorHold * silent! :call MyHelpersRunVim('jumps')
 " augroup END
 
+" For vim compatibility
+" Vim complains if the directory already exists (2017-02-20)
+function! nb#mkdir(dir, ...) abort
+  if glob(a:dir) != ''
+    return
+  endif
+  call mkdir(a:dir, 'p')
+endfunction
+
 function! nb#touch(path) abort
   if empty(a:path)
     throw "Specify non empty path to create"
@@ -128,15 +179,19 @@ function! nb#touch(path) abort
   let path = fnamemodify(a:path, ':p')
   let dir = fnamemodify(a:path, ':p:h')
   call nb#mkdir(dir, 'p')
-  if nb#isNeovim()
+  if has("nvim")
     call writefile([], path, 'a')
   endif
 endfunction
 
-let g:nb#tempdir = nb#mktemp("vim")
-nnoremap <silent> <leader>vl :execute 'edit ' . g:nb#tempdir<cr>
+let g:nb#tempdir = fnamemodify(nb#createTempFile(''), ':p:h') . '/'
+" make tempdir a project root - see vim-rooter
+call nb#touch(g:nb#tempdir . '/.root')
+nnoremap <silent> <leader>vT :execute 'edit ' . g:nb#tempdir<cr>
 
-let g:nb#logfile = g:nb#tempdir . "log"
+let g:nb#logfile = g:nb#tempdir . "my-vim.log"
+call writefile([], g:nb#logfile, 'a')
+
 nnoremap <silent> <leader>vm :call nb#viewLogfile()<cr><cr>
 function! nb#viewLogfile() abort
   call writefile(["=== Log messages until " .  strftime("%H:%M:%S") . ' ======================='], g:nb#logfile, 'a') 
@@ -144,19 +199,12 @@ function! nb#viewLogfile() abort
  keepjumps normal G
 endfunction
 
-let g:nb#runlogfile = nb#tempdir . "runlog"
-let &makeef = g:nb#runlogfile
-
-nnoremap <silent> <leader>vr :call nb#viewRunLogfile()<cr><cr>
-function! nb#viewRunLogfile() abort
-  execute 'edit ' . g:nb#runlogfile
-  setlocal nowrap
-  keepjumps normal G
-endfunction
-
-function! nb#debug(msg, ...) abort
-  call writefile(["DEBUG> " . a:msg] + a:000, g:nb#logfile, 'a') 
-endfunction
+" nnoremap <silent> <leader>vr :call nb#viewRunLogfile()<cr><cr>
+" function! nb#viewRunLogfile() abort
+"   execute 'edit ' . g:nb#runlogfile
+"   setlocal nowrap
+"   keepjumps normal G
+" endfunction
 
 function! nb#info(msg) abort
   call writefile(["INFO > " . a:msg], g:nb#logfile, 'a') 
@@ -169,7 +217,7 @@ function! nb#warn(msg) abort
 endfunction
 
 function! nb#error(msg) abort
-  call writefile(["WARN > " . a:msg], g:nb#logfile, 'a') 
+  call writefile(["ERROR> " . a:msg], g:nb#logfile, 'a') 
   echohl ErrorMsg | unsilent echom a:msg | echohl None
 endfunction
 
@@ -188,19 +236,6 @@ endfunction
 "   silent! only
 "   keepjumps normal! gg
 " endfunction
-
-function! nb#isNeovim() abort
-  return has("nvim")
-endfunction
-
-" For vim compatibility
-" Vim complains if the directory already exists (2017-02-20)
-function! nb#mkdir(dir, ...) abort
-  if glob(a:dir) != ''
-    return
-  endif
-  call mkdir(a:dir, 'p')
-endfunction
 
 " Normalize whitespace in a string...
 function! TrimWS(str)
@@ -601,14 +636,20 @@ command! -nargs=* RemoveNewlineBlocks
       \ | :silent %s/\n*\%$//eg
 
 function! MyZ0MyrcEnv() abort
-  setlocal filetype=vim
+  call nb#createTempBuffer("MyVimEnv", '', 'vim')
   setlocal nowrap
-  Redirv verbose command
-  RedirAppendv verbose autocmd
-  RedirAppendv verbose messages
-  RedirAppendv verbose set
-  RedirAppendv verbose let
-  RedirAppendv verbose function
+  silent put!='### verbose command'
+  silent put=execute('verbose command')
+  silent put='### verbose autocmd'
+  silent put=execute('verbose autocmd')
+  silent put='### verbose messages'
+  silent put=execute('verbose messages')
+  silent put='### verbose set'
+  silent put=execute('verbose set')
+  silent put='### verbose let'
+  silent put=execute('verbose let')
+  silent put='### verbose function'
+  silent put=execute('verbose function')
   keepjumps normal! gg0
   let b:outline = '^### '
 endfunction
@@ -616,16 +657,19 @@ nnoremap <silent> <leader>vE :call MyZ0MyrcEnv()<cr>
 
 function! Map(...) abort
   let search = join(a:000)
-  execute 'Redir       verbose map'
-  execute 'RedirAppend verbose map!'
+  call nb#createTempBuffer('Map')
+  silent pu=execute('verbose map') 
+  silent pu=execute('verbose map!') 
   silent! keeppatterns %s/\v\n\s*(last set from)/xxx \1/ig 
   silent! g/\v<plug>/d
   silent! keepjumps g/no mapping found/ normal! "_dd
   silent! keepjumps g/^$/ normal! "_dd
-  silent sort u /\v^\w+/
+  " silent sort u /\v^\w+/i
   silent! keepjumps keeppatterns %s/\v(.+)xxx (last set from) (.+) line (\d+)/\3:\4:1:\1/ig 
   " example /home/...:s  <C-H>       * <C-G>"_c
-  silent! execute 'v/\c^\S\+:\S\+\s\+\S*' . search . '.*\*/d'
+  " silent! execute 'v/\c^\S\+:\S\+\s\+\S*' . search . '.*\*/d'
+  " silent! execute 'v/\v^\S+\s+\S*' . escape(search, '\') . '/d'
+  " /\v^\S+\s+\\f
   set errorformat&
   silent cgetbuffer
   bwipe
@@ -653,3 +697,8 @@ function! nb#getScriptFunction(scriptPath, name) abort
   return function(nb#getScriptFunctionName(a:scriptPath, a:name))
 endfunction
 
+" let g:nb#runlogfile = nb#tempdir . "runlog"
+" call nb#touch(g:nb#runlogfile) 
+" let &makeef = g:nb#runlogfile
+
+" call nb#debug('### jj19 nb#runlogfile:' . json_encode(nb#runlogfile))

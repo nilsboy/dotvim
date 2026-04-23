@@ -6,10 +6,6 @@ finish
 " NOTE: breaks own CursorHoldI autocmds
 " NOTE: Does not update on undo?
 
-if ! nb#isNeovim()
-  finish
-endif
-
 " supress error message about this var (2017-05-28)
 let g:ale_change_sign_column_color = 0
 

@@ -1,6 +1,50 @@
-priority 3
-
+priority 1
 extends javascript
+
+snippet notes "notes" b
+# enable jumps src of dependencies:
+
+package.json:
+  "resolutions": {
+    "@my/module": "link:../my-module",
+  }
+
+tsconfig.json:
+{
+  "compilerOptions": {
+    "composite": true // necessary? TODO / NOTE: also in tsconfig.base.json?
+    "declaration": true,
+    "declarationMap": true,
+    }
+}
+
+then run in the root project to compile the root and dep projects:
+tsc -b --watch
+
+// another possibility
+
+  "references": [
+    {
+      "path": "../models-mongoose"
+    }
+  ]
+
+class-transformer:
+  @Transform(({ value }) =>
+    value
+      .toString()
+      .split(',')
+      .map((x: string) => x.trim()),
+  )
+
+// overwrite vulnerable dependencies
+{
+  "resolutions": {
+    "socks": "^2.8.3",
+    "express": "^4.21.1"
+  }
+}
+endsnippet
 
 global !p
 
@@ -26,6 +70,14 @@ def toMethodCase(v):
   v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
   v = re.sub(r'^[\.\/]*', r'', v)
   return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
+
+def toSnakeCase(v):
+  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', v)
+  return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+def toSnailCase(v):
+  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1-\2', v)
+  return re.sub('([a-z0-9])([A-Z])', r'\1-\2', s1).lower()
 
 def classNameOld():
   v = snip.basename[0:1].upper()
@@ -55,7 +107,7 @@ def escape(v):
 endglobal
 
 snippet class "class" w
-export class ${1:`!p snip.rv = className()`} {
+export class ${1:`!p snip.rv = className()`}$2 {
   ${VISUAL}$0
 }
 endsnippet
@@ -68,24 +120,26 @@ endsnippet
 
 # NOTE: typescript enums can not use objects as values
 snippet enumNonObject "enum" w
-export enum `!p snip.rv = className()` {
+export enum `!p snip.rv = className()`$2 {
 	${1:name} = ${0:value}
 }
 endsnippet
 
 snippet enum "enum" b
-export const ${1:`!p snip.rv = className()`} = {
-  ${2:key1}: ${3:value1},$0
+export const ${1:`!p snip.rv = className()`}$2 = {
+  ${3:key1}: ${4:value1},$0
 } as const
 export type $1 = typeof $1[keyof typeof $1]
 endsnippet
 
-snippet con "constructor" b
-# TODO:
+snippet conWithAssign "constructor" b
+// TODO:
 public constructor(data: Partial<"class"Context>) {
   Object.assign(this, data)
 }
+endsnippet
 
+snippet con "constructor" b
 public constructor($1) {
 	${VISUAL}$0
 }
@@ -102,7 +156,7 @@ super()
 endsnippet
 
 snippet a "await" w
-await
+Array<${VISUAL}$0>
 endsnippet
 
 snippet ignore "ignore" b
@@ -230,9 +284,13 @@ endsnippet
 # uuidv1()
 # endsnippet
 
-snippet uuidv6 "uuidv6" w
-uuidV6()
-import { v6 as uuidV6 } from "uuid-with-v6"
+# snippet uuidv6 "uuidv6" w
+# uuidV6()
+# import { v6 as uuidV6 } from "uuid-with-v6"
+# endsnippet
+
+snippet mapToString "map array entries to string" w
+${VISUAL}.map((x) => x.toString())$0
 endsnippet
 
 snippet tag "tag" w
@@ -291,7 +349,7 @@ const $2 = await fetch(\`${VISUAL}${1:url}\`, {
 endsnippet
 
 snippet arr "Array<>" w
-Array<${VISUAL}$0>
+Array<${VISUAL}$1>$0
 endsnippet
 
 snippet toBoolean "toBoolean" b
@@ -314,7 +372,7 @@ assert.ok(${VISUAL}$0)
 endsnippet
 
 snippet classContextIterator "contextIterator" b
-// TODO: see ProductOrderItemContexts for [Symbol.iterator]() fix
+// TODO: fixed?: see ProductOrderItemContexts for [Symbol.iterator]() fix
 export class `!p snip.rv = className()`
   implements Iterator<${1:`!p snip.rv = classNameSingular()`}>
 {
@@ -326,8 +384,7 @@ export class `!p snip.rv = className()`
   }
 
   [Symbol.iterator]() {
-    this.iterator = this.dto[Symbol.iterator]()
-    return this.iterator
+    return new `!p snip.rv = className()`(this.dto)
   }
 
   next(
@@ -428,20 +485,21 @@ import { html } from "lit"
 import { MobxLitElement } from "@adobe/lit-mobx"
 import { customElement, property } from "lit/decorators.js"
 
-@customElement("`!p snip.rv = snip.basename`")
-export class `!p snip.rv = toCamelCase(snip.basename)` extends MobxLitElement {
+@customElement("`!p snip.rv = toSnailCase(snip.basename)`")
+export class `!p snip.rv = snip.basename` extends MobxLitElement {
   @property()
-  productSpecifications: Array<ProductSpecification> = []
+  property1: Object[] = []
 
   override render() {
     return html\`
+      $0<link href="/css/input.css" rel="stylesheet" />
     \`
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "`!p snip.rv = snip.basename`": `!p snip.rv = toCamelCase(snip.basename)`
+    "`!p snip.rv = toSnailCase(snip.basename)`": `!p snip.rv = snip.basename`
   }
 }
 endsnippet
@@ -483,3 +541,74 @@ app.listen(port, () => {
   console.log(\`Example app listening on port ${port}\`)
 })
 endsnippet
+
+snippet event "event" i
+@change=${(e: any) => (this.$0 = e.target.value)}
+endsnippet
+
+snippet exec "exec" b
+system
+endsnippet
+
+snippet system "system exec shell" b
+import { $ } from "execa"
+const dev$ = $({ cwd: "../$0/" })
+dev$\`git co main\`
+endsnippet
+
+snippet deletefile "deletefile" b
+if(fs.existsSync(outfile)) {
+  fs.unlinkSync(outfile)
+}
+endsnippet
+
+snippet fileReadLinewise "fileReadLinewise" b
+# TODO: cleanup
+const fs = require("fs")
+const readline = require("readline")
+
+async function processLineByLine() {
+  const fileStream = fs.createReadStream("input.txt")
+
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity,
+  })
+
+  for await (const line of rl) {
+    console.log(`Line from file: ${line}`)
+  }
+}
+endsnippet
+
+snippet mongoose-debug "mongoose-debug" b
+$0.db.connection.set('debug', true)
+endsnippet
+
+snippet fixtures "fixtures" b
+// NOTE: use functions to make objects "immutable" between tests
+
+export function foo() {
+  return 'bar'
+}
+
+export function baz(): any {
+  return {
+    moreFoo: "moreBar",
+  };
+}
+endsnippet
+
+snippet transaction "transaction" b
+const dbSession: ClientSession = await this.$1.db.connection.startSession();
+await dbSession
+.withTransaction(async () => {
+${VISUAL}$0
+})
+.then(async () => await dbSession.endSession())
+.catch(async (e) => {
+  await dbSession.endSession();
+  throw e;
+});
+endsnippet
+

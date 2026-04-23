@@ -4,16 +4,19 @@ finish
 let g:submode_always_show_submode	= 1
 let g:submode_timeout = 0
 " let g:submode_timeoutlen = 0
-let g:submode_keep_leaving_key = 1
-let g:submode_keyseqs_to_leave = ['q']
+let g:submode_keep_leaving_key = 0
+" let g:submode_keyseqs_to_leave = ['q']
 
 PackAdd kana/vim-submode
 
-" call submode#enter_with('move', 'n', '', '<bs>')
-call submode#enter_with('move', 'n', '', '<leader>m')
-call submode#map('move', 'n', '', 'j', '<c-f>')
-call submode#map('move', 'n', '', 'k', '<c-b>')
-call submode#map('move', 'n', '', 'J', '7j')
-call submode#map('move', 'n', '', 'K', '7k')
-" call submode#map('move', 'n', '', 'h', 'B')
-" call submode#map('move', 'n', '', 'l', 'W')
+call submode#enter_with('indent-move', 'n', '', '<leader>z')
+call submode#map('indent-move', 'n', '', 'j', '<Plug>(IndentWiseBlockScopeBoundaryEnd)')
+call submode#map('indent-move', 'n', '', 'k', '<Plug>(IndentWiseBlockScopeBoundaryBegin)')
+call submode#map('indent-move', 'n', '', 'h', '<Plug>(IndentWisePreviousLesserIndent)')
+call submode#map('indent-move', 'n', '', 'l', '<Plug>(IndentWiseNextGreaterIndent)')
+
+call submode#enter_with('move', 'n', '', '<leader>3')
+call submode#map('move', 'n', '', 'j', '19j')
+call submode#map('move', 'n', '', 'k', '19k')
+call submode#map('move', 'n', '', 'h', '46h')
+call submode#map('move', 'n', '', 'l', '46l')

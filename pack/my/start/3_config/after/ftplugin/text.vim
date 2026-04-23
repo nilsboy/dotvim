@@ -15,6 +15,7 @@ let &l:commentstring = '# %s'
 let b:outline = '('
 let b:outline .= '^(table of contents|page \d+|[[:upper:]]{1}[[:upper:]\s]+$)'
 let b:outline .= '|^---*'
+let b:outline .= '|^##.*\s'
 let b:outline .= ')'
 " let b:outline = '^(table of contents(?!.*\.\.\..*)|\d+\.[\d\.]*\s+\w+(?!.*\.\.\..*)|---)'
 

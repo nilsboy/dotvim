@@ -1,6 +1,8 @@
+finish
 " Directory viewer for Vim
 " NOTE: gets rid of netrw and its quirks
 " TAGS: file manager netrw
+" NOTE: switched to fern
 PackAdd justinmk/vim-dirvish
 
 " disable netrw
@@ -8,9 +10,10 @@ PackAdd justinmk/vim-dirvish
 " let g:loaded_netrw = 1
 " let g:loaded_netrwPlugin = 1
 
-" " TODO: test
-" augroup vim-dirvish#augroupFixBrokenSearchMapping
-"   autocmd!
-"   autocmd FileType dirvish nmap <silent> <buffer> / <Plug>(incsearch-forward)
-" augroup END
+" let g:loaded_netrwPlugin = 1
+command! -nargs=? -complete=dir Explore Dirvish <args>
+command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
 
+" debugging
+" let g:dirvish_dbg=1

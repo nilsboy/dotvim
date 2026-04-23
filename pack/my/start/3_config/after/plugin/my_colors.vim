@@ -53,10 +53,10 @@ function! MyColorsColorschemeCleanup() abort
   " syntax match MyExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
   " highlight MyColorsEolColor ctermbg=red
 endfunction
-augroup MyColorsAugroupColorschemeCleanup
-  autocmd!
-  autocmd ColorScheme,Syntax,FileType * call MyColorsColorschemeCleanup()
-augroup END
+" augroup MyColorsAugroupColorschemeCleanup
+"   autocmd!
+"   autocmd ColorScheme,Syntax,FileType * call MyColorsColorschemeCleanup()
+" augroup END
 
 " augroup MyColorsAugroupCursorline
 "   autocmd!
@@ -89,3 +89,6 @@ augroup END
 
 " load colorscheme last to ensure own settings have priority
 colorscheme my_colors
+
+command! -nargs=* SyntaxOffBuffer setlocal syntax=off
+

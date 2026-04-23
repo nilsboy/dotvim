@@ -32,6 +32,10 @@ snippet argv "ask for missing option" w
 $1=\$\{1$0:?Specify $1\}
 endsnippet
 
+snippet default "set default value if var is empty" b
+${1:var}="${$1:-${2:default value}"
+endsnippet
+
 snippet argv_default "default to" w
 $1=\$\{1:-${2:default}\}
 endsnippet
@@ -219,7 +223,7 @@ snippet tailfromline "tailfromline" b
 tail -n+${1:line} ${0:file}
 endsnippet
 
-snippet sudogui "sudo gui user root" b
+snippet sudo "sudo gui user root" b
 pkexec
 endsnippet
 
@@ -234,4 +238,17 @@ endsnippet
 
 snippet timestamp-generate "timestamp" w
 $(date +%Y%m%d_%H%M%S)
+endsnippet
+
+snippet keyboard_input "keyboard_input" b
+echo -n "Enter $1: " 
+read $1
+endsnippet
+
+snippet $ "var" w
+${$1}$0
+endsnippet
+
+snippet d "var" w
+${$1}$0
 endsnippet

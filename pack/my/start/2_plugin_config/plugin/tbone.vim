@@ -51,7 +51,7 @@ nnoremap <silent> <leader>mL :call setreg('z', g:my_tbone_last_command) \| :call
 nnoremap <silent> <leader>mc :call tbone#myClear()<cr>
 
 " open new shell in current buffer's directory
-nnoremap <silent> <leader>md :execute ":Tmux split-window -v 'cd " . expand('%:h') . " && bash -i'"<cr>
+nnoremap <silent> <leader>md :execute ":Tmux split-window -v 'cd " . expand('%:h') . " && bash -il'"<cr>
 
 function! tbone#mySendRaw() abort
   let g:my_tbone_last_command = getreg('z')
@@ -59,11 +59,31 @@ function! tbone#mySendRaw() abort
 endfunction
 nnoremap <silent> <leader>mr "zyip:call tbone#mySendRaw()<cr>
 nnoremap <silent> <leader>mR "zyy:call tbone#mySendRaw()<cr>
-nnoremap <silent> <leader>my :call tbone#copyPane()<cr>
 
-function! tbone#copyPane() abort
-  execute 'Tmux capture-pane -pS- -t 'g:my_tbone_pane '\| xsel --input --clipboard'
-  let @+=substitute(@+, '\v\n{3,}', '\n', 'g')
+nnoremap <silent> <leader>my :call tbone#copyPaneIntoBuffer()<cr>
+function! tbone#copyPaneIntoBuffer() abort
+  call nb#createTempBuffer('tmux')
+
+  " call setreg('+', [])
+  execute 'Tmux capture-pane -JpS- -t '
+    \ .. g:my_tbone_pane 
+    \ .. '\| perl -pe \"s/ +$//g\" '
+    \ .. '\| xsel --input --clipboard'
+
+  " does not work in wayland?:
+  " \ .. '\| xclip -i -selection primary'
+  " \ .. '\| wl-copy'
+  " let @+=substitute(@+, '\v\n{3,}', '\n', 'g')
+
+  normal! P
+
+  " remove leading empty lines
+  silent! %s#\%^\($\n\s*\)\+##
+
+  " remove trailing empty lines
+  silent! %s#\($\n\s*\)\+\%$##
+
+  normal gg
 endfunction
 
 " nmap to keep pos on yip

@@ -32,3 +32,5 @@ autocmd BufRead,BufNewFile *.mongodb.js setlocal filetype=mongodb
 " if getline(1) =~ '^#!.*\<vite-node\>'
 "   setfiletype typescript
 " endif
+
+autocmd BufRead,BufNewFile *.snippets setlocal filetype=snippets

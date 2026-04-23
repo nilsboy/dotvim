@@ -7,7 +7,7 @@ finish
 " nnoremap c "_c
 " xnoremap c "_c
 
-MyInstall xsel pkexec apt install xsel
+" MyInstall xsel pkexec apt install xsel
 
 " fix indent level
 " let g:EasyClipAutoFormat = 1

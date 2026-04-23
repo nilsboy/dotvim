@@ -1,3 +1,3 @@
 " easily search for, substitute, and abbreviate multiple variants of a word
-" Tags: camelcase snailcase
+" Tags: camelcase snailcase coerce
 PackAdd tpope/vim-abolish

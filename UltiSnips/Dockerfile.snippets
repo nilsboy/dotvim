@@ -1,5 +1,5 @@
 snippet init "init" b
-FROM ubuntu:20.04
+FROM ubuntu:latest
 
 MAINTAINER ${2:`!v $USER`}
 
@@ -94,10 +94,38 @@ RUN \
   set -ex; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-  $0
+    ca-certificates \
+    $0
 
-RUN \
-  apt-get autoremove -y && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt && \
+    apt-get purge --auto-remove --yes && \
+    apt-get clean
 endsnippet
+
+snippet python "python" b
+RUN apt-get update && apt-get install -y --no-install-recommends gcc python3
+RUN python3 -m venv /app/python/venv
+ENV PATH="/app/python/venv/bin:$PATH"
+RUN pip3 install $0
+endsnippet
+
+snippet wget-init "wget" b
+# NOTE: instead consider: apt-get install ca-certificates
+RUN echo "check_certificate = off" >> ~/.wgetrc
+endsnippet
+
+snippet wget "wget" b
+RUN wget -qO- $1 > $2
+endsnippet
+
+snippet nodejs "nodejs" b
+# Installing Node
+SHELL ["/bin/bash", "-c"]
+RUN echo "check_certificate = off" >> ~/.wgetrc
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh > /tmp/nvm-setup
+RUN source /tmp/nvm-setup
+RUN source /root/.bashrc && nvm install 20
+RUN npm install -g npm@latest >/dev/null
+endsnippet
+

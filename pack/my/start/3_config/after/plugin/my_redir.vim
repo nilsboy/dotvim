@@ -1,3 +1,5 @@
+finish
+" NOTE: using nb#createTempFile() instead
 " Redirect the output of a Vim or external command into a scratch buffer
 " Based on:
 " https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
@@ -12,10 +14,8 @@ function! Redir(cmd, append, verbose)
   if a:append
     keepjumps normal! Go
   else
-    let tempfile = nb#mktemp("redir") . fnameescape(a:cmd)
-    keepjumps execute 'edit ' . tempfile
+    let tempfile = nb#createTempBuffer("redir", a:cmd)
     only
-    " setlocal buftype=nowrite
     write
   endif
   if a:verbose

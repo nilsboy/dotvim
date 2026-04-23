@@ -1,4 +1,8 @@
-priority 2
+# // getPropertyFromChild() {
+# //   /** @type {MyGraph} */
+# //   const child = this.shadowRoot.querySelector('#myGraph')
+# //   return child?.pn
+# // }
 
 global !p
 
@@ -83,18 +87,6 @@ snippet reqc "require class" b
 const `!p snip.rv = toCamelCase(t[1])` = require("$1")
 endsnippet
 
-snippet rekk "rekuire" w
-const rekuire = require("rekuire")
-endsnippet
-
-snippet rek "rekuire" w
-const `!p snip.rv = toMethodCase(t[1])` = rekuire(\`${VISUAL}$1\`)
-endsnippet
-
-snippet rekc "rekuire class" w
-const `!p snip.rv = toCamelCase(t[1])` = rekuire(\`$1\`)
-endsnippet
-
 snippet requirefresh "requirefresh" b
 const importFresh = require("import-fresh")
 endsnippet
@@ -104,7 +96,11 @@ import * as ${2:`!p snip.rv = toCamelCase(t[1])`} from "$1"
 endsnippet
 
 snippet i "import" b
-import { ${2:`!p snip.rv = toMethodCase(t[1])`} } from "$1"
+import { ${2:`!p snip.rv = toMethodCase(t[1])`}${VISUAL} } from "./src/${VISUAL}$1"
+endsnippet
+
+snippet importWholeFile "import whole file" b
+import "./${VISUAL}$1"
 endsnippet
 
 snippet ic "import class" b
@@ -137,14 +133,16 @@ snippet system "system" b
 endsnippet
 
 snippet exec "exec" b
-// NOTE: 4.x syntax - newest is 6.x
-const execa = require("execa")
-const $0 = await execa(\`${VISUAL}$1\`, [])
+//NOTE: checkout typescript version
 endsnippet
 
 snippet execsync "exec" b
 const exec = require("child_process").execFileSync
 const stdout = exec(\`${1:cmd}\`, [])
+endsnippet
+
+snippet sleep "sleep" b
+await new Promise(function sleep(r) { setTimeout(r, 3000) })
 endsnippet
 
 snippet fs "require fs" b
@@ -219,13 +217,13 @@ if($1${VISUAL}$2) {
 }
 endsnippet
 
-snippet else "else"
+snippet else "else" w
 else {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet elsei "else"
+snippet elsei "else" w
 } else {
   ${VISUAL}$0
 endsnippet
@@ -245,6 +243,12 @@ endsnippet
 
 snippet foreach "for each of collection" b
 for(const ${2:variable} of ${1:iterable}) {
+  ${VISUAL}$0
+}
+endsnippet
+
+snippet foreachAsync "for each of collection" b
+for await (const ${2:variable} of ${1:iterable}) {
   ${VISUAL}$0
 }
 endsnippet
@@ -276,15 +280,44 @@ snippet pkginfo "add package.json info to module global" b
 require('pkginfo')(module)
 endsnippet
 
-snippet class "class" b
+snippet classNodeJs "class" b
 module.exports = class `!p snip.rv = className()` {
   ${VISUAL}$0
 }
 endsnippet
 
-snippet con "constructor" w
-constructor($1) {
+snippet class "class" b
+export class `!p snip.rv = className()` {
   ${VISUAL}$0
+}
+endsnippet
+
+snippet conOld "constructor" w
+constructor(properties) {
+  initClass(this, properties)$0
+}
+endsnippet
+
+snippet con-with-option-object "" w
+/**
+ * @param {Object} options
+ * @param {string} options.name
+ * @param {number} options.age
+ */
+constructor({ name, age }) {
+  this.name = name;
+  this.age = age;
+}
+endsnippet
+
+snippet con "constructor" w
+/**
+  * @param {Object} [props]
+  * @param { ${2:type}  } props.${1:var name}
+  * @param {number} [props.amount]$0
+  */
+constructor(props) {
+  initClass(this, props)
 }
 endsnippet
 
@@ -309,16 +342,17 @@ endsnippet
 snippet testThrows "expectToThrow" b
 expect(() => {
   ${VISUAL}$0
-}).toThrowError($1)
+}).toThrow(${1:error class})
 endsnippet
 
 snippet testThrowsAsync "expectToThrow" b
-await expect(
+// TODO: test
+await expect(async () => {
   ${VISUAL}$0
-).rejects.toThrow($1)
+}).rejects.toThrow($1)
 endsnippet
 
-snippet testBeforeAll "beforeAll" b
+snippet test-beforeAll "beforeAll" b
 beforeAll(async () => {
   ${VISUAL}$0
 })
@@ -376,11 +410,16 @@ const Promise = require("bluebird")
 //})
 endsnippet
 
-snippet find "file walk" b
-const fileWalker = require("klaw-sync")
-const paths = fileWalker($1).map((entry) => {
-  ${0:entry = entry.path}
-})
+snippet fileWalker "" w
+find
+endsnippet
+
+snippet find "fileWalker" b
+const klaw = require('klaw')
+
+for await (const file of klaw('/some/dir')) {
+  console.log(file)
+}
 endsnippet
 
 snippet glob-req "glob" b
@@ -431,7 +470,7 @@ async function $1($2) {
 endsnippet
 
 snippet m "method" w
-$1($2) : $3 {
+$1($2) {
   ${VISUAL}$0
 }
 endsnippet
@@ -509,7 +548,6 @@ snippet main "main" b
 async function main() {
   ${VISUAL}$0
 }
-
 main()
 endsnippet
 
@@ -573,7 +611,7 @@ snippet q "q" w
 \`${VISUAL}$1\`$0
 endsnippet
 
-snippet match "match" b
+snippet matchToVar "match" w
 let [ , ${3:capture groups} ] = ${1:value}.match(/${2:regex}/) || []$0
 endsnippet
 
@@ -766,6 +804,16 @@ snippet jjj "here"
 
 endsnippet
 
+snippet js "here with timestamp"
+
+// prettier-ignore
+{
+  const d = new Date() ; const stamp = \`${d.getMinutes()}-${d.getSeconds()}\`
+  console.log(\`\n### ${stamp} ##################### jj`!v DebugId()`${VISUAL}$0\n\`)
+}
+
+endsnippet
+
 # https://stackoverflow.com/a/27534731
 snippet jd "dump arbitrarily deep structure" b
 
@@ -913,6 +961,10 @@ const uuid = require(\`uuid/v1\`)
 uuid()
 endsnippet
 
+snippet uuid "uuid" w
+import { v7 as uuidv7 } from 'uuid'
+endsnippet
+
 snippet isArray "isArray" w
 Array.isArray($0)
 endsnippet
@@ -935,11 +987,7 @@ const relaxedJson = require(\`relaxed-json\`)
 const $0 = relaxedJson.parse(fs.readFileSync(rekuire.path(\`${VISUAL}$1\`)).toString())
 endsnippet
 
-snippet toJson "tojson" b
-toString
-endsnippet
-
-snippet toString "toJSON" w
+snippet jsonToString "toJSON" w
 JSON.stringify(${VISUAL}$0, null, 2)
 endsnippet
 
@@ -1031,9 +1079,8 @@ test
 endsnippet
 
 snippet test-describe "describe" b
-describe(\`$1\`, () => {$0
-${VISUAL}
-})
+describe(\``!p snip.rv = className()`\`, () => {$0
+${VISUAL}})
 endsnippet
 
 snippet "(?<=\W)d" "Interpolated var" r
@@ -1070,7 +1117,6 @@ async function main() {
       .pipe(process.stdout)
   }
 }
-
 main()
 endsnippet
 
@@ -1098,10 +1144,22 @@ class $1Error extends Error {
 }
 endsnippet
 
-snippet errorunhandledRejectionCatcher "unhandledRejectionCatcher" b
-process.on(\`unhandledRejection\`, function unhandledRejectionCatcher(e: any) {
-  process.stderr.write(\`Error: Caught unhandledRejection: '${e.message}'\n\n\`)
-  throw e
+snippet catchUnhandledRejectionCatcher "unhandledRejectionCatcher" b
+process.on("unhandledRejection", function unhandledRejectionCatcher(e: any) {
+  // prettier-ignore
+  {
+    console.log(`\n################################################################`)
+    console.log(`e:`) ; console.dir(e, { depth: null })
+    console.log(`\n################################################################\n`)
+  }
+})
+process.on("uncaughtException", (e: Error) => {
+  // prettier-ignore
+  {
+    console.log(`\n################################################################`)
+    console.log(`e:`) ; console.dir(e, { depth: null })
+    console.log(`\n################################################################\n`)
+  }
 })
 endsnippet
 
@@ -1124,6 +1182,7 @@ snippet s "s" w
 endsnippet
 
 snippet matchallglobal "matchglobal" b
+import matchAll from `string.prototype.matchall`
 const $1 = [
   ...matchAll(res.data, /$2/g$0)
 ].map((match) => {
@@ -1176,13 +1235,19 @@ snippet http400BadRequest "400" b
 res.status(400).send({ error: \`${VISUAL}$0\` })
 endsnippet
 
-snippet httpfetch "fetch" b
-import fetch from "node-fetch"
-const $2 = await fetch(\`${VISUAL}${1:url}\`, {
-  method: \`${3:post}\`,
-  body: \`\`,$0
-  headers: { "Content-Type": "application/json" },
+
+snippet fetch "" w
+const res = await fetch(queryResultsUrl + this.queryId, {
+  headers: { "x-key": key },
 })
+if (!res.ok) {
+  throw new Error(
+    { status: res.status, body: await res.text() },
+    "Could not fetch query results."
+  )
+}
+const body = await res.json()
+console.log("got body:", body)
 endsnippet
 
 snippet regex_with_caputure_groups_loop "regex_with_caputure_groups" b
@@ -1212,16 +1277,16 @@ for (const row of rows) {$0
 }
 endsnippet
 
-snippet mongodbTransaction "mongodbTransaction" b
-const mongoSession = mongo.startSession();
+snippet mongoTransaction "mongodbTransaction" b
+const session = mongo.startSession();
 try {
-  await mongoSession.withTransaction(async () => {
+  await session.withTransaction(async () => {
     const coll1 = mongo.db('${1:database}').collection('${2:collection}');
     $0await coll1.insertOne({ abc: 1 }, { session });
     ${VISUAL}
   });
 } finally {
-  mongoSession.endSession();
+  session.endSession();
 }
 endsnippet
 
@@ -1243,3 +1308,194 @@ snippet expectaxios "expectaxios" b
   "testEnvironment": "node"
 endsnippet
 
+snippet ||= "||=" w
+??=
+endsnippet
+
+snippet getStdin "getStdin" b
+const getStdin = require(`get-stdin`)
+const data = await getStdin()
+endsnippet
+
+snippet fetch "" w
+TODO: use Task: https://lit.dev/docs/data/task/#rendering-tasks
+TODO:
+_collections = new Task(this, {
+  task: async () => {
+    const res = await fetch("/api/v2/collections/");
+    if (!res.ok) {
+      throw new Error(`${res.status}: ${res.statusText}`);
+    }
+    return /** @type {import("./rust-types.js").MultipleCollectionInfo[]} */ (
+      await res.json()
+    );
+  },
+});
+endsnippet
+
+snippet ignore "ignore" b
+// @ts-ignore
+endsnippet
+
+snippet ignore-file "ignore" b
+// @ts-nocheck
+endsnippet
+
+snippet jsf "" w
+/**
+ * @param {${2:HTMLElement}} $1
+ * @returns {$0}
+ */
+endsnippet
+
+snippet jsr "" w
+@returns {$0}
+endsnippet
+
+snippet jsp "" w
+@param {${2:type}} $1
+endsnippet
+
+snippet jst "" w
+/** @type {$0} */
+endsnippet
+
+snippet jsi "" w
+import("${1:module}").${2:symbol}
+endsnippet
+
+snippet jspar "" w
+/** @type {Partial<$0>} */
+endsnippet
+
+snippet jspObject "" w
+/**
+ * @param {Object} options
+ * @param {string} options.name
+ * @param {number} options.age
+ */
+endsnippet
+
+snippet import_json "" w
+import colors from "./colors.json" with { type: "json" };
+endsnippet
+
+snippet notImplemented "" b
+throw new Error(\`Method not implemented.\`)$0
+endsnippet
+
+snippet className "className" w
+this.constructor.name
+endsnippet
+
+snippet lodash "lodash" b
+import * as _ from 'lodash'
+endsnippet
+
+snippet lit-firstUpdated "" w
+/**
+  * @param {import('@lit/reactive-element').PropertyValues} changedProperties
+  */
+firstUpdated(changedProperties) {
+  super.firstUpdated(changedProperties)$0
+}
+endsnippet
+
+snippet htmlcomment "" w
+<!-- ${VISUAL} -->
+endsnippet
+
+snippet t "tag" w
+<$1>${VISUAL}$0</${1/\ .*//}>
+endsnippet
+
+snippet div "" w
+<div>${VISUAL}$0</div>
+endsnippet
+
+snippet divc "" w
+<div class="$0">${VISUAL}</div>
+endsnippet
+
+snippet onclick "" w
+@click="${this.$0handleClick}"
+endsnippet
+
+snippet ucfirst "" w
+${1:${VISUAL}}.charAt(0).toUpperCase() + $1.slice(1)
+endsnippet
+
+snippet {} "" w
+Object.create(null)
+endsnippet
+
+snippet cast "" w
+// checkout: https://www.npmjs.com/package/class-transformer#plaintoclass 
+Object.assign(new $1(), ${2:data})
+endsnippet
+
+snippet enum "" w
+/** @typedef {'idle'|'running'} Status */
+/** @type {Status} */
+status
+endsnippet
+
+snippet mongoAggregate "" w
+const pipeline = [
+  {
+    $match: {
+      $or: [
+        { scheduledFor: { $lt: new Date() } },
+        { scheduledFor: { $exists: false } },
+      ],
+    },
+  },
+]
+this.cursor = collection.aggregate(pipeline)
+/** @type {Report} */
+let report
+while ((report = await this.cursor.next())) {
+  console.log(report)
+  // TODO:
+  break
+}
+endsnippet
+
+snippet par "" w
+Partial<${VISUAL}$0>
+endsnippet
+
+snippet p "" w
+Promise<${VISUAL}$0>
+endsnippet
+
+snippet mongoNotNullOrNotExistingOrLt "" w
+# NOTE: this checks for null or existing or condition all in one
+{ lastUpdated: { $not: { $gt: new Date() } } }
+endsnippet
+
+snippet prompt "" w
+es6 chat only.
+create an es6 class.
+no end of line comments.
+with TypeScript JSDoc annotations.
+the class should be named TODO.
+add example usage inside a static _exampleUsage function
+imports of project files have a @@ prefix like this: import {Contract} from "@@Contract"
+always return the full class
+$0
+endsnippet
+
+snippet promptUpdateClass "" w
+keep es6
+keep notes
+no end of line comments.
+with TypeScript JSDoc annotations.
+imports of project files have a @@ prefix like this: import {Contract} from "@@Contract"
+always return the full class
+endsnippet
+
+snippet omit "" w
+const { _id, password, ...cleaned } = req.user
+return cleaned
+endsnippet

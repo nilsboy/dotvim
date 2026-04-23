@@ -1,6 +1,6 @@
 let &errorformat  = 'errorformatregex:%f:%l:%c:%t:%m'
 
-let &makeprg  = 'vitest --run'
+let &makeprg  = 'NODE_OPTIONS=--enable-source-maps VITE_NODE_DEBUG_DUMP=1 VITE_ENABLE_SOURCE_MAPS=1 vitest --reporter=verbose --run'
 " let &makeprg  = 'vitest --run --reporter=./rep.ts'
 
 if g:testNearest
@@ -23,6 +23,10 @@ let &makeprg .= " \\| grep -vi 'node\\:[^:]\\+'"
 let &makeprg .= " \\| grep -vFi 'node_modules/'"
 let &makeprg .= " \\| grep -vFi 'process.stdout.write'"
 let &makeprg .= " \\| grep -vFi 'consoleWithStackTrace'"
+
+
+" remove leading ../ that seem to be caused by using tsconfig.json paths entry
+let &makeprg .= " \\| perl -pe 's/\\.\\.\\///igms'"
 
 let &makeprg .= " \\| errorformatregex"
 

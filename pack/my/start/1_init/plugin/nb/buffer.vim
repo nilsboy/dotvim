@@ -13,7 +13,7 @@ function! nb#buffer#isEmpty(bufnr) abort
   endif
 endfunction
 
-" Close a buffer writing its content and closing vim if appropriate.
+" Close a buffer as gracefully as possible
 function! nb#buffer#close() abort
 
   " only close preview-window if open and return
@@ -23,6 +23,7 @@ function! nb#buffer#close() abort
     return
   endif
 
+  " close windows if the buffer of the window is also shown in another window
   if len(win_findbuf(bufnr('%'))) > 1
     quit
     return
@@ -73,14 +74,16 @@ function! nb#buffer#close() abort
 
   lclose
 
-  if nb#buffer#isNamed('%')
-    if &write
-      update
-    endif
-  else
-    if !nb#buffer#isEmpty('%')
-      call nb#warn('Buffer has no name.')
-      return
+  if &buftype !=? 'nowrite' && !&readonly
+    if nb#buffer#isNamed('%')
+      if &write
+        update
+      endif
+    else
+      if !nb#buffer#isEmpty('%')
+        call nb#warn('Buffer has no name.')
+        return
+      endif
     endif
   endif
 
@@ -89,15 +92,21 @@ function! nb#buffer#close() abort
       call nb#info('Last buffer.')
       return
     else
-      keepjumps new | only
+      keepjumps new
+      silent! only
       silent! keepjumps edit #
-      execute 'lcd ' . g:start_cwd
     endif
     " silent! quit!
   endif
 
-  " use bdelete instead of bwipeout to not loose marks
-  silent! bdelete!
+  if &filetype == 'Fern'
+    silent! bwipeout!
+  else
+    " use bdelete instead of bwipeout to not loose marks
+    silent! bdelete!
+  endif
+
+  execute 'lcd ' . g:start_cwd
 
   if wasQfOpen
     copen
@@ -159,22 +168,6 @@ function! nb#buffer#isLast() abort
   return 1
 endfunction
 
-function! nb#buffer#findByFiletype() abort
-  let lastBuffer = bufnr('$')
-  let listed = 0
-  let i = 1
-  while i <= lastBuffer
-    if buflisted(i) == 1
-      let listed = listed + 1
-    endif
-    if listed > 1
-      return 0
-    endif
-    let i = i + 1
-  endwhile
-  return 1
-endfunction
-
 function! nb#buffer#findByName(name) abort
   let lastBuffer = bufnr('$')
   let i = 1
@@ -187,3 +180,16 @@ function! nb#buffer#findByName(name) abort
   return 0
 endfunction
 
+
+function! nb#buffer#deleteByRegex(regex) abort
+  let lastBuffer = bufnr('$')
+  let i = 1
+  while i <= lastBuffer
+    if bufname(i) =~ fnameescape(a:regex)
+      execute 'bdelete ' . i
+    endif
+    let i = i + 1
+  endwhile
+  return 0
+endfunction
+command! -nargs=1 BuffersDeleteByRegex :call nb#buffer#deleteByRegex("<args>")

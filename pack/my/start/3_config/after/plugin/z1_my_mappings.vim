@@ -1,8 +1,4 @@
-" TODO:
-" - too long lines highlight in light grep
-
-" set verbose=13
-" For a list of vim's internal mappings see:
+" for a list of vim's internal mappings see:
 " :h index
 "
 " Good mappings tutorial:
@@ -13,6 +9,7 @@
 
 " Potentially reassignable keys for normal mode:
 " s, S, Q, Z, <bs>, M, r, R, <space>, Y, -, +, <cr>
+" :help map-which-keys
 
 " Possible insert mode leaders:
 " imap <c-b>
@@ -22,15 +19,6 @@
 " Tab and Ctrl-I (<c-i><c-I>)
 " Enter and Ctrl-M (<c-m>)
 " Esc and Ctrl-[ (<c-[>)
-
-" Map space to leader instead of the other way around to keep the original
-" leader in insert mode - because space does not work well there.
-nmap <space> <leader>
-vmap <space> <leader>
-
-" Ignore the leader if the following key is not mapped
-nmap <leader> <nop>
-vmap <leader> <nop>
 
 inoremap <c-z> <esc><c-z>
 
@@ -146,7 +134,7 @@ nnoremap <silent> <leader>vt :execute ':edit ' . stdpath('config')
 nnoremap <leader>vem :Verbose cmap <bar> map<cr>
 
 " Show all <leader> search mappings
-nnoremap <leader>/? :Verbose map <leader>/<cr> <bar>
+nnoremap <leader>/H :Map <leader>/<cr> <bar>
 
 " open search history and select last entry
 nnoremap <leader>/k q/k
@@ -154,6 +142,7 @@ nnoremap <leader>/k q/k
 " search for selection
 " vnoremap <leader>// y:execute '/' . @"<cr>
 " vnoremap <leader>// y:/\V<c-r>"<cr>
+
 nnoremap <leader>/C /\v^\s*[/"#]+<cr>
 
 " search for character under cursor
@@ -161,7 +150,8 @@ nnoremap <leader>/c "zyl/<c-r>z<cr>
 
 " nnoremap <leader>/b /^.*\S\+\s\+{\s*$<cr>
 nnoremap <leader>/b /^.*{.*$<cr>
-nnoremap <leader>/S /^\S\+<cr>
+nnoremap <leader>/s /\\v^\\s*$<cr>
+nnoremap <leader>/S /\\v^\\S+<cr>
 nnoremap <leader>/w /\\<\\><left><left>
 nnoremap <leader>/r gg/require<cr>}
 nnoremap <leader>/t gg/TODO<cr>
@@ -182,13 +172,17 @@ nnoremap v m`v
 nnoremap V m`V
 nnoremap <C-v> m`<C-v>
 vnoremap <esc> <esc>``
+" clipboard
 vnoremap y y``
+
+nnoremap <leader>vH :Map <leader>v<cr>
 
 function! MyZ0MyMappingsMessages() abort
   echom '=== Messages until '
         \ . strftime("%H:%M:%S")
         \ . ' ======================='
-  Redir messages
+  call nb#createTempBuffer('messages')
+  silent put!=execute('messages')
   keepjumps normal G
   setlocal syntax=txt
   silent! %s/\v\<09\>/\t/g
@@ -234,35 +228,51 @@ sunmap m
 nnoremap gd [<c-d>
 " nnoremap <silent> <leader>gd gd
 
-cnoremap <expr> %% fnameescape(expand('%'))
-cnoremap <expr> %b fnameescape(expand('%:t'))
-cnoremap <expr> %d fnameescape(expand('%:p:h')) . '/'
+cnoremap <expr> ,h fnameescape($HOME) . '/'
+cnoremap <expr> ,d fnameescape(expand('%:p:h')) . '/'
+cnoremap <expr> ,b fnameescape(expand('%:t'))
+cnoremap <expr> ,f fnameescape(expand('%'))
+cnoremap <expr> ,t &filetype . ' '
 
-nnoremap <silent> <leader>vs :Redir scriptnames<cr>
+nnoremap <silent> <leader>vs :call z1_my_mappings#scriptnames()<cr>
+function! z1_my_mappings#scriptnames(...) abort
+  call nb#createTempBuffer('scriptnames')
+  call setline('.', execute('scriptnames')->split("\n"))
+  keepjumps normal! gg
+endfunction
 
 function! MyVimrcRtp() abort
-  Redir echo &runtimepath
+  call nb#createTempBuffer("runtimepath")
+  call setline('.', execute('echo &runtimepath')->split("\n"))
   %s/,/\r/g
+  normal! gg
 endfunction
 nnoremap <silent> <leader>vR :call MyVimrcRtp()<cr>
-
-" nnoremap <silent> { :keepjumps normal! {<cr>
-" nnoremap <silent> } :keepjumps normal! }<cr>
 
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-" set virtualedit=all
+" function! z1_my_mappings#pm2log() abort
+"   call nb#createTempBuffer("pm2-log")
+"   call setline('.', execute('!pm2 log --raw --lines 30000 --nostream')->split("\n"))
+"   keepjumps g/last 30000 lines/d
+"   keepjumps normal! G
+"   " 2020-06-25 15:39: info: Feathers application started on http://localhost:6000
+"   silent! keepjumps keeppatterns %s/\v^\d+-\d+-\d+ \d+\:\d+\: //g
+"   silent !pm2 flush
+" endfunction
+" nnoremap <silent> <leader>TBD :call z1_my_mappings#pm2log()<cr>
 
-function! z1_my_mappings#pm2log() abort
-  Redir !pm2 log --raw --lines 30000 --nostream
-  keepjumps g/last 30000 lines/d
-  keepjumps normal! G
-  " 2020-06-25 15:39: info: Feathers application started on http://localhost:6000
-  silent! keepjumps keeppatterns %s/\v^\d+-\d+-\d+ \d+\:\d+\: //g
-  silent !pm2 flush
-endfunction
-nnoremap <silent> <leader>jl :call z1_my_mappings#pm2log()<cr>
+" TODO:
+" " Press <Leader>e, then type any text‑object (e.g. i), a", iw, etc.)
+" nnoremap <silent> ee :call JumpToEndOfTextObj()<CR>
+
+" function! JumpToEndOfTextObj() abort
+"   " Prompt for the text‑object (the user types it, e.g. i) )
+"   let l:obj = nr2char(getchar())
+"   " Build the normal‑mode command: select the object, exit visual, move right
+"   execute 'normal! v' . l:obj . "\<Esc>l"
+" endfunction
 

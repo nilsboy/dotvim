@@ -1,3 +1,4 @@
+finish
 " Yes, we do need another debugger plugin
 "
 " NOTE: Need to escape spaces in arguments i.e.: 

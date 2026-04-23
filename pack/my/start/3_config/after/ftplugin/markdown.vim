@@ -13,8 +13,15 @@ let b:formatter = 'prettier-markdown'
 
 setlocal nowrap
 
-nmap <silent> <buffer> <leader>nrr m`viC:call my_narrow#narrow({})<cr>
-nmap <silent> <buffer> <leader>nrs m`viC:call my_narrow#narrow({'filetype': 'sql'})<cr>
-nmap <silent> <buffer> <leader>nrt m`viC:call my_narrow#narrow({'filetype': 'text'})<cr>
+nmap <silent> <buffer> ,nr m`viC:call my_narrow#narrow({})<cr>
+nmap <silent> <buffer> ,nRs m`viC:call my_narrow#narrow({'filetype': 'sql'})<cr>
+nmap <silent> <buffer> ,nRt m`viC:call ky_narrow#narrow({'filetype': 'text'})<cr>
 
+function! MyMarkdownToHtml(...) abort
+  let file = nb#createTempFile("pandoc", "pandoc", "html")
+  silent execute '!pandoc --from markdown % -o ' . file
+  execute 'edit ' . file
+endfunction
+nmap <silent> <buffer> <leader>nh :call MyMarkdownToHtml()<cr>
 
+nnoremap <silent> <buffer> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>

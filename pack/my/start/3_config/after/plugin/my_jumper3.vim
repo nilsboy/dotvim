@@ -1,3 +1,4 @@
+finish
 " Jump between recent locations
 " TAGS: jumper mru
 "
@@ -25,40 +26,53 @@ let g:my_jumper3#locs = []
 let g:my_jumper3#maxCount = 100
 let g:my_jumper3#currentIndex = 0
 
-function! my_jumper3#updateStatus() abort
-  let g:my_statusline_debug = g:my_jumper3#currentIndex
-    \ . ' / ' . len(g:my_jumper3#locs)
-endfunction
-
-" mode: save on cursor hold
-" augroup my_jumper3#augroupJumper3
-"   autocmd!
-"   autocmd CursorHold * :call my_jumper3#add()
-" augroup END
-
-" mode: save if cursor moved
 let g:my_jumper3#currentLoc = {}
 augroup my_jumper3#augroupJumper3
   autocmd!
   " NOTE: BufEnter does not work because of my_keep_cursor_position.vim
   " NOTE: BufWinEnter when used with marks moves the cursor from line 0 to
   " the mark so those buffers will always get added
-  autocmd BufWinEnter * :call my_jumper3#updateCurrentPos()
+  " autocmd BufWinEnter * :call my_jumper3#updateCurrentLoc()
+  autocmd BufEnter * :call my_jumper3#updateCurrentLoc()
+  " autocmd CursorHold * :call my_jumper3#updateCurrentLoc()
   autocmd BufLeave * :call my_jumper3#addIfPosChanged()
-  autocmd CursorHold * :call my_jumper3#updateStatus()
+  " autocmd CursorHold * :call my_jumper3#add() 
+  " autocmd CursorHold * :call my_jumper3#updateStatus()
+  " TODO: on buf change set cur pos / add buf?
+  " autocmd VimLeave * :call my_jumper3#save()
+  " autocmd VimEnter * :call my_jumper3#restore()
+  " autocmd VimEnter * :call my_jumper3#updateStatus()
+  " autocmd CursorHold * :call my_jumper3#add()
 augroup END
 
-function! my_jumper3#updateCurrentPos() abort
-  let g:my_jumper3#currentLoc = my_jumper3#getLoc()
+function! my_jumper3#updateStatus() abort
+  let g:my_statusline_debug = ''
+    \ . 'index: ' . g:my_jumper3#currentIndex
+    \ . ' len: ' . len(g:my_jumper3#locs)
+    \ . ' line: ' . g:my_jumper3#currentLoc.lnum
+endfunction
+
+function! my_jumper3#updateCurrentLoc() abort
+  let loc = my_jumper3#getLoc()
+  if loc.buftype == 'quickfix'
+    return
+  endif
+  " call nb#error("update current loc")
+  let g:my_jumper3#currentLoc = loc
+  call my_jumper3#updateStatus()
 endfunction
 
 function! my_jumper3#addIfPosChanged() abort
   let loc = my_jumper3#getLoc()
+  " TODO: test not working?
   if g:my_jumper3#currentLoc != {}
+    " TODO: test not working?
     if loc.pos == g:my_jumper3#currentLoc.pos
+      " call nb#error("same")
       return
     endif
   endif
+  call nb#error("changed")
   call my_jumper3#add()
 endfunction
 
@@ -117,15 +131,17 @@ function! my_jumper3#add() abort
     return
   endif
   call my_jumper3#removeDuplicateLoc(loc)
-  call nb#debug('### jj7 loc:' . json_encode(loc))
   call add(g:my_jumper3#locs, loc)
-  let g:my_jumper3#currentIndex = len(g:my_jumper3#locs) - 1
+  " TODO: remove?
+  " let g:my_jumper3#currentIndex = len(g:my_jumper3#locs) - 1
+  call my_jumper3#updateStatus() 
 endfunction
 
 function! my_jumper3#getLoc() abort
   let loc = {}
-  let [bufnr2, lnum, col, off] = getpos(".")
-  let loc.pos = getpos(".")
+  let pos = getpos(".") 
+  let [bufnr2, lnum, col, off] = pos
+  let loc.pos = pos
   let loc.lnum = lnum
   let loc.col = col
   let loc.off = off
@@ -156,24 +172,27 @@ function! my_jumper3#jump(to) abort
   else
     if !filereadable(loc.filename)
       call remove(g:my_jumper3#locs, g:my_jumper3#currentIndex)
+      call my_jumper3#updateStatus() 
+      " TODO: jump again?
       return
     endif
     silent execute 'edit ' . loc.filename
   endif
+  let g:my_jumper3#currentIndex = to
+  call my_jumper3#updateStatus() 
   " Succeeds even if the line does not exist anymore.
   call setpos('.', g:my_jumper3#locs[to].pos)
-  let g:my_jumper3#currentIndex = to
 endfunction
 
 nnoremap <silent> L :call my_jumper3#next()<cr>
 function! my_jumper3#next() abort
-  call my_jumper3#addIfPosChanged() 
+  " call my_jumper3#addIfPosChanged() 
   call my_jumper3#jump(g:my_jumper3#currentIndex + 1)
 endfunction
 
 nnoremap <silent> H :call my_jumper3#previous()<cr>
 function! my_jumper3#previous() abort
-  call my_jumper3#addIfPosChanged() 
+  " call my_jumper3#addIfPosChanged() 
   call my_jumper3#jump(g:my_jumper3#currentIndex - 1)
 endfunction
 
@@ -190,10 +209,6 @@ function! my_jumper3#save() abort
         \ 'currentIndex': g:my_jumper3#currentIndex
         \ })], g:my_jumper3#file)
 endfunction
-augroup my_jumper3#saveAutoCmd
-  autocmd!
-  autocmd VimLeave * :call my_jumper3#save()
-augroup END
 
 " function! my_jumper3#restore() abort
 "   try
@@ -208,10 +223,6 @@ augroup END
 "   endtry
 "   " call my_jumper3#jump()
 " endfunction
-" augroup my_jumper3#restoreAutoCmd
-"   autocmd!
-"   autocmd VimEnter * :call my_jumper3#restore()
-" augroup END
 
 function! my_jumper3#qflist() abort
   let currentBufnr = bufnr('%')
@@ -259,5 +270,6 @@ function! my_jumper3#dump() abort
   call DUMP(g:my_jumper3#locs)
 endfunction
 
-nnoremap <silent> <leader>S :call my_jumper3#qflist()<cr>
-nnoremap <silent> <leader>s :call my_jumper3#dump()<cr>
+" nnoremap <silent> <leader>S :call my_jumper3#qflist()<cr>
+" nnoremap <silent> <cr> :call my_jumper3#qflist()<cr>
+nnoremap <silent> <cr> :call my_jumper3#dump()<cr>

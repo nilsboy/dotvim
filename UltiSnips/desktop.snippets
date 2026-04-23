@@ -1,0 +1,14 @@
+# gsettings get org.gnome.shell favorite-apps
+
+# gsettings set org.gnome.shell favorite-apps "[]" 
+
+snippet init "init" b
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=$1
+Exec=$2
+Version=1.0
+Type=Application
+Terminal=false
+endsnippet

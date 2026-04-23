@@ -25,7 +25,7 @@ function! my_bufhist#clear() abort
 endfunction
 call my_bufhist#clear()
 
-nnoremap <silent> s :call my_bufhist#toggle()<cr>
+nnoremap <silent> <leader>st :call my_bufhist#toggle()<cr>
 function! my_bufhist#toggle() abort
   let location = my_bufhist#loc()
   if location.filename == ''
@@ -114,7 +114,7 @@ function! my_bufhist#jump(to) abort
   let g:my_bufhist#index = a:to
 endfunction
 
-nnoremap <silent> S :call my_bufhist#list()<cr>
+nnoremap <silent> <leader>ss :call my_bufhist#list()<cr>
 function! my_bufhist#list() abort
   call setqflist(g:my_bufhist#loc)
   call setqflist([], 'a', { 'title' : 'my_bufhist' })

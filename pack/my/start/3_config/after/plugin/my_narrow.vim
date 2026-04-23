@@ -22,8 +22,8 @@ function! my_narrow#narrow(opts) range abort
   let narrowIndent = minIndent
   let curpos[2] = curpos[2] - narrowIndent
 
-  let tempfile = nb#mktemp("region") 
-        \ . fnamemodify(bufname('%'), ':p:t') . ".narrowed" 
+  let tempfile = nb#createTempFile("region", "", "narrowed")
+
   execute 'keepjumps edit ' . tempfile
   execute 'setlocal filetype=' . filetype
   let b:narrowIndent = narrowIndent
@@ -56,4 +56,8 @@ function! my_narrow#writeBack(opts) abort
   silent bwipeout!
   call setpos('.', curpos)
 endfunction
+
+vmap <silent> <leader>nr  :call my_narrow#narrow({})<cr>
+vmap <silent> <leader>nRs :call my_narrow#narrow({'filetype': 'sql'})<cr>
+vmap <silent> <leader>nRt :call ky_narrow#narrow({'filetype': 'text'})<cr>
 

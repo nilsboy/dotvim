@@ -94,17 +94,10 @@ function! MyDbExecSql(...) abort
     let limit = ' --limit ' . limit . ' '
   endif
 
-  wall
-	let fileName = name
-  if add_counter
-    let g:MyDbConfigQueryId = g:MyDbConfigQueryId + 1
-	  let fileName = fileName . '.' . g:MyDbConfigQueryId
-  endif
-  let fileName = fileName . '.sqlresult'
-	let fileName = nb#mktempSimple(g:MyDbConfigProfileName, fileName)
-
-	silent execute 'edit ' . fileName
-  silent! normal! 1,$"_dd
+  " TODO: test
+  let filename = nb#createTempBuffer('sql', name, 'sqlresult')
+  " TODO: remove?:
+  " silent! normal! 1,$"_dd
 
   call nb#debug('Query: ' . sql)
 
@@ -134,12 +127,12 @@ function! MyDbConfigSetProfile(...) abort
 endfunction
 
 function! MyDbInfos() abort
-  let file = nb#mktempSimple("sql", "db-infos")
-  silent execute 'edit ' . file
+  let file = nb#createTempBuffer('db-infos', "db-infos")
+
   " 1,$"_d
   normal! i### SQLs
-  execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.sql'
-  execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.md'
+  silent execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.sql'
+  silent execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.md'
   normal! o
   normal! o
   normal! i### Database profiles
@@ -152,8 +145,9 @@ function! MyDbInfos() abort
   execute 'normal! o' . $HOME . '/src/sql/table-data-excerpt/README.md'
   normal! o
   normal! o### Mappings
-  RedirAppend map \\d
+  silent put=execute('map \\d')
   normal! gg
+  let b:outline = '^### '
 endfunction
 
 nnoremap <leader>dK mz"zyiw:call MyDbConfigKillProcess(@z)<cr>

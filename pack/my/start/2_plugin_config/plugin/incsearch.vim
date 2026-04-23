@@ -1,5 +1,6 @@
 " Improved incremental searching for Vim
 " Alternative: vim-cool
+" check out for smartcase-* etc: https://github.com/haya14busa/vim-asterisk
 PackAdd haya14busa/incsearch.vim
 
 nmap /  <Plug>(incsearch-forward)
@@ -19,7 +20,7 @@ let g:incsearch#do_not_save_error_message_history = 1
 " let g:incsearch#separate_highlight = 1
 
 " nomagic 
-let g:incsearch#magic = '\M'
+" let g:incsearch#magic = '\M'
 
 augroup incsearch-keymap
   autocmd!

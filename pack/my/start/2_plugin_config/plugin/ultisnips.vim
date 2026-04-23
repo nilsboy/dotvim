@@ -3,23 +3,27 @@
 " Setup:
 " apt install python3-pynvim
 " python3 -m pip install --user --upgrade pynvim
+"
+" Way to centralize python helper functions?:
+" https://github.com/honza/vim-snippets/blob/master/pythonx/javascript_snippets.py
 
-nnoremap <silent><leader>js :execute ":edit "
-      \ . stdpath('config') . "/UltiSnips/" . &filetype
-      \ . ".snippets"<cr>
-nnoremap <leader>jS :execute ":edit " . stdpath('config') .
-      \ "/UltiSnips/all.snippets"<cr>
+if exists("b:my_ultisnips_ftPluginLoaded")
+  finish
+endif
+let b:my_ultisnips_ftPluginLoaded = 1
+
+let g:UltiSnipsSnippetDirectories = [ "UltiSnips", $HOME . '/.vimlocal/UltiSnips' ]
 
 let g:UltiSnipsEnableSnipMate = 0
 
 inoremap <silent> <tab> <c-r>=MyUltisnipsJump()<cr>
-let g:UltiSnipsExpandTrigger = '<c-space>'
+let g:UltiSnipsExpandTrigger = '<tab>'
 let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " inoremap <c-space> <c-r>=UltiSnips#ExpandSnippet()<cr>
-vnoremap <tab> <c-r>=UltiSnips#JumpForwards()<cr>
-vnoremap <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
+" vnoremap <tab> <c-r>=UltiSnips#JumpForwards()<cr>
+" vnoremap <s-tab> <c-r>=UltiSnips#JumpBackwards()<cr>
 
 PackAdd SirVer/ultisnips
 
@@ -57,13 +61,7 @@ function! MyUltisnipsJump() abort
   endif
   return "\<esc>"
   " return ''
-
 endfunction
-
-if exists("b:my_ultisnips_ftPluginLoaded")
-  finish
-endif
-let b:my_ultisnips_ftPluginLoaded = 1
 
 augroup ultisnips#augroupExistSnippet
   autocmd!
@@ -75,3 +73,13 @@ augroup MyUltisnipsColorFix
   autocmd!
   autocmd ColorScheme,Syntax,FileType * highlight! link snipLeadingSpaces normal
 augroup END
+
+nnoremap <silent><leader>js :execute ":edit "
+      \ . stdpath('config') . "/UltiSnips/" . &filetype
+      \ . ".snippets"<cr>
+nnoremap <leader>jS :execute ":edit " . stdpath('config') .
+      \ "/UltiSnips/all.snippets"<cr>
+nnoremap <silent><leader>jl :execute ":edit "
+      \ $HOME . '/.vimlocal/UltiSnips/'. &filetype
+      \ . ".snippets"<cr>
+

@@ -1,12 +1,12 @@
 # We use a little hack so that the snippet is expanded
 # and parsed correctly
-snippet snip "Snippet definition" b
-`!p snip.rv = "snippet"` ${1:Tab_trigger} "$1$3" ${4:b}
+snippet snip "" w
+`!p snip.rv = "snippet"` ${1:Tab_trigger} "" ${4:w}
 ${VISUAL}$0
 `!p snip.rv = "endsnippet"`
 endsnippet
 
-snippet global "Global snippet" b
+snippet global "" b
 `!p snip.rv = "global"` !p
 $0
 `!p snip.rv = "endglobal"`
@@ -17,7 +17,7 @@ snippet vis "${VISUAL}" i
 \$\{VISUAL\}
 endsnippet
 
-snippet $ "placeholder" w
+snippet $ "" w
 \$\{$1:${VISUAL}$2\}$0
 endsnippet
 
@@ -31,7 +31,7 @@ snippet 0 "$0" i
 \$0
 endsnippet
 
-snippet toggle "toggle" b
+snippet toggle "" b
 `!p snip.rv = "snippet"` "(${1:la|le|lu})+" "$1 toggle" r
 \`!p snip.rv = toggle('$1', match.group(1))\`
 `!p snip.rv = "endsnippet"`

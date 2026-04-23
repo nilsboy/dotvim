@@ -84,6 +84,9 @@ endfunction
 " formatting
 nnoremap <silent> <leader>x :silent call MakeWith({'name': 'formatter', 'compiler': b:formatter})<cr>
 
+" linting
+nnoremap <silent> <leader>ll :silent call MakeWith({'name': 'linter', 'compiler': b:linter})<cr>
+
 function! my_make#forceJsonFormat() abort
   call MakeWith({'name': 'formatter', 'compiler': 'prettier-json'})
   silent! keeppatterns keepjumps %s/\\n/\r/g
@@ -93,6 +96,17 @@ function! my_make#forceJsonFormat() abort
   silent! keeppatterns keepjumps %s/\/app\/src/src/g
 endfunction
 nnoremap <silent> <leader>X :call my_make#forceJsonFormat()<cr>
+
+function! my_make#forceFormat() abort
+  " silent! keeppatterns keepjumps %s/\\n/\r/g
+  " silent! keeppatterns keepjumps %s/\v'[[:blank:]\+\n\\]+'//g
+  " silent! keeppatterns keepjumps %s/<br>/\r/g
+  " silent! keeppatterns keepjumps %s/&nbsp;/ /g
+
+  silent! keeppatterns keepjumps %s/\%^\v[^[\{]+]//g
+  silent! keeppatterns keepjumps %s/\v[\{\}\[\]]/\1\r{/g
+endfunction
+" nnoremap <silent> <leader>X :call my_make#forceFormat()<cr>
 
 " executing
 nnoremap <silent> <leader>ef :call MakeWith({'name': 'myrunprg', 'compiler': b:myrunprg, 'args': expand('%:p')})<cr>

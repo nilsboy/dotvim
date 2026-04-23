@@ -1,7 +1,7 @@
 " Avoid 'hit enter prompt'
 set shortmess=atTIWF
 
-if nb#isNeovim()
+if has("nvim")
   " don't give ins-completion-menu messages.
   set shortmess+=c
 endif
@@ -40,10 +40,12 @@ function! MyStatuslineDir() abort
   if dir == project
     return ''
   endif
-  return dir
+  return ' ' .. dir
 endfunction
 
-let &statusline .= '%#StatusLine#'
+" NOTE: since neovim 0.12 appending to statusline will keep the default one
+let &statusline = '%#Cursorline#'
+let &statusline .= '%#Cursorline#'
 let &statusline .= ' %-0.30{fnamemodify(getcwd(), ":t")} '
 let &statusline .= '%#StatusLine#'
 
@@ -60,11 +62,12 @@ function! my_statusline#bufferName() abort
   if file == ''
     let file = '[No Name]'
   endif
-  return file
+  return ' ' .. file
 endfunction
 
 let &statusline .= '%#Cursorline#'
-let &statusline .= '%( %{my_statusline#bufferName()} %)'
+" let &statusline .= '%( %{my_statusline#bufferName()} %)'
+let &statusline .= '%-0.30(%{my_statusline#bufferName()} %)'
 let &statusline .= '%#StatusLine#'
 
 let &statusline .= '%( %< %)'

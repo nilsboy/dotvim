@@ -1,3 +1,6 @@
+finish
+" NOTE: does seem to break with big files
+
 " even better % navigate and highlight
 " TAGS: matchit parens
 PackAdd andymass/vim-matchup
@@ -7,15 +10,15 @@ PackAdd andymass/vim-matchup
 
 let g:matchup_matchparen_enabled = 0
 
-" copy of matchup private function
-function! vim_matchup#clear() abort
-  if exists('w:matchup_match_id_list')
-    for l:id in w:matchup_match_id_list
-      silent! call matchdelete(l:id)
-    endfor
-    unlet! w:matchup_match_id_list
-  endif
-endfunction
+" " copy of matchup private function
+" function! vim_matchup#clear() abort
+"   if exists('w:matchup_match_id_list')
+"     for l:id in w:matchup_match_id_list
+"       silent! call matchdelete(l:id)
+"     endfor
+"     unlet! w:matchup_match_id_list
+"   endif
+" endfunction
 
 " makes the cursor hang when searching for matches
 " augroup vim_matchup#augroupHighlight

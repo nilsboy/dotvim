@@ -12,6 +12,9 @@ let &makeprg .= " 'e/^(?<file>\\S+?)\\((?<row>\\d+?),(?<col>\\d+)\\):\\s+error\\
 " at MySqlExceptionConverter.convertException (node_modules/@mikro-orm/core/platforms/ExceptionConverter.js:8:16)
 let &makeprg .= " 'e/^\\s+at\\s+.+?\\s\\((?<file>[^:\\s]+?):(?<row>\\d+?):(?<col>\\d+)\\)$/igms'"
 
+" at /some/file.js:14:12
+let &makeprg .= " 'e/^\\s+at\\s+(?<file>[^:\\s]+?):(?<row>\\d+?):(?<col>\\d+)$/igms'"
+
 " /foo/bar:258
 let &makeprg .= " 'e/^(?<file>[^:\\s]+?):(?<row>\\d+?)$/igms'"
 

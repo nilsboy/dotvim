@@ -1,8 +1,11 @@
 " Search in file names and contents and some quickfix tweaks.
-" TODO: checkout vim dispatch for async?
+" TBD: there's a findexpr now in vim - neovim? (2024-10-25)
+" TBD: checkout quickfixtextfunc quickfix-window-function (2025-03-28)
 
 MyInstall rg ripgrep-install
 MyInstall errorformatregex npm install -g @nilsboy/errorformatregex
+
+nnoremap <leader>fH :Map <leader>f<cr> <bar>
 
 function! my_quickfix#openLoclist() abort
   if len(getloclist(0)) == 0
@@ -26,7 +29,7 @@ function! MyQuickfixSearch(options) abort
   let options = {}
   call extend(options, a:options)
 
-  let functionRef = get(a:options, 'function', '')
+  let functionRef = get(a:options, 'functionRef', '')
   " echo functionRef
   if functionRef != ''
     call extend(options, {functionRef}())
@@ -47,6 +50,7 @@ function! MyQuickfixSearch(options) abort
   let title = get(options, 'title', '')
   let strict = 0
   let path = get(options, 'path', '')
+  let filesFrom = get(options, 'filesFrom', 0)
   let ignoreCase = get(options, 'ignoreCase', 1)
   let type = get(options, 'type', 0)
   let multiline = get(options, 'multiline', 1)
@@ -148,14 +152,15 @@ function! MyQuickfixSearch(options) abort
   let filenameTerm = term
   if matchFilenameOnly
     " let filenameTerm = '/.*' . term . '[^/]*$'
-    let filenameTerm = '.*' . term . '.*$'
+    " let filenameTerm = '.*' . term . '.*$'
+    let filenameTerm = '[^/].*' . term . '[^/]*$'
   else
     " exclude current path from file match
     let filenameTerm = '\Q' . fnameescape(path) . '\E' . '.*' . filenameTerm
   endif
 
-  let grepprg = "timeout -s kill 500s rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts' --sort-files"
-  " let grepprg = "timeout -s kill 500s rg --only-matching --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts'"
+  let timeout = "timeout -s kill 500s "
+  let grepprg = "rg --pcre2 --vimgrep --type-add 'javascript:*.js' --type-add 'typescript:*.ts' --sort-files"
 
   if multiline == 1
     " let grepprg .= " --multiline --multiline-dotall"
@@ -210,12 +215,27 @@ function! MyQuickfixSearch(options) abort
           " \ . ' | sort-by-path-depth'
   endif
 
-  let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
+  let findprg = timeout . " " . findprg
+
+  if filesFrom == 1
+    let filesFromFile = g:nb#tempdir . 'filesFromFile'
+    let files = my_quickfix#filesFrom()
+    call writefile(files, filesFromFile)
+    let xargs = "xargs -d '\n' -a " . filesFromFile
+    let grepprg = timeout . " " . xargs . " " . grepprg
+    let grepprg .= ' ' . shellescape(term)
+  else
+    let grepprg = timeout . " " . grepprg
+    let grepprg .= ' ' . shellescape(term)
+    let grepprg .= ' ' . fnameescape(path)
+  endif
+
+  " let grepprg .= ' ' . shellescape(term) . ' ' . fnameescape(path)
   let grepprg .= " | errorformatregex 'n/^(?<file>.+?)\\:(?<row>\\d+)\\:(?<col>\\d+)\\:/gm' 2>&1"
   let grepprg .= ' | head-warn' . limit
 
-  let tempfile = g:nb#tempdir . 'my_quickfix'
-  call writefile([], tempfile)
+  let tempfile = nb#createTempFile('quickfix')
+  " call writefile([], tempfile)
 
   call nb#debug("quickfix tempfile: " . tempfile)
   call nb#debug('findprg:' . findprg)
@@ -279,6 +299,7 @@ let g:MyQuickfixAllSearchOptions = []
 function! MyQuickfixAddMappings(key, options) abort
   let options = [
         \ { 'key': 'f', 'title': 'all files', 'grep': 0,},
+        \ { 'key': 'd', 'title': 'all files', 'grep': 0,},
         \ { 'key': 'i', 'ask': 1, },
         \ { 'key': 'I', 'ask': 1, 'wordBoundary': 1, },
         \ { 'key': 'c', 'ask': 1, 'ignoreCase': 0},
@@ -316,7 +337,7 @@ function! MyQuickfixAddMappings(key, options) abort
 endfunction
 nnoremap <silent> <leader>f <nop>
 
-nnoremap <silent> <leader>fT :call MyQuickfixSearch({ 'term': 'todo' })<cr>
+nnoremap <silent> <leader>fT :call MyQuickfixSearch({ 'term': 'TODO', 'ignoreCase': 0 })<cr>
 
 function! MyQuickfixFindInBuffer() abort
   return { 'find': 0, 'path': expand('%:p') }
@@ -326,22 +347,37 @@ function! MyQuickfixFindInBufferDir() abort
   return { 'path': MyQuickfixBufferDir() }
 endfunction
 
+function! MyQuickfixFindInBufferDirParent() abort
+  return { 'path': expand("%:p:h:h") }
+endfunction
+
+" grep files currently in quickfix
+function! my_quickfix#filesFrom() abort
+  return uniq(sort(map(getqflist(), {idx, val -> fnamemodify(bufname(val.bufnr), ':p')})))
+endfunction
+
 call MyQuickfixAddMappings('f', {})
 call MyQuickfixAddMappings('fz', { 'fuzzy': 1 })
 call MyQuickfixAddMappings('fa', { 'useIgnoreFile': 0 })
 call MyQuickfixAddMappings('fh', { 'hidden': 1 })
-call MyQuickfixAddMappings('f/', { 'function': 'MyQuickfixFindInBuffer' } )
-call MyQuickfixAddMappings('fd', { 'function': 'MyQuickfixFindInBufferDir' })
+call MyQuickfixAddMappings('fb', { 'functionRef': 'MyQuickfixFindInBuffer' } )
+call MyQuickfixAddMappings('fd', { 'functionRef': 'MyQuickfixFindInBufferDir' })
+call MyQuickfixAddMappings('fu', { 'functionRef': 'MyQuickfixFindInBufferDirParent' })
 call MyQuickfixAddMappings('ft', { 'type': 1 })
+call MyQuickfixAddMappings('F',  { 'type': 1 })
 call MyQuickfixAddMappings('fn', { 'matchFilenameOnly': '1', })
+call MyQuickfixAddMappings('fl', { 'filesFrom': 1, 'find': 0 })
 
-nnoremap <silent><leader>// :normal <leader>fbi<cr>
-nnoremap <silent><leader>*  :normal <leader>fw<cr>
+nnoremap <leader>// :normal! \fbi
+nnoremap <leader>*  :normal! <leader>fbw<cr>
 
-" nnoremap <silent> <leader>jj :call MyQuickfixSearch({ 'path': '/tmp', 'term': '.', 'find': 1, 'grep': 0, 'orderBy': 'recent', })<cr>
-
-nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
-nnoremap <silent> <leader>jt :call Redir("!tree -C --summary --no-color --exclude node_modules", 0, 0)<cr><cr>
+nnoremap <silent> <leader>jt :call my_quickfix#tree()<cr>
+function! my_quickfix#tree(...) abort
+  let output = trim(execute('!tree -C --summary --no-color --exclude node_modules'))
+  call nb#createTempBuffer('tree', '', 'txt')
+  silent put!=output
+  keepjumps normal! gg0jj
+endfunction
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/README.md<cr>
@@ -381,7 +417,7 @@ function! MyQuickfixDump(...) abort
   keepjumps normal! ddggjP
 endfunction
 
-nnoremap <silent> <leader>vll :call MyLoclistDump()<cr>
+" nnoremap <silent> <leader>vll :call MyLoclistDump()<cr>
 function! MyLoclistDump(...) abort
   call DUMP(getloclist(0, {'all': 1}))
   keepjumps /^  "title":
@@ -435,6 +471,8 @@ function! MyQuickfixFormat() abort
       let dir .= '/'
     endif
     let text = ''
+    " TODO: remove
+    let multipleFiles = 1
     if multipleFiles == 1
       let filename = basename
       if g:my_quickfix#showDir
@@ -548,15 +586,6 @@ function! MyQuickfixRemoveInvalid() abort
   call setqflist(filter(copy(getqflist()), 'v:val.valid == 1'))
 endfunction
 
-" http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list
-function! MyQuickfixFilterQuickfixList(bang, pattern)
-  let cmp = a:bang ? '!~?' : '=~?'
-  call setqflist(filter(getqflist(), "bufname(v:val['bufnr']) "
-        \ . cmp . " a:pattern"))
-endfunction
-command! -bang -nargs=1 -complete=file QFilter call
-      \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
-
 function! MyQuickfixHideWarnings()
   call setqflist(filter(getqflist(), "v:val['type'] == 'E'"))
 endfunction
@@ -578,7 +607,9 @@ function! MyQuickfixFixNewlines() abort
 endfunction
 
 function! MyQlistVars() abort
-  Redir set include? define? includeexpr? suffixesadd?
+  call nb#createTempBuffer('quickfix-vars')
+  call setline('.', execute('set include? define? includeexpr? suffixesadd?')->split("\n"))
+  normal! gg
 endfunction
 
 function! my_quickfix#runContext() abort

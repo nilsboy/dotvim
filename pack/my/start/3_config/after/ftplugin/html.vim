@@ -15,7 +15,8 @@ nnoremap <silent> <buffer> <leader>ej :silent call MyShrinkShrink({
       \ 'beforeRestore': function("MyHtmlShrinkBeforeRestore"),
       \ })<cr>
 
-let b:formatter = 'html-tidy'
+" let b:formatter = 'html-tidy'
+let b:formatter = 'prettier'
 
 if exists("b:did_ftplugin_html")
   finish

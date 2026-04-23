@@ -6,8 +6,8 @@ if exists("persist_to_wd#loaded")
 endif
 let persist_to_wd#loaded = 1
 
-if ! nb#isNeovim()
-  " use viminfo for vim?
+" use viminfo for vim?
+if !has("nvim")
   finish
 endif
 

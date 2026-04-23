@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Run with only one specific plugin
+
+source bash-helpers
+
+plugin=${1:?Specify plugin}
+
+vim -u NONE --cmd "set rtp+=~/.config/nvim/pack/minpac/opt/$plugin/ | packadd $plugin"

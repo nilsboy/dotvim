@@ -10,6 +10,7 @@ let b:outline = '('
 let b:outline .= '^\s{0,4}\S+.*\:(\s*\||)\s*$'
 let b:outline .= '|^\S+.*:'
 let b:outline .= '|^---$'
+let b:outline .= '|^[\s\-]*name\s*\:'
 let b:outline .= ')'
 
 nnoremap <buffer> <silent> K :call CocAction('doHover')<cr>

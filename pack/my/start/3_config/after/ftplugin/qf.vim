@@ -7,7 +7,8 @@ nnoremap <silent> <buffer> <bs> :call my_quickfix#toggle()<cr>
 nmap <buffer> <c-u> <esc><c-u>
 nmap <buffer> <c-o> <esc><c-o>
 
-nmap <buffer> <leader>x :set modifiable \| :keepjumps %s/\\%u00/\\r/g<cr>
+nmap <buffer> <localleader>e :set modifiable<cr>
+nmap <buffer> <localleader>n :set modifiable \| :keepjumps %s/\\%u00/\\r/g<cr>
 
 if BufferIsQuickfix()
   let g:my_quickfix#currentList = 'quickfix'
@@ -19,8 +20,10 @@ if BufferIsQuickfix()
   nnoremap <buffer><silent> L :silent! cnewer \| :call MyStatuslineUpateQickfixValues()<cr>
   nnoremap <buffer><silent> H :silent! colder \| :call MyStatuslineUpateQickfixValues()<cr>
   nnoremap <buffer><silent> <cr> :call MyQfIsQfListError()<cr>
-  nnoremap <buffer><silent> <leader><cr> :silent call MyQfIsQfListError() \| copen<cr>
-  nnoremap <buffer> <silent> x :call qf#closeBuffer()<cr> 
+  nnoremap <buffer><silent> <localleader><cr> :silent call MyQfIsQfListError() \| copen<cr>
+  nnoremap <buffer><silent> x :call qf#closeBuffer()<cr> 
+  nnoremap <buffer> <localleader>g :QFilter<space>
+  nnoremap <buffer> <localleader>v :QFilter!<space>
   augroup MyQfAugroupBufferLeave
     autocmd!
     autocmd BufLeave <buffer> :silent! cclose
@@ -36,7 +39,7 @@ else
   nnoremap <buffer><silent> L :silent! lnewer \| :call MyStatuslineUpateLoclistValues()<cr>
   nnoremap <buffer><silent> H :silent! lolder \| :call MyStatuslineUpateLoclistValues()<cr>
   nnoremap <buffer><silent> <cr> :call MyQfIsLocListError()<cr>
-  nnoremap <buffer><silent> <leader><cr> :silent call MyQfIsLocListError() \| lopen<cr>
+  nnoremap <buffer><silent> <localleader><cr> :silent call MyQfIsLocListError() \| lopen<cr>
   " augroup MyQfAugroupBufferLeave
   "   autocmd!
   "   autocmd BufLeave <buffer> :silent! lclose
@@ -126,4 +129,13 @@ function! MyQfIsLocListError() abort
     call nb#warn('No valid error on current line.')
   endif
 endfunction
+
+" http://dhruvasagar.com/2013/12/17/vim-filter-quickfix-list
+function! MyQuickfixFilterQuickfixList(bang, pattern)
+  let cmp = a:bang ? '!~?' : '=~?'
+  call setqflist(filter(getqflist(), "bufname(v:val['bufnr']) "
+        \ . cmp . " a:pattern"))
+endfunction
+command! -bang -nargs=1 -complete=file QFilter call
+      \ MyQuickfixFilterQuickfixList(<bang>0, <q-args>)
 

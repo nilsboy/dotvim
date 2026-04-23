@@ -5,10 +5,15 @@ let &errorformat = 'errorformatregex:%f:%l:%c:%t:%m'
 
 let &makeprg = "prettier"
 let &makeprg .= " --write"
-let &makeprg .= " --loglevel=error"
-let &makeprg .= " --arrow-parens=always"
-let &makeprg .= " --no-semi"
-let &makeprg .= " --trailing-comma=es5"
+
+if filereadable('.prettierrc')
+elseif filereadable('.prettierrc.json')
+elseif filereadable('.prettierrc.cjs')
+else 
+  let &makeprg .= " --arrow-parens=always"
+  let &makeprg .= " --no-semi"
+  let &makeprg .= " --trailing-comma=es5"
+endif
 
 let &makeprg .= " " . expand("%:p") . " 2>&1"
 
@@ -23,8 +28,11 @@ let &makeprg .= " 'e/^\\s+at\\s+.+?\\s\\((?<file>[^:\\s]+?):(?<row>\\d+?):(?<col
 " /foo/bar:258
 let &makeprg .= " 'e/^(?<file>[^:\\s]+?):(?<row>\\d+?)$/igms'"
 
-" │ [error] doc/queries.mongodb.js: SyntaxError: Missing semicolon. (1:3)
-let &makeprg .= " 'e/\\[error\\]\\s+(?<file>.+)?\\:.+?\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/igms'"
+" [error] doc/queries.mongodb.js: SyntaxError: Missing semicolon. (1:3)
+" [error] bin/test.js: SyntaxError: Missing semicolon. (58:13)
+let &makeprg .= " 'e/\\[error\\]\\s+(?<file>.+?)\\:.+?\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/igms'"
+
+
 
 " TODO:
 " exclude node_modules
