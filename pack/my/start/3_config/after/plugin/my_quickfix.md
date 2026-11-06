@@ -1,4 +1,4 @@
-# Possible features form my_quickfix.vim
+# Possible features for my_quickfix.vim
 
 Use for: linting, makeing, testing, formatting, finding stuff
 
@@ -6,21 +6,19 @@ Use for: linting, makeing, testing, formatting, finding stuff
 
 - https://old.reddit.com/r/vim/comments/j27gi7/just_made_my_first_plugin_vimbettergrep/
 - semgrep: https://news.ycombinator.com/item?id=23919313
-- parse command output by regex
-- require runners to supply a standard output? (move parsing logic to runner
-  script)
+- [DONE] parse command output by regex
 - use jobs api - implies not using makeprg?
-- word with boundaries search
+- [DONE] word with boundaries search
 - and search ignoring order of search words
 - checkout quickfixsigns for resetting the signes on :colder etc
-- use winsaveview to prevent window resizing on copen
-- always close buffer of preview window - is there a plugin for that?
+- [DONE] use winsaveview to prevent window resizing on copen
+- [DONE] always close buffer of preview window - is there a plugin for that?
 - operator for searching
 - stacktrace vs error message line
 - add "exclude file containing" search?:
-  https://www.reddit.com/r/vim/comments/8f5fsf/how_do_you_search_through_all_files_that_contain/
+  [DONE] https://www.reddit.com/r/vim/comments/8f5fsf/how_do_you_search_through_all_files_that_contain/
 - optionally only show one match per file
-- persist quickfix lists?
+- [WONTFIX] persist quickfix lists?
   https://old.reddit.com/r/vim/comments/9iwr41/store_quickfix_list_as_a_file_and_load_it/e6n0qmi/
 
 ## Help

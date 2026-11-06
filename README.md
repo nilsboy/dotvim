@@ -32,3 +32,9 @@ Grep through the source to find more notes.
 
 This setting makes Vim echo the autocommands as it executes them.
 `:set verbose=9`
+
+# TODO
+
+- when opening a tmp file - switch back to curr buf dir when closing again -
+  only happens when not started vim from the wanted dir
+- git-diff-branch

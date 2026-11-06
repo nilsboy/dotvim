@@ -10,17 +10,17 @@ finish
 " - use marks, extended marks or signs? - add later?
 " - save in vim config dir / include the branch?
 "
-" TODO: tests - see my_jumper3.vader
+" TBD: tests - see my_jumper3.vader
 
 " NOTE: mark jumps automatically land in locs if their location is different
 " from the restored position when reopening a buffer see:
 " my_keep_cursor_position.
 
-" TODO: index out of range - check if target exists
-" TODO: before jumping find current buffer in history and move it to top
-" TODO: on jump check if target is current buffer and skip it
-" TODO: if jump fails jump to next
-" TODO: skip closed buffers?
+" TBD: index out of range - check if target exists
+" TBD: before jumping find current buffer in history and move it to top
+" TBD: on jump check if target is current buffer and skip it
+" TBD: if jump fails jump to next
+" TBD: skip closed buffers?
 
 let g:my_jumper3#locs = []
 let g:my_jumper3#maxCount = 100
@@ -38,7 +38,7 @@ augroup my_jumper3#augroupJumper3
   autocmd BufLeave * :call my_jumper3#addIfPosChanged()
   " autocmd CursorHold * :call my_jumper3#add() 
   " autocmd CursorHold * :call my_jumper3#updateStatus()
-  " TODO: on buf change set cur pos / add buf?
+  " TBD: on buf change set cur pos / add buf?
   " autocmd VimLeave * :call my_jumper3#save()
   " autocmd VimEnter * :call my_jumper3#restore()
   " autocmd VimEnter * :call my_jumper3#updateStatus()
@@ -64,9 +64,9 @@ endfunction
 
 function! my_jumper3#addIfPosChanged() abort
   let loc = my_jumper3#getLoc()
-  " TODO: test not working?
+  " TBD: test not working?
   if g:my_jumper3#currentLoc != {}
-    " TODO: test not working?
+    " TBD: test not working?
     if loc.pos == g:my_jumper3#currentLoc.pos
       " call nb#error("same")
       return
@@ -132,7 +132,7 @@ function! my_jumper3#add() abort
   endif
   call my_jumper3#removeDuplicateLoc(loc)
   call add(g:my_jumper3#locs, loc)
-  " TODO: remove?
+  " TBD: remove?
   " let g:my_jumper3#currentIndex = len(g:my_jumper3#locs) - 1
   call my_jumper3#updateStatus() 
 endfunction
@@ -173,7 +173,7 @@ function! my_jumper3#jump(to) abort
     if !filereadable(loc.filename)
       call remove(g:my_jumper3#locs, g:my_jumper3#currentIndex)
       call my_jumper3#updateStatus() 
-      " TODO: jump again?
+      " TBD: jump again?
       return
     endif
     silent execute 'edit ' . loc.filename

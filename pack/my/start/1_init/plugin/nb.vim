@@ -13,13 +13,6 @@ function! nb#debug(msg, ...) abort
   call writefile(["DEBUG> " . a:msg] + a:000, g:nb#logfile, 'a') 
 endfunction
 
-" TODO: remove
-function! nb#mktemp(suffix) abort
-  let tempname = tempname() . "/" . a:suffix . "/"
-  call mkdir(tempname, "p", 0700)
-  return tempname
-endfunction
-
 let s:tempFileCounters = {}
 function! nb#createTempFile(dir, basename = '', ext = '') abort
   let basename = a:basename
@@ -468,7 +461,6 @@ function! MyBufferIsVerySpecial(bufnr) abort
   return bufname(a:bufnr) =~ '\v^__.+__$'
 endfunction
 
-" TODO: remap
 " nnoremap <silent> <leader>O :call MyHelpersOpenOrg()<cr>
 function! MyHelpersOpenOrg() abort
   let fileName = substitute(expand('%:p'), '/txt/', '/pdf/', 'g')
@@ -478,8 +470,6 @@ function! MyHelpersOpenOrg() abort
 endfunction
 command! -nargs=* MyOriginal call MyHelpersOpenOrg(<f-args>)
 
-" TODO:
-" let nb#triedToInstall = {}
 function! nb#install(app, ...) abort
   let cmd = join(a:000)
   if cmd == ''
@@ -552,7 +542,7 @@ function! RegexToPcre(vim_regex) abort
 
   if was_verymagic
     " Always need to escape pipe in shell
-    " TODO:
+    " TBD:
     " let search = substitute(search, '|','\\|','g')
   else
     " PCRE operates a bit like verymagic, so remove some escaping

@@ -1,6 +1,6 @@
 finish
 " Slim, Fast and Hackable Completion Framework for Neovim
-" TODO: try out - currently has errors (2018-07-12)
+" TBD: try out - currently has errors (2018-07-12)
 " TAGS: completion
 PackAdd ncm2/ncm2
 

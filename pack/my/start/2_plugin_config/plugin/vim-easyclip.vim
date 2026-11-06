@@ -7,6 +7,8 @@ finish
 " nnoremap c "_c
 " xnoremap c "_c
 
+PackAdd tpope/vim-repeat
+
 " MyInstall xsel pkexec apt install xsel
 
 " fix indent level
@@ -39,7 +41,7 @@ augroup MyEasyclipAugroupCleanNewLines
   " Workaround from EasyClipRing.vim - changes the whole buffer.
   " Vars are stored with <00> in vim vars - no way to replace them for
   " completion menu
-  " TODO: make this atomic
+  " TBD: make this atomic
   autocmd CompleteDone * :%s/\%x00/\r/ge | call MyEasyclipSavePasteToRegister()
 augroup END
 

@@ -47,7 +47,7 @@ function! s:hl(...) abort
         \ . l:line . ' buffer=' . bufnr('%')
 endfunction
 
-" " TODO: only works when not at the beginning or end of file
+" " TBD: only works when not at the beginning or end of file
 " autocmd VimEnter,VimResized *
 "       \ nnoremap <c-f> :execute ':normal ' . (&lines - 3) . 'j'<cr>
 " autocmd VimEnter,VimResized *

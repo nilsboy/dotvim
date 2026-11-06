@@ -34,5 +34,5 @@ endfunction
 " nnoremap <expr> <CR> foldlevel('.') ? 'za' : 'zfip'
 " nnoremap <CR> zfip
 
-" TODO: only search visible
+" TBD: only search visible
 

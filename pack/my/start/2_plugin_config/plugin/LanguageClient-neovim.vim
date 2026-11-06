@@ -11,7 +11,7 @@ let g:LanguageClient_serverCommands = {
 " call LanguageClient#debugInfo()
 
 let g:LanguageClient_autoStart = 1
-" TODO: checkout using verbose why the plugin listens to keypresses if
+" TBD: checkout using verbose why the plugin listens to keypresses if
 " filetype is not supported.
 " let g:LanguageClient_trace = 'verbose'
 let g:LanguageClient_trace = 'messages'
@@ -27,11 +27,11 @@ nnoremap <silent> <leader>ld :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <leader>lR :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> <leader>lr :call LanguageClient_textDocument_references()<cr>
 nnoremap <silent> <leader>la :call LanguageClient_textDocument_codeAction()<cr>
-" TODO: nnoremap <silent> <leader>lc :call LanguageClient_textDocument_completion()<cr>
+" TBD: nnoremap <silent> <leader>lc :call LanguageClient_textDocument_completion()<cr>
 nnoremap <silent> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
 nnoremap <silent> <leader>lh :call LanguageClient_textDocument_documentHighlight()<cr>
 nnoremap <silent> <leader>le :call LanguageClient_explainErrorAtPoint()<cr>
-" TODO:
+" TBD:
 " *LanguageClient_workspace_symbol()*
 " *LanguageClient_workspace_applyEdit()*
 " Example status line making use of |LanguageClient_serverStatusMessage|.
@@ -53,7 +53,7 @@ PackAdd autozimu/LanguageClient-neovim', 'next', { 'build': 'bash install.sh }
 
 " Support multi projects - by default it seems to stop searching for the
 " project root at the first build.gradle.
-" TODO: create ticket to fix this
+" TBD: create ticket to fix this
 let g:LanguageClient_rootMarkers = {
   \ 'java': ['settings.gradle'],
   \ }

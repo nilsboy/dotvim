@@ -4,8 +4,8 @@ finish
 " - only jump to changes if they are far enough away from each other
 " - save only one entry for files opened but not edited
 
-" TODO: There are a lot more signs than marks - use them instead?
-" TODO: remove escaped buffers from alternate buffer or remove from jump list?
+" TBD: There are a lot more signs than marks - use them instead?
+" TBD: remove escaped buffers from alternate buffer or remove from jump list?
 
 let g:MyJumperDir = stdpath("data") . '/jumper'
 let g:MyJumperFile = g:MyJumperDir . '/jumps'

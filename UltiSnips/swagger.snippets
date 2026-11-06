@@ -1,13 +1,9 @@
-extends all
-
 global !p
-def enum(t, opts):
-	if t:
-		opts = [m[len(t):] for m in opts if m.startswith(t)]
-	if len(opts) == 1:
-		return opts[0]
-	return '|'.join(opts)
+import sys
+from snippet_helpers import *
 endglobal
+
+extends all
 
 snippet init "init" b
 {

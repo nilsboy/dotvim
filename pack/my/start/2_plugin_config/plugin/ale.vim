@@ -20,7 +20,7 @@ let g:ale_emit_conflict_warnings = 0
 
 " let g:ale_linters = {}
 
-" TODO: run formatter first?
+" TBD: run formatter first?
 " let g:ale_lint_delay = 1000
 
 PackAdd w0rp/ale

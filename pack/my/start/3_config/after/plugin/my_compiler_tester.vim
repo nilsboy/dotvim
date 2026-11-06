@@ -6,7 +6,7 @@
 "
 " Based on https://stackoverflow.com/a/29102995
 "
-" TODO: test positive look ahead to end a multiline match see: :h \@=
+" TBD: test positive look ahead to end a multiline match see: :h \@=
 
 function! MyCompilerTesterTest() abort
   silent write

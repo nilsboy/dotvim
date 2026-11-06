@@ -4,7 +4,7 @@ sign define MoreMsg text=i texthl=MoreMsg linehl=MoreMsg
 
 augroup MyQfAugroupHilight
   autocmd!
-  " TODO: only when qf buffer is loaded
+  " TBD: only when qf buffer is loaded
   autocmd BufWinEnter * call MyQuickfixColorsColor()
 augroup END
 

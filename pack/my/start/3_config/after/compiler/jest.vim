@@ -39,7 +39,7 @@ let &makeprg .= " 'e/●.*?at .*?\\((?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\)
 let &makeprg .= " 'e/.*Caught unhandledRejection.*/igms'"
 
 " joi error locations:
-" TODO: fine tune
+" TBD: fine tune
 let &makeprg .= " 'e/\\s+\\[\\d+\\]/igm'"
 
 let &makeprg .= " 'e/No tests found/igm'"
@@ -49,11 +49,11 @@ let &makeprg .= " 'e/exiting with code 1/igm'"
 let &makeprg .= " 'e/(?<file>\\S+?):(?<row>\\d+?):(?<col>\\d+)\\s+\\-\\s+error\\s+TS\\d+/igms'"
 
 
-" TODO:
+" TBD:
 " exclude node_modules
 " let &makeprg .= " 'd/node_modules/igm'"
 
-" TODO:
+" TBD:
 " 549 |     if (!state) {
 " let &makeprg .= " 'd/^\\s+\\d+/igm'"
 

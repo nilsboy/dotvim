@@ -1,4 +1,4 @@
-" TODO: checkout webapi-vim
+" TBD: checkout webapi-vim
 "
 " A REST console for Vim.
 " PackAdd diepm/vim-rest-console

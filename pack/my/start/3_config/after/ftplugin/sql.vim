@@ -7,8 +7,8 @@ setlocal nowrap
 
 let &l:commentstring = '# %s'
 
-" TODO:
-" TODO npm sqlite3 seems to have a good formatter
+" TBD:
+" TBD npm sqlite3 seems to have a good formatter
 function! MySqlFormat() abort
   let t = MyHelpersGetVisualSelection()
   let t = substitute(t, '\n', ' ', 'g')

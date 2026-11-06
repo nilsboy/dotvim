@@ -62,7 +62,7 @@ function! MyJsonFromJavascript() " no abort
   %s/`/"/g
 endfunction
 
-" " TODO: use Commentary User autocmd instead
+" " TBD: use Commentary User autocmd instead
 " nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
 " function! MyJsonCommenter() abort
 "   s/\v"/\\"/g

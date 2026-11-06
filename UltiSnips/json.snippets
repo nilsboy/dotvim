@@ -1,4 +1,6 @@
 global !p
+import sys
+from snippet_helpers import *
 
 def compB(t, opts):
   if t:
@@ -6,7 +8,6 @@ def compB(t, opts):
   if len(opts) == 1:
     return opts[0]
   return "(" + '|'.join(opts) + ')'
-
 endglobal
 
 snippet s "String" w

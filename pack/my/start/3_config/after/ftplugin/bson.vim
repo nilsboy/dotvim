@@ -2,8 +2,6 @@ function! BsonToJson() abort
   let orgFile = expand('%')
   let orgBuffer = bufnr('%')
 
-  " let json = nb#mktemp("bson2json") . expand('%:t') . '.json'
-  " TODO: test
   let json = nb#createTempFile('bson2json', '', 'json')
 
   silent execute 'edit ' . json

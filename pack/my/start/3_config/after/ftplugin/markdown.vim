@@ -25,3 +25,5 @@ endfunction
 nmap <silent> <buffer> <leader>nh :call MyMarkdownToHtml()<cr>
 
 nnoremap <silent> <buffer> <leader>lw :silent call MakeWith({'name': 'tsc', 'compiler': 'tsc'})<cr>
+
+" nnoremap <silent> <buffer> <cr> vi[gf

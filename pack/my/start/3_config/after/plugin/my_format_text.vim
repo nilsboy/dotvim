@@ -2,7 +2,7 @@
 " SEE ALSO: https://www.reddit.com/r/vim/comments/4lvaok/supercharge_vim_formatting_for_plain_text/
 " :help auto-format
 " :help format-comments
-" TODO: if the listpat fits in the previous row the listpat is wrapped into the
+" TBD: if the listpat fits in the previous row the listpat is wrapped into the
 " previous row
 
 function! MyVimrcShowFormatSettings() abort

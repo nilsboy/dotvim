@@ -1,6 +1,6 @@
-" TODO: mapping help page in buffer
-" TODO: nowait?
-" TODO: add git plugin?
+" TBD: mapping help page in buffer
+" TBD: nowait?
+" TBD: add git plugin?
 
 " nmap <buffer><nowait> l <Plug>(fern-action-expand)
 nmap <buffer><expr> <Plug>(fern-my-open-or-expand)

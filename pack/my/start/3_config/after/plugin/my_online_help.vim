@@ -4,8 +4,8 @@ nnoremap <silent><leader>ih yiw :silent wall \| :call MyOnlineHelp(@")<cr>
 nnoremap <silent><leader>iW yiW:call MyOnlineHelp(@")<cr>
 vnoremap <silent><leader>ih y:call MyOnlineHelp(@")<cr>
 
-" TODO: allow jump to complete file
-" TODO: reset search to previous value if leaving buffer?
+" TBD: allow jump to complete file
+" TBD: reset search to previous value if leaving buffer?
 
 function! MyOnlineHelp(term) abort
   let filetype = &filetype

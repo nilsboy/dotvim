@@ -50,7 +50,6 @@ function! nb#buffer#close() abort
     return
   elseif BufferIsLoclist()
     " NOTE: use bw! to prevent - "last window cannot be closed"
-    " TODO: test:
     bw!
     " lclose
     return

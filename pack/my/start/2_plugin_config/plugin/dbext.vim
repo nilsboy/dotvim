@@ -18,31 +18,31 @@ finish
 " Notes:
 " - include other sql files with the 'read ' statement
 "
-" TODO
+" TBD
 " :h dbext-integration
 " take a look at the OMNI SQLComplete plugin
 "
-" TODO: checkout https://github.com/knq/usql
-" TODO: allow to run sql snippets from markdown files
-" TODO: checkout SQLUtilities plugin
+" TBD: checkout https://github.com/knq/usql
+" TBD: allow to run sql snippets from markdown files
+" TBD: checkout SQLUtilities plugin
 " (https://github.com/vim-scripts/SQLUtilities)
-" TODO: for table formatting checkout https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/
-" TODO: use special mapping for altering commands
-" TODO: alert when more rows are found than requested
-" TODO: fix encoding
-" TODO: add submode for navigating screenwise in result
-" TODO: keep header visible - using scrollbind?
-" TODO: default limit
-" TODO: sql formatter
-" TODO: completion
-" TODO: interruptable queries
-" TODO: prepend table name in result if field is not a uniquely named result field
-" TODO: allow to kill a query
-" TODO: shorten long field values
-" TODO: csv output
-" TODO: persistent connection / display of running queries / killing of
+" TBD: for table formatting checkout https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/
+" TBD: use special mapping for altering commands
+" TBD: alert when more rows are found than requested
+" TBD: fix encoding
+" TBD: add submode for navigating screenwise in result
+" TBD: keep header visible - using scrollbind?
+" TBD: default limit
+" TBD: sql formatter
+" TBD: completion
+" TBD: interruptable queries
+" TBD: prepend table name in result if field is not a uniquely named result field
+" TBD: allow to kill a query
+" TBD: shorten long field values
+" TBD: csv output
+" TBD: persistent connection / display of running queries / killing of
 " queries
-" TODO: How to work with columns of text : vim
+" TBD: How to work with columns of text : vim
 " (https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/)
 
 " To control the size of the Result window
@@ -71,7 +71,7 @@ let g:dbext_default_history_max_entry = 0
 
 let  g:dbext_default_DBI_commit_on_disconnect = 0
 
-" TODO - need to reconnect to take effect?
+" TBD - need to reconnect to take effect?
 " let  g:dbext_default_DBI_column_delimiter = ";"
 
 " If you want each buffer to have its OWN Result buffer
@@ -90,12 +90,12 @@ PackAdd dbext.vim, {
 \ }
 
 " Blob fetch length
-" TODO DBSetOption driver_parms=LongReadLen=50
+" TBD DBSetOption driver_parms=LongReadLen=50
 
 let g:dbext_default_usermaps = 0
 " let g:dbext_map_prefix = '<leader><leader>db'
 "
-" TODO: deactivate sql complete
+" TBD: deactivate sql complete
 " :h omni-complete
 
 let g:MyDbextResultsCount = 0
@@ -161,7 +161,7 @@ function! MyDbextAfter(name) abort
   let name = name . '.' . g:MyDbextResultsCount
   let name = '/tmp/' . name . '.sqlresult'
   execute 'buffer ' . g:MyDbextNewBufferNr
-  " TODO: test if vim-rooter works with write
+  " TBD: test if vim-rooter works with write
   " needed otherwise the file might not exist jet!?!
   write
   execute ':Move! ' . fnameescape(name)

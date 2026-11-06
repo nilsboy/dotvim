@@ -46,7 +46,7 @@ set display=lastline,uhex,msgsep
 " Vim will wrap long lines at any character in 'breakat'
 set linebreak
 set breakat&vim
-" TODO: unset by coc?
+" TBD: unset by coc?
 if has("nvim")
   set breakindent
   " more chars:
@@ -106,7 +106,7 @@ set suffixesadd=.txt,.md
 set shellpipe=2>&1\ \|\ tee\ %s;exit\ \${PIPESTATUS[0]}
 
 " set diffopt=filler,internal,algorithm:histogram,indent-heuristic
-" TODO: possible to use word-diff like git?: git diff --word-diff-regex=[^[:space:]]
+" TBD: possible to use word-diff like git?: git diff --word-diff-regex=[^[:space:]]
 set diffopt+=algorithm:patience,indent-heuristic,iwhiteall,iblank
 let &fillchars = "diff: ,eob: "
 

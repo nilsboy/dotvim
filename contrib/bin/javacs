@@ -16,7 +16,7 @@ cd $HOME/tmp/vscode-javac/out/
 # Using javaconfig.json is deprecated but there does not seem to be another
 # way when using the standalone version.
 
-# TODO: add sources to gradle conf
+# TBD: add sources to gradle conf
 
 export CLASSPATH=$(pwd)/fat-jar.jar
 java org.javacs.Main

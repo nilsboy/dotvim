@@ -1,8 +1,8 @@
 finish
-" TODO: jump to current if last
+" TBD: jump to current if last
 "
-" TODO: add key to add entry before current or just first?
-" TODO: don't jump into special buffers
+" TBD: add key to add entry before current or just first?
+" TBD: don't jump into special buffers
 
 " NOTE: Marks keep their position even if the underlying character moves.
 " NOTE: Marks can be restored using undo and redo.

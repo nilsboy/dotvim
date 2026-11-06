@@ -23,7 +23,7 @@ endif
 
 let &makeprg .= " " . expand("%:p") . " 2>&1"
 
-" TODO: add rules
+" TBD: add rules
 let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
 
 " Oops! Something went wrong! :(

@@ -337,7 +337,7 @@ function! MyQuickfixAddMappings(key, options) abort
 endfunction
 nnoremap <silent> <leader>f <nop>
 
-nnoremap <silent> <leader>fT :call MyQuickfixSearch({ 'term': 'TODO', 'ignoreCase': 0 })<cr>
+nnoremap <silent> <leader>fT :call MyQuickfixSearch({ 'term': 'TODO\:', 'ignoreCase': 0 })<cr>
 
 function! MyQuickfixFindInBuffer() abort
   return { 'find': 0, 'path': expand('%:p') }
@@ -373,11 +373,21 @@ nnoremap <leader>*  :normal! <leader>fbw<cr>
 
 nnoremap <silent> <leader>jt :call my_quickfix#tree()<cr>
 function! my_quickfix#tree(...) abort
-  let output = trim(execute('!tree -C --summary --no-color --exclude node_modules'))
+  let output = trim(execute('!tree --ascii -C --summary --no-color --exclude node_modules'))
   call nb#createTempBuffer('tree', '', 'txt')
   silent put!=output
   keepjumps normal! gg0jj
 endfunction
+
+
+nnoremap <silent> <leader>jT :call my_quickfix#dirTree()<cr>
+function! my_quickfix#dirTree(...) abort
+  let output = trim(execute('!tree --ascii -d -C --summary --no-color --exclude node_modules'))
+  call nb#createTempBuffer('tree', '', 'txt')
+  silent put!=output
+  keepjumps normal! gg0jj
+endfunction
+
 
 call MyQuickfixAddMappings('fp', { 'path': '~/src/' })
 nnoremap <silent> <leader>fpp :edit ~/src/README.md<cr>
@@ -405,7 +415,7 @@ function! MyQuickfixOutline(location) abort
     call MyQuickfixSearch({ 'term': pcreDefine, 'find': 0, 'multiline': 0, 'exact': 1})
   endif
   call setqflist([], 'a', { 'title' : 'outline' })
-  " TODO: loop over qf list to find line closest to current and set it
+  " TBD: loop over qf list to find line closest to current and set it
 endfunction
 nnoremap <silent> <leader>o :call MyQuickfixOutline('bufferOnly')<cr>
 nnoremap <silent> <leader>O :call MyQuickfixOutline('wholeProject')<cr>
@@ -471,7 +481,7 @@ function! MyQuickfixFormat() abort
       let dir .= '/'
     endif
     let text = ''
-    " TODO: remove
+    " TBD: remove
     let multipleFiles = 1
     if multipleFiles == 1
       let filename = basename
@@ -557,7 +567,7 @@ augroup MyQuickfixAugroupFormat
   autocmd FileType qf call MyQuickfixFormat()
 augroup END
 
-" TODO: keep cursor position in qf
+" TBD: keep cursor position in qf
 " nnoremap <silent> <cmd> 5 {-> execute('pedit ' . MyQuickfixGetCurrent().filename)}
 " nnoremap <silent> <cmd> 5 execute 'pedit ' . MyQuickfixGetCurrent().filename<cr>
 " nnoremap <leader>5 :call MyQuickfixPreview()<cr>
@@ -596,7 +606,7 @@ function! MyQuickfixIsError() abort
   echo getqflist()[getcurpos()[1]-1].valid
 endfunction
 
-" TODO: split by \r and add new entries to the quickfix
+" TBD: split by \r and add new entries to the quickfix
 " Vars are stored with <00> in vim and don't result in new lines when printed
 function! MyQuickfixFixNewlines() abort
   let qflist = getqflist()

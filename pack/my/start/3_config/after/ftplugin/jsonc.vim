@@ -47,8 +47,6 @@ function! MyJsonToYaml() abort
   silent wall
   let src = expand("%:p")
 
-  " let dst = nb#mktemp("json2yaml") . expand("%:t:r") . '.yaml'
-  " TODO: test
   let dst = nb#createTempFile('json2yaml', '', 'yaml')
 
   execute '!json2yaml ' . src . ' > ' . dst
@@ -73,7 +71,7 @@ function! MyJsonFromJavascript() " no abort
 endfunction
 command! -nargs=* JsonFromJavascipt call MyJsonFromJavascript(<f-args>)
 
-" " TODO: use Commentary User autocmd instead
+" " TBD: use Commentary User autocmd instead
 " nnoremap <silent> <buffer> gcc :call MyJsonCommenter()<cr>
 " function! MyJsonCommenter() abort
 "   s/\v"/\\"/g

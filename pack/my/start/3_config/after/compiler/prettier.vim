@@ -32,9 +32,7 @@ let &makeprg .= " 'e/^(?<file>[^:\\s]+?):(?<row>\\d+?)$/igms'"
 " [error] bin/test.js: SyntaxError: Missing semicolon. (58:13)
 let &makeprg .= " 'e/\\[error\\]\\s+(?<file>.+?)\\:.+?\\((?<row>\\d+)\\:(?<col>\\d+)\\)$/igms'"
 
-
-
-" TODO:
+" TBD:
 " exclude node_modules
 " let &makeprg .= " 'd/node_modules/igm'"
 

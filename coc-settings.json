@@ -1,5 +1,5 @@
 {
-  // TODO: test: Go to implementation instead type definition:
+  // TBD: test: Go to implementation instead type definition:
   "typescript.preferGoToSourceDefinition": true,
 
   // does not help with no implicit any

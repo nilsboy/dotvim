@@ -43,6 +43,7 @@ function! MakeWith(opts) abort
     else
       call nb#debug("Running make with &makeprg:", &makeprg)
       silent execute 'make! ' . args
+      " silent execute 'make! ' . args . ' \| tee /tmp/bla '
     endif
   catch
     execute 'cd ' . currentCwd

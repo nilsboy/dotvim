@@ -86,7 +86,7 @@ execute  'hi! TabLine       guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi! TabLineFill   guibg='s:greyLight' guifg='s:none' gui='s:none
 execute  'hi! TabLineSel    guibg='s:greenLight' guifg='s:none' gui='s:none
 
-" TODO:
+" TBD:
 " checkout cterm=reverse to change priority with CursorLine:
 " https://old.reddit.com/r/vim/comments/ga4xe0/why_use_reverse_for_tui_highlights/
 execute  'hi! Cursor        guibg='s:none' guifg='s:none' gui='s:none
@@ -136,7 +136,7 @@ execute  'hi! ErrorSign     guibg='s:greyBright' guifg='s:red' gui='s:none
 execute  'hi! WarningSign   guibg='s:greyBright' guifg='s:yellow' gui='s:none
 execute  'hi! InfoSign      guibg='s:greyBright' guifg='s:green' gui='s:none
 
-" TODO:
+" TBD:
 " https://stackoverflow.com/questions/60589935/vim-change-highlight-of-current-quickfix-line-quickfixline
 execute 'hi! QuickFixLine guibg='s:blueBright' guifg='s:blackLight' gui='s:none
 " hi! QuickFixLine gui=bold 

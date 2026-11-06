@@ -1,12 +1,6 @@
 global !p
-def toggle(t, opt):
-  opts = t.split('|')
-  pos = opts.index(opt)
-  if len(opts) == pos + 1:
-    pos = 0
-  else:
-    pos = pos + 1
-  return opts[pos]
+import sys
+from snippet_helpers import *
 endglobal
 
 snippet profile "Set dbext profile name" b

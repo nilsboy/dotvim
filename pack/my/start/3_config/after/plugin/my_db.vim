@@ -8,32 +8,32 @@
 "
 " SEE ALSO: :h sql
 "
-" TODO: Completion:
+" TBD: Completion:
 " - take a look at the OMNI SQLComplete plugin
 " - include other sql files with the 'read ' statement
 " - deactivate sql complete
 "   :h omni-complete
 
-" TODO: dump whole db for grepping
-" TODO: checkout https://github.com/knq/usql
-" TODO: allow to run sql snippets from markdown files
-" TODO: checkout SQLUtilities plugin
+" TBD: dump whole db for grepping
+" TBD: checkout https://github.com/knq/usql
+" TBD: allow to run sql snippets from markdown files
+" TBD: checkout SQLUtilities plugin
 " (https://github.com/vim-scripts/SQLUtilities)
-" TODO: for table formatting checkout https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/
-" TODO: use special mapping for altering commands
-" TODO: alert when more rows are found than requested
-" TODO: add submode for navigating screenwise in result
-" TODO: keep header visible - using scrollbind?
-" TODO: sql formatter
-" TODO: interruptable queries
-" TODO: prepend table name in result if field name is not uniq
-" TODO: allow to kill a query
-" TODO: csv output
-" TODO: persistent connection / display of running queries / killing of
+" TBD: for table formatting checkout https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/
+" TBD: use special mapping for altering commands
+" TBD: alert when more rows are found than requested
+" TBD: add submode for navigating screenwise in result
+" TBD: keep header visible - using scrollbind?
+" TBD: sql formatter
+" TBD: interruptable queries
+" TBD: prepend table name in result if field name is not uniq
+" TBD: allow to kill a query
+" TBD: csv output
+" TBD: persistent connection / display of running queries / killing of
 " queries
-" TODO: How to work with columns of text : vim
+" TBD: How to work with columns of text : vim
 " (https://www.reddit.com/r/vim/comments/6b4s2b/how_to_work_with_columns_of_text/)
-" TODO: checkout https://github.com/chrisbra/csv.vim
+" TBD: checkout https://github.com/chrisbra/csv.vim
 "
 " DONE: fix encoding
 " DONE: shorten long field values
@@ -41,15 +41,16 @@
 
 let g:MyDbConfigConfigDir = $HOME . '/.config/dbdump'
 let g:MyDbConfigProfileName = 'specifyProfileName'
+let g:MyDbInfos = $HOME . '/src/db/README.md'
 
 nnoremap <leader>d <nop>
 
-nnoremap <silent> <leader>di  :call MyDbInfos()<cr>
-nnoremap <silent> <leader>dp  mz"zyiw:call MyDbConfigSetProfile(@z)<cr>
+nnoremap <silent> <leader>di :execute("edit " . g:MyDbInfos)<cr>
+nnoremap <silent> <leader>dp mz"zyiw:call MyDbConfigSetProfile(@z)<cr>
 
-nnoremap <silent> <leader>dP  mz:call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
+nnoremap <silent> <leader>dP mz:call MyDbExecSql('SHOW PROCESSLIST', '[processlist]')<cr>
 
-nnoremap <silent> <leader>dd  mz"zyip:call MyDbExecSql(@z, '[query]', '', 1)<cr>
+nnoremap <silent> <leader>dd mz"zyip:call MyDbExecSql(@z, '[query]', '', 1)<cr>
 
 nnoremap <silent> <leader>dtt mz:call MyDbExecSql('SHOW TABLES', '[tables]')<cr>
 nnoremap <silent> <leader>dtD mz:call MyDbExecSql('SHOW DATABASES', '[databases]')<cr>
@@ -83,7 +84,7 @@ function! MyDbExecSql(...) abort
   let cmd_options = get(a:000, 2, '')
   let add_counter = get(a:000, 3, 0)
 
-  " TODO: hack
+  " TBD: hack
   " Restore cursor position - `normal y` moves cursor - in manual mode prevented
   " by easyclip plugin
   silent! normal! `z
@@ -94,9 +95,9 @@ function! MyDbExecSql(...) abort
     let limit = ' --limit ' . limit . ' '
   endif
 
-  " TODO: test
+  " TBD: test
   let filename = nb#createTempBuffer('sql', name, 'sqlresult')
-  " TODO: remove?:
+  " TBD: remove?:
   " silent! normal! 1,$"_dd
 
   call nb#debug('Query: ' . sql)
@@ -123,31 +124,7 @@ command! -nargs=* MyDbConfigSetProfile call MyDbConfigSetProfile (<f-args>)
 function! MyDbConfigSetProfile(...) abort
   silent! normal! `z
   let g:MyDbConfigProfileName = a:1
-  call nb#debug('Setting db profile name: ' .. g:MyDbConfigProfileName)
-endfunction
-
-function! MyDbInfos() abort
-  let file = nb#createTempBuffer('db-infos', "db-infos")
-
-  " 1,$"_d
-  normal! i### SQLs
-  silent execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.sql'
-  silent execute 'r! ls -t ' . $HOME . '/src/sql/queries/*.md'
-  normal! o
-  normal! o
-  normal! i### Database profiles
-  execute 'normal! o' . g:MyDbConfigConfigDir . '/default.yaml'
-  execute 'normal! o' . $HOME . '/src/myconf/README.md'
-  execute 'normal! o' . $HOME . '/src/dbdump/README.md'
-  normal! o
-  normal! o
-  normal! i### Table Data Excerpts
-  execute 'normal! o' . $HOME . '/src/sql/table-data-excerpt/README.md'
-  normal! o
-  normal! o### Mappings
-  silent put=execute('map \\d')
-  normal! gg
-  let b:outline = '^### '
+  call nb#info('Setting db profile name: ' .. g:MyDbConfigProfileName)
 endfunction
 
 nnoremap <leader>dK mz"zyiw:call MyDbConfigKillProcess(@z)<cr>

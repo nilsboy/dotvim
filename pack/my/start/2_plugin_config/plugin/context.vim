@@ -19,4 +19,4 @@ PackAdd wellle/context.vim
 
 nnoremap <silent> <leader>jc :ContextToggle<cr>
 
-" TODO: test: change autocmds to only update on cursor hold?
+" TBD: test: change autocmds to only update on cursor hold?

@@ -11,6 +11,10 @@ if [[ $1 ]] ; then
 fi
 endsnippet
 
+snippet ifEmptyFail "" w
+: "\${$1:?\\$$1 must be set and not empty}"
+endsnippet
+
 snippet elseif "elseif" b
 elif [[ $1 ]] ; then
 endsnippet
@@ -30,6 +34,10 @@ endsnippet
 
 snippet argv "ask for missing option" w
 $1=\$\{1$0:?Specify $1\}
+endsnippet
+
+snippet envCheckNotEmpty "" w
+: "${$0:?}"
 endsnippet
 
 snippet default "set default value if var is empty" b

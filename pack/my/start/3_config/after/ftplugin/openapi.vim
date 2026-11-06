@@ -1,4 +1,4 @@
-" " TODO: use coc-yaml with an openapi schema instead
+" " TBD: use coc-yaml with an openapi schema instead
 " augroup MyOpenApiAugroupLint
 "   autocmd!
 "   " TBD: TextChanged stops UltiSnips snippet expansion

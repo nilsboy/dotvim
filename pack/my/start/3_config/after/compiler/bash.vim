@@ -1,4 +1,4 @@
-" TODO:
+" TBD:
 let &errorformat  = '%m'
 
 let &makeprg = '$* 2>&1'

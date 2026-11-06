@@ -18,7 +18,7 @@ let &makeprg .= " 'e/^\\s+at\\s+.+?\\s\\((?<file>[^:\\s]+?):(?<row>\\d+?):(?<col
 " /foo/bar:258
 let &makeprg .= " 'e/^(?<file>[^:\\s]+?):(?<row>\\d+?)$/igms'"
 
-" TODO:
+" TBD:
 " exclude node_modules
 " let &makeprg .= " 'd/node_modules/igm'"
 

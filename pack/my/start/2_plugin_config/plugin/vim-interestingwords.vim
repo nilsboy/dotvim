@@ -1,5 +1,5 @@
 finish
-" TODO: clobbers <leader>k
+" TBD: clobbers <leader>k
 " highlight and navigate through (multiple) different words in a buffer 
 PackAdd lfv89/vim-interestingwords 
 " TAGS: search highlight colors

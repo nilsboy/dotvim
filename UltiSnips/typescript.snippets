@@ -1,3 +1,8 @@
+global !p
+import sys
+from snippet_helpers import *
+endglobal
+
 priority 1
 extends javascript
 
@@ -46,87 +51,27 @@ class-transformer:
 }
 endsnippet
 
-global !p
-
-def toggle(t, opt):
-  opts = t.split('|')
-  pos = opts.index(opt)
-  if len(opts) == pos + 1:
-    pos = 0
-  else:
-    pos = pos + 1
-  return opts[pos]
-
-def toCamelCase(v):
-  v = re.sub(r'.*/', r'', v)
-  return re.sub(r'(\W)', r'', v.title())
-  return v
-  v = re.sub(r'^[\/\.]+', r'', v)
-  return v
-  return v.title()
-  return re.sub(r'(\W)', r'', v.title())
-
-def toMethodCase(v):
-  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-  v = re.sub(r'^[\.\/]*', r'', v)
-  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
-
-def toSnakeCase(v):
-  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', v)
-  return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
-def toSnailCase(v):
-  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1-\2', v)
-  return re.sub('([a-z0-9])([A-Z])', r'\1-\2', s1).lower()
-
-def classNameOld():
-  v = snip.basename[0:1].upper()
-  v = v + re.sub(r'(\W)', r'', snip.basename.title()[1:])
-  return v
-
-def className():
-  v = snip.basename[0:1].upper()
-  v = v + snip.basename[1:]
-  return v
-
-def classNameSingular():
-  v = snip.basename[0:1].upper()
-  v = v + snip.basename[1:]
-  v = re.sub(r'Contexts$', r'Context', v)
-  return v
-
-def classNameWithoutContext():
-  v = snip.basename[0:1].upper()
-  v = v + snip.basename[1:]
-  v = re.sub(r'Context$', r'', v)
-  return v
-
-def escape(v):
-  return re.sub(r'`', r'\`', v)
-
-endglobal
-
 snippet class "class" w
-export class ${1:`!p snip.rv = className()`}$2 {
+export class ${1:`!p snip.rv = className(snip)`}$2 {
   ${VISUAL}$0
 }
 endsnippet
 
 snippet interface "interface" w
-export interface `!p snip.rv = className()` {
+export interface `!p snip.rv = className(snip)` {
   ${VISUAL}$0
 }
 endsnippet
 
 # NOTE: typescript enums can not use objects as values
 snippet enumNonObject "enum" w
-export enum `!p snip.rv = className()`$2 {
+export enum `!p snip.rv = className(snip)`$2 {
 	${1:name} = ${0:value}
 }
 endsnippet
 
 snippet enum "enum" b
-export const ${1:`!p snip.rv = className()`}$2 = {
+export const ${1:`!p snip.rv = className(snip)`}$2 = {
   ${3:key1}: ${4:value1},$0
 } as const
 export type $1 = typeof $1[keyof typeof $1]
@@ -146,7 +91,7 @@ public constructor($1) {
 endsnippet
 
 snippet conContext "constructor" b
-public constructor(dto: `!p snip.rv = className()`$1) {
+public constructor(dto: `!p snip.rv = className(snip)`$1) {
 	this.dto = dto$0
 }
 endsnippet
@@ -271,7 +216,7 @@ export class $1 extends CustomError {
 endsnippet
 
 snippet errorSubClass "error definition" b
-export class $0Error extends `!p snip.rv = className()` {}
+export class $0Error extends `!p snip.rv = className(snip)` {}
 endsnippet
 
 snippet e "e" b
@@ -373,8 +318,8 @@ endsnippet
 
 snippet classContextIterator "contextIterator" b
 // TODO: fixed?: see ProductOrderItemContexts for [Symbol.iterator]() fix
-export class `!p snip.rv = className()`
-  implements Iterator<${1:`!p snip.rv = classNameSingular()`}>
+export class `!p snip.rv = className(snip)`
+  implements Iterator<${1:`!p snip.rv = classNameSingular(snip)`}>
 {
   dto: $1[]
   iterator: Iterator<$1>
@@ -384,7 +329,7 @@ export class `!p snip.rv = className()`
   }
 
   [Symbol.iterator]() {
-    return new `!p snip.rv = className()`(this.dto)
+    return new `!p snip.rv = className(snip)`(this.dto)
   }
 
   next(
@@ -400,7 +345,7 @@ export class `!p snip.rv = className()`
     }
   }
 
-  toArray(): ${1:`!p snip.rv = classNameSingular()`}[] {
+  toArray(): ${1:`!p snip.rv = classNameSingular(snip)`}[] {
     return Array.from(this)
   }
 
@@ -411,13 +356,13 @@ export class `!p snip.rv = className()`
 endsnippet
 
 snippet classContext "classContext" b
-import { `!p snip.rv = classNameWithoutContext()` } from "./types/`!p snip.rv = classNameWithoutContext()`"
+import { `!p snip.rv = classNameWithoutContext(snip)` } from "./types/`!p snip.rv = classNameWithoutContext(snip)`"
 import { contextProxyHandler } from "./contextProxyHandler"
 
-export class `!p snip.rv = className()` extends `!p snip.rv = classNameWithoutContext()` {
-  dto: `!p snip.rv = classNameWithoutContext()`
+export class `!p snip.rv = className(snip)` extends `!p snip.rv = classNameWithoutContext(snip)` {
+  dto: `!p snip.rv = classNameWithoutContext(snip)`
 
-  public constructor(dto: `!p snip.rv = classNameWithoutContext()`) {
+  public constructor(dto: `!p snip.rv = classNameWithoutContext(snip)`) {
     super()
     this.dto = dto
     return new Proxy(this, contextProxyHandler)

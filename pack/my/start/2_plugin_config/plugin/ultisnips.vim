@@ -74,6 +74,13 @@ augroup MyUltisnipsColorFix
   autocmd ColorScheme,Syntax,FileType * highlight! link snipLeadingSpaces normal
 augroup END
 
+" fix snippets sometimes not reloading when changed
+" may also need :CocRestart to reload the dropdown?
+augroup ultisnips#augroupFixSnippetFileUpdates
+  autocmd!
+  autocmd BufWritePost *.snippets :call UltiSnips#RefreshSnippets()
+augroup END
+
 nnoremap <silent><leader>js :execute ":edit "
       \ . stdpath('config') . "/UltiSnips/" . &filetype
       \ . ".snippets"<cr>

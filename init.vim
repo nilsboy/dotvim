@@ -47,12 +47,6 @@ filetype on
 filetype plugin on
 filetype indent on
 
-" augroup z0_my_vimrc#augroupReloadVimrcOnWrite
-"   autocmd!
-"   autocmd BufWritePost $MYVIMRC nested source $MYVIMRC
-" augroup END
-
-" TODO:
 " set verbosefile=/tmp/vim-debug.log
 " set verbose=13
 

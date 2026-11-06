@@ -1,35 +1,6 @@
 global !p
-
-def toCamelCase(v):
-  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-  v = re.sub(r'[\.\/]*', r'', v)
-  v = v.title()
-  v = re.sub(r'[\W\-_]*', '', v)
-  return v
-
-def toMethodCase(v):
-  v = re.sub(r'(.+)\.[^.]*$', r'\1', v)
-  v = re.sub(r'[\.\/]*', r'', v)
-  return v[0:1].lower() + re.sub(r'(\W)', r'', v.title()[1:])
-
-def toSnakeCase(v):
-  s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', v)
-  return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
-def ucfirst(v):
-  return v[0].upper() + v[1:]
-
-# clean file name to produce a name for vim var usage
-def cfname(v):
-  v = re.sub(r'\W', r'_', v).lower()
-  v = re.sub(r'^my_', '', v)
-  v = re.sub(r'vim_', '', v)
-  v = re.sub(r'_vim', '', v)
-  return 'My_' + v
-
-def fncc(v):
-  return toCamelCase(cfname(v))
-
+import sys
+from snippet_helpers import *
 endglobal
 
 snippet command "command" b
@@ -323,6 +294,10 @@ endsnippet
 
 snippet map "map" b
 nnoremap <silent> ${1:<leader>}$0
+endsnippet
+
+snippet "exit" "" r
+finish
 endsnippet
 
 snippet "(.*)finish" "finish" r

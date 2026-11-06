@@ -11,6 +11,6 @@ let &makeprg  = "my_javascript_formatter"
 let &makeprg .= " % 2>&1"
 
 " let &makeprg .= " \\| errorformatregex --filename " . expand("%:p")
-" TODO:
+" TBD:
 let &makeprg .= " \\| errorformatregex"
 

@@ -1,5 +1,5 @@
-" TODO: add?: https://github.com/lebab/lebab
-" TODO: Get source of core node modules: i.e. process.binding("natives").assert
+" TBD: add?: https://github.com/lebab/lebab
+" TBD: Get source of core node modules: i.e. process.binding("natives").assert
 
 " NOTE: use `node --prof` for a call trace
 
@@ -14,7 +14,7 @@ let b:formatter = 'prettier'
 let b:myrunprg = 'vite-node'
 let b:tester = 'vitest' 
 
-" TODO:
+" TBD:
 " let b:formatter = 'my-javascript'
 
 " support module filenames

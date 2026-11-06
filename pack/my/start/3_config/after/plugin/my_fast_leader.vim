@@ -1,5 +1,5 @@
 finish
-" TODO: test - can make the insert leader fast?
+" TBD: test - can make the insert leader fast?
 inoremap <expr><silent> <space> Smartcomma()
 function! Smartcomma() abort
     let [bufnum, lnum, col, off, curswant] = getcurpos()

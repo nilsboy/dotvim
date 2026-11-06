@@ -18,7 +18,7 @@ syntax match WarningMsg /warn\s*>.*/
 syntax match Comment /debug>.*/
 syntax match Comment /['`"].*['`"]/
 
-" TODO: integrate into errorformatregex to output prefix for non interesting lines
+" TBD: integrate into errorformatregex to output prefix for non interesting lines
 syntax match Comment /at.*\(node\:.*\)/
 syntax match Comment /at.*\(.*node_modules.*\)/
 syntax match Comment /at.*\(<anonymous>\)/

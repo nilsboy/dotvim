@@ -1,3 +1,8 @@
+global !p
+import sys
+from snippet_helpers import *
+endglobal
+
 ### global snippets
 
 ### global paths
@@ -7,17 +12,6 @@
 ###
 
 priority -1
-
-global !p
-def toggle(t, opt):
-  opts = t.split('|')
-  pos = opts.index(opt)
-  if len(opts) == pos + 1:
-    pos = 0
-  else:
-    pos = pos + 1
-  return opts[pos]
-endglobal
 
 ### Brackets
 
@@ -239,8 +233,12 @@ snippet '(^\s*).*see' "see also" r
 `!v nb#surroundings()[0]`SEE ALSO:$0`!v  nb#surroundings()[1]`
 endsnippet
 
-snippet password "generate a secure password" w
+snippet password "" w
 `apg -M SNC -n 1 -m 10`
+endsnippet
+
+snippet passwordPIN "" w
+`apg -a 1 -M N -m 6 -x 6 -n 1`
 endsnippet
 
 snippet ls "ls" b

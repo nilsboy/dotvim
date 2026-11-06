@@ -3,7 +3,7 @@ finish
 PackAdd terryma/vim-expand-region
 " TAGS: textobj
 
-" TODO: find sensible mapping?
+" TBD: find sensible mapping?
 " nmap <cr> <Plug>(expand_region_expand)
 " vmap <bs> <Plug>(expand_region_shrink)
 

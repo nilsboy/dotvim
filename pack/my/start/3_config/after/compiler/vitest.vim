@@ -34,7 +34,7 @@ let &makeprg .= " \\| errorformatregex"
 " let &makeprg .= " 'e/.*Caught unhandledRejection.*/igms'"
 
 " " joi error locations:
-" " TODO: fine tune
+" " TBD: fine tune
 " let &makeprg .= " 'e/\\s+\\[\\d+\\]/igm'"
 
 " let &makeprg .= " 'e/No tests found/igm'"

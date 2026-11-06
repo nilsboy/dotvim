@@ -19,29 +19,36 @@ endfunction
 " > Note: for rename import on file rename, you have to install watchman in your $PATH.
 " NOTE: Ubuntu (2025-08-26) has a very old version of watchman that leaves lots
 " of file handles open and does not update watchman.
-MyInstall watchman pkexec apt install watchman
+" NOTE: watchman actually optional? falls back to node watcher? May depend on
+" the lsp server. tsserver may handle it itself - others might not.
+" NOTE: make sure watchman is NOT installed
+" MyInstall watchman pkexec apt install watchman
 
 call PackAdd('neoclide/coc.nvim', {'do': {-> MyCocInstall()}})
 call coc#add_extension('coc-tsserver')
 call coc#add_extension('coc-ultisnips')
 call coc#add_extension('coc-json')
+call coc#add_extension('coc-html')
+call coc#add_extension('coc-css')
 
 " NOTE: loads jars and complains for missing jars - even when it is not used?!?:
-call coc#add_extension('coc-java')
+" call coc#add_extension('coc-java')
 
 " call coc#add_extension('coc-phpls')
 call coc#add_extension('coc-yaml')
 " TBD: produces isKeyword error when opening a .vim file
 call coc#add_extension('coc-vimlsp')
-call coc#add_extension('@yaegassy/coc-tailwindcss3')
+" call coc#add_extension('@yaegassy/coc-tailwindcss3')
 " call coc#add_extension('coc-swagger')
 
 " NOTE: needs pip3 install jedi
-call coc#add_extension('coc-python')
+" call coc#add_extension('coc-python')
+"
+call coc#add_extension('coc-pyright')
 
-" TODO: test
+" TBD: test
 " call coc#add_extension('coc-sql')
-" TODO: test
+" TBD: test
 " call coc#add_extension('coc-sqlfluff')
 
 nmap <silent> <leader>ld <Plug>(coc-definition)

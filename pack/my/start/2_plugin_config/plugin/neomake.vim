@@ -1,8 +1,8 @@
 finish
 " A plugin for asynchronous :make using Neovim's job-control functionality
 PackAdd neomake/neomake
-" TODO: checkout neomake-vim-autoformat.vim
-" TODO: see statusline support from neomake
+" TBD: checkout neomake-vim-autoformat.vim
+" TBD: see statusline support from neomake
 " Note: Does not support stdin:
 " https://github.com/neomake/neomake/issues/190
 
@@ -12,11 +12,11 @@ PackAdd neomake/neomake
 
 let g:neomake_ft_maker_remove_invalid_entries = 0
 
-" TODO: change for speedup? / screws with separator between file search and
+" TBD: change for speedup? / screws with separator between file search and
 " let g:neomake_serialize = 1
 let g:neomake_echo_current_error = 1
 
-" TODO: disable for linting?
+" TBD: disable for linting?
 let g:neomake_open_list = 0
 
 let g:neomake_highlight_columns = 1

@@ -1,7 +1,7 @@
 " Generate table of contents for Markdown files
 PackAdd mzlogin/vim-markdown-toc
 
-" TODO: replace with remark formatter?
+" TBD: replace with remark formatter?
 
 let g:vmt_dont_insert_fence = 1
 

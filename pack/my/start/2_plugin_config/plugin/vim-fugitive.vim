@@ -44,7 +44,7 @@ nnoremap <silent> <leader>gA :silent !git add -A .<cr>
 
 nnoremap <silent> <leader>gC :!git checkout %<cr>
 
-" TODO:
+" TBD:
 " nnoremap <silent> <leader>gM :call MyFugitiveMasterDiff()<cr>
 function! MyFugitiveMasterDiff() abort
   call nb#createTempBuffer('GitDiffMaster', '', 'diff')
@@ -54,10 +54,13 @@ function! MyFugitiveMasterDiff() abort
   " setlocal filetype=diff
 endfunction
 
-nnoremap <silent> <leader>gg :call MakeWith({'name': 'myrunprg', 'compiler': 'git-status', 'args': ''})<cr>
+" nnoremap <silent> <leader>gg :call MakeWith({'name': 'myrunprg', 'compiler': 'git-status', 'args': ''})<cr>
 " nnoremap <silent> <leader>fg :let &g:errorformat = '%f' \| cgetexpr system('git diff-files --name-only --diff-filter=d') \| :copen<cr>
 
-nnoremap <silent> <leader>gS :let &g:errorformat = '%f' \| cgetexpr system('git diff --name-only --diff-filter=d dev --') \| :copen<cr>
+nnoremap <silent> <leader>gS :let &g:errorformat = '%f' \| cgetexpr system('git diff --name-only --diff-filter=d main --') \| :copen<cr>
 
 " diff --name-only dev -- 
+
+" nnoremap <silent> <leader>gg :cexpr system('git diff --name-status main')
+nnoremap <silent> <leader>gg :call MakeWith({'compiler': 'git-diff-branch'})<cr>
 
