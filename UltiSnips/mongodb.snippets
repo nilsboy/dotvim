@@ -3,11 +3,6 @@
 
 # config: ~/.mongoshrc.js
 
-global !p
-import sys
-from snippet_helpers import *
-endglobal
-
 snippet show "show collections" b
 show collections
 endsnippet
@@ -624,13 +619,13 @@ snippet join "join" b
 {
   $lookup: {
     from: "${1:other collection}",
-    localField: "`!p snip.rv = lcFirst(t[1])`.id",
+    localField: "`!v SnLcFirst(1)`.id",
     foreignField: "id",
-    as: "`!p snip.rv = lcFirst(t[1])`",
+    as: "`!v SnLcFirst(1)`",
   },
 },
 {
-  $unwind: "$`!p snip.rv = lcFirst(t[1])`"
+  $unwind: "$`!v SnLcFirst(1)`"
 },
 endsnippet
 

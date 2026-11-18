@@ -1,14 +1,9 @@
-global !p
-import sys
-from snippet_helpers import *
-endglobal
-
 snippet command "command" b
 function! $1(...) abort
   let cmd = join(a:000)
   ${VISUAL}$0
 endfunction
-command! -nargs=* ${1:`!p snip.rv = fncc(snip.basename)`}$2 call $1(<f-args>)
+command! -nargs=* ${1:`!v SnFncC()`}$2 call $1(<f-args>)
 " TODO
 " command! -bar -bang -nargs=* -range -complete=custom,tbone#complete_panes Twrite
 "      \ execute tbone#write_command(<bang>0, <line1>, <line2>, <count>, <f-args>)
@@ -27,11 +22,11 @@ g:`!v expand('%:t:r')`#${1:name}
 endsnippet
 
 snippet nold "name something" w
-`!p snip.rv = fncc(snip.basename)`$0
+`!v SnFncC()`$0
 endsnippet
 
 # snippet g "global variable name" w
-# g:`!p snip.rv = fncc(snip.basename)`${VISUAL}$0
+# g:`!v SnFncC()`${VISUAL}$0
 # endsnippet
 
 # snippet g "g" w
@@ -49,13 +44,13 @@ echo {-> 'error function'}()
 endsnippet
 
 snippet funOld "Function" b
-function! `!p snip.rv = fncc(snip.basename)`${1:name}($2) abort
+function! `!v SnFncC()`${1:name}($2) abort
   ${VISUAL}$0
 endfunction
 endsnippet
 
 snippet method "Method" b
-function! `!p snip.rv = snip.basename`#${1:name}($2) abort
+function! `!v SnBaseName()`#${1:name}($2) abort
   ${VISUAL}$0
 endfunction
 endsnippet

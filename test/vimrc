@@ -1,0 +1,11 @@
+" minimal headless harness for the vader tests in this directory:
+" provides snippet_helpers.vim + vader without loading the full config
+" (packpath= keeps the start-pack plugins out; the rtp-only config dir is
+" harmless).
+set nocompatible
+set nomore noswapfile viminfo=
+set packpath=
+exec 'set runtimepath=' . fnameescape($HOME . '/.config/nvim') . ',' . escape($VIMRUNTIME, ' ,\')
+set runtimepath+=/home/ai/.config/nvim/pack/minpac/opt/vader.vim
+source /home/ai/.config/nvim/pack/my/start/1_init/plugin/snippet_helpers.vim
+filetype plugin indent on

@@ -1,8 +1,3 @@
-global !p
-import sys
-from snippet_helpers import *
-endglobal
-
 priority 1
 extends javascript
 
@@ -52,26 +47,26 @@ class-transformer:
 endsnippet
 
 snippet class "class" w
-export class ${1:`!p snip.rv = className(snip)`}$2 {
+export class ${1:`!v SnClassName()`}$2 {
   ${VISUAL}$0
 }
 endsnippet
 
 snippet interface "interface" w
-export interface `!p snip.rv = className(snip)` {
+export interface `!v SnClassName()` {
   ${VISUAL}$0
 }
 endsnippet
 
 # NOTE: typescript enums can not use objects as values
 snippet enumNonObject "enum" w
-export enum `!p snip.rv = className(snip)`$2 {
+export enum `!v SnClassName()`$2 {
 	${1:name} = ${0:value}
 }
 endsnippet
 
 snippet enum "enum" b
-export const ${1:`!p snip.rv = className(snip)`}$2 = {
+export const ${1:`!v SnClassName()`}$2 = {
   ${3:key1}: ${4:value1},$0
 } as const
 export type $1 = typeof $1[keyof typeof $1]
@@ -91,7 +86,7 @@ public constructor($1) {
 endsnippet
 
 snippet conContext "constructor" b
-public constructor(dto: `!p snip.rv = className(snip)`$1) {
+public constructor(dto: `!v SnClassName()`$1) {
 	this.dto = dto$0
 }
 endsnippet
@@ -216,7 +211,7 @@ export class $1 extends CustomError {
 endsnippet
 
 snippet errorSubClass "error definition" b
-export class $0Error extends `!p snip.rv = className(snip)` {}
+export class $0Error extends `!v SnClassName()` {}
 endsnippet
 
 snippet e "e" b
@@ -318,8 +313,8 @@ endsnippet
 
 snippet classContextIterator "contextIterator" b
 // TODO: fixed?: see ProductOrderItemContexts for [Symbol.iterator]() fix
-export class `!p snip.rv = className(snip)`
-  implements Iterator<${1:`!p snip.rv = classNameSingular(snip)`}>
+export class `!v SnClassName()`
+  implements Iterator<${1:`!v SnClassNameSing()`}>
 {
   dto: $1[]
   iterator: Iterator<$1>
@@ -329,7 +324,7 @@ export class `!p snip.rv = className(snip)`
   }
 
   [Symbol.iterator]() {
-    return new `!p snip.rv = className(snip)`(this.dto)
+    return new `!v SnClassName()`(this.dto)
   }
 
   next(
@@ -345,7 +340,7 @@ export class `!p snip.rv = className(snip)`
     }
   }
 
-  toArray(): ${1:`!p snip.rv = classNameSingular(snip)`}[] {
+  toArray(): ${1:`!v SnClassNameSing()`}[] {
     return Array.from(this)
   }
 
@@ -356,13 +351,13 @@ export class `!p snip.rv = className(snip)`
 endsnippet
 
 snippet classContext "classContext" b
-import { `!p snip.rv = classNameWithoutContext(snip)` } from "./types/`!p snip.rv = classNameWithoutContext(snip)`"
+import { `!v SnClassNameNoCtx()` } from "./types/`!v SnClassNameNoCtx()`"
 import { contextProxyHandler } from "./contextProxyHandler"
 
-export class `!p snip.rv = className(snip)` extends `!p snip.rv = classNameWithoutContext(snip)` {
-  dto: `!p snip.rv = classNameWithoutContext(snip)`
+export class `!v SnClassName()` extends `!v SnClassNameNoCtx()` {
+  dto: `!v SnClassNameNoCtx()`
 
-  public constructor(dto: `!p snip.rv = classNameWithoutContext(snip)`) {
+  public constructor(dto: `!v SnClassNameNoCtx()`) {
     super()
     this.dto = dto
     return new Proxy(this, contextProxyHandler)
@@ -430,8 +425,8 @@ import { html } from "lit"
 import { MobxLitElement } from "@adobe/lit-mobx"
 import { customElement, property } from "lit/decorators.js"
 
-@customElement("`!p snip.rv = toSnailCase(snip.basename)`")
-export class `!p snip.rv = snip.basename` extends MobxLitElement {
+@customElement("`!v SnToSnailCase(expand("%:t:r"))`")
+export class `!v SnBaseName()` extends MobxLitElement {
   @property()
   property1: Object[] = []
 
@@ -444,7 +439,7 @@ export class `!p snip.rv = snip.basename` extends MobxLitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "`!p snip.rv = toSnailCase(snip.basename)`": `!p snip.rv = snip.basename`
+    "`!v SnToSnailCase(expand("%:t:r"))`": `!v SnBaseName()`
   }
 }
 endsnippet

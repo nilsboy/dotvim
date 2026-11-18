@@ -1,8 +1,3 @@
-global !p
-import sys
-from snippet_helpers import *
-endglobal
-
 snippet profile "Set dbext profile name" b
 // vimex: DBSetOption profile=$1
 endsnippet
@@ -43,8 +38,12 @@ ORDER BY
   
 endsnippet
 
-snippet "(LEFT|INNER)+" "LEFT|INNER toggle" r
-`!p snip.rv = toggle('LEFT|INNER', match.group(1))`
+snippet LEFT "→ INNER" w
+INNER
+endsnippet
+
+snippet INNER "→ LEFT" w
+LEFT
 endsnippet
 
 snippet g "group by" w
@@ -70,16 +69,20 @@ snippet q "q" w
 '$1'$0
 endsnippet
 
-snippet ',\s*' "(^|\s+)" r
-`!p snip.rv = match.group(0)`'$1'$0
+snippet ", " "quote a column after a comma" w
+'$1'$0
 endsnippet
 
 snippet if "if" b
 SELECT IF((SELECT 1) = '1', 'yes', 'no')
 endsnippet
 
-snippet "(USING|ON)+" "USING|ON toggle" r
-`!p snip.rv = toggle('USING|ON', match.group(1))`
+snippet USING "→ ON" w
+ON
+endsnippet
+
+snippet ON "→ USING" w
+USING
 endsnippet
 
 snippet j "join" w
@@ -92,8 +95,12 @@ snippet lj "left join" w
 LEFT JOIN 
 endsnippet
 
-snippet "(=|IN)+" "=|IN toggle" r
-`!p snip.rv = toggle('=|IN', match.group(1))`
+snippet = "→ IN" w
+IN
+endsnippet
+
+snippet IN "→ =" w
+=
 endsnippet
 
 snippet l "limit" w

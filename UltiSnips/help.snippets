@@ -1,26 +1,21 @@
 # Snippets for VIM Help Files
 
-global !p
-import sys
-from snippet_helpers import *
-endglobal
-
 snippet sec "Section marker" b
 ==============================================================================
-${1:SECTION}`!p snip.rv = sec_title(snip, t)`
+${1:SECTION}`!v SnSecTitle(1)``
 
 $0
 endsnippet
 
 snippet ssec "Sub section marker" b
-${1:Subsection}`!p snip.rv = sec_title(snip, t)
-snip += "-"*len(t[1])`
+${1:Subsection}`!v SnSecTitle(1)`
+`!v repeat("-", strlen(SnT(1)))``
 
 $0
 endsnippet
 
 snippet sssec "Subsub Section marker" b
-${1:SubSubsection}:`!p snip.rv = sec_title(snip, t)`
+${1:SubSubsection}:`!v SnSecTitle(1)``
 
 $0
 endsnippet

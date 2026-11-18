@@ -1,4 +1,5 @@
-import { ${2:`!p snip.rv = toMethodCase(t[1])`}${VISUAL} } from "./src/${VISUAL}$1"
+snippet i "import" b
+import { ${2:`!v SnToMethodCase(1)`}${VISUAL} } from "./src/${VISUAL}$1"
 endsnippet
 
 snippet importWholeFile "import whole file" b
@@ -6,16 +7,16 @@ import "./${VISUAL}$1"
 endsnippet
 
 snippet ic "import class" b
-import `!p snip.rv = toCamelCase(t[1])` from "$1"
+import `!v SnToCamelCase(1)` from "$1"
 endsnippet
 
 snippet inew "import class" b
-import `!p snip.rv = toCamelCase(t[1])` from "$1"
-`!p snip.rv = toMethodCase(t[1])` = new `!p snip.rv = toCamelCase(t[1])`($1)
+import `!v SnToCamelCase(1)` from "$1"
+`!v SnToMethodCase(1)` = new `!v SnToCamelCase(1)`($1)
 endsnippet
 
 snippet new "new" b
-const `!p snip.rv = t[1][0:1].lower() + re.sub(r'(\W)', r'', t[1].title()[1:])` = new $1($1)
+const `!v SnLcCamel(1)` = new $1($1)
 endsnippet
 
 snippet export "module.exports"
@@ -183,13 +184,13 @@ require('pkginfo')(module)
 endsnippet
 
 snippet classNodeJs "class" b
-module.exports = class `!p snip.rv = className(snip)` {
+module.exports = class `!v SnClassName()` {
   ${VISUAL}$0
 }
 endsnippet
 
 snippet class "class" b
-export class `!p snip.rv = className(snip)` {
+export class `!v SnClassName()` {
   ${VISUAL}$0
 }
 endsnippet
@@ -583,8 +584,12 @@ snippet packageJson "packageJson" b
 const packageJson = path.join(require("packpath").self(), \`package.json\`)
 endsnippet
 
-snippet "(const|let)+" "const|let toggle" r
-`!p snip.rv = toggle('const|let', match.group(1))`
+snippet const "→ let" w
+let
+endsnippet
+
+snippet let "→ const" w
+const
 endsnippet
 
 snippet throw "throw" w
@@ -619,7 +624,7 @@ if($1 instanceof ${VISUAL}$2) {
 endsnippet
 
 snippet errorSubClass "error definition" b
-`!p snip.rv = className(snip)`.$1 = class $1 extends $2.Error {}$0
+`!v SnClassName()`.$1 = class $1 extends $2.Error {}$0
 endsnippet
 
 snippet cp "copy" w
@@ -981,7 +986,7 @@ test
 endsnippet
 
 snippet test-describe "describe" b
-describe(\``!p snip.rv = className(snip)`\`, () => {$0
+describe(\``!v SnClassName()`\`, () => {$0
 ${VISUAL}})
 endsnippet
 

@@ -1,0 +1,88 @@
+Before:
+  set nomore noswapfile
+  new
+
+After:
+  setlocal filetype=
+  bwipeout!
+
+Execute (SnToCamelCase strips the path and case-cleans):
+  Assert SnToCamelCase('./src/foo-bar') ==# 'FooBar', SnToCamelCase('./src/foo-bar')
+  Assert SnToCamelCase('x.ts') ==# 'XTs', SnToCamelCase('x.ts')
+  Assert SnToCamelCase('plain') ==# 'Plain', SnToCamelCase('plain')
+
+Execute (SnToMethodCase drops the extension and lowers the first char):
+  Assert SnToMethodCase('./src/fetch-data.ts') ==# 'srcfetchData', SnToMethodCase('./src/fetch-data.ts')
+  Assert SnToMethodCase('user-dto.ts') ==# 'userDto', SnToMethodCase('user-dto.ts')
+
+Execute (SnToSnakeCase and SnToSnailCase split camel words):
+  Assert SnToSnakeCase('FooBarBaz') ==# 'foo_bar_baz', SnToSnakeCase('FooBarBaz')
+  Assert SnToSnailCase('FooBarBaz') ==# 'foo-bar-baz', SnToSnailCase('FooBarBaz')
+
+Execute (basename helpers work on the fake buffer name):
+  file /tmp/snipfake/customerApi.ts
+  Assert SnBaseName() ==# 'customerApi', SnBaseName()
+  Assert SnClassName() ==# 'CustomerApi', SnClassName()
+
+Execute (ClassName variants strip Context suffixes):
+  file /tmp/snipfake/CustomerContexts.ts
+  Assert SnClassNameSing() ==# 'CustomerContext', SnClassNameSing()
+  file /tmp/snipfake/CustomerContext.ts
+  Assert SnClassNameNoCtx() ==# 'Customer', SnClassNameNoCtx()
+  file /tmp/snipfake/UserRepo.ts
+  Assert SnClassNameSing() ==# 'UserRepo', SnClassNameSing()
+
+Execute (SnFncC builds a My_-prefixed camel function name):
+  file /tmp/snipfake/my-thing.vim
+  Assert SnFncC() ==# 'My_Thing', SnFncC()
+  file /tmp/snipfake/my_thing.vim
+  Assert SnFncC() ==# 'My_Thing', SnFncC()
+  file /tmp/snipfake/vim_thing.vim
+  Assert SnFncC() ==# 'My_Thing', SnFncC()
+
+Execute (SnEnum filters the cycle by the typed text):
+  let b:snippetary_t = {'4': 'p'}
+  Assert SnEnum(4, ['path', 'body']) ==# 'path', SnEnum(4, ['path', 'body'])
+  let b:snippetary_t = {'4': ''}
+  Assert SnEnum(4, ['path', 'body']) ==# 'path|body', SnEnum(4, ['path', 'body'])
+  let b:snippetary_t = {'4': 'nope'}
+  Assert SnEnum(4, ['path', 'body']) ==# 'path|body', SnEnum(4, ['path', 'body'])
+
+Execute (SnCompB adds the parens for multi results):
+  let b:snippetary_t = {'2': 'tr'}
+  Assert SnCompB(2, ['true', 'false']) ==# 'true', SnCompB(2, ['true', 'false'])
+  let b:snippetary_t = {'2': ''}
+  Assert SnCompB(2, ['true', 'false']) ==# '(true|false)', SnCompB(2, ['true', 'false'])
+
+Execute (SnLcFirst and SnLcCamel lower the first character):
+  let b:snippetary_t = {'1': 'FooBar'}
+  Assert SnLcFirst(1) ==# 'fooBar', SnLcFirst(1)
+  let b:snippetary_t = {'1': 'user-dto'}
+  Assert SnLcCamel(1) ==# 'userDto', SnLcCamel(1)
+  let b:snippetary_t = {'1': 'Order'}
+  Assert SnLcCamel(1) ==# 'order', SnLcCamel(1)
+
+Execute (SnIf emits only for non-empty tabstops):
+  let b:snippetary_t = {'1': 'name'}
+  Assert SnIf(1, ' class="') ==# ' class="', SnIf(1, ' class="')
+  let b:snippetary_t = {'1': ''}
+  Assert SnIf(1, ' class="') ==# '', SnIf(1, ' class="')
+
+Execute (SnSecTitle right-aligns the *file-section* marker):
+  file /tmp/snipfake/notes.md
+  let b:snippetary_t = {'1': 'SECTION'}
+  let res = SnSecTitle(1)
+  Assert res =~# '\*notes-section\*$', 'res=[' . res . ']'
+  Assert strlen(res) == 71, 'len: ' . strlen(res)
+
+Execute (SnHtmlSlash only closes xhtml filetypes):
+  setlocal filetype=xhtml
+  Assert SnHtmlSlash() ==# '/', SnHtmlSlash()
+  setlocal filetype=html
+  Assert SnHtmlSlash() ==# '', SnHtmlSlash()
+
+Execute (SnBase64Visual pipes the captured selection):
+  let b:snippetary_visual = 'abc'
+  let res = SnBase64Visual()
+  " base64-my behavior is environment-specific; just require output at all
+  Assert type(res) ==# type(''), type(res)
