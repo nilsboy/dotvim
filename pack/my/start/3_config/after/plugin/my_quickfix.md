@@ -9,7 +9,7 @@ Use for: linting, makeing, testing, formatting, finding stuff
 - [DONE] parse command output by regex
 - use jobs api - implies not using makeprg?
 - [DONE] word with boundaries search
-- and search ignoring order of search words
+- "and search" ignoring order of search words
 - checkout quickfixsigns for resetting the signes on :colder etc
 - [DONE] use winsaveview to prevent window resizing on copen
 - [DONE] always close buffer of preview window - is there a plugin for that?
@@ -30,6 +30,8 @@ Use for: linting, makeing, testing, formatting, finding stuff
 
 ## Why not :make, &errorformat, :compiler
 
+NOTE: implemented my own with errorformatregex.
+
 - makeprg and errorformat together are flawed
   (https://github.com/vim-syntastic/syntastic/issues/699#issuecomment-248517315)
 - :compiler is only meant to be used for one tool per buffer at a time - it is
@@ -42,6 +44,8 @@ Use for: linting, makeing, testing, formatting, finding stuff
   restored
 
 ## Generic Runners
+
+NOTE: build my own with MyMake.
 
 - make (builtin)
   - synchronous
@@ -107,12 +111,3 @@ Use for: linting, makeing, testing, formatting, finding stuff
 - :h neomake: section: 6.3 How to develop/debug the errorformat setting?
 - To send to stdin see: :h jobsend()
 
-# Notes
-
-rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
-its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
-
-ag gives the wrong result for (it returns empty lines as well): let b:define =
-'^[[:upper:]]+[[:upper:][:space:]]+\$'
-
-ack is to complicated to install and has wontfix bugs pre ack3.

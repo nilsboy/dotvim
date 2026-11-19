@@ -6,5 +6,6 @@ delcommand Remove
 command! -nargs=* Remove echohl WarningMsg | echom "Warning: :Remove is disabled. Use \<leader\>rm instead." | echohl None
 
 nnoremap <leader>rm :Delete!
+nnoremap <leader>mv :Move!<space>
 
 command! -nargs=* W :SudoWrite

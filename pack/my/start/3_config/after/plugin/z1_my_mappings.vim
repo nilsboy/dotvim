@@ -276,3 +276,5 @@ nnoremap gk k
 "   execute 'normal! v' . l:obj . "\<Esc>l"
 " endfunction
 
+nnoremap gf :<C-U>execute 'edit' fnameescape(expand('<cfile>'))<CR>
+

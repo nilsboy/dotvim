@@ -5,6 +5,9 @@
 # Default Ubuntu ripgrep does not have pcre support.
 # SEE ALSO: https://bugs.launchpad.net/ubuntu/+source/rust-ripgrep/+bug/1950866
 # Releases : https://github.com/BurntSushi/ripgrep/releases 
+#
+# rg needs version from website to support --pcre2 wich adds supports for '\Q..\E'
+# its not in the Ubuntu 14.04 Version and not in the ripgrep snap (2018-09-27).
 
 source bash-helpers
 
