@@ -1,0 +1,89 @@
+" Tests for pack/my/start/3_config/after/plugin/my_search_wrap_warning.vim
+" using ~/jo:
+"
+"   line 4:  c1
+"   line 9:  c2   <- on b2 (line 8), /c lands here: the first match
+"   line 14: c3
+"   line 19: c4
+"
+" From c2, n n n n is c3, c4, c1 (wrap), c2 - visiting the first match
+" c2 for the second time must warn and highlight line 9.
+
+Before:
+  set nomore noswapfile wrapscan hlsearch
+  source /home/ai/.config/nvim/pack/my/start/3_config/after/plugin/my_search_wrap_warning.vim
+  edit! /home/ai/jo
+  call cursor(8, 1)
+
+After:
+  bwipeout!
+
+Execute (/c from b2 lands on c2, line 9):
+  call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 9
+
+Execute (n n n n arrives back at c2: warn and highlight line 9):
+  call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 9
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 14
+  Assert g:search_wrap_active == 0
+  Assert empty(getmatches())
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 19
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 4
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 9
+  Assert g:search_wrap_active == 1
+  Assert getmatches()[0].pattern ==# '\%9l'
+  Assert g:search_wrap_match != -1
+  " the warning is kept for the arrival, cleared by the next movement
+  doautocmd CursorMoved
+  Assert g:search_wrap_active == 1
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 14
+  Assert g:search_wrap_active == 0
+  Assert empty(getmatches())
+
+Execute (N direction warns when arriving back at c2):
+  call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 9
+  " N: c1, c4 (wrap), c3, c2 - arrival at c2 fires
+  call feedkeys('N', 'xmt')
+  Assert line('.') == 4
+  Assert g:search_wrap_active == 0
+  call feedkeys('N', 'xmt')
+  Assert line('.') == 19
+  Assert g:search_wrap_active == 0
+  call feedkeys('N', 'xmt')
+  Assert line('.') == 14
+  Assert g:search_wrap_active == 0
+  call feedkeys('N', 'xmt')
+  Assert line('.') == 9
+  Assert g:search_wrap_active == 1
+  Assert getmatches()[0].pattern ==# '\%9l'
+
+Execute (the press count is respected: c2 2n is c1 2n back at c2):
+  call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 9
+  call feedkeys('2n', 'xmt')
+  Assert line('.') == 19
+  Assert g:search_wrap_active == 0
+  call feedkeys('2n', 'xmt')
+  Assert line('.') == 9
+  Assert g:search_wrap_active == 1
+  Assert getmatches()[0].pattern ==# '\%9l'
+
+Execute (other movements start a new cycle):
+  call feedkeys("/c\<cr>", 'xmt')
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 14
+  " any other movement, e.g. j ...
+  call feedkeys('j', 'xmt')
+  " ... makes the next n a fresh cycle: origin is c3 now, no stale warning
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 19
+  Assert g:search_wrap_active == 0
