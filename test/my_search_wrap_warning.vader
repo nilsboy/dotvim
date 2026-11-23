@@ -1,19 +1,24 @@
 " Tests for pack/my/start/3_config/after/plugin/my_search_wrap_warning.vim
 " using ~/jo:
-"
+
 "   line 4:  c1
 "   line 9:  c2   <- on b2 (line 8), /c lands here: the first match
 "   line 14: c3
 "   line 19: c4
-"
+
 " From c2, n n n n is c3, c4, c1 (wrap), c2 - visiting the first match
-" c2 for the second time must warn and highlight line 9.
+" c2 for the second time must warn and highlight the c2 match itself.
 
 Before:
   set nomore noswapfile wrapscan hlsearch
   source /home/ai/.config/nvim/pack/my/start/3_config/after/plugin/my_search_wrap_warning.vim
   edit! /home/ai/jo
   call cursor(8, 1)
+  " the highlight of the visited match, looked up by its id
+  function! Matched() abort
+    let l:found = filter(copy(getmatches()), 'v:val.id == g:search_wrap_match')
+    return empty(l:found) ? {} : l:found[0]
+  endfunction
 
 After:
   bwipeout!
@@ -22,13 +27,13 @@ Execute (/c from b2 lands on c2, line 9):
   call feedkeys("/c\<cr>", 'xmt')
   Assert line('.') == 9
 
-Execute (n n n n arrives back at c2: warn and highlight line 9):
+Execute (n n n n arrives back at c2: warn and highlight the c2 match):
   call feedkeys("/c\<cr>", 'xmt')
   Assert line('.') == 9
   call feedkeys('n', 'xmt')
   Assert line('.') == 14
   Assert g:search_wrap_active == 0
-  Assert empty(getmatches())
+  Assert empty(Matched())
   call feedkeys('n', 'xmt')
   Assert line('.') == 19
   Assert g:search_wrap_active == 0
@@ -38,15 +43,15 @@ Execute (n n n n arrives back at c2: warn and highlight line 9):
   call feedkeys('n', 'xmt')
   Assert line('.') == 9
   Assert g:search_wrap_active == 1
-  Assert getmatches()[0].pattern ==# '\%9l'
-  Assert g:search_wrap_match != -1
+  Assert Matched().pattern ==# '\%9l\%1c\%(c\)', 'got ' . string(Matched())
+  Assert Matched().group ==# 'WarningMsg', 'got ' . string(Matched())
   " the warning is kept for the arrival, cleared by the next movement
   doautocmd CursorMoved
   Assert g:search_wrap_active == 1
   call feedkeys('n', 'xmt')
   Assert line('.') == 14
   Assert g:search_wrap_active == 0
-  Assert empty(getmatches())
+  Assert empty(Matched())
 
 Execute (N direction warns when arriving back at c2):
   call feedkeys("/c\<cr>", 'xmt')
@@ -64,7 +69,8 @@ Execute (N direction warns when arriving back at c2):
   call feedkeys('N', 'xmt')
   Assert line('.') == 9
   Assert g:search_wrap_active == 1
-  Assert getmatches()[0].pattern ==# '\%9l'
+  Assert Matched().pattern ==# '\%9l\%1c\%(c\)', 'got ' . string(Matched())
+  Assert Matched().group ==# 'WarningMsg', 'got ' . string(Matched())
 
 Execute (the press count is respected: c2 2n is c1 2n back at c2):
   call feedkeys("/c\<cr>", 'xmt')
@@ -75,15 +81,43 @@ Execute (the press count is respected: c2 2n is c1 2n back at c2):
   call feedkeys('2n', 'xmt')
   Assert line('.') == 9
   Assert g:search_wrap_active == 1
-  Assert getmatches()[0].pattern ==# '\%9l'
+  Assert Matched().pattern ==# '\%9l\%1c\%(c\)', 'got ' . string(Matched())
 
-Execute (other movements start a new cycle):
+Execute (leaving the match position does not stop the cycle):
   call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 9
   call feedkeys('n', 'xmt')
   Assert line('.') == 14
-  " any other movement, e.g. j ...
+  " any other movement, e.g. j - the origin is remembered anyway
   call feedkeys('j', 'xmt')
-  " ... makes the next n a fresh cycle: origin is c3 now, no stale warning
   call feedkeys('n', 'xmt')
   Assert line('.') == 19
   Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 4
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 9
+  Assert g:search_wrap_active == 1
+  Assert Matched().pattern ==# '\%9l\%1c\%(c\)', 'got ' . string(Matched())
+
+Execute (a re-run of the same search starts a new cycle):
+  call feedkeys("/c\<cr>", 'xmt')
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 14
+  " the same pattern again: a new search, c3 is left and c4 is the origin
+  call feedkeys("/c\<cr>", 'xmt')
+  Assert line('.') == 19
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 4
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 9
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 14
+  Assert g:search_wrap_active == 0
+  call feedkeys('n', 'xmt')
+  Assert line('.') == 19
+  Assert g:search_wrap_active == 1
+  Assert Matched().pattern ==# '\%19l\%1c\%(c\)', 'got ' . string(Matched())
