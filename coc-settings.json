@@ -51,5 +51,8 @@
     "https://json.schemastore.org/kustomization.json": "kustomization.json",
     "kubernetes": ["*.k8s.yaml", "*.k8s.json"]
   },
-  "yaml.trace.server": "verbose"
+  "yaml.trace.server": "verbose",
+  "json.schemaDownload.trustedDomains": {
+    "https://www.schemastore.org": true
+  }
 }
