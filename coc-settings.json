@@ -53,6 +53,7 @@
   },
   "yaml.trace.server": "verbose",
   "json.schemaDownload.trustedDomains": {
-    "https://www.schemastore.org": true
+    "https://www.schemastore.org": true,
+    "https://biomejs.dev": true
   }
 }
